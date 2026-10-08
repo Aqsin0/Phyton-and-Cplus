@@ -1,21 +1,92 @@
-let globalData = {};
-let currentTab = 'cpp';
+// Bütün şagird məlumatları və balları buradadır:
+let globalData = {
+  cpp: [
+    {
+      id: 1,
+      ad: "Əli Məmmədov",
+      foto: "https://i.pravatar.cc/150?img=11",
+      fm: 85,
+      stepping: 90,
+      e_olimp: 75,
+      codesources: 88,
+      hackerrank: 92,
+      kecmis_reyting: 410
+    },
+    {
+      id: 2,
+      ad: "Aysel Əliyeva",
+      foto: "https://i.pravatar.cc/150?img=5",
+      fm: 95,
+      stepping: 88,
+      e_olimp: 90,
+      codesources: 94,
+      hackerrank: 96,
+      kecmis_reyting: 450
+    },
+    {
+      id: 3,
+      ad: "Murad Həsənov",
+      foto: "https://i.pravatar.cc/150?img=12",
+      fm: 60,
+      stepping: 70,
+      e_olimp: 65,
+      codesources: 72,
+      hackerrank: 80,
+      kecmis_reyting: 360
+    }
+  ],
+  python: [
+    {
+      id: 1,
+      ad: "Əli Məmmədov",
+      foto: "https://i.pravatar.cc/150?img=11",
+      fm: 90,
+      stepping: 95,
+      e_olimp: 85,
+      codesources: 90,
+      hackerrank: 94,
+      kecmis_reyting: 430
+    },
+    {
+      id: 2,
+      ad: "Leyla Quliyeva",
+      foto: "https://i.pravatar.cc/150?img=9",
+      fm: 88,
+      stepping: 92,
+      e_olimp: 80,
+      codesources: 85,
+      hackerrank: 90,
+      kecmis_reyting: 420
+    }
+  ],
+  common: [
+    {
+      id: 1,
+      ad: "Əli Məmmədov",
+      foto: "https://i.pravatar.cc/150?img=11",
+      cari_reyting: 884,
+      kecmis_reyting: 840
+    },
+    {
+      id: 2,
+      ad: "Aysel Əliyeva",
+      foto: "https://i.pravatar.cc/150?img=5",
+      cari_reyting: 913,
+      kecmis_reyting: 890
+    }
+  ]
+};
 
-// Səhifə yüklənəndə data.json faylından məlumat çəkilir
-fetch('data.json')
-  .then(response => response.json())
-  .then(data => {
-    globalData = data;
-    renderTable();
-  })
-  .catch(error => console.error('Məlumat yüklənmədi:', error));
+let currentTab = 'cpp';
 
 function switchTab(tabName) {
   currentTab = tabName;
   document.querySelectorAll('.tab-btn').forEach(btn => {
     btn.classList.remove('active');
   });
-  event.target.classList.add('active');
+  if (event && event.target) {
+    event.target.classList.add('active');
+  }
   renderTable();
 }
 
@@ -37,7 +108,7 @@ function renderTable() {
 
   const list = rawList.map(calculateTotals);
 
-  // Başlıqlar
+  // Sütun Başlıqları
   if (currentTab === 'common') {
     tableHead.innerHTML = `
       <tr>
@@ -111,7 +182,6 @@ function renderTable() {
 function sortAndRender() {
   if (!globalData[currentTab]) return;
   
-  // Cari reytinqə görə azalan sıra ilə çeşidləmə
   globalData[currentTab].sort((a, b) => {
     const totalA = calculateTotals(a).cari_reyting;
     const totalB = calculateTotals(b).cari_reyting;
@@ -120,3 +190,6 @@ function sortAndRender() {
 
   renderTable();
 }
+
+// Səhifə yüklənəndə cədvəli avtomatik çək
+window.onload = renderTable;
