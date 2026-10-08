@@ -27,10 +27,7 @@
             padding: 20px;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
+        .container { max-width: 1200px; margin: 0 auto; }
 
         .header {
             display: flex;
@@ -97,7 +94,7 @@
         .badge-negative { color: var(--negative); font-weight: bold; }
         .rank-col { font-weight: bold; color: var(--accent); width: 40px; }
 
-        /* Admin Modal */
+        /* Modal Stilləri */
         .modal {
             display: none;
             position: fixed;
@@ -111,9 +108,9 @@
             background: var(--card-bg);
             padding: 25px;
             border-radius: 12px;
-            max-width: 600px;
+            max-width: 500px;
             width: 90%;
-            max-height: 80vh;
+            max-height: 85vh;
             overflow-y: auto;
             border: 1px solid var(--border);
         }
@@ -121,8 +118,9 @@
         .form-group { margin-bottom: 15px; }
         .form-group label { display: block; margin-bottom: 5px; color: var(--text-sub); }
         .form-group input {
-            width: 100%; padding: 8px; border-radius: 6px;
+            width: 100%; padding: 10px; border-radius: 6px;
             border: 1px solid var(--border); background: #0f172a; color: white;
+            box-sizing: border-box;
         }
     </style>
 </head>
@@ -139,7 +137,7 @@
         </div>
 
         <div class="action-bar">
-            <button class="btn btn-admin" onclick="openAdminPanel()">🔒 Admin Paneli</button>
+            <button class="btn btn-admin" onclick="showLoginModal()">🔑 Admin Girişi</button>
             <button class="btn" onclick="sortAndRender()">🔄 Reytinqə Görə Sırala</button>
         </div>
 
@@ -151,14 +149,31 @@
         </div>
     </div>
 
-    <!-- Admin Modal -->
-    <div id="adminModal" class="modal">
+    <!-- 1. Giriş Pəncərəsi (Login Modal) -->
+    <div id="loginModal" class="modal">
         <div class="modal-content">
-            <h2>⚙️ Admin Paneli - Şagird Balı Düzəlt</h2>
+            <h2>🔑 Admin Girişi</h2>
+            <div class="form-group">
+                <label>İstifadəçi Adı:</label>
+                <input type="text" id="loginUser" placeholder="İstifadəçi adınızı daxil edin">
+            </div>
+            <div class="form-group">
+                <label>Şifrə:</label>
+                <input type="password" id="loginPass" placeholder="Şifrənizi daxil edin">
+            </div>
+            <button class="btn btn-admin" style="width:100%;" onclick="handleLogin()">Giriş Et</button>
+            <button class="btn" style="width:100%; margin-top:10px; background:#64748b;" onclick="closeLoginModal()">Ləğv Et</button>
+        </div>
+    </div>
+
+    <!-- 2. Admin İdarə Paneli (Admin Modal) -->
+    <div id="adminModal" class="modal">
+        <div class="modal-content" style="max-width: 650px;">
+            <h2 id="welcomeAdmin">⚙️ Admin Paneli</h2>
             <div id="adminBody"></div>
             <br>
-            <button class="btn" onclick="saveAdminChanges()">💾 Yadda Saxla və Yayımla</button>
-            <button class="btn" style="background:#64748b;" onclick="closeAdminPanel()">Bağla</button>
+            <button class="btn" style="width:100%;" onclick="saveAdminChanges()">💾 Yadda Saxla və Yayımla</button>
+            <button class="btn" style="width:100%; margin-top:10px; background:#64748b;" onclick="closeAdminPanel()">Çıxış Et / Bağla</button>
         </div>
     </div>
 
@@ -177,17 +192,23 @@
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
-        const ADMIN_PASSWORD = "123456"; // 🔑 Admin Giriş Şifreniz
+        // 👥 3 Xüsusi Admin Hesabı
+        const ADMIN_USERS = {
+            "Jagermaster": "Aqsin2008",
+            "Chivas": "Turan2008",
+            "Jameson": "Kenan2007"
+        };
+
+        let activeAdminUser = null;
         let globalData = {};
         let currentTab = 'cpp';
 
-        // Firebase'den verileri canlı dinle
+        // Firebase-dən məlumatları canlı dinləyirik
         database.ref('students_data').on('value', (snapshot) => {
             const data = snapshot.val();
             if (data) {
                 globalData = data;
             } else {
-                // İlk kurulum için varsayılan veriler
                 globalData = {
                     cpp: [
                         { id: 1, ad: "Əli Məmmədov", foto: "https://i.pravatar.cc/150?img=11", fm: 85, stepping: 90, e_olimp: 75, codesources: 88, hackerrank: 92, kecmis_reyting: 410 },
@@ -269,14 +290,32 @@
             renderTable();
         }
 
-        /* --- Admin Paneli Fonksiyonları --- */
-        function openAdminPanel() {
-            const pass = prompt("Admin Şifresini Girin:");
-            if (pass !== ADMIN_PASSWORD) {
-                alert("Hatalı Şifre!");
-                return;
-            }
+        /* --- Admin Giriş Əməliyyatları --- */
+        function showLoginModal() {
+            document.getElementById('loginUser').value = '';
+            document.getElementById('loginPass').value = '';
+            document.getElementById('loginModal').style.display = 'flex';
+        }
 
+        function closeLoginModal() {
+            document.getElementById('loginModal').style.display = 'none';
+        }
+
+        function handleLogin() {
+            const user = document.getElementById('loginUser').value.trim();
+            const pass = document.getElementById('loginPass').value.trim();
+
+            if (ADMIN_USERS[user] && ADMIN_USERS[user] === pass) {
+                activeAdminUser = user;
+                closeLoginModal();
+                openAdminPanel();
+            } else {
+                alert("İstifadəçi adı və ya şifrə yanlışdır!");
+            }
+        }
+
+        function openAdminPanel() {
+            document.getElementById('welcomeAdmin').innerText = `⚙️ Xoş gəldiniz, ${activeAdminUser}!`;
             const adminBody = document.getElementById('adminBody');
             adminBody.innerHTML = '';
 
@@ -312,6 +351,7 @@
         }
 
         function closeAdminPanel() {
+            activeAdminUser = null;
             document.getElementById('adminModal').style.display = 'none';
         }
 
@@ -330,9 +370,8 @@
                 }
             });
 
-            // Firebase'e kaydet
             database.ref('students_data').set(globalData).then(() => {
-                alert("Değişiklikler Canlı Olarak Yayınlandı!");
+                alert(`Dəyişikliklər ${activeAdminUser} tərəfindən uğurla yayımlandı!`);
                 closeAdminPanel();
             });
         }
