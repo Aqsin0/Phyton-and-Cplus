@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mənim İnteraktiv Saytım</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; background-color: #f4f4f9; }
+        .card { background: white; padding: 30px; border-radius: 12px; display: inline-block; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 300px; }
+        h1 { color: #333; font-size: 24px; }
+        p { font-size: 18px; color: #555; margin: 12px 0; }
+        .highlight { font-weight: bold; color: #007bff; }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h1 id="basliq">Yüklənir...</h1>
+        <p>Status: <span id="status" class="highlight">-</span></p>
+        <p>Qiymət: <span id="qiymet" class="highlight">-</span></p>
+        <p><small>Son Yenilənmə: <span id="son_yenilenme">-</span></small></p>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

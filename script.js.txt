@@ -1,0 +1,9 @@
+fetch('data.json')
+  .then(response => response.json())
+  .then(data => {
+    document.getElementById('basliq').innerText = data.basliq;
+    document.getElementById('status').innerText = data.status;
+    document.getElementById('qiymet').innerText = data.qiymet;
+    document.getElementById('son_yenilenme').innerText = data.son_yenilenme;
+  })
+  .catch(error => console.error('Xəta baş verdi:', error));

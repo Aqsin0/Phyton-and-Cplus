@@ -1,0 +1,6 @@
+{
+  "basliq": "Xoş Gəldiniz!",
+  "status": "Açıq",
+  "qiymet": "15 AZN",
+  "son_yenilenme": "Bugün, 18:00"
+}
