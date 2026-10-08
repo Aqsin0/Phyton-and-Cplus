@@ -14,9 +14,11 @@
             --text-main: #f8fafc;
             --text-sub: #94a3b8;
             --accent: #38bdf8;
+            --accent-hover: #0284c7;
             --positive: #22c55e;
             --negative: #ef4444;
             --border: #334155;
+            --purple: #a855f7;
         }
 
         body {
@@ -50,6 +52,7 @@
             border-radius: 8px;
             cursor: pointer;
             font-weight: 600;
+            transition: all 0.2s;
         }
 
         .tab-btn.active, .tab-btn:hover {
@@ -72,9 +75,13 @@
             border-radius: 8px;
             cursor: pointer;
             font-weight: 600;
+            transition: transform 0.1s, background 0.2s;
         }
 
+        .btn:active { transform: scale(0.98); }
         .btn-admin { background-color: #e11d48; }
+        .btn-admin:hover { background-color: #be123c; }
+        .btn-add { background-color: var(--purple); }
 
         .table-wrapper {
             background-color: var(--card-bg);
@@ -94,12 +101,13 @@
         .badge-negative { color: var(--negative); font-weight: bold; }
         .rank-col { font-weight: bold; color: var(--accent); width: 40px; }
 
-        /* Modal Stilləri */
+        /* Modal Og Admin Stiler */
         .modal {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8);
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(4px);
             justify-content: center; align-items: center;
             z-index: 1000;
         }
@@ -107,12 +115,81 @@
         .modal-content {
             background: var(--card-bg);
             padding: 25px;
-            border-radius: 12px;
-            max-width: 500px;
-            width: 90%;
+            border-radius: 16px;
+            max-width: 750px;
+            width: 92%;
             max-height: 85vh;
             overflow-y: auto;
             border: 1px solid var(--border);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+        }
+
+        .admin-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: #0f172a;
+            padding: 12px 16px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .stat-card div { font-size: 12px; color: var(--text-sub); }
+        .stat-card span { font-size: 20px; font-weight: bold; color: var(--accent); }
+
+        .search-box {
+            width: 100%;
+            padding: 10px 14px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: #0f172a;
+            color: white;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+        }
+
+        .admin-student-card {
+            background: #0f172a;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .admin-student-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .grid-inputs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+            gap: 8px;
+        }
+
+        .grid-inputs label {
+            font-size: 11px;
+            color: var(--text-sub);
+            display: block;
+            margin-bottom: 3px;
+        }
+
+        .grid-inputs input {
+            width: 100%;
+            padding: 6px 8px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            background: var(--card-bg);
+            color: white;
+            font-weight: bold;
+            box-sizing: border-box;
         }
 
         .form-group { margin-bottom: 15px; }
@@ -149,13 +226,13 @@
         </div>
     </div>
 
-    <!-- 1. Giriş Pəncərəsi (Login Modal) -->
+    <!-- 1. Login Modal -->
     <div id="loginModal" class="modal">
-        <div class="modal-content">
+        <div class="modal-content" style="max-width:400px;">
             <h2>🔑 Admin Girişi</h2>
             <div class="form-group">
                 <label>İstifadəçi Adı:</label>
-                <input type="text" id="loginUser" placeholder="İstifadəçi adınızı daxil edin">
+                <input type="text" id="loginUser" placeholder="Jagermaster / Chivas / Jameson">
             </div>
             <div class="form-group">
                 <label>Şifrə:</label>
@@ -166,14 +243,39 @@
         </div>
     </div>
 
-    <!-- 2. Admin İdarə Paneli (Admin Modal) -->
+    <!-- 2. Interactive Admin Modal -->
     <div id="adminModal" class="modal">
-        <div class="modal-content" style="max-width: 650px;">
-            <h2 id="welcomeAdmin">⚙️ Admin Paneli</h2>
+        <div class="modal-content">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                <h2 id="welcomeAdmin" style="margin:0; color:var(--accent);">⚙️ Admin Paneli</h2>
+                <button class="btn btn-add" onclick="addNewStudent()">➕ Yeni Şagird Əlavə Et</button>
+            </div>
+
+            <!-- Realtime Stats Dashboard -->
+            <div class="admin-stats">
+                <div class="stat-card">
+                    <div>Ümumi Şagird Sayı</div>
+                    <span id="statCount">0</span>
+                </div>
+                <div class="stat-card">
+                    <div>Orta Reytinq Balı</div>
+                    <span id="statAvg">0</span>
+                </div>
+                <div class="stat-card">
+                    <div>Lider Şagird</div>
+                    <span id="statTop" style="font-size:14px; color:var(--positive);">-</span>
+                </div>
+            </div>
+
+            <!-- Search filter -->
+            <input type="text" id="adminSearch" class="search-box" placeholder="🔍 Şagird adı ilə axtar..." oninput="filterAdminStudents()">
+
             <div id="adminBody"></div>
-            <br>
-            <button class="btn" style="width:100%;" onclick="saveAdminChanges()">💾 Yadda Saxla və Yayımla</button>
-            <button class="btn" style="width:100%; margin-top:10px; background:#64748b;" onclick="closeAdminPanel()">Çıxış Et / Bağla</button>
+
+            <div style="display:flex; gap:10px; margin-top:15px;">
+                <button class="btn" style="flex:2;" onclick="saveAdminChanges()">💾 Yadda Saxla və Yayımla</button>
+                <button class="btn" style="flex:1; background:#64748b;" onclick="closeAdminPanel()">Çıxış Et</button>
+            </div>
         </div>
     </div>
 
@@ -192,7 +294,6 @@
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
-        // 👥 3 Xüsusi Admin Hesabı
         const ADMIN_USERS = {
             "Jagermaster": "Aqsin2008",
             "Chivas": "Turan2008",
@@ -203,7 +304,6 @@
         let globalData = {};
         let currentTab = 'cpp';
 
-        // Firebase-dən məlumatları canlı dinləyirik
         database.ref('students_data').on('value', (snapshot) => {
             const data = snapshot.val();
             if (data) {
@@ -224,6 +324,7 @@
                 database.ref('students_data').set(globalData);
             }
             renderTable();
+            if (activeAdminUser) renderAdminBody();
         });
 
         function switchTab(tabName) {
@@ -231,6 +332,7 @@
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             document.getElementById('btn-' + tabName).classList.add('active');
             renderTable();
+            if (activeAdminUser) renderAdminBody();
         }
 
         function calculateTotals(student) {
@@ -290,7 +392,7 @@
             renderTable();
         }
 
-        /* --- Admin Giriş Əməliyyatları --- */
+        /* --- Admin Interactive Engine --- */
         function showLoginModal() {
             document.getElementById('loginUser').value = '';
             document.getElementById('loginPass').value = '';
@@ -315,39 +417,83 @@
         }
 
         function openAdminPanel() {
-            document.getElementById('welcomeAdmin').innerText = `⚙️ Xoş gəldiniz, ${activeAdminUser}!`;
+            document.getElementById('welcomeAdmin').innerText = `⚙️ Admin: ${activeAdminUser} (${currentTab.toUpperCase()})`;
+            renderAdminBody();
+            document.getElementById('adminModal').style.display = 'flex';
+        }
+
+        function renderAdminBody(filterQuery = '') {
+            const list = (globalData[currentTab] || []).map(calculateTotals);
             const adminBody = document.getElementById('adminBody');
             adminBody.innerHTML = '';
 
-            (globalData[currentTab] || []).forEach((student, index) => {
+            // Stats calculation
+            const totalStudents = list.length;
+            const avgRating = totalStudents > 0 ? Math.round(list.reduce((acc, s) => acc + s.cari_reyting, 0) / totalStudents) : 0;
+            const topStudent = totalStudents > 0 ? list.reduce((prev, current) => (prev.cari_reyting > current.cari_reyting) ? prev : current) : null;
+
+            document.getElementById('statCount').innerText = totalStudents;
+            document.getElementById('statAvg').innerText = avgRating;
+            document.getElementById('statTop').innerText = topStudent ? `${topStudent.ad} (${topStudent.cari_reyting} pt)` : '-';
+
+            const filteredList = list.filter(s => s.ad.toLowerCase().includes(filterQuery.toLowerCase()));
+
+            filteredList.forEach((student, index) => {
                 let fieldsHTML = '';
                 if (currentTab === 'common') {
                     fieldsHTML = `
-                        <label>Cari Reytinq: <input type="number" id="inp_${index}_cari" value="${student.cari_reyting || 0}"></label>
-                        <label>Keçmiş Reytinq: <input type="number" id="inp_${index}_kecmis" value="${student.kecmis_reyting || 0}"></label>
+                        <div><label>Cari Reytinq</label><input type="number" id="inp_${index}_cari" value="${student.cari_reyting || 0}"></div>
+                        <div><label>Keçmiş Reytinq</label><input type="number" id="inp_${index}_kecmis" value="${student.kecmis_reyting || 0}"></div>
                     `;
                 } else {
                     fieldsHTML = `
-                        <label>FM: <input type="number" id="inp_${index}_fm" value="${student.fm || 0}"></label>
-                        <label>Stepping: <input type="number" id="inp_${index}_stepping" value="${student.stepping || 0}"></label>
-                        <label>e-Olimp: <input type="number" id="inp_${index}_e_olimp" value="${student.e_olimp || 0}"></label>
-                        <label>CodeSources: <input type="number" id="inp_${index}_codesources" value="${student.codesources || 0}"></label>
-                        <label>HackerRank: <input type="number" id="inp_${index}_hackerrank" value="${student.hackerrank || 0}"></label>
-                        <label>Keçmiş Reytinq: <input type="number" id="inp_${index}_kecmis" value="${student.kecmis_reyting || 0}"></label>
+                        <div><label>FM</label><input type="number" id="inp_${index}_fm" value="${student.fm || 0}"></div>
+                        <div><label>Stepping</label><input type="number" id="inp_${index}_stepping" value="${student.stepping || 0}"></div>
+                        <div><label>e-Olimp</label><input type="number" id="inp_${index}_e_olimp" value="${student.e_olimp || 0}"></div>
+                        <div><label>CodeSources</label><input type="number" id="inp_${index}_codesources" value="${student.codesources || 0}"></div>
+                        <div><label>HackerRank</label><input type="number" id="inp_${index}_hackerrank" value="${student.hackerrank || 0}"></div>
+                        <div><label>Keçmiş Reytinq</label><input type="number" id="inp_${index}_kecmis" value="${student.kecmis_reyting || 0}"></div>
                     `;
                 }
 
                 adminBody.innerHTML += `
-                    <div style="border-bottom:1px solid #334155; padding:10px 0;">
-                        <strong>${student.ad}</strong>
-                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top:5px;">
+                    <div class="admin-student-card">
+                        <div class="admin-student-header">
+                            <div class="student-info">
+                                <img class="avatar" src="${student.foto}">
+                                <strong>${student.ad}</strong>
+                            </div>
+                            <span style="font-size:12px; color:var(--accent);">Cari Toplam: <strong>${student.cari_reyting}</strong></span>
+                        </div>
+                        <div class="grid-inputs">
                             ${fieldsHTML}
                         </div>
                     </div>
                 `;
             });
+        }
 
-            document.getElementById('adminModal').style.display = 'flex';
+        function filterAdminStudents() {
+            const query = document.getElementById('adminSearch').value;
+            renderAdminBody(query);
+        }
+
+        function addNewStudent() {
+            const name = prompt("Yeni Şagirdin Adı və Soyadı:");
+            if (!name) return;
+
+            const photo = prompt("Foto URL-i (Boş bıraxsanız avtomatik avatar təyin ediləcək):") || `https://i.pravatar.cc/150?img=${Math.floor(Math.random()*70)}`;
+
+            if (!globalData[currentTab]) globalData[currentTab] = [];
+
+            const newObj = currentTab === 'common' 
+                ? { id: Date.now(), ad: name, foto: photo, cari_reyting: 0, kecmis_reyting: 0 }
+                : { id: Date.now(), ad: name, foto: photo, fm: 0, stepping: 0, e_olimp: 0, codesources: 0, hackerrank: 0, kecmis_reyting: 0 };
+
+            globalData[currentTab].push(newObj);
+            database.ref('students_data').set(globalData).then(() => {
+                alert(`yeni şagird (${name}) əlavə edildi!`);
+            });
         }
 
         function closeAdminPanel() {
@@ -358,20 +504,24 @@
         function saveAdminChanges() {
             (globalData[currentTab] || []).forEach((student, index) => {
                 if (currentTab === 'common') {
-                    student.cari_reyting = Number(document.getElementById(`inp_${index}_cari`).value);
-                    student.kecmis_reyting = Number(document.getElementById(`inp_${index}_kecmis`).value);
+                    if (document.getElementById(`inp_${index}_cari`)) {
+                        student.cari_reyting = Number(document.getElementById(`inp_${index}_cari`).value);
+                        student.kecmis_reyting = Number(document.getElementById(`inp_${index}_kecmis`).value);
+                    }
                 } else {
-                    student.fm = Number(document.getElementById(`inp_${index}_fm`).value);
-                    student.stepping = Number(document.getElementById(`inp_${index}_stepping`).value);
-                    student.e_olimp = Number(document.getElementById(`inp_${index}_e_olimp`).value);
-                    student.codesources = Number(document.getElementById(`inp_${index}_codesources`).value);
-                    student.hackerrank = Number(document.getElementById(`inp_${index}_hackerrank`).value);
-                    student.kecmis_reyting = Number(document.getElementById(`inp_${index}_kecmis`).value);
+                    if (document.getElementById(`inp_${index}_fm`)) {
+                        student.fm = Number(document.getElementById(`inp_${index}_fm`).value);
+                        student.stepping = Number(document.getElementById(`inp_${index}_stepping`).value);
+                        student.e_olimp = Number(document.getElementById(`inp_${index}_e_olimp`).value);
+                        student.codesources = Number(document.getElementById(`inp_${index}_codesources`).value);
+                        student.hackerrank = Number(document.getElementById(`inp_${index}_hackerrank`).value);
+                        student.kecmis_reyting = Number(document.getElementById(`inp_${index}_kecmis`).value);
+                    }
                 }
             });
 
             database.ref('students_data').set(globalData).then(() => {
-                alert(`Dəyişikliklər ${activeAdminUser} tərəfindən uğurla yayımlandı!`);
+                alert(`Dəyişikliklər ${activeAdminUser} tərəfindən canlı yayımlandı! 🚀`);
                 closeAdminPanel();
             });
         }
