@@ -15,12 +15,13 @@
             --text-main: #f8fafc;
             --text-sub: #94a3b8;
             --accent: #38bdf8;
-            --accent-glow: rgba(56, 189, 248, 0.3);
+            --accent-glow: rgba(56, 189, 248, 0.35);
             --positive: #22c55e;
             --negative: #ef4444;
             --border: #334155;
-            --purple: #a855f7;
-            --danger: #f43f5e;
+            --gold: #f59e0b;
+            --silver: #94a3b8;
+            --bronze: #d97706;
         }
 
         body {
@@ -28,10 +29,10 @@
             background-color: var(--bg-color);
             color: var(--text-main);
             margin: 0;
-            padding: 20px;
+            padding: 15px;
         }
 
-        .container { max-width: 1200px; margin: 0 auto; }
+        .container { max-width: 1250px; margin: 0 auto; }
 
         .header {
             display: flex;
@@ -39,7 +40,7 @@
             align-items: center;
             flex-wrap: wrap;
             gap: 15px;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             background: var(--card-bg);
             padding: 20px;
             border-radius: 16px;
@@ -47,15 +48,15 @@
             box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
         }
 
-        h1 { margin: 0; font-size: 26px; color: var(--accent); text-shadow: 0 0 12px var(--accent-glow); }
+        h1 { margin: 0; font-size: 24px; color: var(--accent); text-shadow: 0 0 12px var(--accent-glow); }
 
-        .tabs { display: flex; gap: 10px; }
+        .tabs { display: flex; gap: 8px; flex-wrap: wrap; }
 
         .tab-btn {
             background-color: var(--card-inner);
             color: var(--text-sub);
             border: 1px solid var(--border);
-            padding: 10px 22px;
+            padding: 10px 20px;
             border-radius: 10px;
             cursor: pointer;
             font-weight: 600;
@@ -73,6 +74,8 @@
             display: flex;
             justify-content: space-between;
             margin-bottom: 20px;
+            gap: 10px;
+            flex-wrap: wrap;
         }
 
         .btn {
@@ -84,14 +87,49 @@
             cursor: pointer;
             font-weight: 600;
             transition: all 0.2s ease;
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
         }
 
         .btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
-        .btn:active { transform: translateY(0); }
-        .btn-admin { background-color: #e11d48; box-shadow: 0 4px 12px rgba(225, 29, 72, 0.3); }
-        .btn-add { background-color: var(--purple); box-shadow: 0 4px 12px rgba(168, 85, 247, 0.3); }
+        .btn-admin { background-color: #e11d48; }
 
+        /* Həftənin Zirvədəkiləri Dashboard */
+        .highlights-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .highlight-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 18px;
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.4);
+        }
+
+        .highlight-card h3 {
+            margin-top: 0;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 10px;
+        }
+
+        .mini-list { list-style: none; padding: 0; margin: 0; }
+        .mini-list li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            font-size: 14px;
+        }
+        .mini-list li:last-child { border-bottom: none; }
+
+        /* Cədvəl Dizaynı */
         .table-wrapper {
             background-color: var(--card-bg);
             border-radius: 16px;
@@ -100,14 +138,30 @@
             box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
         }
 
-        table { width: 100%; border-collapse: collapse; text-align: left; min-width: 800px; }
-        th, td { padding: 15px 18px; border-bottom: 1px solid var(--border); }
+        table { width: 100%; border-collapse: collapse; text-align: left; min-width: 850px; }
+        th, td { padding: 14px 16px; border-bottom: 1px solid var(--border); }
         th { background-color: #0f172a; color: var(--accent); font-size: 13px; letter-spacing: 0.5px; }
-        tr { transition: background 0.2s; }
         tr:hover { background-color: rgba(56, 189, 248, 0.05); }
 
         .student-info { display: flex; align-items: center; gap: 12px; }
-        .avatar { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent); box-shadow: 0 0 8px var(--accent-glow); }
+        .avatar { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent); }
+
+        /* Qurucu (Jüri) Stili */
+        .founder-row {
+            background: rgba(245, 158, 11, 0.05) !important;
+        }
+        .founder-badge {
+            background: linear-gradient(135deg, #f59e0b, #b45309);
+            color: #000;
+            font-size: 10px;
+            font-weight: 800;
+            padding: 2px 8px;
+            border-radius: 12px;
+            margin-left: 6px;
+            letter-spacing: 0.5px;
+            box-shadow: 0 0 10px rgba(245, 158, 11, 0.4);
+        }
+
         .badge-positive { color: var(--positive); font-weight: bold; background: rgba(34, 197, 94, 0.1); padding: 4px 8px; border-radius: 6px; }
         .badge-negative { color: var(--negative); font-weight: bold; background: rgba(239, 68, 68, 0.1); padding: 4px 8px; border-radius: 6px; }
         .rank-col { font-weight: bold; color: var(--accent); width: 40px; font-size: 16px; }
@@ -121,118 +175,48 @@
             backdrop-filter: blur(8px);
             justify-content: center; align-items: center;
             z-index: 1000;
-            animation: fadeIn 0.25s ease-out;
         }
-
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         .modal-content {
             background: var(--card-bg);
-            padding: 28px;
+            padding: 25px;
             border-radius: 20px;
-            max-width: 750px;
+            max-width: 800px;
             width: 92%;
             max-height: 85vh;
             overflow-y: auto;
             border: 1px solid var(--border);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
         }
-
-        .admin-stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-
-        .stat-card {
-            background: var(--card-inner);
-            padding: 14px 18px;
-            border-radius: 12px;
-            border: 1px solid var(--border);
-            text-align: center;
-        }
-
-        .stat-card div { font-size: 12px; color: var(--text-sub); margin-bottom: 4px; }
-        .stat-card span { font-size: 22px; font-weight: bold; color: var(--accent); }
-
-        .search-box {
-            width: 100%;
-            padding: 12px 16px;
-            border-radius: 10px;
-            border: 1px solid var(--border);
-            background: var(--card-inner);
-            color: white;
-            margin-bottom: 18px;
-            box-sizing: border-box;
-            outline: none;
-            transition: border-color 0.2s;
-        }
-        .search-box:focus { border-color: var(--accent); }
 
         .admin-student-card {
             background: var(--card-inner);
-            border-radius: 14px;
-            padding: 16px;
-            margin-bottom: 14px;
-            border: 1px solid var(--border);
-            transition: border-color 0.2s;
-        }
-        .admin-student-card:hover { border-color: rgba(56, 189, 248, 0.4); }
-
-        .admin-student-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+            border-radius: 12px;
+            padding: 14px;
             margin-bottom: 12px;
+            border: 1px solid var(--border);
         }
 
         .grid-inputs {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-            gap: 10px;
+            gap: 8px;
+            margin-top: 8px;
         }
 
-        .grid-inputs label {
-            font-size: 11px;
-            color: var(--text-sub);
-            display: block;
-            margin-bottom: 4px;
-        }
-
+        .grid-inputs label { font-size: 11px; color: var(--text-sub); display: block; margin-bottom: 3px; }
         .grid-inputs input {
-            width: 100%;
-            padding: 8px 10px;
-            border-radius: 8px;
-            border: 1px solid var(--border);
-            background: #0f172a;
-            color: white;
-            font-weight: bold;
-            box-sizing: border-box;
-            outline: none;
+            width: 100%; padding: 6px 8px; border-radius: 6px;
+            border: 1px solid var(--border); background: #0f172a; color: white;
+            font-weight: bold; box-sizing: border-box;
         }
-        .grid-inputs input:focus { border-color: var(--accent); }
 
-        .btn-delete {
-            background: transparent;
-            border: 1px solid var(--danger);
-            color: var(--danger);
-            padding: 6px 10px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 12px;
-            transition: all 0.2s;
-        }
-        .btn-delete:hover { background: var(--danger); color: white; }
-
-        .form-group { margin-bottom: 18px; }
-        .form-group label { display: block; margin-bottom: 6px; color: var(--text-sub); font-size: 14px; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; color: var(--text-sub); }
         .form-group input {
-            width: 100%; padding: 12px; border-radius: 10px;
+            width: 100%; padding: 10px; border-radius: 8px;
             border: 1px solid var(--border); background: var(--card-inner); color: white;
-            box-sizing: border-box; outline: none;
+            box-sizing: border-box;
         }
-        .form-group input:focus { border-color: var(--accent); }
     </style>
 </head>
 <body>
@@ -244,6 +228,22 @@
                 <button class="tab-btn active" id="btn-cpp" onclick="switchTab('cpp')">C++</button>
                 <button class="tab-btn" id="btn-python" onclick="switchTab('python')">Python</button>
                 <button class="tab-btn" id="btn-common" onclick="switchTab('common')">Common</button>
+            </div>
+        </div>
+
+        <!-- Həftənin Zirvədəkiləri -->
+        <div class="highlights-grid">
+            <div class="highlight-card">
+                <h3 style="color:var(--gold);">🥇 Həftənin Liderləri</h3>
+                <ul class="mini-list" id="topList"></ul>
+            </div>
+            <div class="highlight-card">
+                <h3 style="color:var(--accent);">⚡ Ötən Həftənin Çempionları</h3>
+                <ul class="mini-list" id="pastTopList"></ul>
+            </div>
+            <div class="highlight-card">
+                <h3 style="color:var(--negative);">🚀 Yüksəliş Gözlənilənlər</h3>
+                <ul class="mini-list" id="bottomList"></ul>
             </div>
         </div>
 
@@ -260,9 +260,9 @@
         </div>
     </div>
 
-    <!-- 1. Giriş Pəncərəsi (Login Modal) -->
+    <!-- Login Modal -->
     <div id="loginModal" class="modal">
-        <div class="modal-content" style="max-width:420px;">
+        <div class="modal-content" style="max-width:400px;">
             <h2 style="margin-top:0; color:var(--accent);">🔑 Admin Girişi</h2>
             <div class="form-group">
                 <label>İstifadəçi Adı:</label>
@@ -272,41 +272,18 @@
                 <label>Şifrə:</label>
                 <input type="password" id="loginPass" placeholder="Şifrənizi daxil edin" onkeydown="handlePassKey(event)">
             </div>
-            <button class="btn btn-admin" style="width:100%; margin-top:5px;" onclick="handleLogin()">Giriş Et</button>
+            <button class="btn btn-admin" style="width:100%;" onclick="handleLogin()">Giriş Et</button>
             <button class="btn" style="width:100%; margin-top:10px; background:#64748b;" onclick="closeLoginModal()">Ləğv Et</button>
         </div>
     </div>
 
-    <!-- 2. İnteraktiv Admin Paneli -->
+    <!-- Admin Modal -->
     <div id="adminModal" class="modal">
         <div class="modal-content">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;">
-                <h2 id="welcomeAdmin" style="margin:0; color:var(--accent);">⚙️ Admin Paneli</h2>
-                <button class="btn btn-add" onclick="addNewStudent()">➕ Yeni Şagird</button>
-            </div>
-
-            <!-- İnteraktiv Statistika -->
-            <div class="admin-stats">
-                <div class="stat-card">
-                    <div>Ümumi Şagird Sayı</div>
-                    <span id="statCount">0</span>
-                </div>
-                <div class="stat-card">
-                    <div>Orta Reytinq Balı</div>
-                    <span id="statAvg">0</span>
-                </div>
-                <div class="stat-card">
-                    <div>Lider Şagird</div>
-                    <span id="statTop" style="font-size:15px; color:var(--positive);">-</span>
-                </div>
-            </div>
-
-            <!-- Canlı Axtarış -->
-            <input type="text" id="adminSearch" class="search-box" placeholder="🔍 Şagird adı ilə axtar..." oninput="filterAdminStudents()">
-
+            <h2 id="welcomeAdmin" style="margin-top:0; color:var(--accent);">⚙️ Admin Paneli</h2>
+            <p style="font-size:12px; color:var(--text-sub);">💡 Qeyd: Cari Reytinq və Artım avtomatik hesablanır. Siz yalnız platforma ballarını və keçmiş reytinqi dəyişə bilərsiniz.</p>
             <div id="adminBody"></div>
-
-            <div style="display:flex; gap:10px; margin-top:20px;">
+            <div style="display:flex; gap:10px; margin-top:15px;">
                 <button class="btn" style="flex:2;" onclick="saveAdminChanges()">💾 Yadda Saxla və Yayımla</button>
                 <button class="btn" style="flex:1; background:#64748b;" onclick="closeAdminPanel()">Çıxış Et</button>
             </div>
@@ -334,26 +311,34 @@
             "Jameson": "Kenan2007"
         };
 
+        // Qurucular / Jürilər siyahısı
+        const FOUNDERS = ["Süleymanzadə Aqşin", "Məmmədli Turan", "Gülverdiyev Kənan"];
+
+        // 25 Şagirdin Siyahısı
+        const STUDENT_NAMES = [
+            "Abbasov Rüfət", "Abıyeva Aysun", "Ağazadə poladxan", "Allahverdiyev Amid",
+            "Bəbirov Soltan", "Cavadzadə Mirzə", "Əhmədli Bahar", "Əliyeva Əsmər",
+            "Əliyeva Hüsna", "Əliyeva Mehriban", "Əlizadə Rəhimə", "Əsgərova Çinarə",
+            "Fərzalı Səma", "Gülverdiyev Kənan", "Həşimova Fatimə", "Hüseyinova Səbinə",
+            "Hüseyinzadə Aygün", "İbrahimova Rəşqəndə", "Məmmədli Əhməd", "Məmmədli Turan",
+            "Məmmədova Sabrina", "Musazadə Rəşad", "Süleymanzadə Aqşin", "Şəmsiyev Xosu",
+            "Təhməzova Leyla"
+        ];
+
         let activeAdminUser = null;
         let globalData = {};
         let currentTab = 'cpp';
 
         database.ref('students_data').on('value', (snapshot) => {
             const data = snapshot.val();
-            if (data) {
+            if (data && data.cpp && data.cpp.length === 25) {
                 globalData = data;
             } else {
+                // İlkin 25 şagird məlumatının formalaşdırılması
                 globalData = {
-                    cpp: [
-                        { id: 1, ad: "Əli Məmmədov", foto: "https://i.pravatar.cc/150?img=11", fm: 85, stepping: 90, e_olimp: 75, codesources: 88, hackerrank: 92, kecmis_reyting: 410 },
-                        { id: 2, ad: "Aysel Əliyeva", foto: "https://i.pravatar.cc/150?img=5", fm: 95, stepping: 88, e_olimp: 90, codesources: 94, hackerrank: 96, kecmis_reyting: 450 }
-                    ],
-                    python: [
-                        { id: 1, ad: "Əli Məmmədov", foto: "https://i.pravatar.cc/150?img=11", fm: 90, stepping: 95, e_olimp: 85, codesources: 90, hackerrank: 94, kecmis_reyting: 430 }
-                    ],
-                    common: [
-                        { id: 1, ad: "Əli Məmmədov", foto: "https://i.pravatar.cc/150?img=11", cari_reyting: 884, kecmis_reyting: 840 }
-                    ]
+                    cpp: STUDENT_NAMES.map((name, i) => ({ id: i+1, ad: name, foto: `https://i.pravatar.cc/150?img=${(i%70)+1}`, fm: 0, stepping: 0, e_olimp: 0, codesources: 0, hackerrank: 0, kecmis_reyting: 0 })),
+                    python: STUDENT_NAMES.map((name, i) => ({ id: i+1, ad: name, foto: `https://i.pravatar.cc/150?img=${(i%70)+1}`, fm: 0, stepping: 0, e_olimp: 0, codesources: 0, hackerrank: 0, kecmis_reyting: 0 })),
+                    common: STUDENT_NAMES.map((name, i) => ({ id: i+1, ad: name, foto: `https://i.pravatar.cc/150?img=${(i%70)+1}`, kecmis_reyting: 0 }))
                 };
                 database.ref('students_data').set(globalData);
             }
@@ -369,10 +354,17 @@
             if (activeAdminUser) renderAdminBody();
         }
 
-        function calculateTotals(student) {
+        function calculateTotals(student, index) {
             if (currentTab === 'common') {
-                const artim = Number(student.cari_reyting || 0) - Number(student.kecmis_reyting || 0);
-                return { ...student, artim };
+                const cppStudent = globalData.cpp ? globalData.cpp[index] : null;
+                const pyStudent = globalData.python ? globalData.python[index] : null;
+                
+                const cppCari = cppStudent ? (cppStudent.fm||0)+(cppStudent.stepping||0)+(cppStudent.e_olimp||0)+(cppStudent.codesources||0)+(cppStudent.hackerrank||0) : 0;
+                const pyCari = pyStudent ? (pyStudent.fm||0)+(pyStudent.stepping||0)+(pyStudent.e_olimp||0)+(pyStudent.codesources||0)+(pyStudent.hackerrank||0) : 0;
+                
+                const cari = cppCari + pyCari;
+                const artim = cari - Number(student.kecmis_reyting || 0);
+                return { ...student, cari_reyting: cari, artim };
             } else {
                 const cari = Number(student.fm || 0) + Number(student.stepping || 0) + Number(student.e_olimp || 0) + Number(student.codesources || 0) + Number(student.hackerrank || 0);
                 const artim = cari - Number(student.kecmis_reyting || 0);
@@ -384,7 +376,9 @@
             const tableHead = document.querySelector('#ratingTable thead');
             const tableBody = document.querySelector('#tableBody');
             const rawList = globalData[currentTab] || [];
-            const list = rawList.map(calculateTotals);
+            const list = rawList.map((s, idx) => calculateTotals(s, idx));
+
+            updateHighlights(list);
 
             if (currentTab === 'common') {
                 tableHead.innerHTML = `<tr><th>#</th><th>Şagird</th><th>Cari Reytinq</th><th>Keçmiş Reytinq</th><th>Artım</th></tr>`;
@@ -395,13 +389,17 @@
             tableBody.innerHTML = '';
             list.forEach((item, index) => {
                 const row = document.createElement('tr');
+                const isFounder = FOUNDERS.includes(item.ad);
+                if (isFounder) row.classList.add('founder-row');
+
                 const artimClass = item.artim >= 0 ? 'badge-positive' : 'badge-negative';
                 const artimSign = item.artim >= 0 ? `+${item.artim}` : item.artim;
+                const founderBadge = isFounder ? `<span class="founder-badge">👑 JÜRİ</span>` : '';
 
                 if (currentTab === 'common') {
                     row.innerHTML = `
                         <td class="rank-col">${index + 1}</td>
-                        <td><div class="student-info"><img class="avatar" src="${item.foto}"><span>${item.ad}</span></div></td>
+                        <td><div class="student-info"><img class="avatar" src="${item.foto}"><span>${item.ad} ${founderBadge}</span></div></td>
                         <td><strong>${item.cari_reyting}</strong></td>
                         <td>${item.kecmis_reyting}</td>
                         <td class="${artimClass}">${artimSign}</td>
@@ -409,7 +407,7 @@
                 } else {
                     row.innerHTML = `
                         <td class="rank-col">${index + 1}</td>
-                        <td><div class="student-info"><img class="avatar" src="${item.foto}"><span>${item.ad}</span></div></td>
+                        <td><div class="student-info"><img class="avatar" src="${item.foto}"><span>${item.ad} ${founderBadge}</span></div></td>
                         <td>${item.fm}</td><td>${item.stepping}</td><td>${item.e_olimp}</td><td>${item.codesources}</td><td>${item.hackerrank}</td>
                         <td><strong>${item.cari_reyting}</strong></td>
                         <td>${item.kecmis_reyting}</td>
@@ -420,13 +418,39 @@
             });
         }
 
+        function updateHighlights(list) {
+            const sortedCurrent = [...list].sort((a,b) => b.cari_reyting - a.cari_reyting);
+            const sortedPast = [...list].sort((a,b) => b.kecmis_reyting - a.kecmis_reyting);
+
+            // Həftənin Liderləri (Top 3)
+            const topList = document.getElementById('topList');
+            topList.innerHTML = sortedCurrent.slice(0, 3).map((s, i) => 
+                `<li><span>${i===0?'👑':i===1?'🥈':'🥉'} ${s.ad}</span><strong>${s.cari_reyting} pt</strong></li>`
+            ).join('');
+
+            // Ötən Həftənin Çempionları (Top 3)
+            const pastTopList = document.getElementById('pastTopList');
+            pastTopList.innerHTML = sortedPast.slice(0, 3).map((s, i) => 
+                `<li><span>⭐ ${s.ad}</span><span>${s.kecmis_reyting} pt</span></li>`
+            ).join('');
+
+            // Sonuncu 3 nəfər
+            const bottomList = document.getElementById('bottomList');
+            bottomList.innerHTML = sortedCurrent.slice(-3).reverse().map(s => 
+                `<li><span>⚠️ ${s.ad}</span><span style="color:var(--negative);">${s.cari_reyting} pt</span></li>`
+            ).join('');
+        }
+
         function sortAndRender() {
             if (!globalData[currentTab]) return;
-            globalData[currentTab].sort((a, b) => calculateTotals(b).cari_reyting - calculateTotals(a).cari_reyting);
+            globalData[currentTab].sort((a, b) => {
+                const idxA = globalData[currentTab].indexOf(a);
+                const idxB = globalData[currentTab].indexOf(b);
+                return calculateTotals(b, idxB).cari_reyting - calculateTotals(a, idxA).cari_reyting;
+            });
             renderTable();
         }
 
-        /* --- Klaviatura və Giriş Əməliyyatları --- */
         function handleUserKey(event) {
             if (event.key === "Enter") {
                 event.preventDefault();
@@ -471,26 +495,15 @@
             document.getElementById('adminModal').style.display = 'flex';
         }
 
-        function renderAdminBody(filterQuery = '') {
-            const list = (globalData[currentTab] || []).map(calculateTotals);
+        function renderAdminBody() {
+            const rawList = globalData[currentTab] || [];
             const adminBody = document.getElementById('adminBody');
             adminBody.innerHTML = '';
 
-            const totalStudents = list.length;
-            const avgRating = totalStudents > 0 ? Math.round(list.reduce((acc, s) => acc + s.cari_reyting, 0) / totalStudents) : 0;
-            const topStudent = totalStudents > 0 ? list.reduce((prev, current) => (prev.cari_reyting > current.cari_reyting) ? prev : current) : null;
-
-            document.getElementById('statCount').innerText = totalStudents;
-            document.getElementById('statAvg').innerText = avgRating;
-            document.getElementById('statTop').innerText = topStudent ? `${topStudent.ad} (${topStudent.cari_reyting} pt)` : '-';
-
-            const filteredList = list.filter(s => s.ad.toLowerCase().includes(filterQuery.toLowerCase()));
-
-            filteredList.forEach((student, index) => {
+            rawList.forEach((student, index) => {
                 let fieldsHTML = '';
                 if (currentTab === 'common') {
                     fieldsHTML = `
-                        <div><label>Cari Reytinq</label><input type="number" id="inp_${index}_cari" value="${student.cari_reyting || 0}"></div>
                         <div><label>Keçmiş Reytinq</label><input type="number" id="inp_${index}_kecmis" value="${student.kecmis_reyting || 0}"></div>
                     `;
                 } else {
@@ -506,54 +519,13 @@
 
                 adminBody.innerHTML += `
                     <div class="admin-student-card">
-                        <div class="admin-student-header">
-                            <div class="student-info">
-                                <img class="avatar" src="${student.foto}">
-                                <strong>${student.ad}</strong>
-                            </div>
-                            <div style="display:flex; align-items:center; gap:10px;">
-                                <span style="font-size:13px; color:var(--accent);">Cari Bal: <strong>${student.cari_reyting}</strong></span>
-                                <button class="btn-delete" onclick="deleteStudent(${student.id})">🗑️ Sil</button>
-                            </div>
-                        </div>
+                        <strong>${index+1}. ${student.ad}</strong>
                         <div class="grid-inputs">
                             ${fieldsHTML}
                         </div>
                     </div>
                 `;
             });
-        }
-
-        function filterAdminStudents() {
-            const query = document.getElementById('adminSearch').value;
-            renderAdminBody(query);
-        }
-
-        function addNewStudent() {
-            const name = prompt("Yeni Şagirdin Adı və Soyadı:");
-            if (!name) return;
-
-            const photo = prompt("Foto URL-i (Boş bıraxsanız avtomatik avatar təyin ediləcək):") || `https://i.pravatar.cc/150?img=${Math.floor(Math.random()*70)}`;
-
-            if (!globalData[currentTab]) globalData[currentTab] = [];
-
-            const newObj = currentTab === 'common' 
-                ? { id: Date.now(), ad: name, foto: photo, cari_reyting: 0, kecmis_reyting: 0 }
-                : { id: Date.now(), ad: name, foto: photo, fm: 0, stepping: 0, e_olimp: 0, codesources: 0, hackerrank: 0, kecmis_reyting: 0 };
-
-            globalData[currentTab].push(newObj);
-            database.ref('students_data').set(globalData).then(() => {
-                alert(`Yeni şagird (${name}) əlavə edildi!`);
-            });
-        }
-
-        function deleteStudent(id) {
-            if (confirm("Bu şagirdi siyahıdan silməyə əminsiniz?")) {
-                globalData[currentTab] = globalData[currentTab].filter(s => s.id !== id);
-                database.ref('students_data').set(globalData).then(() => {
-                    renderAdminBody();
-                });
-            }
         }
 
         function closeAdminPanel() {
@@ -564,8 +536,7 @@
         function saveAdminChanges() {
             (globalData[currentTab] || []).forEach((student, index) => {
                 if (currentTab === 'common') {
-                    if (document.getElementById(`inp_${index}_cari`)) {
-                        student.cari_reyting = Number(document.getElementById(`inp_${index}_cari`).value);
+                    if (document.getElementById(`inp_${index}_kecmis`)) {
                         student.kecmis_reyting = Number(document.getElementById(`inp_${index}_kecmis`).value);
                     }
                 } else {
