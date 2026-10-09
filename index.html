@@ -20,6 +20,7 @@
             --negative: #ef4444;
             --border: #374151;
             --gold: #f59e0b;
+            --gold-glow: rgba(245, 158, 11, 0.3);
         }
 
         body {
@@ -68,6 +69,67 @@
             border-color: var(--accent);
             box-shadow: 0 0 12px var(--accent-glow);
         }
+
+        /* 👑 Kreativ Jüri Bölməsi */
+        .jury-section {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.08), rgba(17, 24, 39, 0.8));
+            border: 1px solid var(--gold);
+            border-radius: 16px;
+            padding: 18px 22px;
+            margin-bottom: 20px;
+            box-shadow: 0 0 20px var(--gold-glow);
+        }
+
+        .jury-title {
+            margin: 0 0 12px 0;
+            font-size: 16px;
+            color: var(--gold);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .jury-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 12px;
+        }
+
+        .jury-card {
+            background: rgba(31, 41, 55, 0.7);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 12px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            backdrop-filter: blur(4px);
+            transition: transform 0.2s ease;
+        }
+
+        .jury-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--gold);
+            box-shadow: 0 0 12px var(--gold-glow);
+        }
+
+        .jury-card-avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            border: 2px solid var(--gold);
+            box-shadow: 0 0 10px var(--gold-glow);
+            overflow: hidden;
+            background: #1f2937;
+            flex-shrink: 0;
+        }
+
+        .jury-card-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+        .jury-card-info strong { display: block; font-size: 14px; color: #fff; }
+        .jury-card-info span { font-size: 11px; color: var(--gold); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
 
         .action-bar {
             display: flex;
@@ -156,7 +218,7 @@
         }
         .avatar img { width: 100%; height: 100%; object-fit: cover; }
 
-        .founder-row { background: rgba(245, 158, 11, 0.04) !important; }
+        .founder-row { background: rgba(245, 158, 11, 0.05) !important; }
         .founder-badge {
             background: linear-gradient(135deg, #f59e0b, #d97706);
             color: #000;
@@ -165,6 +227,7 @@
             padding: 2px 7px;
             border-radius: 6px;
             white-space: nowrap;
+            box-shadow: 0 0 8px var(--gold-glow);
         }
 
         .badge-positive { color: var(--positive); font-weight: bold; background: rgba(34, 197, 94, 0.1); padding: 3px 8px; border-radius: 6px; }
@@ -248,6 +311,40 @@
                 <button class="tab-btn active" id="btn-cpp" onclick="switchTab('cpp')">C++</button>
                 <button class="tab-btn" id="btn-python" onclick="switchTab('python')">Python</button>
                 <button class="tab-btn" id="btn-common" onclick="switchTab('common')">Common</button>
+            </div>
+        </div>
+
+        <!-- 👑 Kreativ Jüri Şərəf Bölməsi -->
+        <div class="jury-section">
+            <div class="jury-title">👑 Münsiflər Heyəti (Jürilər)</div>
+            <div class="jury-cards-grid">
+                <div class="jury-card">
+                    <div class="jury-card-avatar">
+                        <img src="https://svgsilh.com/svg/1300331.svg" alt="Aqşin">
+                    </div>
+                    <div class="jury-card-info">
+                        <strong>Süleymanzadə Aqşin</strong>
+                        <span>⭐ Baş Jüri / Təsisçi</span>
+                    </div>
+                </div>
+                <div class="jury-card">
+                    <div class="jury-card-avatar">
+                        <img src="https://svgsilh.com/svg/1300331.svg" alt="Turan">
+                    </div>
+                    <div class="jury-card-info">
+                        <strong>Məmmədli Turan</strong>
+                        <span>⭐ Jüri / Təsisçi</span>
+                    </div>
+                </div>
+                <div class="jury-card">
+                    <div class="jury-card-avatar">
+                        <img src="https://svgsilh.com/svg/1300331.svg" alt="Kənan">
+                    </div>
+                    <div class="jury-card-info">
+                        <strong>Gülverdiyev Kənan</strong>
+                        <span>⭐ Jüri / Təsisçi</span>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -340,8 +437,8 @@
 
         const FOUNDERS = ["Süleymanzadə Aqşin", "Məmmədli Turan", "Gülverdiyev Kənan"];
 
-        // İstifadəçinin göndərdiyi Pinterest profil fotosu
-        const DEFAULT_AVATAR_URL = "https://i.pinimg.com/736x/21/20/b0/2120b058d619307761340407a1065114.jpg";
+        // Göndərilən istock boz profil vektoru URL-i
+        const DEFAULT_AVATAR_URL = "https://svgsilh.com/svg/1300331.svg";
 
         const STUDENT_NAMES = [
             "Abbasov Rüfət", "Abıyeva Aysun", "Ağazadə poladxan", "Allahverdiyev Amid",
@@ -612,7 +709,6 @@
             });
         }
 
-        // Şəkil yükləmə və sıxışdırma məntiqi
         function handleImageUpload(event, index) {
             const file = event.target.files[0];
             if (!file) return;
