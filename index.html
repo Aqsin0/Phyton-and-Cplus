@@ -20,8 +20,6 @@
             --negative: #ef4444;
             --border: #334155;
             --gold: #f59e0b;
-            --silver: #94a3b8;
-            --bronze: #d97706;
         }
 
         body {
@@ -29,7 +27,7 @@
             background-color: var(--bg-color);
             color: var(--text-main);
             margin: 0;
-            padding: 15px;
+            padding: 12px;
         }
 
         .container { max-width: 1250px; margin: 0 auto; }
@@ -42,13 +40,13 @@
             gap: 15px;
             margin-bottom: 20px;
             background: var(--card-bg);
-            padding: 20px;
+            padding: 18px 20px;
             border-radius: 16px;
             border: 1px solid var(--border);
             box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
         }
 
-        h1 { margin: 0; font-size: 24px; color: var(--accent); text-shadow: 0 0 12px var(--accent-glow); }
+        h1 { margin: 0; font-size: 22px; color: var(--accent); text-shadow: 0 0 12px var(--accent-glow); }
 
         .tabs { display: flex; gap: 8px; flex-wrap: wrap; }
 
@@ -56,7 +54,7 @@
             background-color: var(--card-inner);
             color: var(--text-sub);
             border: 1px solid var(--border);
-            padding: 10px 20px;
+            padding: 10px 18px;
             border-radius: 10px;
             cursor: pointer;
             font-weight: 600;
@@ -92,10 +90,10 @@
         .btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
         .btn-admin { background-color: #e11d48; }
 
-        /* Həftənin Zirvədəkiləri Dashboard */
+        /* Həftəlik Statistika Kartları */
         .highlights-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
             gap: 15px;
             margin-bottom: 25px;
         }
@@ -104,13 +102,13 @@
             background: var(--card-bg);
             border: 1px solid var(--border);
             border-radius: 16px;
-            padding: 18px;
+            padding: 16px;
             box-shadow: 0 10px 25px -5px rgba(0,0,0,0.4);
         }
 
         .highlight-card h3 {
             margin-top: 0;
-            font-size: 16px;
+            font-size: 15px;
             display: flex;
             align-items: center;
             gap: 8px;
@@ -125,11 +123,11 @@
             align-items: center;
             padding: 8px 0;
             border-bottom: 1px solid rgba(255,255,255,0.05);
-            font-size: 14px;
+            font-size: 13.5px;
         }
         .mini-list li:last-child { border-bottom: none; }
 
-        /* Cədvəl Dizaynı */
+        /* Cədvəl Adaptivliyi */
         .table-wrapper {
             background-color: var(--card-bg);
             border-radius: 16px;
@@ -138,35 +136,37 @@
             box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
         }
 
-        table { width: 100%; border-collapse: collapse; text-align: left; min-width: 850px; }
-        th, td { padding: 14px 16px; border-bottom: 1px solid var(--border); }
-        th { background-color: #0f172a; color: var(--accent); font-size: 13px; letter-spacing: 0.5px; }
+        table { width: 100%; border-collapse: collapse; text-align: left; min-width: 800px; }
+        th, td { padding: 12px 14px; border-bottom: 1px solid var(--border); }
+        th { background-color: #0f172a; color: var(--accent); font-size: 12.5px; letter-spacing: 0.5px; }
         tr:hover { background-color: rgba(56, 189, 248, 0.05); }
 
-        .student-info { display: flex; align-items: center; gap: 12px; }
-        .avatar { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent); }
+        .student-info { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+        .avatar { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent); background: #0f172a; flex-shrink: 0; }
 
-        /* Qurucu (Jüri) Stili */
+        /* Mobil və Dekstop Uyğun Jüri Nişanı */
         .founder-row {
-            background: rgba(245, 158, 11, 0.05) !important;
+            background: rgba(245, 158, 11, 0.06) !important;
         }
         .founder-badge {
-            background: linear-gradient(135deg, #f59e0b, #b45309);
+            background: linear-gradient(135deg, #f59e0b, #d97706);
             color: #000;
             font-size: 10px;
             font-weight: 800;
-            padding: 2px 8px;
-            border-radius: 12px;
-            margin-left: 6px;
-            letter-spacing: 0.5px;
-            box-shadow: 0 0 10px rgba(245, 158, 11, 0.4);
+            padding: 3px 8px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            white-space: nowrap;
+            box-shadow: 0 0 8px rgba(245, 158, 11, 0.4);
         }
 
         .badge-positive { color: var(--positive); font-weight: bold; background: rgba(34, 197, 94, 0.1); padding: 4px 8px; border-radius: 6px; }
         .badge-negative { color: var(--negative); font-weight: bold; background: rgba(239, 68, 68, 0.1); padding: 4px 8px; border-radius: 6px; }
-        .rank-col { font-weight: bold; color: var(--accent); width: 40px; font-size: 16px; }
+        .rank-col { font-weight: bold; color: var(--accent); width: 35px; font-size: 15px; }
 
-        /* Modal Stiller */
+        /* Modal Stilləri */
         .modal {
             display: none;
             position: fixed;
@@ -179,9 +179,9 @@
 
         .modal-content {
             background: var(--card-bg);
-            padding: 25px;
+            padding: 22px;
             border-radius: 20px;
-            max-width: 800px;
+            max-width: 850px;
             width: 92%;
             max-height: 85vh;
             overflow-y: auto;
@@ -198,9 +198,9 @@
 
         .grid-inputs {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(95px, 1fr));
             gap: 8px;
-            margin-top: 8px;
+            margin-top: 10px;
         }
 
         .grid-inputs label { font-size: 11px; color: var(--text-sub); display: block; margin-bottom: 3px; }
@@ -231,7 +231,7 @@
             </div>
         </div>
 
-        <!-- Həftənin Zirvədəkiləri -->
+        <!-- Statistika Paneli -->
         <div class="highlights-grid">
             <div class="highlight-card">
                 <h3 style="color:var(--gold);">🥇 Həftənin Liderləri</h3>
@@ -281,7 +281,7 @@
     <div id="adminModal" class="modal">
         <div class="modal-content">
             <h2 id="welcomeAdmin" style="margin-top:0; color:var(--accent);">⚙️ Admin Paneli</h2>
-            <p style="font-size:12px; color:var(--text-sub);">💡 Qeyd: Cari Reytinq və Artım avtomatik hesablanır. Siz yalnız platforma ballarını və keçmiş reytinqi dəyişə bilərsiniz.</p>
+            <p style="font-size:12px; color:var(--text-sub);">💡 Qeyd: Cari Reytinq və Artım avtomatik hesablanır. Bura şagirdlərin foto linkini və platforma ballarını daxil edə bilərsiniz.</p>
             <div id="adminBody"></div>
             <div style="display:flex; gap:10px; margin-top:15px;">
                 <button class="btn" style="flex:2;" onclick="saveAdminChanges()">💾 Yadda Saxla və Yayımla</button>
@@ -311,10 +311,11 @@
             "Jameson": "Kenan2007"
         };
 
-        // Qurucular / Jürilər siyahısı
         const FOUNDERS = ["Süleymanzadə Aqşin", "Məmmədli Turan", "Gülverdiyev Kənan"];
 
-        // 25 Şagirdin Siyahısı
+        // Neytral Standart Avatara Yönləndirmə
+        const DEFAULT_AVATAR = "https://ui-avatars.com/api/?background=1e293b&color=38bdf8&name=";
+
         const STUDENT_NAMES = [
             "Abbasov Rüfət", "Abıyeva Aysun", "Ağazadə poladxan", "Allahverdiyev Amid",
             "Bəbirov Soltan", "Cavadzadə Mirzə", "Əhmədli Bahar", "Əliyeva Əsmər",
@@ -334,11 +335,10 @@
             if (data && data.cpp && data.cpp.length === 25) {
                 globalData = data;
             } else {
-                // İlkin 25 şagird məlumatının formalaşdırılması
                 globalData = {
-                    cpp: STUDENT_NAMES.map((name, i) => ({ id: i+1, ad: name, foto: `https://i.pravatar.cc/150?img=${(i%70)+1}`, fm: 0, stepping: 0, e_olimp: 0, codesources: 0, hackerrank: 0, kecmis_reyting: 0 })),
-                    python: STUDENT_NAMES.map((name, i) => ({ id: i+1, ad: name, foto: `https://i.pravatar.cc/150?img=${(i%70)+1}`, fm: 0, stepping: 0, e_olimp: 0, codesources: 0, hackerrank: 0, kecmis_reyting: 0 })),
-                    common: STUDENT_NAMES.map((name, i) => ({ id: i+1, ad: name, foto: `https://i.pravatar.cc/150?img=${(i%70)+1}`, kecmis_reyting: 0 }))
+                    cpp: STUDENT_NAMES.map((name, i) => ({ id: i+1, ad: name, foto: DEFAULT_AVATAR + encodeURIComponent(name), fm: 0, stepping: 0, e_olimp: 0, codesources: 0, hackerrank: 0, kecmis_reyting: 0 })),
+                    python: STUDENT_NAMES.map((name, i) => ({ id: i+1, ad: name, foto: DEFAULT_AVATAR + encodeURIComponent(name), fm: 0, stepping: 0, e_olimp: 0, codesources: 0, hackerrank: 0, kecmis_reyting: 0 })),
+                    common: STUDENT_NAMES.map((name, i) => ({ id: i+1, ad: name, foto: DEFAULT_AVATAR + encodeURIComponent(name), kecmis_reyting: 0 }))
                 };
                 database.ref('students_data').set(globalData);
             }
@@ -395,11 +395,12 @@
                 const artimClass = item.artim >= 0 ? 'badge-positive' : 'badge-negative';
                 const artimSign = item.artim >= 0 ? `+${item.artim}` : item.artim;
                 const founderBadge = isFounder ? `<span class="founder-badge">👑 JÜRİ</span>` : '';
+                const imgSrc = item.foto || (DEFAULT_AVATAR + encodeURIComponent(item.ad));
 
                 if (currentTab === 'common') {
                     row.innerHTML = `
                         <td class="rank-col">${index + 1}</td>
-                        <td><div class="student-info"><img class="avatar" src="${item.foto}"><span>${item.ad} ${founderBadge}</span></div></td>
+                        <td><div class="student-info"><img class="avatar" src="${imgSrc}"><span>${item.ad}</span>${founderBadge}</div></td>
                         <td><strong>${item.cari_reyting}</strong></td>
                         <td>${item.kecmis_reyting}</td>
                         <td class="${artimClass}">${artimSign}</td>
@@ -407,7 +408,7 @@
                 } else {
                     row.innerHTML = `
                         <td class="rank-col">${index + 1}</td>
-                        <td><div class="student-info"><img class="avatar" src="${item.foto}"><span>${item.ad} ${founderBadge}</span></div></td>
+                        <td><div class="student-info"><img class="avatar" src="${imgSrc}"><span>${item.ad}</span>${founderBadge}</div></td>
                         <td>${item.fm}</td><td>${item.stepping}</td><td>${item.e_olimp}</td><td>${item.codesources}</td><td>${item.hackerrank}</td>
                         <td><strong>${item.cari_reyting}</strong></td>
                         <td>${item.kecmis_reyting}</td>
@@ -422,19 +423,16 @@
             const sortedCurrent = [...list].sort((a,b) => b.cari_reyting - a.cari_reyting);
             const sortedPast = [...list].sort((a,b) => b.kecmis_reyting - a.kecmis_reyting);
 
-            // Həftənin Liderləri (Top 3)
             const topList = document.getElementById('topList');
             topList.innerHTML = sortedCurrent.slice(0, 3).map((s, i) => 
                 `<li><span>${i===0?'👑':i===1?'🥈':'🥉'} ${s.ad}</span><strong>${s.cari_reyting} pt</strong></li>`
             ).join('');
 
-            // Ötən Həftənin Çempionları (Top 3)
             const pastTopList = document.getElementById('pastTopList');
             pastTopList.innerHTML = sortedPast.slice(0, 3).map((s, i) => 
                 `<li><span>⭐ ${s.ad}</span><span>${s.kecmis_reyting} pt</span></li>`
             ).join('');
 
-            // Sonuncu 3 nəfər
             const bottomList = document.getElementById('bottomList');
             bottomList.innerHTML = sortedCurrent.slice(-3).reverse().map(s => 
                 `<li><span>⚠️ ${s.ad}</span><span style="color:var(--negative);">${s.cari_reyting} pt</span></li>`
@@ -502,12 +500,16 @@
 
             rawList.forEach((student, index) => {
                 let fieldsHTML = '';
+                const photoVal = student.foto || '';
+
                 if (currentTab === 'common') {
                     fieldsHTML = `
+                        <div style="grid-column: span 2;"><label>📷 Foto URL</label><input type="text" id="inp_${index}_foto" value="${photoVal}" placeholder="https://..."></div>
                         <div><label>Keçmiş Reytinq</label><input type="number" id="inp_${index}_kecmis" value="${student.kecmis_reyting || 0}"></div>
                     `;
                 } else {
                     fieldsHTML = `
+                        <div style="grid-column: span 2;"><label>📷 Foto URL</label><input type="text" id="inp_${index}_foto" value="${photoVal}" placeholder="https://..."></div>
                         <div><label>FM</label><input type="number" id="inp_${index}_fm" value="${student.fm || 0}"></div>
                         <div><label>Stepping</label><input type="number" id="inp_${index}_stepping" value="${student.stepping || 0}"></div>
                         <div><label>e-Olimp</label><input type="number" id="inp_${index}_e_olimp" value="${student.e_olimp || 0}"></div>
@@ -535,6 +537,10 @@
 
         function saveAdminChanges() {
             (globalData[currentTab] || []).forEach((student, index) => {
+                if (document.getElementById(`inp_${index}_foto`)) {
+                    student.foto = document.getElementById(`inp_${index}_foto`).value.trim();
+                }
+
                 if (currentTab === 'common') {
                     if (document.getElementById(`inp_${index}_kecmis`)) {
                         student.kecmis_reyting = Number(document.getElementById(`inp_${index}_kecmis`).value);
