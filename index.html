@@ -500,7 +500,7 @@
                     <strong id="pKurs">1-ci Kurs</strong>
                 </div>
                 <div class="info-box">
-                    <span>🎂 Yaşı</span>
+                    <span>🎂 Yaşı (Doğum Tarixi)</span>
                     <strong id="pYos">18 Yaş</strong>
                 </div>
                 <div class="info-box">
@@ -559,7 +559,7 @@
                 <button class="btn" style="background:var(--gold); color:#000; font-size:12px; padding:6px 12px;" onclick="finishWeekAndTransferRating()">Həftəni Tamamla</button>
             </div>
 
-            <p style="font-size:12px; color:var(--text-sub); margin-top:10px;">💡 Qeyd: Şəkil, ixtisas, kurs, yaş və doğulduğu yeri dəyişdikdə bütün bölmələrdə (C++, Python, Common) avtomatik sinxronlaşacaq.</p>
+            <p style="font-size:12px; color:var(--text-sub); margin-top:10px;">💡 Qeyd: Şagirdlərin yaşları verilən doğum tarixlərinə əsasən avtomatik hesablanır.</p>
             <div id="adminBody"></div>
             <div style="display:flex; gap:10px; margin-top:15px;">
                 <button class="btn" style="flex:2;" onclick="saveAdminChanges()">💾 Yadda Saxla və Yayımla</button>
@@ -592,20 +592,61 @@
         const FOUNDERS = ["Süleymanzadə Aqşin", "Məmmədli Turan", "Gülverdiyev Kənan"];
         const DEFAULT_AVATAR_URL = "https://svgsilh.com/svg/1300331.svg";
 
-        const STUDENT_NAMES = [
-            "Abbasov Rüfət", "Abıyeva Aysun", "Ağazadə poladxan", "Allahverdiyev Amid",
-            "Bəbirov Soltan", "Cavadzadə Mirzə", "Əhmədli Bahar", "Əliyeva Əsmər",
-            "Əliyeva Hüsna", "Əliyeva Mehriban", "Əlizadə Rəhimə", "Əsgərova Çinarə",
-            "Fərzalı Səma", "Gülverdiyev Kənan", "Həşimova Fatimə", "Hüseyinova Səbinə",
-            "Hüseyinzadə Aygün", "İbrahimova Rəşqəndə", "Məmmədli Əhməd", "Məmmədli Turan",
-            "Məmmədova Sabrina", "Musazadə Rəşad", "Süleymanzadə Aqşin", "Şəmsiyev Xosu",
-            "Təhməzova Leyla"
-        ];
+        // Dəqiq Doğum Tarixləri Bazasının Xəritəsi (YYYY-MM-DD)
+        const BIRTH_DATES = {
+            "Abbasov Rüfət": "2008-01-23",
+            "Abıyeva Aysun": "2008-03-01",
+            "Ağazadə poladxan": "2008-06-07",
+            "Allahverdiyev Amid": "2008-05-31",
+            "Bəbirov Soltan": "2008-02-22",
+            "Cavadzadə Mirzə": "2008-03-29",
+            "Əhmədli Bahar": "2008-03-21",
+            "Əliyeva Əsmər": "2008-05-11",
+            "Əliyeva Hüsna": "2008-04-02",
+            "Əliyeva Mehriban": "2007-12-24",
+            "Əlizadə Rəhimə": "2007-09-18",
+            "Əsgərova Çinarə": "2008-06-30",
+            "Fərzalı Səma": "2008-06-17",
+            "Gülverdiyev Kənan": "2008-12-06",
+            "Həşimova Fatimə": "2008-05-05",
+            "Hüseyinova Səbinə": "2007-06-07",
+            "Hüseyinzadə Aygün": "2007-12-17",
+            "İbrahimova Rəşqəndə": "2008-01-04",
+            "Məmmədli Əhməd": "2007-12-14",
+            "Məmmədli Turan": "2008-10-19",
+            "Məmmədova Sabrina": "2008-07-19",
+            "Musazadə Rəşad": "2008-07-02",
+            "Süleymanzadə Aqşin": "2008-11-30",
+            "Şəmsiyev Xosu": "2008-04-21",
+            "Təhməzova Leyla": "2008-11-08"
+        };
+
+        const STUDENT_NAMES = Object.keys(BIRTH_DATES);
 
         let activeAdminUser = null;
         let globalData = {};
         let currentTab = 'cpp';
         let chartInstance = null;
+
+        // Yaşı Doğum Tarixinə Göre Avtomatik Hesablayan Funksiya
+        function calculateAgeAndFormattedBirth(birthStr) {
+            if (!birthStr) return { age: 18, birthFormatted: "Məlum deyil" };
+            const birthDate = new Date(birthStr);
+            const today = new Date();
+            
+            let age = today.getFullYear() - birthDate.getFullYear();
+            const monthDiff = today.getMonth() - birthDate.getMonth();
+            
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+                age--;
+            }
+
+            const day = String(birthDate.getDate()).padStart(2, '0');
+            const month = String(birthDate.getMonth() + 1).padStart(2, '0');
+            const year = birthDate.getFullYear();
+
+            return { age, birthFormatted: `${day}.${month}.${year}` };
+        }
 
         function updateLiveDateTime() {
             const now = new Date();
@@ -621,9 +662,9 @@
                 globalData = data;
             } else {
                 globalData = {
-                    cpp: STUDENT_NAMES.map((name, i) => ({ id: i+1, ad: name, foto: DEFAULT_AVATAR_URL, ixtisas: "İnformasiya Təhlükəsizliyi", kurs: "1-ci kurs", yas: "18", yer: "Gəncə şəhəri", fm: 0, stepping: 0, e_olimp: 0, codesources: 0, hackerrank: 0, kecmis_reyting: 0 })),
-                    python: STUDENT_NAMES.map((name, i) => ({ id: i+1, ad: name, foto: DEFAULT_AVATAR_URL, ixtisas: "İnformasiya Təhlükəsizliyi", kurs: "1-ci kurs", yas: "18", yer: "Gəncə şəhəri", fm: 0, stepping: 0, e_olimp: 0, codesources: 0, hackerrank: 0, kecmis_reyting: 0 })),
-                    common: STUDENT_NAMES.map((name, i) => ({ id: i+1, ad: name, foto: DEFAULT_AVATAR_URL, ixtisas: "İnformasiya Təhlükəsizliyi", kurs: "1-ci kurs", yas: "18", yer: "Gəncə şəhəri", kecmis_reyting: 0 }))
+                    cpp: STUDENT_NAMES.map((name, i) => ({ id: i+1, ad: name, foto: DEFAULT_AVATAR_URL, ixtisas: "İnformasiya Təhlükəsizliyi", kurs: "1-ci kurs", yer: "Gəncə şəhəri", fm: 0, stepping: 0, e_olimp: 0, codesources: 0, hackerrank: 0, kecmis_reyting: 0 })),
+                    python: STUDENT_NAMES.map((name, i) => ({ id: i+1, ad: name, foto: DEFAULT_AVATAR_URL, ixtisas: "İnformasiya Təhlükəsizliyi", kurs: "1-ci kurs", yer: "Gəncə şəhəri", fm: 0, stepping: 0, e_olimp: 0, codesources: 0, hackerrank: 0, kecmis_reyting: 0 })),
+                    common: STUDENT_NAMES.map((name, i) => ({ id: i+1, ad: name, foto: DEFAULT_AVATAR_URL, ixtisas: "İnformasiya Təhlükəsizliyi", kurs: "1-ci kurs", yer: "Gəncə şəhəri", kecmis_reyting: 0 }))
                 };
                 database.ref('students_data').set(globalData);
             }
@@ -750,9 +791,12 @@
             const isFounder = FOUNDERS.includes(student.ad);
             document.getElementById('pBadge').innerHTML = isFounder ? `<span class="founder-badge">👑 JÜRİ / TƏSİSÇİ</span>` : '';
 
+            // Dinamik Avtomatik Yaş Və Doğum Tarixi Hesablanması
+            const birthInfo = calculateAgeAndFormattedBirth(BIRTH_DATES[student.ad]);
+
             document.getElementById('pIxtisas').innerText = student.ixtisas || "İnformasiya Təhlükəsizliyi";
             document.getElementById('pKurs').innerText = student.kurs || "1-ci Kurs";
-            document.getElementById('pYos').innerText = (student.yas || "18") + " Yaş";
+            document.getElementById('pYos').innerText = `${birthInfo.age} Yaş (${birthInfo.birthFormatted})`;
             document.getElementById('pYer').innerText = student.yer || "Gəncə şəhəri";
             document.getElementById('pCari').innerText = computed.cari_reyting + " pt";
 
@@ -919,7 +963,6 @@
                         </div>
                         <div><label>İxtisas</label><input type="text" id="inp_${index}_ixtisas" value="${student.ixtisas || 'İnformasiya Təhlükəsizliyi'}"></div>
                         <div><label>Kurs</label><input type="text" id="inp_${index}_kurs" value="${student.kurs || '1-ci kurs'}"></div>
-                        <div><label>Yaş</label><input type="text" id="inp_${index}_yas" value="${student.yas || '18'}"></div>
                         <div><label>Doğulduğu Yer</label><input type="text" id="inp_${index}_yer" value="${student.yer || 'Gəncə şəhəri'}"></div>
                     `;
                 } else {
@@ -939,7 +982,6 @@
                         <div><label>HackerRank</label><input type="number" id="inp_${index}_hackerrank" value="${student.hackerrank || 0}"></div>
                         <div><label>İxtisas</label><input type="text" id="inp_${index}_ixtisas" value="${student.ixtisas || 'İnformasiya Təhlükəsizliyi'}"></div>
                         <div><label>Kurs</label><input type="text" id="inp_${index}_kurs" value="${student.kurs || '1-ci kurs'}"></div>
-                        <div><label>Yaş</label><input type="text" id="inp_${index}_yas" value="${student.yas || '18'}"></div>
                         <div><label>Doğulduğu Yer</label><input type="text" id="inp_${index}_yer" value="${student.yer || 'Gəncə şəhəri'}"></div>
                     `;
                 }
@@ -970,7 +1012,6 @@
                     ctx.drawImage(img, 0, 0, 120, 120);
                     
                     const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);
-
                     const targetName = globalData[currentTab][index].ad;
 
                     ['cpp', 'python', 'common'].forEach(tab => {
@@ -997,7 +1038,6 @@
                 const targetName = student.ad;
                 const ixtisasVal = document.getElementById(`inp_${index}_ixtisas`) ? document.getElementById(`inp_${index}_ixtisas`).value : student.ixtisas;
                 const kursVal = document.getElementById(`inp_${index}_kurs`) ? document.getElementById(`inp_${index}_kurs`).value : student.kurs;
-                const yasVal = document.getElementById(`inp_${index}_yas`) ? document.getElementById(`inp_${index}_yas`).value : student.yas;
                 const yerVal = document.getElementById(`inp_${index}_yer`) ? document.getElementById(`inp_${index}_yer`).value : student.yer;
 
                 ['cpp', 'python', 'common'].forEach(tab => {
@@ -1006,7 +1046,6 @@
                         if (st) {
                             st.ixtisas = ixtisasVal;
                             st.kurs = kursVal;
-                            st.yas = yasVal;
                             st.yer = yerVal;
                         }
                     }
