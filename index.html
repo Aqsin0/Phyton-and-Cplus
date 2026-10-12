@@ -249,7 +249,91 @@
         .badge-negative { color: var(--negative); font-weight: bold; background: rgba(239, 68, 68, 0.1); padding: 3px 8px; border-radius: 6px; }
         .rank-col { font-weight: bold; color: var(--accent); width: 35px; font-size: 15px; }
 
-        /* Modal Stilləri */
+        /* 📄 Tam Səhifə Profil Ekranı (Yeni Geniş Səhifə) */
+        #profilePage {
+            display: none;
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px solid var(--border);
+            box-shadow: 0 10px 30px -5px rgba(0,0,0,0.5);
+            margin-top: 10px;
+        }
+
+        .back-btn {
+            background: #374151;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+            transition: background 0.2s;
+        }
+        .back-btn:hover { background: #4b5563; }
+
+        .profile-header-card {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 20px;
+        }
+
+        .profile-avatar-large {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 3px solid var(--accent);
+            box-shadow: 0 0 20px var(--accent-glow);
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        .profile-grid-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .info-box {
+            background: var(--card-inner);
+            padding: 14px 18px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .info-box span {
+            font-size: 11px;
+            color: var(--text-sub);
+            display: block;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .info-box strong {
+            font-size: 16px;
+            color: #fff;
+            margin-top: 5px;
+            display: block;
+        }
+
+        .chart-container {
+            background: var(--card-inner);
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid var(--border);
+        }
+
+        /* Modal Stilləri (Giriş & Admin üçün) */
         .modal {
             display: none;
             position: fixed;
@@ -269,60 +353,6 @@
             max-height: 85vh;
             overflow-y: auto;
             border: 1px solid var(--border);
-        }
-
-        /* 👤 Şagird Profil Modalı CSS */
-        .profile-modal-card {
-            text-align: center;
-        }
-
-        .profile-avatar-large {
-            width: 110px;
-            height: 110px;
-            border-radius: 50%;
-            border: 3px solid var(--accent);
-            box-shadow: 0 0 20px var(--accent-glow);
-            object-fit: cover;
-            margin: 0 auto 15px auto;
-            display: block;
-        }
-
-        .profile-grid-info {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 12px;
-            margin: 20px 0;
-            text-align: left;
-        }
-
-        .info-box {
-            background: var(--card-inner);
-            padding: 12px 15px;
-            border-radius: 12px;
-            border: 1px solid var(--border);
-        }
-
-        .info-box span {
-            font-size: 11px;
-            color: var(--text-sub);
-            display: block;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .info-box strong {
-            font-size: 15px;
-            color: #fff;
-            margin-top: 4px;
-            display: block;
-        }
-
-        .chart-container {
-            background: var(--card-inner);
-            border-radius: 14px;
-            padding: 15px;
-            border: 1px solid var(--border);
-            margin-top: 20px;
         }
 
         .admin-student-card {
@@ -371,123 +401,126 @@
 <body>
 
     <div class="container">
-        <div class="header">
-            <div class="header-title-box">
-                <h1>🏆 Şagird Reytinq Paneli</h1>
-                <div class="live-datetime" id="liveDateTime">📅 Yüklənir...</div>
-            </div>
-            <div class="tabs">
-                <button class="tab-btn active" id="btn-cpp" onclick="switchTab('cpp')">C++</button>
-                <button class="tab-btn" id="btn-python" onclick="switchTab('python')">Python</button>
-                <button class="tab-btn" id="btn-common" onclick="switchTab('common')">Common</button>
-            </div>
-        </div>
-
-        <!-- 👑 Kreativ Jüri Şərəf Bölməsi -->
-        <div class="jury-section">
-            <div class="jury-title">👑 Münsiflər Heyəti (Jürilər)</div>
-            <div class="jury-cards-grid">
-                <div class="jury-card" onclick="openProfileByName('Süleymanzadə Aqşin')">
-                    <div class="jury-card-avatar">
-                        <img src="https://svgsilh.com/svg/1300331.svg" alt="Aqşin">
-                    </div>
-                    <div class="jury-card-info">
-                        <strong>Süleymanzadə Aqşin</strong>
-                        <span>⭐ Baş Jüri / Təsisçi</span>
-                    </div>
+        <!-- 🏠 ƏSAS REYTİNQ EKRAI -->
+        <div id="mainDashboard">
+            <div class="header">
+                <div class="header-title-box">
+                    <h1>🏆 Şagird Reytinq Paneli</h1>
+                    <div class="live-datetime" id="liveDateTime">📅 Yüklənir...</div>
                 </div>
-                <div class="jury-card" onclick="openProfileByName('Məmmədli Turan')">
-                    <div class="jury-card-avatar">
-                        <img src="https://svgsilh.com/svg/1300331.svg" alt="Turan">
-                    </div>
-                    <div class="jury-card-info">
-                        <strong>Məmmədli Turan</strong>
-                        <span>⭐ Jüri / Təsisçi</span>
-                    </div>
-                </div>
-                <div class="jury-card" onclick="openProfileByName('Gülverdiyev Kənan')">
-                    <div class="jury-card-avatar">
-                        <img src="https://svgsilh.com/svg/1300331.svg" alt="Kənan">
-                    </div>
-                    <div class="jury-card-info">
-                        <strong>Gülverdiyev Kənan</strong>
-                        <span>⭐ Jüri / Təsisçi</span>
-                    </div>
+                <div class="tabs">
+                    <button class="tab-btn active" id="btn-cpp" onclick="switchTab('cpp')">C++</button>
+                    <button class="tab-btn" id="btn-python" onclick="switchTab('python')">Python</button>
+                    <button class="tab-btn" id="btn-common" onclick="switchTab('common')">Common</button>
                 </div>
             </div>
-        </div>
 
-        <!-- Statistika Paneli -->
-        <div class="highlights-grid">
-            <div class="highlight-card">
-                <h3 style="color:var(--gold);">🥇 Həftənin Liderləri</h3>
-                <ul class="mini-list" id="topList"></ul>
+            <!-- 👑 Kreativ Jüri Bölməsi -->
+            <div class="jury-section">
+                <div class="jury-title">👑 Münsiflər Heyəti (Jürilər)</div>
+                <div class="jury-cards-grid">
+                    <div class="jury-card" onclick="openProfilePageByName('Süleymanzadə Aqşin')">
+                        <div class="jury-card-avatar">
+                            <img src="https://svgsilh.com/svg/1300331.svg" alt="Aqşin">
+                        </div>
+                        <div class="jury-card-info">
+                            <strong>Süleymanzadə Aqşin</strong>
+                            <span>⭐ Baş Jüri / Təsisçi</span>
+                        </div>
+                    </div>
+                    <div class="jury-card" onclick="openProfilePageByName('Məmmədli Turan')">
+                        <div class="jury-card-avatar">
+                            <img src="https://svgsilh.com/svg/1300331.svg" alt="Turan">
+                        </div>
+                        <div class="jury-card-info">
+                            <strong>Məmmədli Turan</strong>
+                            <span>⭐ Jüri / Təsisçi</span>
+                        </div>
+                    </div>
+                    <div class="jury-card" onclick="openProfilePageByName('Gülverdiyev Kənan')">
+                        <div class="jury-card-avatar">
+                            <img src="https://svgsilh.com/svg/1300331.svg" alt="Kənan">
+                        </div>
+                        <div class="jury-card-info">
+                            <strong>Gülverdiyev Kənan</strong>
+                            <span>⭐ Jüri / Təsisçi</span>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="highlight-card">
-                <h3 style="color:var(--accent);">⚡ Ötən Həftənin Çempionları</h3>
-                <ul class="mini-list" id="pastTopList"></ul>
+
+            <!-- Statistika Paneli -->
+            <div class="highlights-grid">
+                <div class="highlight-card">
+                    <h3 style="color:var(--gold);">🥇 Həftənin Liderləri</h3>
+                    <ul class="mini-list" id="topList"></ul>
+                </div>
+                <div class="highlight-card">
+                    <h3 style="color:var(--accent);">⚡ Ötən Həftənin Çempionları</h3>
+                    <ul class="mini-list" id="pastTopList"></ul>
+                </div>
+                <div class="highlight-card">
+                    <h3 style="color:var(--negative);">🚀 Yüksəliş Gözlənilənlər</h3>
+                    <ul class="mini-list" id="bottomList"></ul>
+                </div>
             </div>
-            <div class="highlight-card">
-                <h3 style="color:var(--negative);">🚀 Yüksəliş Gözlənilənlər</h3>
-                <ul class="mini-list" id="bottomList"></ul>
+
+            <div class="action-bar">
+                <button class="btn btn-admin" onclick="checkSavedLoginOrModal()">🔑 Admin Girişi</button>
+                <button class="btn" onclick="sortAndRender()">🔄 Reytinqə Görə Sırala</button>
+            </div>
+
+            <div class="table-wrapper">
+                <table id="ratingTable">
+                    <thead></thead>
+                    <tbody id="tableBody"></tbody>
+                </table>
             </div>
         </div>
 
-        <div class="action-bar">
-            <button class="btn btn-admin" onclick="checkSavedLoginOrModal()">🔑 Admin Girişi</button>
-            <button class="btn" onclick="sortAndRender()">🔄 Reytinqə Görə Sırala</button>
-        </div>
-
-        <div class="table-wrapper">
-            <table id="ratingTable">
-                <thead></thead>
-                <tbody id="tableBody"></tbody>
-            </table>
-        </div>
-    </div>
-
-    <!-- 👤 Şagird Profil Modalı -->
-    <div id="profileModal" class="modal">
-        <div class="modal-content" style="max-width:650px;">
-            <div class="profile-modal-card">
+        <!-- 📄 TAM SƏHİFƏ PROFiL EKRANI -->
+        <div id="profilePage">
+            <button class="back-btn" onclick="closeProfilePage()">⬅️ Reytinq Cədvəlinə Qayıt</button>
+            
+            <div class="profile-header-card">
                 <img id="pAvatar" class="profile-avatar-large" src="" alt="Avatar">
-                <h2 id="pName" style="margin:0; color:var(--accent);"></h2>
-                <div id="pBadge" style="margin-top:6px;"></div>
-
-                <div class="profile-grid-info">
-                    <div class="info-box">
-                        <span>🎓 İxtisası</span>
-                        <strong id="pIxtisas">İnformasiya Təhlükəsizliyi</strong>
-                    </div>
-                    <div class="info-box">
-                        <span>📚 Kursu</span>
-                        <strong id="pKurs">1-ci Kurs</strong>
-                    </div>
-                    <div class="info-box">
-                        <span>🎂 Yaşı</span>
-                        <strong id="pYos">18 Yaş</strong>
-                    </div>
-                    <div class="info-box">
-                        <span>📍 Doğulduğu Yer</span>
-                        <strong id="pYer">Gəncə şəhəri</strong>
-                    </div>
-                    <div class="info-box">
-                        <span>⭐ Cari Reytinq</span>
-                        <strong id="pCari" style="color:var(--accent);">0 pt</strong>
-                    </div>
-                    <div class="info-box">
-                        <span>📊 Həftəlik Artım/Azalma</span>
-                        <strong id="pArtim">0</strong>
-                    </div>
+                <div>
+                    <h2 id="pName" style="margin:0; font-size:24px; color:var(--accent);"></h2>
+                    <div id="pBadge" style="margin-top:6px;"></div>
                 </div>
+            </div>
 
-                <!-- Interaktiv Chart.js Diaqramı -->
-                <div class="chart-container">
-                    <h4 style="margin:0 0 10px 0; font-size:14px; color:var(--text-sub);">📈 Reytinq Dəyişim Diaqramı (Dinamika)</h4>
-                    <canvas id="studentChart" height="180"></canvas>
+            <div class="profile-grid-info">
+                <div class="info-box">
+                    <span>🎓 İxtisası</span>
+                    <strong id="pIxtisas">İnformasiya Təhlükəsizliyi</strong>
                 </div>
+                <div class="info-box">
+                    <span>📚 Kursu</span>
+                    <strong id="pKurs">1-ci Kurs</strong>
+                </div>
+                <div class="info-box">
+                    <span>🎂 Yaşı</span>
+                    <strong id="pYos">18 Yaş</strong>
+                </div>
+                <div class="info-box">
+                    <span>📍 Doğulduğu Yer</span>
+                    <strong id="pYer">Gəncə şəhəri</strong>
+                </div>
+                <div class="info-box">
+                    <span>⭐ Cari Reytinq</span>
+                    <strong id="pCari" style="color:var(--accent);">0 pt</strong>
+                </div>
+                <div class="info-box">
+                    <span>📊 Həftəlik Artım/Azalma</span>
+                    <strong id="pArtim">0</strong>
+                </div>
+            </div>
 
-                <button class="btn" style="width:100%; margin-top:20px; background:#64748b;" onclick="closeProfileModal()">Bağla</button>
+            <!-- Interaktiv Chart.js Diaqramı -->
+            <div class="chart-container">
+                <h3 style="margin:0 0 15px 0; font-size:16px; color:var(--accent);">📈 Reytinq Dəyişim Diaqramı (Həftəlik Dinamika)</h3>
+                <canvas id="studentChart" height="120"></canvas>
             </div>
         </div>
     </div>
@@ -520,7 +553,7 @@
                 <h2 id="welcomeAdmin" style="margin:0; color:var(--accent);">⚙️ Admin Paneli</h2>
                 <button class="btn" style="background:#e11d48; font-size:12px; padding:6px 12px;" onclick="logoutAdmin()">🔒 Çıxış Et</button>
             </div>
-            <p style="font-size:12px; color:var(--text-sub); margin-top:6px;">💡 Qeyd: Platforma ballarını və ya profil məlumatlarını daxil edə bilərsiniz.</p>
+            <p style="font-size:12px; color:var(--text-sub); margin-top:6px;">💡 Qeyd: Platforma ballarını və profil məlumatlarını girin. Cari Reytinq və Artım avtomatik hesablanır.</p>
             <div id="adminBody"></div>
             <div style="display:flex; gap:10px; margin-top:15px;">
                 <button class="btn" style="flex:2;" onclick="saveAdminChanges()">💾 Yadda Saxla və Yayımla</button>
@@ -648,7 +681,7 @@
                 if (currentTab === 'common') {
                     row.innerHTML = `
                         <td class="rank-col">${index + 1}</td>
-                        <td><div class="student-info">${avatarHTML}<span class="clickable-name" onclick="openProfileModal(${index})">${item.ad}</span>${founderBadge}</div></td>
+                        <td><div class="student-info">${avatarHTML}<span class="clickable-name" onclick="openProfilePage(${index})">${item.ad}</span>${founderBadge}</div></td>
                         <td><strong>${item.cari_reyting}</strong></td>
                         <td>${item.kecmis_reyting}</td>
                         <td class="${artimClass}">${artimSign}</td>
@@ -656,7 +689,7 @@
                 } else {
                     row.innerHTML = `
                         <td class="rank-col">${index + 1}</td>
-                        <td><div class="student-info">${avatarHTML}<span class="clickable-name" onclick="openProfileModal(${index})">${item.ad}</span>${founderBadge}</div></td>
+                        <td><div class="student-info">${avatarHTML}<span class="clickable-name" onclick="openProfilePage(${index})">${item.ad}</span>${founderBadge}</div></td>
                         <td>${item.fm}</td><td>${item.stepping}</td><td>${item.e_olimp}</td><td>${item.codesources}</td><td>${item.hackerrank}</td>
                         <td><strong>${item.cari_reyting}</strong></td>
                         <td>${item.kecmis_reyting}</td>
@@ -673,17 +706,17 @@
 
             document.getElementById('topList').innerHTML = sortedCurrent.slice(0, 3).map((s, i) => {
                 const rawIdx = (globalData[currentTab]||[]).findIndex(item => item.ad === s.ad);
-                return `<li onclick="openProfileModal(${rawIdx})"><span>${i===0?'👑':i===1?'🥈':'🥉'} ${s.ad}</span><strong>${s.cari_reyting} pt</strong></li>`;
+                return `<li onclick="openProfilePage(${rawIdx})"><span>${i===0?'👑':i===1?'🥈':'🥉'} ${s.ad}</span><strong>${s.cari_reyting} pt</strong></li>`;
             }).join('');
 
             document.getElementById('pastTopList').innerHTML = sortedPast.slice(0, 3).map((s, i) => {
                 const rawIdx = (globalData[currentTab]||[]).findIndex(item => item.ad === s.ad);
-                return `<li onclick="openProfileModal(${rawIdx})"><span>⭐ ${s.ad}</span><span>${s.kecmis_reyting} pt</span></li>`;
+                return `<li onclick="openProfilePage(${rawIdx})"><span>⭐ ${s.ad}</span><span>${s.kecmis_reyting} pt</span></li>`;
             }).join('');
 
             document.getElementById('bottomList').innerHTML = sortedCurrent.slice(-3).reverse().map(s => {
                 const rawIdx = (globalData[currentTab]||[]).findIndex(item => item.ad === s.ad);
-                return `<li onclick="openProfileModal(${rawIdx})"><span>⚠️ ${s.ad}</span><span style="color:var(--negative);">${s.cari_reyting} pt</span></li>`;
+                return `<li onclick="openProfilePage(${rawIdx})"><span>⚠️ ${s.ad}</span><span style="color:var(--negative);">${s.cari_reyting} pt</span></li>`;
             }).join('');
         }
 
@@ -697,8 +730,8 @@
             renderTable();
         }
 
-        /* 👤 Şagird Profil Modal Məntiqi */
-        function openProfileModal(index) {
+        /* 📄 Tam Səhifə Profil Məntiqləri */
+        function openProfilePage(index) {
             const student = globalData[currentTab][index];
             if (!student) return;
 
@@ -721,20 +754,25 @@
             document.getElementById('pArtim').innerText = artimSign + " pt";
             document.getElementById('pArtim').style.color = artimColor;
 
-            // Chart.js İnteraktiv Diaqramını yaradın
+            // Chart.js Diaqramı
             renderStudentChart(student.kecmis_reyting || 0, computed.cari_reyting);
 
-            document.getElementById('profileModal').style.display = 'flex';
+            // Cədvəli gizlət, Tam Səhifə Profili göstər
+            document.getElementById('mainDashboard').style.display = 'none';
+            document.getElementById('profilePage').style.display = 'block';
+            window.scrollTo(0, 0);
         }
 
-        function openProfileByName(name) {
+        function openProfilePageByName(name) {
             const rawList = globalData[currentTab] || [];
             const idx = rawList.findIndex(s => s.ad === name);
-            if (idx !== -1) openProfileModal(idx);
+            if (idx !== -1) openProfilePage(idx);
         }
 
-        function closeProfileModal() {
-            document.getElementById('profileModal').style.display = 'none';
+        function closeProfilePage() {
+            document.getElementById('profilePage').style.display = 'none';
+            document.getElementById('mainDashboard').style.display = 'block';
+            window.scrollTo(0, 0);
         }
 
         function renderStudentChart(pastRating, currentRating) {
@@ -760,8 +798,8 @@
                         borderColor: '#38bdf8',
                         backgroundColor: 'rgba(56, 189, 248, 0.15)',
                         fill: true,
-                        tension: 0.3,
-                        pointRadius: 5,
+                        tension: 0.35,
+                        pointRadius: 6,
                         pointBackgroundColor: '#38bdf8'
                     }]
                 },
@@ -776,7 +814,7 @@
             });
         }
 
-        /* --- Admin Məntiqləri --- */
+        /* --- Admin Giriş Məntiqləri --- */
         function checkSavedLoginOrModal() {
             const savedUser = localStorage.getItem('admin_user');
             const savedPass = localStorage.getItem('admin_pass');
