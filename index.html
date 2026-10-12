@@ -7,6 +7,8 @@
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <!-- Chart.js Diaqram Kitabxanası -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
             --bg-color: #090d16;
@@ -107,6 +109,7 @@
             gap: 12px;
             backdrop-filter: blur(4px);
             transition: transform 0.2s ease;
+            cursor: pointer;
         }
 
         .jury-card:hover {
@@ -186,6 +189,7 @@
             padding: 8px 0;
             border-bottom: 1px solid rgba(255,255,255,0.04);
             font-size: 13.5px;
+            cursor: pointer;
         }
         .mini-list li:last-child { border-bottom: none; }
 
@@ -201,6 +205,17 @@
         th, td { padding: 12px 14px; border-bottom: 1px solid var(--border); }
         th { background-color: #0b0f19; color: var(--accent); font-size: 12.5px; letter-spacing: 0.5px; }
         tr:hover { background-color: rgba(56, 189, 248, 0.04); }
+
+        .clickable-name {
+            cursor: pointer;
+            color: #f9fafb;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+        .clickable-name:hover {
+            color: var(--accent);
+            text-decoration: underline;
+        }
 
         .student-info { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
         
@@ -256,6 +271,60 @@
             border: 1px solid var(--border);
         }
 
+        /* 👤 Şagird Profil Modalı CSS */
+        .profile-modal-card {
+            text-align: center;
+        }
+
+        .profile-avatar-large {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            border: 3px solid var(--accent);
+            box-shadow: 0 0 20px var(--accent-glow);
+            object-fit: cover;
+            margin: 0 auto 15px auto;
+            display: block;
+        }
+
+        .profile-grid-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .info-box {
+            background: var(--card-inner);
+            padding: 12px 15px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .info-box span {
+            font-size: 11px;
+            color: var(--text-sub);
+            display: block;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .info-box strong {
+            font-size: 15px;
+            color: #fff;
+            margin-top: 4px;
+            display: block;
+        }
+
+        .chart-container {
+            background: var(--card-inner);
+            border-radius: 14px;
+            padding: 15px;
+            border: 1px solid var(--border);
+            margin-top: 20px;
+        }
+
         .admin-student-card {
             background: var(--card-inner);
             border-radius: 12px;
@@ -266,7 +335,7 @@
 
         .grid-inputs {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(95px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
             gap: 8px;
             margin-top: 10px;
         }
@@ -318,7 +387,7 @@
         <div class="jury-section">
             <div class="jury-title">👑 Münsiflər Heyəti (Jürilər)</div>
             <div class="jury-cards-grid">
-                <div class="jury-card">
+                <div class="jury-card" onclick="openProfileByName('Süleymanzadə Aqşin')">
                     <div class="jury-card-avatar">
                         <img src="https://svgsilh.com/svg/1300331.svg" alt="Aqşin">
                     </div>
@@ -327,7 +396,7 @@
                         <span>⭐ Baş Jüri / Təsisçi</span>
                     </div>
                 </div>
-                <div class="jury-card">
+                <div class="jury-card" onclick="openProfileByName('Məmmədli Turan')">
                     <div class="jury-card-avatar">
                         <img src="https://svgsilh.com/svg/1300331.svg" alt="Turan">
                     </div>
@@ -336,7 +405,7 @@
                         <span>⭐ Jüri / Təsisçi</span>
                     </div>
                 </div>
-                <div class="jury-card">
+                <div class="jury-card" onclick="openProfileByName('Gülverdiyev Kənan')">
                     <div class="jury-card-avatar">
                         <img src="https://svgsilh.com/svg/1300331.svg" alt="Kənan">
                     </div>
@@ -377,6 +446,52 @@
         </div>
     </div>
 
+    <!-- 👤 Şagird Profil Modalı -->
+    <div id="profileModal" class="modal">
+        <div class="modal-content" style="max-width:650px;">
+            <div class="profile-modal-card">
+                <img id="pAvatar" class="profile-avatar-large" src="" alt="Avatar">
+                <h2 id="pName" style="margin:0; color:var(--accent);"></h2>
+                <div id="pBadge" style="margin-top:6px;"></div>
+
+                <div class="profile-grid-info">
+                    <div class="info-box">
+                        <span>🎓 İxtisası</span>
+                        <strong id="pIxtisas">İnformasiya Təhlükəsizliyi</strong>
+                    </div>
+                    <div class="info-box">
+                        <span>📚 Kursu</span>
+                        <strong id="pKurs">1-ci Kurs</strong>
+                    </div>
+                    <div class="info-box">
+                        <span>🎂 Yaşı</span>
+                        <strong id="pYos">18 Yaş</strong>
+                    </div>
+                    <div class="info-box">
+                        <span>📍 Doğulduğu Yer</span>
+                        <strong id="pYer">Gəncə şəhəri</strong>
+                    </div>
+                    <div class="info-box">
+                        <span>⭐ Cari Reytinq</span>
+                        <strong id="pCari" style="color:var(--accent);">0 pt</strong>
+                    </div>
+                    <div class="info-box">
+                        <span>📊 Həftəlik Artım/Azalma</span>
+                        <strong id="pArtim">0</strong>
+                    </div>
+                </div>
+
+                <!-- Interaktiv Chart.js Diaqramı -->
+                <div class="chart-container">
+                    <h4 style="margin:0 0 10px 0; font-size:14px; color:var(--text-sub);">📈 Reytinq Dəyişim Diaqramı (Dinamika)</h4>
+                    <canvas id="studentChart" height="180"></canvas>
+                </div>
+
+                <button class="btn" style="width:100%; margin-top:20px; background:#64748b;" onclick="closeProfileModal()">Bağla</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Login Modal -->
     <div id="loginModal" class="modal">
         <div class="modal-content" style="max-width:400px;">
@@ -405,7 +520,7 @@
                 <h2 id="welcomeAdmin" style="margin:0; color:var(--accent);">⚙️ Admin Paneli</h2>
                 <button class="btn" style="background:#e11d48; font-size:12px; padding:6px 12px;" onclick="logoutAdmin()">🔒 Çıxış Et</button>
             </div>
-            <p style="font-size:12px; color:var(--text-sub); margin-top:6px;">💡 Qeyd: Platforma ballarını girin. Cari Reytinq və Artım tam avtomatik hesablanır.</p>
+            <p style="font-size:12px; color:var(--text-sub); margin-top:6px;">💡 Qeyd: Platforma ballarını və ya profil məlumatlarını daxil edə bilərsiniz.</p>
             <div id="adminBody"></div>
             <div style="display:flex; gap:10px; margin-top:15px;">
                 <button class="btn" style="flex:2;" onclick="saveAdminChanges()">💾 Yadda Saxla və Yayımla</button>
@@ -436,8 +551,6 @@
         };
 
         const FOUNDERS = ["Süleymanzadə Aqşin", "Məmmədli Turan", "Gülverdiyev Kənan"];
-
-        // Göndərilən istock boz profil vektoru URL-i
         const DEFAULT_AVATAR_URL = "https://svgsilh.com/svg/1300331.svg";
 
         const STUDENT_NAMES = [
@@ -453,8 +566,8 @@
         let activeAdminUser = null;
         let globalData = {};
         let currentTab = 'cpp';
+        let chartInstance = null;
 
-        // Canlı Saat / Tarix
         function updateLiveDateTime() {
             const now = new Date();
             const options = { day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
@@ -469,9 +582,9 @@
                 globalData = data;
             } else {
                 globalData = {
-                    cpp: STUDENT_NAMES.map((name, i) => ({ id: i+1, ad: name, foto: DEFAULT_AVATAR_URL, fm: 0, stepping: 0, e_olimp: 0, codesources: 0, hackerrank: 0, kecmis_reyting: 0 })),
-                    python: STUDENT_NAMES.map((name, i) => ({ id: i+1, ad: name, foto: DEFAULT_AVATAR_URL, fm: 0, stepping: 0, e_olimp: 0, codesources: 0, hackerrank: 0, kecmis_reyting: 0 })),
-                    common: STUDENT_NAMES.map((name, i) => ({ id: i+1, ad: name, foto: DEFAULT_AVATAR_URL, kecmis_reyting: 0 }))
+                    cpp: STUDENT_NAMES.map((name, i) => ({ id: i+1, ad: name, foto: DEFAULT_AVATAR_URL, ixtisas: "İnformasiya Təhlükəsizliyi", kurs: "1-ci kurs", yas: "18", yer: "Gəncə şəhəri", fm: 0, stepping: 0, e_olimp: 0, codesources: 0, hackerrank: 0, kecmis_reyting: 0 })),
+                    python: STUDENT_NAMES.map((name, i) => ({ id: i+1, ad: name, foto: DEFAULT_AVATAR_URL, ixtisas: "İnformasiya Təhlükəsizliyi", kurs: "1-ci kurs", yas: "18", yer: "Gəncə şəhəri", fm: 0, stepping: 0, e_olimp: 0, codesources: 0, hackerrank: 0, kecmis_reyting: 0 })),
+                    common: STUDENT_NAMES.map((name, i) => ({ id: i+1, ad: name, foto: DEFAULT_AVATAR_URL, ixtisas: "İnformasiya Təhlükəsizliyi", kurs: "1-ci kurs", yas: "18", yer: "Gəncə şəhəri", kecmis_reyting: 0 }))
                 };
                 database.ref('students_data').set(globalData);
             }
@@ -530,12 +643,12 @@
                 const founderBadge = isFounder ? `<span class="founder-badge">👑 JÜRİ</span>` : '';
                 
                 const photoSrc = item.foto || DEFAULT_AVATAR_URL;
-                const avatarHTML = `<div class="avatar"><img src="${photoSrc}" alt="${item.ad}"></div>`;
+                const avatarHTML = `<div class="avatar"><img src="${photoSrc}"></div>`;
 
                 if (currentTab === 'common') {
                     row.innerHTML = `
                         <td class="rank-col">${index + 1}</td>
-                        <td><div class="student-info">${avatarHTML}<span>${item.ad}</span>${founderBadge}</div></td>
+                        <td><div class="student-info">${avatarHTML}<span class="clickable-name" onclick="openProfileModal(${index})">${item.ad}</span>${founderBadge}</div></td>
                         <td><strong>${item.cari_reyting}</strong></td>
                         <td>${item.kecmis_reyting}</td>
                         <td class="${artimClass}">${artimSign}</td>
@@ -543,7 +656,7 @@
                 } else {
                     row.innerHTML = `
                         <td class="rank-col">${index + 1}</td>
-                        <td><div class="student-info">${avatarHTML}<span>${item.ad}</span>${founderBadge}</div></td>
+                        <td><div class="student-info">${avatarHTML}<span class="clickable-name" onclick="openProfileModal(${index})">${item.ad}</span>${founderBadge}</div></td>
                         <td>${item.fm}</td><td>${item.stepping}</td><td>${item.e_olimp}</td><td>${item.codesources}</td><td>${item.hackerrank}</td>
                         <td><strong>${item.cari_reyting}</strong></td>
                         <td>${item.kecmis_reyting}</td>
@@ -558,17 +671,20 @@
             const sortedCurrent = [...list].sort((a,b) => b.cari_reyting - a.cari_reyting);
             const sortedPast = [...list].sort((a,b) => b.kecmis_reyting - a.kecmis_reyting);
 
-            document.getElementById('topList').innerHTML = sortedCurrent.slice(0, 3).map((s, i) => 
-                `<li><span>${i===0?'👑':i===1?'🥈':'🥉'} ${s.ad}</span><strong>${s.cari_reyting} pt</strong></li>`
-            ).join('');
+            document.getElementById('topList').innerHTML = sortedCurrent.slice(0, 3).map((s, i) => {
+                const rawIdx = (globalData[currentTab]||[]).findIndex(item => item.ad === s.ad);
+                return `<li onclick="openProfileModal(${rawIdx})"><span>${i===0?'👑':i===1?'🥈':'🥉'} ${s.ad}</span><strong>${s.cari_reyting} pt</strong></li>`;
+            }).join('');
 
-            document.getElementById('pastTopList').innerHTML = sortedPast.slice(0, 3).map((s, i) => 
-                `<li><span>⭐ ${s.ad}</span><span>${s.kecmis_reyting} pt</span></li>`
-            ).join('');
+            document.getElementById('pastTopList').innerHTML = sortedPast.slice(0, 3).map((s, i) => {
+                const rawIdx = (globalData[currentTab]||[]).findIndex(item => item.ad === s.ad);
+                return `<li onclick="openProfileModal(${rawIdx})"><span>⭐ ${s.ad}</span><span>${s.kecmis_reyting} pt</span></li>`;
+            }).join('');
 
-            document.getElementById('bottomList').innerHTML = sortedCurrent.slice(-3).reverse().map(s => 
-                `<li><span>⚠️ ${s.ad}</span><span style="color:var(--negative);">${s.cari_reyting} pt</span></li>`
-            ).join('');
+            document.getElementById('bottomList').innerHTML = sortedCurrent.slice(-3).reverse().map(s => {
+                const rawIdx = (globalData[currentTab]||[]).findIndex(item => item.ad === s.ad);
+                return `<li onclick="openProfileModal(${rawIdx})"><span>⚠️ ${s.ad}</span><span style="color:var(--negative);">${s.cari_reyting} pt</span></li>`;
+            }).join('');
         }
 
         function sortAndRender() {
@@ -581,7 +697,86 @@
             renderTable();
         }
 
-        /* --- Xatırla və Giriş Məntiqləri --- */
+        /* 👤 Şagird Profil Modal Məntiqi */
+        function openProfileModal(index) {
+            const student = globalData[currentTab][index];
+            if (!student) return;
+
+            const computed = calculateTotals(student, index);
+
+            document.getElementById('pAvatar').src = student.foto || DEFAULT_AVATAR_URL;
+            document.getElementById('pName').innerText = student.ad;
+            
+            const isFounder = FOUNDERS.includes(student.ad);
+            document.getElementById('pBadge').innerHTML = isFounder ? `<span class="founder-badge">👑 JÜRİ / TƏSİSÇİ</span>` : '';
+
+            document.getElementById('pIxtisas').innerText = student.ixtisas || "İnformasiya Təhlükəsizliyi";
+            document.getElementById('pKurs').innerText = student.kurs || "1-ci Kurs";
+            document.getElementById('pYos').innerText = (student.yas || "18") + " Yaş";
+            document.getElementById('pYer').innerText = student.yer || "Gəncə şəhəri";
+            document.getElementById('pCari').innerText = computed.cari_reyting + " pt";
+
+            const artimSign = computed.artim >= 0 ? `+${computed.artim}` : computed.artim;
+            const artimColor = computed.artim >= 0 ? 'var(--positive)' : 'var(--negative)';
+            document.getElementById('pArtim').innerText = artimSign + " pt";
+            document.getElementById('pArtim').style.color = artimColor;
+
+            // Chart.js İnteraktiv Diaqramını yaradın
+            renderStudentChart(student.kecmis_reyting || 0, computed.cari_reyting);
+
+            document.getElementById('profileModal').style.display = 'flex';
+        }
+
+        function openProfileByName(name) {
+            const rawList = globalData[currentTab] || [];
+            const idx = rawList.findIndex(s => s.ad === name);
+            if (idx !== -1) openProfileModal(idx);
+        }
+
+        function closeProfileModal() {
+            document.getElementById('profileModal').style.display = 'none';
+        }
+
+        function renderStudentChart(pastRating, currentRating) {
+            const ctx = document.getElementById('studentChart').getContext('2d');
+
+            if (chartInstance) {
+                chartInstance.destroy();
+            }
+
+            chartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['1-ci Həftə', '2-ci Həftə', '3-cü Həftə', 'Ötən Həftə', 'Cari Həftə'],
+                    datasets: [{
+                        label: 'Reytinq Balları',
+                        data: [
+                            Math.max(0, pastRating - 40),
+                            Math.max(0, pastRating - 20),
+                            Math.max(0, pastRating - 10),
+                            pastRating,
+                            currentRating
+                        ],
+                        borderColor: '#38bdf8',
+                        backgroundColor: 'rgba(56, 189, 248, 0.15)',
+                        fill: true,
+                        tension: 0.3,
+                        pointRadius: 5,
+                        pointBackgroundColor: '#38bdf8'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { ticks: { color: '#9ca3af' }, grid: { color: '#374151' } },
+                        y: { ticks: { color: '#9ca3af' }, grid: { color: '#374151' } }
+                    }
+                }
+            });
+        }
+
+        /* --- Admin Məntiqləri --- */
         function checkSavedLoginOrModal() {
             const savedUser = localStorage.getItem('admin_user');
             const savedPass = localStorage.getItem('admin_pass');
@@ -679,6 +874,10 @@
                             </label>
                             ${isCustomPhoto ? '<span style="font-size:11px; color:var(--positive); margin-left:8px;">✓ Özəl Foto Yüklənib</span>' : ''}
                         </div>
+                        <div><label>İxtisas</label><input type="text" id="inp_${index}_ixtisas" value="${student.ixtisas || 'İnformasiya Təhlükəsizliyi'}"></div>
+                        <div><label>Kurs</label><input type="text" id="inp_${index}_kurs" value="${student.kurs || '1-ci kurs'}"></div>
+                        <div><label>Yaş</label><input type="text" id="inp_${index}_yas" value="${student.yas || '18'}"></div>
+                        <div><label>Doğulduğu Yer</label><input type="text" id="inp_${index}_yer" value="${student.yer || 'Gəncə şəhəri'}"></div>
                     `;
                 } else {
                     fieldsHTML = `
@@ -695,6 +894,10 @@
                         <div><label>e-Olimp</label><input type="number" id="inp_${index}_e_olimp" value="${student.e_olimp || 0}"></div>
                         <div><label>CodeSources</label><input type="number" id="inp_${index}_codesources" value="${student.codesources || 0}"></div>
                         <div><label>HackerRank</label><input type="number" id="inp_${index}_hackerrank" value="${student.hackerrank || 0}"></div>
+                        <div><label>İxtisas</label><input type="text" id="inp_${index}_ixtisas" value="${student.ixtisas || 'İnformasiya Təhlükəsizliyi'}"></div>
+                        <div><label>Kurs</label><input type="text" id="inp_${index}_kurs" value="${student.kurs || '1-ci kurs'}"></div>
+                        <div><label>Yaş</label><input type="text" id="inp_${index}_yas" value="${student.yas || '18'}"></div>
+                        <div><label>Doğulduğu Yer</label><input type="text" id="inp_${index}_yer" value="${student.yer || 'Gəncə şəhəri'}"></div>
                     `;
                 }
 
@@ -739,6 +942,11 @@
 
         function saveAdminChanges() {
             (globalData[currentTab] || []).forEach((student, index) => {
+                if (document.getElementById(`inp_${index}_ixtisas`)) student.ixtisas = document.getElementById(`inp_${index}_ixtisas`).value;
+                if (document.getElementById(`inp_${index}_kurs`)) student.kurs = document.getElementById(`inp_${index}_kurs`).value;
+                if (document.getElementById(`inp_${index}_yas`)) student.yas = document.getElementById(`inp_${index}_yas`).value;
+                if (document.getElementById(`inp_${index}_yer`)) student.yer = document.getElementById(`inp_${index}_yer`).value;
+
                 if (currentTab !== 'common') {
                     if (document.getElementById(`inp_${index}_fm`)) {
                         student.fm = Number(document.getElementById(`inp_${index}_fm`).value);
