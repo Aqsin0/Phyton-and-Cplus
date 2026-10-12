@@ -249,7 +249,7 @@
         .badge-negative { color: var(--negative); font-weight: bold; background: rgba(239, 68, 68, 0.1); padding: 3px 8px; border-radius: 6px; }
         .rank-col { font-weight: bold; color: var(--accent); width: 35px; font-size: 15px; }
 
-        /* 📄 Tam Səhifə Profil Ekranı (Yeni Geniş Səhifə) */
+        /* 📄 Tam Səhifə Profil Ekranı */
         #profilePage {
             display: none;
             background: var(--card-bg);
@@ -333,7 +333,7 @@
             border: 1px solid var(--border);
         }
 
-        /* Modal Stilləri (Giriş & Admin üçün) */
+        /* Modal Stilləri */
         .modal {
             display: none;
             position: fixed;
@@ -401,7 +401,7 @@
 <body>
 
     <div class="container">
-        <!-- 🏠 ƏSAS REYTİNQ EKRAI -->
+        <!-- 🏠 ƏSAS REYTİNQ EKRANI -->
         <div id="mainDashboard">
             <div class="header">
                 <div class="header-title-box">
@@ -549,11 +549,17 @@
     <!-- Admin Modal -->
     <div id="adminModal" class="modal">
         <div class="modal-content">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
                 <h2 id="welcomeAdmin" style="margin:0; color:var(--accent);">⚙️ Admin Paneli</h2>
                 <button class="btn" style="background:#e11d48; font-size:12px; padding:6px 12px;" onclick="logoutAdmin()">🔒 Çıxış Et</button>
             </div>
-            <p style="font-size:12px; color:var(--text-sub); margin-top:6px;">💡 Qeyd: Platforma ballarını və profil məlumatlarını girin. Cari Reytinq və Artım avtomatik hesablanır.</p>
+            
+            <div style="margin-top:12px; background:rgba(245, 158, 11, 0.1); padding:10px 14px; border-radius:10px; border:1px solid var(--gold); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+                <span style="font-size:12px; color:var(--gold); font-weight:600;">🗓️ Yeni Həftə Rejimi: Həftə bitdikdə düyməyə basaraq indiki Cari Reytinqi "Keçmiş Reytinq"ə çevirin.</span>
+                <button class="btn" style="background:var(--gold); color:#000; font-size:12px; padding:6px 12px;" onclick="finishWeekAndTransferRating()">Həftəni Tamamla</button>
+            </div>
+
+            <p style="font-size:12px; color:var(--text-sub); margin-top:10px;">💡 Qeyd: Şəkil, ixtisas, kurs, yaş və doğulduğu yeri dəyişdikdə bütün bölmələrdə (C++, Python, Common) avtomatik sinxronlaşacaq.</p>
             <div id="adminBody"></div>
             <div style="display:flex; gap:10px; margin-top:15px;">
                 <button class="btn" style="flex:2;" onclick="saveAdminChanges()">💾 Yadda Saxla və Yayımla</button>
@@ -754,10 +760,8 @@
             document.getElementById('pArtim').innerText = artimSign + " pt";
             document.getElementById('pArtim').style.color = artimColor;
 
-            // Chart.js Diaqramı
             renderStudentChart(student.kecmis_reyting || 0, computed.cari_reyting);
 
-            // Cədvəli gizlət, Tam Səhifə Profili göstər
             document.getElementById('mainDashboard').style.display = 'none';
             document.getElementById('profilePage').style.display = 'block';
             window.scrollTo(0, 0);
@@ -814,7 +818,7 @@
             });
         }
 
-        /* --- Admin Giriş Məntiqləri --- */
+        /* --- Admin Giriş və Sinxronizasiya Məntiqləri --- */
         function checkSavedLoginOrModal() {
             const savedUser = localStorage.getItem('admin_user');
             const savedPass = localStorage.getItem('admin_pass');
@@ -950,6 +954,7 @@
             });
         }
 
+        // Bütün tab-larda şəkil yeniləməsi (Sinxronlaşdırma)
         function handleImageUpload(event, index) {
             const file = event.target.files[0];
             if (!file) return;
@@ -965,8 +970,15 @@
                     ctx.drawImage(img, 0, 0, 120, 120);
                     
                     const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);
-                    globalData[currentTab][index].foto = compressedBase64;
-                    alert(`${globalData[currentTab][index].ad} üçün yeni foto seçildi! "Yadda Saxla" düyməsini sıxmağı unutmayın.`);
+
+                    // Bütün tab-larda şəkilləri eyni vaxtda dəyiş
+                    ['cpp', 'python', 'common'].forEach(tab => {
+                        if (globalData[tab] && globalData[tab][index]) {
+                            globalData[tab][index].foto = compressedBase64;
+                        }
+                    });
+
+                    alert(`${globalData[currentTab][index].ad} üçün şəkil bütün tablarda yeniləndi! "Yadda Saxla" düyməsini sıxmağı unutmayın.`);
                     renderAdminBody();
                 };
                 img.src = e.target.result;
@@ -978,13 +990,25 @@
             document.getElementById('adminModal').style.display = 'none';
         }
 
+        // Dəyişiklikləri Yadda Saxlama və Şəxsi Məlumatları Bütün Tablara Ötürmə
         function saveAdminChanges() {
             (globalData[currentTab] || []).forEach((student, index) => {
-                if (document.getElementById(`inp_${index}_ixtisas`)) student.ixtisas = document.getElementById(`inp_${index}_ixtisas`).value;
-                if (document.getElementById(`inp_${index}_kurs`)) student.kurs = document.getElementById(`inp_${index}_kurs`).value;
-                if (document.getElementById(`inp_${index}_yas`)) student.yas = document.getElementById(`inp_${index}_yas`).value;
-                if (document.getElementById(`inp_${index}_yer`)) student.yer = document.getElementById(`inp_${index}_yer`).value;
+                const ixtisasVal = document.getElementById(`inp_${index}_ixtisas`) ? document.getElementById(`inp_${index}_ixtisas`).value : student.ixtisas;
+                const kursVal = document.getElementById(`inp_${index}_kurs`) ? document.getElementById(`inp_${index}_kurs`).value : student.kurs;
+                const yasVal = document.getElementById(`inp_${index}_yas`) ? document.getElementById(`inp_${index}_yas`).value : student.yas;
+                const yerVal = document.getElementById(`inp_${index}_yer`) ? document.getElementById(`inp_${index}_yer`).value : student.yer;
 
+                // Profil şəxsi məlumatlarını BÜTÜN tablarda sinxronlaşdır
+                ['cpp', 'python', 'common'].forEach(tab => {
+                    if (globalData[tab] && globalData[tab][index]) {
+                        globalData[tab][index].ixtisas = ixtisasVal;
+                        globalData[tab][index].kurs = kursVal;
+                        globalData[tab][index].yas = yasVal;
+                        globalData[tab][index].yer = yerVal;
+                    }
+                });
+
+                // Platforma ballarını isə YALNIZ cari taba yaz (Müstəqil saxla)
                 if (currentTab !== 'common') {
                     if (document.getElementById(`inp_${index}_fm`)) {
                         student.fm = Number(document.getElementById(`inp_${index}_fm`).value);
@@ -999,6 +1023,26 @@
             database.ref('students_data').set(globalData).then(() => {
                 alert(`Dəyişikliklər ${activeAdminUser} tərəfindən canlı yayımlandı! 🚀`);
                 closeAdminPanel();
+            });
+        }
+
+        // Həftəni tamamlayıb Cari Reytinqi Keçmiş Reytinqə Keçirmək
+        function finishWeekAndTransferRating() {
+            if (!confirm("Cari həftəni tamamlayıb indikı Cari Reytinqləri Keçmiş Reytinq kimi yadda saxlamaq istədiyinizdən əminsiniz?")) return;
+
+            ['cpp', 'python', 'common'].forEach(tab => {
+                if (globalData[tab]) {
+                    globalData[tab].forEach((student, idx) => {
+                        const computed = calculateTotals(student, idx);
+                        student.kecmis_reyting = computed.cari_reyting;
+                    });
+                }
+            });
+
+            database.ref('students_data').set(globalData).then(() => {
+                alert("Cari reytinqlər uğurla 'Keçmiş Reytinq'ə çevrildi! 🗓️");
+                renderTable();
+                if (activeAdminUser) renderAdminBody();
             });
         }
     </script>
