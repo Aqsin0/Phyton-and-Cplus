@@ -639,13 +639,14 @@
             if (activeAdminUser) renderAdminBody();
         }
 
-        function calculateTotals(student, index) {
+        /* Dəqiq Ad Üzrə Hesablama Funksiyası */
+        function calculateTotals(student) {
             if (currentTab === 'common') {
-                const cppStudent = globalData.cpp ? globalData.cpp[index] : null;
-                const pyStudent = globalData.python ? globalData.python[index] : null;
+                const cppStudent = globalData.cpp ? globalData.cpp.find(s => s.ad === student.ad) : null;
+                const pyStudent = globalData.python ? globalData.python.find(s => s.ad === student.ad) : null;
                 
-                const cppCari = cppStudent ? (cppStudent.fm||0)+(cppStudent.stepping||0)+(cppStudent.e_olimp||0)+(cppStudent.codesources||0)+(cppStudent.hackerrank||0) : 0;
-                const pyCari = pyStudent ? (pyStudent.fm||0)+(pyStudent.stepping||0)+(pyStudent.e_olimp||0)+(pyStudent.codesources||0)+(pyStudent.hackerrank||0) : 0;
+                const cppCari = cppStudent ? (Number(cppStudent.fm)||0)+(Number(cppStudent.stepping)||0)+(Number(cppStudent.e_olimp)||0)+(Number(cppStudent.codesources)||0)+(Number(cppStudent.hackerrank)||0) : 0;
+                const pyCari = pyStudent ? (Number(pyStudent.fm)||0)+(Number(pyStudent.stepping)||0)+(Number(pyStudent.e_olimp)||0)+(Number(pyStudent.codesources)||0)+(Number(pyStudent.hackerrank)||0) : 0;
                 
                 const cari = cppCari + pyCari;
                 const artim = cari - Number(student.kecmis_reyting || 0);
@@ -661,7 +662,7 @@
             const tableHead = document.querySelector('#ratingTable thead');
             const tableBody = document.querySelector('#tableBody');
             const rawList = globalData[currentTab] || [];
-            const list = rawList.map((s, idx) => calculateTotals(s, idx));
+            const list = rawList.map(s => calculateTotals(s));
 
             updateHighlights(list);
 
@@ -684,10 +685,12 @@
                 const photoSrc = item.foto || DEFAULT_AVATAR_URL;
                 const avatarHTML = `<div class="avatar"><img src="${photoSrc}"></div>`;
 
+                const rawIdx = (globalData[currentTab]||[]).findIndex(s => s.ad === item.ad);
+
                 if (currentTab === 'common') {
                     row.innerHTML = `
                         <td class="rank-col">${index + 1}</td>
-                        <td><div class="student-info">${avatarHTML}<span class="clickable-name" onclick="openProfilePage(${index})">${item.ad}</span>${founderBadge}</div></td>
+                        <td><div class="student-info">${avatarHTML}<span class="clickable-name" onclick="openProfilePage(${rawIdx})">${item.ad}</span>${founderBadge}</div></td>
                         <td><strong>${item.cari_reyting}</strong></td>
                         <td>${item.kecmis_reyting}</td>
                         <td class="${artimClass}">${artimSign}</td>
@@ -695,7 +698,7 @@
                 } else {
                     row.innerHTML = `
                         <td class="rank-col">${index + 1}</td>
-                        <td><div class="student-info">${avatarHTML}<span class="clickable-name" onclick="openProfilePage(${index})">${item.ad}</span>${founderBadge}</div></td>
+                        <td><div class="student-info">${avatarHTML}<span class="clickable-name" onclick="openProfilePage(${rawIdx})">${item.ad}</span>${founderBadge}</div></td>
                         <td>${item.fm}</td><td>${item.stepping}</td><td>${item.e_olimp}</td><td>${item.codesources}</td><td>${item.hackerrank}</td>
                         <td><strong>${item.cari_reyting}</strong></td>
                         <td>${item.kecmis_reyting}</td>
@@ -729,9 +732,7 @@
         function sortAndRender() {
             if (!globalData[currentTab]) return;
             globalData[currentTab].sort((a, b) => {
-                const idxA = globalData[currentTab].indexOf(a);
-                const idxB = globalData[currentTab].indexOf(b);
-                return calculateTotals(b, idxB).cari_reyting - calculateTotals(a, idxA).cari_reyting;
+                return calculateTotals(b).cari_reyting - calculateTotals(a).cari_reyting;
             });
             renderTable();
         }
@@ -741,7 +742,7 @@
             const student = globalData[currentTab][index];
             if (!student) return;
 
-            const computed = calculateTotals(student, index);
+            const computed = calculateTotals(student);
 
             document.getElementById('pAvatar').src = student.foto || DEFAULT_AVATAR_URL;
             document.getElementById('pName').innerText = student.ad;
@@ -818,7 +819,7 @@
             });
         }
 
-        /* --- Admin Giriş və Sinxronizasiya Məntiqləri --- */
+        /* --- Admin Giriş Məntiqləri --- */
         function checkSavedLoginOrModal() {
             const savedUser = localStorage.getItem('admin_user');
             const savedPass = localStorage.getItem('admin_pass');
@@ -954,7 +955,6 @@
             });
         }
 
-        // Bütün tab-larda şəkil yeniləməsi (Sinxronlaşdırma)
         function handleImageUpload(event, index) {
             const file = event.target.files[0];
             if (!file) return;
@@ -971,14 +971,16 @@
                     
                     const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);
 
-                    // Bütün tab-larda şəkilləri eyni vaxtda dəyiş
+                    const targetName = globalData[currentTab][index].ad;
+
                     ['cpp', 'python', 'common'].forEach(tab => {
-                        if (globalData[tab] && globalData[tab][index]) {
-                            globalData[tab][index].foto = compressedBase64;
+                        if (globalData[tab]) {
+                            const st = globalData[tab].find(s => s.ad === targetName);
+                            if (st) st.foto = compressedBase64;
                         }
                     });
 
-                    alert(`${globalData[currentTab][index].ad} üçün şəkil bütün tablarda yeniləndi! "Yadda Saxla" düyməsini sıxmağı unutmayın.`);
+                    alert(`${targetName} üçün şəkil bütün tablarda yeniləndi! "Yadda Saxla" düyməsini sıxmağı unutmayın.`);
                     renderAdminBody();
                 };
                 img.src = e.target.result;
@@ -990,25 +992,26 @@
             document.getElementById('adminModal').style.display = 'none';
         }
 
-        // Dəyişiklikləri Yadda Saxlama və Şəxsi Məlumatları Bütün Tablara Ötürmə
         function saveAdminChanges() {
             (globalData[currentTab] || []).forEach((student, index) => {
+                const targetName = student.ad;
                 const ixtisasVal = document.getElementById(`inp_${index}_ixtisas`) ? document.getElementById(`inp_${index}_ixtisas`).value : student.ixtisas;
                 const kursVal = document.getElementById(`inp_${index}_kurs`) ? document.getElementById(`inp_${index}_kurs`).value : student.kurs;
                 const yasVal = document.getElementById(`inp_${index}_yas`) ? document.getElementById(`inp_${index}_yas`).value : student.yas;
                 const yerVal = document.getElementById(`inp_${index}_yer`) ? document.getElementById(`inp_${index}_yer`).value : student.yer;
 
-                // Profil şəxsi məlumatlarını BÜTÜN tablarda sinxronlaşdır
                 ['cpp', 'python', 'common'].forEach(tab => {
-                    if (globalData[tab] && globalData[tab][index]) {
-                        globalData[tab][index].ixtisas = ixtisasVal;
-                        globalData[tab][index].kurs = kursVal;
-                        globalData[tab][index].yas = yasVal;
-                        globalData[tab][index].yer = yerVal;
+                    if (globalData[tab]) {
+                        const st = globalData[tab].find(s => s.ad === targetName);
+                        if (st) {
+                            st.ixtisas = ixtisasVal;
+                            st.kurs = kursVal;
+                            st.yas = yasVal;
+                            st.yer = yerVal;
+                        }
                     }
                 });
 
-                // Platforma ballarını isə YALNIZ cari taba yaz (Müstəqil saxla)
                 if (currentTab !== 'common') {
                     if (document.getElementById(`inp_${index}_fm`)) {
                         student.fm = Number(document.getElementById(`inp_${index}_fm`).value);
@@ -1026,14 +1029,13 @@
             });
         }
 
-        // Həftəni tamamlayıb Cari Reytinqi Keçmiş Reytinqə Keçirmək
         function finishWeekAndTransferRating() {
             if (!confirm("Cari həftəni tamamlayıb indikı Cari Reytinqləri Keçmiş Reytinq kimi yadda saxlamaq istədiyinizdən əminsiniz?")) return;
 
             ['cpp', 'python', 'common'].forEach(tab => {
                 if (globalData[tab]) {
-                    globalData[tab].forEach((student, idx) => {
-                        const computed = calculateTotals(student, idx);
+                    globalData[tab].forEach((student) => {
+                        const computed = calculateTotals(student);
                         student.kecmis_reyting = computed.cari_reyting;
                     });
                 }
