@@ -179,7 +179,7 @@
         .btn-gold { background-color: var(--gold); color: #000; font-weight: 800; box-shadow: 0 0 15px var(--gold-glow); }
         .btn-dark { background-color: #374151; }
 
-        /* Həftəlik Statistika Kartları */
+        /* 🎨 ARXA FONU MARAQLI VƏ FƏRQLİ KARTLAR */
         .highlights-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -188,10 +188,25 @@
         }
 
         .highlight-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
             border-radius: 16px;
             padding: 16px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            border: 1px solid var(--border);
+        }
+
+        .card-top-leaders {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(17, 24, 39, 0.95));
+            border-color: var(--gold);
+        }
+
+        .card-past-leaders {
+            background: linear-gradient(135deg, rgba(56, 189, 248, 0.15), rgba(17, 24, 39, 0.95));
+            border-color: var(--accent);
+        }
+
+        .card-outsiders {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(17, 24, 39, 0.95));
+            border-color: var(--negative);
         }
 
         .highlight-card h3 {
@@ -200,7 +215,7 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            border-bottom: 1px solid var(--border);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
             padding-bottom: 10px;
         }
 
@@ -215,7 +230,7 @@
             cursor: pointer;
         }
 
-        /* 🎨 QƏŞƏNG CƏDVƏL DİZAYNI */
+        /* 🎨 CƏDVƏL DİZAYNI */
         .table-wrapper {
             background-color: var(--card-bg);
             border-radius: 16px;
@@ -242,7 +257,6 @@
         tr { transition: background 0.2s ease; }
         tr:hover { background-color: rgba(56, 189, 248, 0.06) !important; }
 
-        /* Yer Sıralamaları Rəngləri */
         .rank-1-row { background: linear-gradient(90deg, rgba(245, 158, 11, 0.12), transparent) !important; }
         .rank-2-row { background: linear-gradient(90deg, rgba(148, 163, 184, 0.08), transparent) !important; }
         .rank-3-row { background: linear-gradient(90deg, rgba(217, 119, 6, 0.08), transparent) !important; }
@@ -261,7 +275,7 @@
         .badge-negative { color: var(--negative); font-weight: bold; background: rgba(239, 68, 68, 0.12); padding: 4px 10px; border-radius: 8px; border: 1px solid rgba(239, 68, 68, 0.2); }
         .rank-col { font-weight: 800; color: var(--accent); width: 38px; font-size: 16px; }
 
-        /* 🏆 QALİBLƏR MODAL KARTLAR DİZAYNI */
+        /* 🏆 QALİBLƏR MODAL DİZAYNI */
         .winner-card {
             background: var(--card-inner);
             border-radius: 16px;
@@ -275,24 +289,24 @@
 
         .winner-card.place-1 {
             border-color: var(--gold);
-            background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(31, 41, 55, 0.9));
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.25), rgba(31, 41, 55, 0.95));
             box-shadow: 0 0 30px var(--gold-glow);
             grid-column: span 2;
         }
 
         .winner-card.place-2 {
             border-color: var(--silver);
-            background: linear-gradient(135deg, rgba(148, 163, 184, 0.15), rgba(31, 41, 55, 0.9));
+            background: linear-gradient(135deg, rgba(148, 163, 184, 0.2), rgba(31, 41, 55, 0.95));
         }
 
         .winner-card.place-3 {
             border-color: var(--bronze);
-            background: linear-gradient(135deg, rgba(217, 119, 6, 0.15), rgba(31, 41, 55, 0.9));
+            background: linear-gradient(135deg, rgba(217, 119, 6, 0.2), rgba(31, 41, 55, 0.95));
         }
 
         .winner-avatar {
-            width: 75px;
-            height: 75px;
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
             margin: 0 auto 10px auto;
             border: 3px solid #fff;
@@ -301,7 +315,24 @@
         }
         .winner-avatar img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* 📄 Tam Səhifə Profil Ekranı */
+        /* 👎 Dislike Rain Animasiyası */
+        .dislike-particle {
+            position: fixed;
+            top: -50px;
+            font-size: 28px;
+            z-index: 1200;
+            pointer-events: none;
+            animation: fallAnimation 3s linear forwards;
+        }
+
+        @keyframes fallAnimation {
+            to {
+                transform: translateY(105vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* 📄 Tam Səhifə Profil Və Admin Ekranı */
         #profilePage, #fullAdminPage {
             display: none;
             background: var(--card-bg);
@@ -343,7 +374,6 @@
             border: 1px solid var(--border);
         }
 
-        /* 😭 Şeir Qutusu Stilləri */
         .poem-box {
             background: rgba(239, 68, 68, 0.05);
             border: 1px solid var(--negative);
@@ -369,6 +399,10 @@
         .form-group { margin-bottom: 15px; }
         .form-group label { display: block; margin-bottom: 5px; color: var(--text-sub); }
         .form-group input, .form-group textarea { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border); background: var(--card-inner); color: white; box-sizing: border-box; }
+
+        .admin-nav { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+        .admin-nav-btn { background: var(--card-inner); border: 1px solid var(--border); color: var(--text-sub); padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 600; }
+        .admin-nav-btn.active { background: var(--accent); color: #000; }
     </style>
 </head>
 <body>
@@ -434,17 +468,17 @@
                 </div>
             </div>
 
-            <!-- Statistika Paneli -->
+            <!-- 🎨 Statistika Paneli (Fərqli Arxa Fonlar) -->
             <div class="highlights-grid">
-                <div class="highlight-card">
+                <div class="highlight-card card-top-leaders">
                     <h3 style="color:var(--gold);">🥇 <span data-i18n="topLeaders">Həftənin Liderləri</span></h3>
                     <ul class="mini-list" id="topList"></ul>
                 </div>
-                <div class="highlight-card">
+                <div class="highlight-card card-past-leaders">
                     <h3 style="color:var(--accent);">⚡ <span data-i18n="pastLeaders">Ötən Həftənin Liderləri</span></h3>
                     <ul class="mini-list" id="pastTopList"></ul>
                 </div>
-                <div class="highlight-card">
+                <div class="highlight-card card-outsiders">
                     <h3 style="color:var(--negative);">😭 <span data-i18n="outsiders">Həftənin Outsiderləri</span></h3>
                     <ul class="mini-list" id="bottomList"></ul>
                 </div>
@@ -453,8 +487,8 @@
             <div class="action-bar">
                 <div style="display:flex; gap:8px; flex-wrap:wrap;">
                     <button class="btn btn-gold" onclick="showWinnersCelebration()">🎉 <span data-i18n="btnWinners">Həftənin Qalibləri</span></button>
-                    <button class="btn" style="background:#ef4444;" onclick="showOutsidersModal()">😭 <span data-i18n="btnOutsiders">Outsiderlər & Şeir</span></button>
-                    <button class="btn btn-dark" onclick="openFeedbackModal()">💬 <span data-i18n="btnFeedback">Adminə Mesaj</span></button>
+                    <button class="btn" style="background:#ef4444;" onclick="showOutsidersModal()">😭 <span data-i18n="btnOutsiders">Həftənin Outsiderləri</span></button>
+                    <button class="btn btn-dark" onclick="openFeedbackModal()">💬 <span data-i18n="btnFeedback">Feedback</span></button>
                 </div>
                 <div style="display:flex; gap:8px;">
                     <button class="btn btn-admin" onclick="checkSavedLoginOrModal()">🔑 <span data-i18n="btnAdmin">Admin Paneli</span></button>
@@ -509,12 +543,12 @@
                 </div>
             </div>
 
-            <!-- Tələbə Fayl Yükləmə Bölməsi -->
+            <!-- Tələbə Çoxlu Fayl Yükləmə Bölməsi -->
             <div class="info-box" style="margin-bottom:20px;">
-                <h4 style="margin:0 0 10px 0; color:var(--accent);">📁 Tapşırıq/Kod Faylı Yüklə</h4>
+                <h4 style="margin:0 0 10px 0; color:var(--accent);">📁 Tapşırıq / Kod Faylları Yüklə (Çoxlu Fayl Seçimi)</h4>
                 <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
-                    <input type="file" id="studentTaskFile" style="background:#0b0f19; padding:8px; border-radius:8px; border:1px solid var(--border); color:#fff;">
-                    <button class="btn" onclick="uploadStudentTask()">Yüklə və Adminə Göndər</button>
+                    <input type="file" id="studentTaskFiles" multiple style="background:#0b0f19; padding:8px; border-radius:8px; border:1px solid var(--border); color:#fff;">
+                    <button class="btn" onclick="uploadStudentTasks()">Yüklə və Adminə Göndər</button>
                 </div>
                 <div id="studentTaskStatus" style="margin-top:10px; font-size:13px; font-weight:bold;"></div>
             </div>
@@ -535,38 +569,60 @@
                 </div>
             </div>
 
-            <!-- 📸 Admin Panelində Qrup Şəkli Dəyişmə Hissəsi -->
-            <div class="info-box" style="margin-bottom:20px; border:1px solid var(--accent);">
-                <h3 style="margin:0 0 10px 0; color:var(--accent);">📸 Qrup Şəklini Yenilə</h3>
-                <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
-                    <label class="file-upload-btn">
-                        📁 Kompüterdən/Telefondan Yeni Qrup Şəkli Seç
-                        <input type="file" accept="image/*" style="display:none;" onchange="handleGroupPhotoUpload(event)">
-                    </label>
-                    <span id="groupPhotoStatus" style="font-size:12px; color:var(--positive); font-weight:bold;"></span>
+            <div class="admin-nav">
+                <button class="admin-nav-btn active" onclick="switchAdminSubTab('students')">👥 Tələbələrin Reytinqi</button>
+                <button class="admin-nav-btn" onclick="switchAdminSubTab('files')">📁 Faylları Yoxlama Səhifəsi</button>
+                <button class="admin-nav-btn" onclick="switchAdminSubTab('audio')">🎵 Musiqi & Media İdarəsi</button>
+                <button class="admin-nav-btn" onclick="switchAdminSubTab('logs')">📲 Cihaz & Giriş Logları</button>
+            </div>
+
+            <!-- SUB TAB 1: Reytinq Və Bal Redaktəsi -->
+            <div id="adminTabStudents">
+                <div style="background:rgba(245, 158, 11, 0.1); padding:12px 16px; border-radius:12px; border:1px solid var(--gold); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:20px;">
+                    <span style="font-size:13px; color:var(--gold); font-weight:600;">🗓️ Həftə Bitişi: Cari reytinqləri Keçmiş Reytinqə çevirir.</span>
+                    <button class="btn btn-gold" onclick="finishWeekAndTransferRating()">Həftəni Tamamla</button>
+                </div>
+                <div id="adminBody"></div>
+                <button class="btn" style="width:100%; margin-top:20px; padding:14px; font-size:16px;" onclick="saveAdminChanges()">💾 Yadda Saxla və Yayımla</button>
+            </div>
+
+            <!-- SUB TAB 2: Fayl Yoxlama Səhifəsi -->
+            <div id="adminTabFiles" style="display:none;">
+                <div class="info-box">
+                    <h3 style="margin:0 0 15px 0; color:var(--accent);">📁 Tələbələrin Yüklədiyi Bütün Fayllar</h3>
+                    <div id="adminTaskFilesList">Yüklənir...</div>
                 </div>
             </div>
 
-            <div style="background:rgba(245, 158, 11, 0.1); padding:12px 16px; border-radius:12px; border:1px solid var(--gold); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:20px;">
-                <span style="font-size:13px; color:var(--gold); font-weight:600;">🗓️ Həftə Bitişi: Cari reytinqləri Keçmiş Reytinqə çevirir.</span>
-                <button class="btn btn-gold" onclick="finishWeekAndTransferRating()">Həftəni Tamamla</button>
+            <!-- SUB TAB 3: Musiqi Və Qrup Şəkli -->
+            <div id="adminTabAudio" style="display:none;">
+                <div class="info-box" style="margin-bottom:15px;">
+                    <h3 style="margin:0 0 10px 0; color:var(--gold);">🎉 Qaliblər Musiqisini Yüklə</h3>
+                    <input type="file" id="winnerAudioFile" accept="audio/*" style="margin-bottom:10px;">
+                    <button class="btn btn-gold" onclick="uploadWinnerAudio()">Yüklə</button>
+                </div>
+                <div class="info-box" style="margin-bottom:15px;">
+                    <h3 style="margin:0 0 10px 0; color:var(--negative);">😭 Outsiderlər Musiqisini Yüklə</h3>
+                    <input type="file" id="outsiderAudioFile" accept="audio/*" style="margin-bottom:10px;">
+                    <button class="btn" style="background:var(--negative);" onclick="uploadOutsiderAudio()">Yüklə</button>
+                </div>
+                <div class="info-box">
+                    <h3 style="margin:0 0 10px 0; color:var(--accent);">📸 Qrup Şəklini Yenilə</h3>
+                    <input type="file" accept="image/*" onchange="handleGroupPhotoUpload(event)">
+                </div>
             </div>
 
-            <!-- Tələbələrin Yüklədiyi Fayllar Və Qiymətləndirmə -->
-            <div class="info-box" style="margin-bottom:20px;">
-                <h3 style="margin:0 0 15px 0; color:var(--accent);">📁 Tələbələrin Yüklədiyi Tapşırıq Faylları</h3>
-                <div id="adminTaskFilesList">Yüklənir...</div>
+            <!-- SUB TAB 4: Cihaz Və Feedback Logları -->
+            <div id="adminTabLogs" style="display:none;">
+                <div class="info-box" style="margin-bottom:20px;">
+                    <h3 style="margin:0 0 15px 0; color:var(--gold);">💬 Feedback Mesajları</h3>
+                    <div id="adminFeedbackList">Mesaj yoxdur.</div>
+                </div>
+                <div class="info-box">
+                    <h3 style="margin:0 0 15px 0; color:var(--accent);">📲 Giriş Edilən Cihazlar & Loglar</h3>
+                    <div id="adminLogsList">Log yoxdur.</div>
+                </div>
             </div>
-
-            <!-- Tələbələrin Mesajları (Feedback) -->
-            <div class="info-box" style="margin-bottom:20px;">
-                <h3 style="margin:0 0 15px 0; color:var(--gold);">💬 Tələbələrin Adminə Mesajları</h3>
-                <div id="adminFeedbackList">Mesaj yoxdur.</div>
-            </div>
-
-            <div id="adminBody"></div>
-
-            <button class="btn" style="width:100%; margin-top:20px; padding:14px; font-size:16px;" onclick="saveAdminChanges()">💾 Yadda Saxla və Yayımla</button>
         </div>
     </div>
 
@@ -584,7 +640,7 @@
     <!-- Feedback Modal -->
     <div id="feedbackModal" class="modal">
         <div class="modal-content" style="max-width:450px;">
-            <h2 style="margin-top:0; color:var(--accent);">💬 Adminə Mesaj Göndər</h2>
+            <h2 style="margin-top:0; color:var(--accent);">💬 Feedback (Fikir Bildir)</h2>
             <div class="form-group"><label>Adınız:</label><input type="text" id="fbName" placeholder="Ad Soyad"></div>
             <div class="form-group"><label>Mesajınız / Fikriniz:</label><textarea id="fbMsg" rows="4" placeholder="Sayt haqqında təklif və ya fikriniz..."></textarea></div>
             <button class="btn" style="width:100%;" onclick="sendFeedback()">Göndər</button>
@@ -592,10 +648,10 @@
         </div>
     </div>
 
-    <!-- 🏆 Qaliblər Modal (Yenilənmiş Möhtəşəm Dizayn) -->
+    <!-- 🏆 Qaliblər Modal (Əla Effekti Və Güllər Çiçəklər) -->
     <div id="winnersModal" class="modal">
         <div class="modal-content" style="text-align:center;">
-            <h1 style="color:var(--gold); margin-top:0; font-size:26px;">👑 HƏFTƏNİN QALİBLƏRİ 🏆</h1>
+            <h1 style="color:var(--gold); margin-top:0; font-size:28px;">👑 HƏFTƏNİN QALİBLƏRİ 🏆</h1>
             <p style="color:var(--text-sub); font-size:13px; margin-bottom:20px;">Təbrik edirik! Bu həftənin ən yüksək nəticə göstərən tələbələri:</p>
             
             <div id="winnersListGrid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(140px, 1fr)); gap:15px; margin:20px 0;"></div>
@@ -604,7 +660,7 @@
         </div>
     </div>
 
-    <!-- 😭 Outsiderlər & Şeir Modal -->
+    <!-- 😭 Outsiderlər Modal Və Dislike Yağışı -->
     <div id="outsidersModal" class="modal">
         <div class="modal-content" style="text-align:center;">
             <h1 style="color:var(--negative); margin-top:0;">😭 HƏFTƏNİN OUTSİDERLƏRİ 😴</h1>
@@ -655,15 +711,13 @@ Yat, qal dala, laylay!</span>
         <div class="modal-content" style="max-width:500px;">
             <h2 style="color:var(--accent); margin-top:0;">🚀 Versiya 2.0 (V2.0) Yenilikləri</h2>
             <ul style="text-align:left; font-size:14px; line-height:1.7; color:var(--text-sub);">
-                <li>✅ Fotoların sıxlaşdırılması ləğv edildi (HQ keyfiyyət).</li>
-                <li>✅ "Şagird" ➔ "Tələbə", "Çempion" ➔ "Lider" edildi.</li>
-                <li>✅ "Yüksəliş gözlənilənlər" ➔ "Outsiderlər" olaraq dəyişdirildi.</li>
-                <li>✅ Cədvəldə platformaların kliklənən rəsmi linkləri əlavə olundu (FM istisna olaraq).</li>
-                <li>✅ Çoxdilli sistem (AZ, RU, TR, EN) inteqrasiya edildi.</li>
-                <li>✅ Tələbələr üçün Tapşırıq/Kod faylı yükləmə və Admin Yoxlama/Bal vermə sistemi.</li>
-                <li>✅ Qaliblər üçün 5 Saniyəlik Real İnsan Alqış Səsi & Konfetti effekti.</li>
-                <li>✅ Outsiderlər üçün Səsli Oxunan Xüsusi Şeir bölməsi.</li>
-                <li>✅ Skor Tablosu rəngarəng neon dizaynla yeniləndi.</li>
+                <li>✅ Fotoların uzanması və yassılaşması tamamilə aradan qaldırıldı.</li>
+                <li>✅ Çoxlu fayl yükləmə sistemi və avtomatik ekran təmizlənməsi.</li>
+                <li>✅ Admin panelində silmə təsdiqı (Confirm Dialog) ilə fayl silmə.</li>
+                <li>✅ Adminlər üçün xüsusi Fayl Yoxlama və Cihaz Log səhifələri.</li>
+                <li>✅ Adminlər tərəfindən Qalib və Outsider musiqilərinin yüklənməsi.</li>
+                <li>✅ Ətrafa güllər-çiçəklər saçan təmtəraqlı Qaliblər ekranı.</li>
+                <li>✅ Dislike yağışı yağdıran Həftənin Outsiderləri ekranı.</li>
             </ul>
             <button class="btn" style="width:100%;" onclick="closeVersionModal()">Əla!</button>
         </div>
@@ -718,13 +772,13 @@ Yat, qal dala, laylay!</span>
         let chartInstance = null;
         let currentLang = 'az';
         let activeProfileStudent = null;
-        let applauseAudio = null;
+        let activeAudioObject = null;
 
         const i18n = {
-            az: { title: "Tələbə Reytinq Paneli", groupPhoto: "Bizim Qrupumuz", juryTitle: "Münsiflər Heyəti (Jürilər)", topLeaders: "Həftənin Liderləri", pastLeaders: "Ötən Həftənin Liderləri", outsiders: "Həftənin Outsiderləri", btnWinners: "Həftənin Qalibləri", btnOutsiders: "Outsiderlər & Şeir", btnFeedback: "Adminə Mesaj", btnAdmin: "Admin Paneli", btnSort: "Sırala", btnBack: "Reytinq Cədvəlinə Qayıt" },
-            ru: { title: "Панель Рейтинга Студентов", groupPhoto: "Наша Группа", juryTitle: "Жюри", topLeaders: "Лидеры Недели", pastLeaders: "Прошлые Лидеры", outsiders: "Аутсайдеры Недели", btnWinners: "Победители", btnOutsiders: "Аутсайдеры", btnFeedback: "Сообщение Админу", btnAdmin: "Панель Админа", btnSort: "Сортировать", btnBack: "Назад к Таблице" },
-            tr: { title: "Öğrenci Sıralama Paneli", groupPhoto: "Grubumuz", juryTitle: "Jüri Üyeleri", topLeaders: "Haftanın Liderleri", pastLeaders: "Geçen Haftanın Liderleri", outsiders: "Haftanın Outsiderları", btnWinners: "Kazananlar", btnOutsiders: "Outsiderlar & Şiir", btnFeedback: "Admine Mesaj", btnAdmin: "Admin Paneli", btnSort: "Sırala", btnBack: "Listeye Dön" },
-            en: { title: "Student Leaderboard Panel", groupPhoto: "Our Group", juryTitle: "Jury Panel", topLeaders: "Top Leaders", pastLeaders: "Past Leaders", outsiders: "Weekly Outsiders", btnWinners: "Winners", btnOutsiders: "Outsiders & Poem", btnFeedback: "Message Admin", btnAdmin: "Admin Panel", btnSort: "Sort", btnBack: "Back to Table" }
+            az: { title: "Tələbə Reytinq Paneli", groupPhoto: "Bizim Qrupumuz", juryTitle: "Münsiflər Heyəti (Jürilər)", topLeaders: "Həftənin Liderləri", pastLeaders: "Ötən Həftənin Liderləri", outsiders: "Həftənin Outsiderləri", btnWinners: "Həftənin Qalibləri", btnOutsiders: "Həftənin Outsiderləri", btnFeedback: "Feedback", btnAdmin: "Admin Paneli", btnSort: "Sırala", btnBack: "Reytinq Cədvəlinə Qayıt" },
+            ru: { title: "Панель Рейтинга Студентов", groupPhoto: "Наша Группа", juryTitle: "Жюри", topLeaders: "Лидеры Недели", pastLeaders: "Прошлые Лидеры", outsiders: "Аутсайдеры Недели", btnWinners: "Победители", btnOutsiders: "Аутсайдеры Недели", btnFeedback: "Обратная связь", btnAdmin: "Панель Админа", btnSort: "Сортировать", btnBack: "Назад к Таблице" },
+            tr: { title: "Öğrenci Sıralama Paneli", groupPhoto: "Grubumuz", juryTitle: "Jüri Üyeleri", topLeaders: "Haftanın Liderleri", pastLeaders: "Geçen Haftanın Liderleri", outsiders: "Haftanın Outsiderları", btnWinners: "Kazananlar", btnOutsiders: "Haftanın Outsiderları", btnFeedback: "Geri Bildirim", btnAdmin: "Admin Paneli", btnSort: "Sırala", btnBack: "Listeye Dön" },
+            en: { title: "Student Leaderboard Panel", groupPhoto: "Our Group", juryTitle: "Jury Panel", topLeaders: "Top Leaders", pastLeaders: "Past Leaders", outsiders: "Weekly Outsiders", btnWinners: "Winners", btnOutsiders: "Weekly Outsiders", btnFeedback: "Feedback", btnAdmin: "Admin Panel", btnSort: "Sort", btnBack: "Back to Table" }
         };
 
         function setLanguage(lang) {
@@ -768,11 +822,18 @@ Yat, qal dala, laylay!</span>
         setInterval(updateLiveDateTime, 1000);
         updateLiveDateTime();
 
+        // Cihaz Məlumatı Loglayan Funksiya
+        function logDeviceInfo(action, detail="") {
+            const deviceInfo = `${navigator.userAgent} | Screen: ${window.innerWidth}x${window.innerHeight}`;
+            database.ref('device_logs').push({
+                action, detail, deviceInfo, timestamp: new Date().toISOString()
+            });
+        }
+        logDeviceInfo("Site Visit");
+
         database.ref('group_photo').on('value', (snap) => {
             const photoUrl = snap.val();
-            if (photoUrl) {
-                document.getElementById('mainGroupImg').src = photoUrl;
-            }
+            if (photoUrl) document.getElementById('mainGroupImg').src = photoUrl;
         });
 
         database.ref('students_data').on('value', (snapshot) => {
@@ -813,7 +874,6 @@ Yat, qal dala, laylay!</span>
             }
         }
 
-        /* 🎨 Qəşəng Cədvəl Render Edilməsi */
         function renderTable() {
             const tableHead = document.querySelector('#ratingTable thead');
             const tableBody = document.querySelector('#tableBody');
@@ -907,11 +967,12 @@ Yat, qal dala, laylay!</span>
             renderTable();
         }
 
-        /* 📄 Profil Səhifəsi Və Fayl Yükləmə */
+        /* 📄 Profil Səhifəsi Və Çoxlu Fayl Yükləmə */
         function openProfilePage(index) {
             const student = globalData[currentTab][index];
             if (!student) return;
             activeProfileStudent = student.ad;
+            logDeviceInfo("Profile View", activeProfileStudent);
 
             const computed = calculateTotals(student);
 
@@ -931,18 +992,7 @@ Yat, qal dala, laylay!</span>
             document.getElementById('pArtim').innerText = artimSign + " pt";
             document.getElementById('pArtim').style.color = computed.artim >= 0 ? 'var(--positive)' : 'var(--negative)';
 
-            database.ref('student_tasks/' + activeProfileStudent.replace(/\s+/g, '_')).on('value', (snap) => {
-                const task = snap.val();
-                const statusDiv = document.getElementById('studentTaskStatus');
-                if (task) {
-                    let stText = task.status === 'correct' ? `✅ Düzgün (+${task.addedPoints || 0} Bal Əlavə Olundu)` : (task.status === 'wrong' ? '❌ Səhv Qiymətləndirildi' : '⏳ Admin Yoxlanışındadır');
-                    let stColor = task.status === 'correct' ? 'var(--positive)' : (task.status === 'wrong' ? 'var(--negative)' : 'var(--gold)');
-                    statusDiv.innerHTML = `<span style="color:${stColor}">Fayl: ${task.fileName} (${stText})</span>`;
-                } else {
-                    statusDiv.innerHTML = 'Hələ heç bir fayl yüklənməyib.';
-                }
-            });
-
+            loadStudentUploadedTasksList();
             renderStudentChart(student.kecmis_reyting || 0, computed.cari_reyting);
 
             document.getElementById('mainDashboard').style.display = 'none';
@@ -950,24 +1000,52 @@ Yat, qal dala, laylay!</span>
             window.scrollTo(0, 0);
         }
 
-        function uploadStudentTask() {
-            const fileInput = document.getElementById('studentTaskFile');
-            if (!fileInput.files[0]) { alert("Zəhmət olmasa fayl seçin!"); return; }
-            
-            const file = fileInput.files[0];
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                database.ref('student_tasks/' + activeProfileStudent.replace(/\s+/g, '_')).set({
-                    studentName: activeProfileStudent,
-                    fileName: file.name,
-                    fileData: e.target.result,
-                    status: 'pending',
-                    timestamp: new Date().toISOString()
-                }).then(() => {
-                    alert("Fayl uğurla admine göndərildi! ✅");
-                });
-            };
-            reader.readAsDataURL(file);
+        function loadStudentUploadedTasksList() {
+            database.ref('student_tasks').orderByChild('studentName').equalTo(activeProfileStudent).on('value', (snap) => {
+                const tasks = snap.val();
+                const statusDiv = document.getElementById('studentTaskStatus');
+                statusDiv.innerHTML = '';
+                if (tasks) {
+                    Object.keys(tasks).forEach(key => {
+                        const t = tasks[key];
+                        let stText = t.status === 'correct' ? `✅ Düzgün (+${t.addedPoints || 0} Bal)` : (t.status === 'wrong' ? '❌ Səhv' : '⏳ Yoxlanılır');
+                        let stColor = t.status === 'correct' ? 'var(--positive)' : (t.status === 'wrong' ? 'var(--negative)' : 'var(--gold)');
+                        statusDiv.innerHTML += `<div style="margin-top:4px;"><span style="color:${stColor}">📄 ${t.fileName} - (${stText})</span></div>`;
+                    });
+                } else {
+                    statusDiv.innerHTML = 'Hələ heç bir fayl yüklənməyib.';
+                }
+            });
+        }
+
+        // Çoxlu Fayl Yükləmə Və Ekrani Təmizləmə
+        function uploadStudentTasks() {
+            const fileInput = document.getElementById('studentTaskFiles');
+            const files = fileInput.files;
+            if (!files || files.length === 0) { alert("Zəhmət olmasa ən azı bir fayl seçin!"); return; }
+
+            logDeviceInfo("Task Upload", `${activeProfileStudent} - ${files.length} fayl`);
+
+            let uploadedCount = 0;
+            Array.from(files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    database.ref('student_tasks').push({
+                        studentName: activeProfileStudent,
+                        fileName: file.name,
+                        fileData: e.target.result,
+                        status: 'pending',
+                        timestamp: new Date().toISOString()
+                    }).then(() => {
+                        uploadedCount++;
+                        if (uploadedCount === files.length) {
+                            alert(`${files.length} ədəd fayl uğurla admine göndərildi! ✅`);
+                            fileInput.value = ''; // Ekranı Və Seçilmiş Faylları Təmizlə
+                        }
+                    });
+                };
+                reader.readAsDataURL(file);
+            });
         }
 
         function closeProfilePage() {
@@ -993,7 +1071,7 @@ Yat, qal dala, laylay!</span>
             });
         }
 
-        /* 🎉 QALİBLƏR MÖHTƏŞƏM TƏNTƏNƏSİ, 5 SANİYƏLİK ALQIŞ VƏ KONFETTİ */
+        /* 🎉 QALİBLƏR MÖHTƏŞƏM TƏNTƏNƏSİ, GÜLLƏR VƏ MUSİQİ */
         function showWinnersCelebration() {
             const rawList = globalData[currentTab] || [];
             const list = rawList.map(s => calculateTotals(s)).sort((a,b) => b.cari_reyting - a.cari_reyting);
@@ -1018,48 +1096,35 @@ Yat, qal dala, laylay!</span>
 
             document.getElementById('winnersModal').style.display = 'flex';
 
-            // 5 Saniyəlik Konfetti Atəşfəşanlığı
+            // Güllər Və Konfetti Partlayışı
             const duration = 5 * 1000;
             const animationEnd = Date.now() + duration;
-            const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 1100 };
-
-            function randomInRange(min, max) { return Math.random() * (max - min) + min; }
 
             const interval = setInterval(function() {
                 const timeLeft = animationEnd - Date.now();
                 if (timeLeft <= 0) return clearInterval(interval);
 
-                const particleCount = 50 * (timeLeft / duration);
-                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
-                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
-            }, 250);
+                confetti({ particleCount: 40, spread: 100, origin: { x: 0.1, y: 0.5 }, shapes: ['circle', 'square'] });
+                confetti({ particleCount: 40, spread: 100, origin: { x: 0.9, y: 0.5 }, shapes: ['circle', 'square'] });
+            }, 300);
 
-            // Real İnsan Alqış Səsi (5 Saniyə)
-            playRealApplauseSound();
-        }
-
-        function playRealApplauseSound() {
-            if (applauseAudio) {
-                applauseAudio.pause();
-                applauseAudio.currentTime = 0;
-            }
-            // 5 saniyəlik yüksək keyfiyyətli kütlə alqış audio faylı
-            applauseAudio = new Audio('https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3');
-            applauseAudio.play().catch(e => console.log('Audio error:', e));
-            
-            setTimeout(() => {
-                if (applauseAudio) {
-                    applauseAudio.pause();
+            // Adminin Yüklədiyi Musiqini Səsələndir
+            database.ref('audio_winner').once('value', (snap) => {
+                const audioData = snap.val();
+                if (audioData) {
+                    if (activeAudioObject) activeAudioObject.pause();
+                    activeAudioObject = new Audio(audioData);
+                    activeAudioObject.play().catch(e=>console.log(e));
                 }
-            }, 5000);
+            });
         }
 
         function closeWinnersModal() { 
-            if (applauseAudio) applauseAudio.pause();
+            if (activeAudioObject) activeAudioObject.pause();
             document.getElementById('winnersModal').style.display = 'none'; 
         }
 
-        /* 😭 Outsiderlər Modal & SpeechSynthesis */
+        /* 😭 Həftənin Outsiderləri Və Dislike Yağışı */
         function showOutsidersModal() {
             const rawList = globalData[currentTab] || [];
             const list = rawList.map(s => calculateTotals(s)).sort((a,b) => a.cari_reyting - b.cari_reyting);
@@ -1070,7 +1135,7 @@ Yat, qal dala, laylay!</span>
             bottom3.forEach((s) => {
                 grid.innerHTML += `
                     <div style="background:var(--card-inner); padding:12px 18px; border-radius:12px; border:1px solid var(--negative); text-align:center;">
-                        <img src="${s.foto || DEFAULT_AVATAR_URL}" style="width:55px; height:55px; border-radius:50%; border:2px solid var(--negative);">
+                        <img src="${s.foto || DEFAULT_AVATAR_URL}" style="width:55px; height:55px; border-radius:50%; border:2px solid var(--negative); object-fit:cover;">
                         <strong style="display:block; font-size:13px; margin-top:5px; color:#fff;">😭 ${s.ad}</strong>
                         <span style="color:var(--negative); font-weight:bold; font-size:12px;">${s.cari_reyting} pt</span>
                     </div>
@@ -1078,6 +1143,28 @@ Yat, qal dala, laylay!</span>
             });
 
             document.getElementById('outsidersModal').style.display = 'flex';
+
+            // Dislike Yağışı Animasiyası
+            for (let i = 0; i < 25; i++) {
+                setTimeout(() => {
+                    const dislike = document.createElement('div');
+                    dislike.className = 'dislike-particle';
+                    dislike.innerText = ['👎', '💔', '😴', '💩'][Math.floor(Math.random() * 4)];
+                    dislike.style.left = Math.random() * 95 + 'vw';
+                    document.body.appendChild(dislike);
+                    setTimeout(() => dislike.remove(), 3000);
+                }, i * 120);
+            }
+
+            // Adminin Yüklədiyi Outsider Musiqisini Səsələndir
+            database.ref('audio_outsider').once('value', (snap) => {
+                const audioData = snap.val();
+                if (audioData) {
+                    if (activeAudioObject) activeAudioObject.pause();
+                    activeAudioObject = new Audio(audioData);
+                    activeAudioObject.play().catch(e=>console.log(e));
+                }
+            });
         }
 
         function speakPoem() {
@@ -1088,17 +1175,16 @@ Yat, qal dala, laylay!</span>
                 utterance.lang = 'az-AZ';
                 utterance.rate = 0.85;
                 window.speechSynthesis.speak(utterance);
-            } else {
-                alert("Sizin brauzeriniz səsli oxumanı dəstəkləmir.");
             }
         }
 
         function closeOutsidersModal() {
+            if (activeAudioObject) activeAudioObject.pause();
             if ('speechSynthesis' in window) window.speechSynthesis.cancel();
             document.getElementById('outsidersModal').style.display = 'none';
         }
 
-        /* 💬 Feedback (Adminə Mesaj) */
+        /* 💬 Feedback (Fikir Bildir) */
         function openFeedbackModal() { document.getElementById('feedbackModal').style.display = 'flex'; }
         function closeFeedbackModal() { document.getElementById('feedbackModal').style.display = 'none'; }
         function sendFeedback() {
@@ -1114,7 +1200,7 @@ Yat, qal dala, laylay!</span>
             });
         }
 
-        /* ⚙️ Admin Məntiqləri, Qrup Foto Yeniləmə Və Fayla Bal Vermə */
+        /* ⚙️ Admin Paneli Və Alt Səhifələri (Sub-Tabs) */
         function checkSavedLoginOrModal() {
             const savedUser = localStorage.getItem('admin_user');
             const savedPass = localStorage.getItem('admin_pass');
@@ -1150,7 +1236,7 @@ Yat, qal dala, laylay!</span>
         function openAdminPanel() {
             document.getElementById('welcomeAdmin').innerText = `⚙️ Admin: ${activeAdminUser} (${currentTab.toUpperCase()})`;
             renderAdminBody();
-            loadAdminTasksAndFeedbacks();
+            loadAdminTasksAndLogs();
             document.getElementById('mainDashboard').style.display = 'none';
             document.getElementById('fullAdminPage').style.display = 'block';
         }
@@ -1160,21 +1246,19 @@ Yat, qal dala, laylay!</span>
             document.getElementById('mainDashboard').style.display = 'block';
         }
 
-        function handleGroupPhotoUpload(event) {
-            const file = event.target.files[0];
-            if (!file) return;
+        function switchAdminSubTab(tabName) {
+            document.querySelectorAll('.admin-nav-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
 
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                database.ref('group_photo').set(e.target.result).then(() => {
-                    document.getElementById('groupPhotoStatus').innerText = "✓ Qrup Şəkli Uğurla Yeniləndi!";
-                    alert("Qrup şəklini uğurla dəyişdiniz! ✅");
-                });
-            };
-            reader.readAsDataURL(file);
+            document.getElementById('adminTabStudents').style.display = tabName === 'students' ? 'block' : 'none';
+            document.getElementById('adminTabFiles').style.display = tabName === 'files' ? 'block' : 'none';
+            document.getElementById('adminTabAudio').style.display = tabName === 'audio' ? 'block' : 'none';
+            document.getElementById('adminTabLogs').style.display = tabName === 'logs' ? 'block' : 'none';
         }
 
-        function loadAdminTasksAndFeedbacks() {
+        // Faylları Və Logları Yüklə
+        function loadAdminTasksAndLogs() {
+            // Fayllar Səhifəsi
             database.ref('student_tasks').on('value', (snap) => {
                 const tasks = snap.val();
                 const listDiv = document.getElementById('adminTaskFilesList');
@@ -1184,35 +1268,64 @@ Yat, qal dala, laylay!</span>
                 Object.keys(tasks).forEach(key => {
                     const t = tasks[key];
                     listDiv.innerHTML += `
-                        <div style="background:#0b0f19; padding:10px; border-radius:8px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+                        <div style="background:#0b0f19; padding:12px; border-radius:10px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; border:1px solid var(--border);">
                             <div>
-                                <strong>${t.studentName}</strong>: <a href="${t.fileData}" download="${t.fileName}" style="color:var(--accent);">${t.fileName}</a>
-                                <span style="font-size:11px; margin-left:8px; color:var(--text-sub);">(${t.status === 'correct' ? '✅ Düzgün' : (t.status === 'wrong' ? '❌ Səhv' : '⏳ Gözləmədə')})</span>
+                                <strong style="color:var(--accent);">${t.studentName}</strong>: 
+                                <a href="${t.fileData}" download="${t.fileName}" style="color:#fff; font-weight:bold;">📄 ${t.fileName}</a>
+                                <span style="font-size:11px; margin-left:8px; color:var(--text-sub);">(${t.status === 'correct' ? '✅ Düzgün' : (t.status === 'wrong' ? '❌ Səhv' : '⏳ Yoxlanılır')})</span>
                             </div>
-                            <div style="display:flex; gap:5px;">
-                                <button class="btn" style="background:var(--positive); font-size:11px; padding:4px 8px;" onclick="gradeTaskAndAddPoints('${key}', '${t.studentName}')">✅ Düzgün (Bal Ver)</button>
-                                <button class="btn" style="background:var(--negative); font-size:11px; padding:4px 8px;" onclick="gradeTask('${key}', 'wrong')">❌ Səhv</button>
+                            <div style="display:flex; gap:6px;">
+                                <button class="btn" style="background:var(--positive); font-size:11px; padding:6px 10px;" onclick="gradeTaskAndAddPoints('${key}', '${t.studentName}')">✅ Düzgün (Bal Ver)</button>
+                                <button class="btn" style="background:var(--negative); font-size:11px; padding:6px 10px;" onclick="gradeTask('${key}', 'wrong')">❌ Səhv</button>
+                                <button class="btn" style="background:#64748b; font-size:11px; padding:6px 10px;" onclick="deleteStudentTask('${key}')">🗑️ Sil</button>
                             </div>
                         </div>
                     `;
                 });
             });
 
+            // Feedback-lər
             database.ref('feedbacks').on('value', (snap) => {
                 const feedbacks = snap.val();
                 const fbDiv = document.getElementById('adminFeedbackList');
                 fbDiv.innerHTML = '';
-                if (!feedbacks) { fbDiv.innerHTML = 'Hələ mesaj yoxdur.'; return; }
+                if (!feedbacks) { fbDiv.innerHTML = 'Mesaj yoxdur.'; return; }
 
                 Object.keys(feedbacks).forEach(k => {
                     const f = feedbacks[k];
                     fbDiv.innerHTML += `
-                        <div style="background:#0b0f19; padding:8px 12px; border-radius:8px; margin-bottom:6px; font-size:13px;">
-                            <strong style="color:var(--accent);">${f.name}:</strong> ${f.msg}
+                        <div style="background:#0b0f19; padding:10px; border-radius:8px; margin-bottom:8px; font-size:13px;">
+                            <strong style="color:var(--gold);">${f.name}:</strong> ${f.msg}
                         </div>
                     `;
                 });
             });
+
+            // Cihaz Logları
+            database.ref('device_logs').limitToLast(15).on('value', (snap) => {
+                const logs = snap.val();
+                const logDiv = document.getElementById('adminLogsList');
+                logDiv.innerHTML = '';
+                if (!logs) { logDiv.innerHTML = 'Log yoxdur.'; return; }
+
+                Object.keys(logs).reverse().forEach(k => {
+                    const l = logs[k];
+                    logDiv.innerHTML += `
+                        <div style="background:#0b0f19; padding:8px 12px; border-radius:8px; margin-bottom:6px; font-size:11px; color:var(--text-sub);">
+                            <strong style="color:var(--accent);">${l.action}</strong> (${l.detail}): ${l.deviceInfo}
+                        </div>
+                    `;
+                });
+            });
+        }
+
+        // Təsdiq İlə Faylı Silmək
+        function deleteStudentTask(taskKey) {
+            if (confirm("Bu faylı silmək istədiyinizdən əminsiniz?")) {
+                database.ref('student_tasks/' + taskKey).remove().then(() => {
+                    alert("Fayl uğurla silindi! 🗑️");
+                });
+            }
         }
 
         function gradeTaskAndAddPoints(taskKey, studentName) {
@@ -1223,14 +1336,12 @@ Yat, qal dala, laylay!</span>
             const targetTab = currentTab === 'common' ? 'cpp' : currentTab;
             if (globalData[targetTab]) {
                 const st = globalData[targetTab].find(s => s.ad === studentName);
-                if (st) {
-                    st.fm = Number(st.fm || 0) + addedPoints;
-                }
+                if (st) st.fm = Number(st.fm || 0) + addedPoints;
             }
 
             database.ref('student_tasks/' + taskKey).update({ status: 'correct', addedPoints }).then(() => {
                 database.ref('students_data').set(globalData).then(() => {
-                    alert(`${studentName} üçün +${addedPoints} bal uğurla əlavə olundu və tələbənin reytinqi artdı! 🚀`);
+                    alert(`${studentName} üçün +${addedPoints} bal əlavə olundu! 🚀`);
                 });
             });
         }
@@ -1239,6 +1350,38 @@ Yat, qal dala, laylay!</span>
             database.ref('student_tasks/' + taskKey).update({ status }).then(() => {
                 alert("Fayl statusu yeniləndi! ❌");
             });
+        }
+
+        // Musiqi Yükləmələri
+        function uploadWinnerAudio() {
+            const file = document.getElementById('winnerAudioFile').files[0];
+            if (!file) return alert("Fayl seçin!");
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                database.ref('audio_winner').set(e.target.result).then(() => alert("Qaliblər musiqisi yeniləndi! 🎵"));
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function uploadOutsiderAudio() {
+            const file = document.getElementById('outsiderAudioFile').files[0];
+            if (!file) return alert("Fayl seçin!");
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                database.ref('audio_outsider').set(e.target.result).then(() => alert("Outsiderlər musiqisi yeniləndi! 🎵"));
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function handleGroupPhotoUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                database.ref('group_photo').set(e.target.result).then(() => alert("Qrup şəkli yeniləndi! ✅"));
+            };
+            reader.readAsDataURL(file);
         }
 
         function renderAdminBody() {
@@ -1254,7 +1397,7 @@ Yat, qal dala, laylay!</span>
                 if (currentTab === 'common') {
                     fieldsHTML = `
                         <div style="grid-column: span 2;">
-                            <label>📷 Foto Yüklə (HQ - Yüksək Keyfiyyət)</label>
+                            <label>📷 Foto Yüklə (HQ - Proporsional Kəsim)</label>
                             <label class="file-upload-btn">📁 Fayl Seç <input type="file" accept="image/*" style="display:none;" onchange="handleHQImageUpload(event, ${index})"></label>
                             ${isCustomPhoto ? '<span style="font-size:11px; color:var(--positive); margin-left:8px;">✓ HQ Foto Aktivdir</span>' : ''}
                         </div>
@@ -1263,7 +1406,7 @@ Yat, qal dala, laylay!</span>
                 } else {
                     fieldsHTML = `
                         <div style="grid-column: span 2;">
-                            <label>📷 Foto Yüklə (HQ - Yüksək Keyfiyyət)</label>
+                            <label>📷 Foto Yüklə (HQ - Proporsional Kəsim)</label>
                             <label class="file-upload-btn">📁 Fayl Seç <input type="file" accept="image/*" style="display:none;" onchange="handleHQImageUpload(event, ${index})"></label>
                             ${isCustomPhoto ? '<span style="font-size:11px; color:var(--positive); margin-left:8px;">✓ HQ Foto Aktivdir</span>' : ''}
                         </div>
@@ -1285,6 +1428,7 @@ Yat, qal dala, laylay!</span>
             });
         }
 
+        // HQ Foto Yükləmə Və Proporsional Mərkəzləşdirilmiş Kəsim (Uzanmanın Qarşısını Alır)
         function handleHQImageUpload(event, index) {
             const file = event.target.files[0];
             if (!file) return;
@@ -1295,9 +1439,15 @@ Yat, qal dala, laylay!</span>
                 img.onload = function() {
                     const canvas = document.createElement('canvas');
                     const ctx = canvas.getContext('2d');
+                    
+                    const side = Math.min(img.width, img.height);
                     canvas.width = 400;
                     canvas.height = 400;
-                    ctx.drawImage(img, 0, 0, 400, 400);
+
+                    const sx = (img.width - side) / 2;
+                    const sy = (img.height - side) / 2;
+
+                    ctx.drawImage(img, sx, sy, side, side, 0, 0, 400, 400);
                     
                     const compressedBase64 = canvas.toDataURL('image/jpeg', 0.92);
                     const targetName = globalData[currentTab][index].ad;
@@ -1309,7 +1459,7 @@ Yat, qal dala, laylay!</span>
                         }
                     });
 
-                    alert(`${targetName} üçün HQ foto yeniləndi! ✅`);
+                    alert(`${targetName} üçün şəkil kəsildi və HQ yükləndi! ✅`);
                     renderAdminBody();
                 };
                 img.src = e.target.result;
@@ -1341,7 +1491,7 @@ Yat, qal dala, laylay!</span>
             });
 
             database.ref('students_data').set(globalData).then(() => {
-                alert(`Bütün dəyişikliklər uğurla canlı yayımlandı! 🚀`);
+                alert(`Dəyişikliklər canlı yayımlandı! 🚀`);
                 closeAdminPanel();
             });
         }
@@ -1359,7 +1509,7 @@ Yat, qal dala, laylay!</span>
             });
 
             database.ref('students_data').set(globalData).then(() => {
-                alert("Cari reytinqlər uğurla 'Keçmiş Reytinq'ə çevrildi! 🗓️");
+                alert("Cari reytinqlər 'Keçmiş Reytinq'ə çevrildi! 🗓️");
                 renderTable();
                 if (activeAdminUser) renderAdminBody();
             });
