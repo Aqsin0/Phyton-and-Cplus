@@ -12,19 +12,19 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         :root {
-            --bg-color: #0b0f19;
-            --card-bg: #111827;
-            --card-inner: #1f2937;
-            --text-main: #f9fafb;
-            --text-sub: #9ca3af;
+            --bg-color: #080c14;
+            --card-bg: #0f172a;
+            --card-inner: #1e293b;
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
             --accent: #38bdf8;
-            --accent-glow: rgba(56, 189, 248, 0.35);
+            --accent-glow: rgba(56, 189, 248, 0.4);
             --positive: #22c55e;
             --negative: #ef4444;
-            --border: #374151;
+            --border: #334155;
             --gold: #f59e0b;
-            --gold-glow: rgba(245, 158, 11, 0.4);
-            --silver: #94a3b8;
+            --gold-glow: rgba(245, 158, 11, 0.5);
+            --silver: #cbd5e1;
             --bronze: #d97706;
         }
 
@@ -68,7 +68,7 @@
         .lang-btn.active { background: var(--accent); color: #000; }
 
         .group-photo-card {
-            background: linear-gradient(135deg, rgba(56, 189, 248, 0.08), rgba(17, 24, 39, 0.9));
+            background: linear-gradient(135deg, rgba(56, 189, 248, 0.08), rgba(15, 23, 42, 0.9));
             border: 1px solid var(--accent);
             border-radius: 16px;
             padding: 15px;
@@ -107,7 +107,7 @@
 
         /* 👑 Jüri Bölməsi */
         .jury-section {
-            background: linear-gradient(135deg, rgba(245, 158, 11, 0.08), rgba(17, 24, 39, 0.8));
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.08), rgba(15, 23, 42, 0.8));
             border: 1px solid var(--gold);
             border-radius: 16px;
             padding: 18px 22px;
@@ -132,7 +132,7 @@
         }
 
         .jury-card {
-            background: rgba(31, 41, 55, 0.7);
+            background: rgba(30, 41, 59, 0.7);
             border: 1px solid rgba(245, 158, 11, 0.3);
             border-radius: 12px;
             padding: 12px 16px;
@@ -174,12 +174,12 @@
             font-weight: 600;
             transition: all 0.2s ease;
         }
-        .btn:hover { transform: translateY(-1px); filter: brightness(1.1); }
+        .btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
         .btn-admin { background-color: #e11d48; }
         .btn-gold { background-color: var(--gold); color: #000; font-weight: 800; box-shadow: 0 0 15px var(--gold-glow); }
-        .btn-dark { background-color: #374151; }
+        .btn-dark { background-color: #334155; }
 
-        /* 🎨 ARXA FONU MARAQLI VƏ FƏRQLİ KARTLAR */
+        /* 🎨 ARXA FONU FƏRQLİ KARTLAR */
         .highlights-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -195,17 +195,17 @@
         }
 
         .card-top-leaders {
-            background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(17, 24, 39, 0.95));
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.18), rgba(15, 23, 42, 0.95));
             border-color: var(--gold);
         }
 
         .card-past-leaders {
-            background: linear-gradient(135deg, rgba(56, 189, 248, 0.15), rgba(17, 24, 39, 0.95));
+            background: linear-gradient(135deg, rgba(56, 189, 248, 0.18), rgba(15, 23, 42, 0.95));
             border-color: var(--accent);
         }
 
         .card-outsiders {
-            background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(17, 24, 39, 0.95));
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.18), rgba(15, 23, 42, 0.95));
             border-color: var(--negative);
         }
 
@@ -243,7 +243,7 @@
         th, td { padding: 13px 15px; border-bottom: 1px solid rgba(255,255,255,0.05); }
         
         th { 
-            background: #0d1527; 
+            background: #0b1329; 
             color: var(--accent); 
             font-size: 13px; 
             font-weight: 700;
@@ -255,17 +255,17 @@
         th a:hover { text-decoration: underline; }
 
         tr { transition: background 0.2s ease; }
-        tr:hover { background-color: rgba(56, 189, 248, 0.06) !important; }
+        tr:hover { background-color: rgba(56, 189, 248, 0.08) !important; }
 
-        .rank-1-row { background: linear-gradient(90deg, rgba(245, 158, 11, 0.12), transparent) !important; }
-        .rank-2-row { background: linear-gradient(90deg, rgba(148, 163, 184, 0.08), transparent) !important; }
-        .rank-3-row { background: linear-gradient(90deg, rgba(217, 119, 6, 0.08), transparent) !important; }
+        .rank-1-row { background: linear-gradient(90deg, rgba(245, 158, 11, 0.15), transparent) !important; }
+        .rank-2-row { background: linear-gradient(90deg, rgba(203, 213, 225, 0.1), transparent) !important; }
+        .rank-3-row { background: linear-gradient(90deg, rgba(217, 119, 6, 0.1), transparent) !important; }
 
-        .clickable-name { cursor: pointer; color: #f9fafb; font-weight: 600; font-size: 14.5px; }
+        .clickable-name { cursor: pointer; color: #f8fafc; font-weight: 600; font-size: 14.5px; }
         .clickable-name:hover { color: var(--accent); text-decoration: underline; }
 
         .student-info { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-        .avatar { width: 42px; height: 42px; border-radius: 50%; background: #1f2937; border: 2px solid var(--border); overflow: hidden; flex-shrink: 0; box-shadow: 0 0 8px rgba(0,0,0,0.5); }
+        .avatar { width: 42px; height: 42px; border-radius: 50%; background: #1e293b; border: 2px solid var(--border); overflow: hidden; flex-shrink: 0; box-shadow: 0 0 8px rgba(0,0,0,0.5); }
         .avatar img { width: 100%; height: 100%; object-fit: cover; }
 
         .founder-row { background: rgba(245, 158, 11, 0.05) !important; }
@@ -275,61 +275,60 @@
         .badge-negative { color: var(--negative); font-weight: bold; background: rgba(239, 68, 68, 0.12); padding: 4px 10px; border-radius: 8px; border: 1px solid rgba(239, 68, 68, 0.2); }
         .rank-col { font-weight: 800; color: var(--accent); width: 38px; font-size: 16px; }
 
-        /* 🏆 QALİBLƏR MODAL DİZAYNI */
-        .winner-card {
-            background: var(--card-inner);
-            border-radius: 16px;
-            padding: 16px;
+        /* 🏆 QALİBLƏR ƏLAVƏ İNTERAKTİV KARTLAR */
+        .winner-card-v2 {
+            background: linear-gradient(145deg, #1e293b, #0f172a);
+            border-radius: 20px;
+            padding: 20px;
             text-align: center;
             border: 2px solid var(--border);
             position: relative;
-            transition: transform 0.3s ease;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        .winner-card:hover { transform: translateY(-5px); }
+        .winner-card-v2:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.6);
+        }
 
-        .winner-card.place-1 {
+        .winner-card-v2.place-1 {
             border-color: var(--gold);
-            background: linear-gradient(135deg, rgba(245, 158, 11, 0.25), rgba(31, 41, 55, 0.95));
-            box-shadow: 0 0 30px var(--gold-glow);
+            background: linear-gradient(145deg, rgba(245, 158, 11, 0.3), rgba(15, 23, 42, 0.95));
+            box-shadow: 0 0 35px var(--gold-glow);
             grid-column: span 2;
         }
-
-        .winner-card.place-2 {
+        .winner-card-v2.place-2 {
             border-color: var(--silver);
-            background: linear-gradient(135deg, rgba(148, 163, 184, 0.2), rgba(31, 41, 55, 0.95));
+            background: linear-gradient(145deg, rgba(203, 213, 225, 0.2), rgba(15, 23, 42, 0.95));
         }
-
-        .winner-card.place-3 {
+        .winner-card-v2.place-3 {
             border-color: var(--bronze);
-            background: linear-gradient(135deg, rgba(217, 119, 6, 0.2), rgba(31, 41, 55, 0.95));
+            background: linear-gradient(145deg, rgba(217, 119, 6, 0.2), rgba(15, 23, 42, 0.95));
         }
 
-        .winner-avatar {
-            width: 80px;
-            height: 80px;
+        .winner-avatar-v2 {
+            width: 90px;
+            height: 90px;
             border-radius: 50%;
-            margin: 0 auto 10px auto;
+            margin: 0 auto 12px auto;
             border: 3px solid #fff;
             overflow: hidden;
-            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+            box-shadow: 0 0 20px rgba(0,0,0,0.6);
         }
-        .winner-avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .winner-avatar-v2 img { width: 100%; height: 100%; object-fit: cover; }
 
         /* 👎 Dislike Rain Animasiyası */
         .dislike-particle {
             position: fixed;
             top: -50px;
-            font-size: 28px;
-            z-index: 1200;
+            font-size: 32px;
+            z-index: 2100;
             pointer-events: none;
-            animation: fallAnimation 3s linear forwards;
+            animation: fallAnimation 3.5s linear forwards;
         }
 
         @keyframes fallAnimation {
-            to {
-                transform: translateY(105vh) rotate(360deg);
-                opacity: 0;
-            }
+            to { transform: translateY(110vh) rotate(360deg); opacity: 0; }
         }
 
         /* 📄 Tam Səhifə Profil Və Admin Ekranı */
@@ -342,36 +341,44 @@
             margin-top: 10px;
         }
 
-        .back-btn { background: #374151; color: #fff; border: none; padding: 10px 20px; border-radius: 10px; cursor: pointer; font-weight: 600; margin-bottom: 20px; }
+        .back-btn { background: #334155; color: #fff; border: none; padding: 10px 20px; border-radius: 10px; cursor: pointer; font-weight: 600; margin-bottom: 20px; }
 
         .profile-header-card { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; padding-bottom: 20px; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
         .profile-avatar-large { width: 120px; height: 120px; border-radius: 50%; border: 3px solid var(--accent); box-shadow: 0 0 20px var(--accent-glow); object-fit: cover; }
 
         .profile-grid-info { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 25px; }
-        .info-box { background: var(--card-inner); padding: 14px 18px; border-radius: 12px; border: 1px solid var(--border); }
-        .info-box span { font-size: 11px; color: var(--text-sub); display: block; text-transform: uppercase; }
+        .info-box { background: var(--card-inner); padding: 16px 20px; border-radius: 14px; border: 1px solid var(--border); }
+        .info-box span { font-size: 11px; color: var(--text-sub); display: block; text-transform: uppercase; letter-spacing: 0.5px; }
         .info-box strong { font-size: 16px; color: #fff; margin-top: 5px; display: block; }
 
-        /* Modal Stilləri */
+        /* Modal Stilləri & Canvas z-index */
         .modal {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(3, 7, 18, 0.92);
-            backdrop-filter: blur(10px);
+            background: rgba(3, 7, 18, 0.94);
+            backdrop-filter: blur(12px);
             justify-content: center; align-items: center;
-            z-index: 1000;
+            z-index: 1500;
         }
 
         .modal-content {
             background: var(--card-bg);
-            padding: 22px;
-            border-radius: 20px;
-            max-width: 750px;
+            padding: 24px;
+            border-radius: 24px;
+            max-width: 780px;
             width: 92%;
             max-height: 85vh;
             overflow-y: auto;
             border: 1px solid var(--border);
+            position: relative;
+            z-index: 1600;
+        }
+
+        /* Confetti canvas fix */
+        canvas#confetti-canvas {
+            z-index: 2000 !important;
+            pointer-events: none;
         }
 
         .poem-box {
@@ -390,19 +397,48 @@
         }
         .poem-refrain { color: #f59e0b; font-weight: bold; }
 
-        .admin-student-card { background: var(--card-inner); border-radius: 12px; padding: 14px; margin-bottom: 12px; border: 1px solid var(--border); }
-        .grid-inputs { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 8px; margin-top: 10px; }
-        .grid-inputs label { font-size: 11px; color: var(--text-sub); display: block; margin-bottom: 3px; }
-        .grid-inputs input { width: 100%; padding: 6px 8px; border-radius: 6px; border: 1px solid var(--border); background: #0b0f19; color: white; font-weight: bold; box-sizing: border-box; }
+        /* PEŞƏKAR ADMİN DASHBOARD STİLLƏRİ */
+        .admin-dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            padding: 20px;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            margin-bottom: 20px;
+        }
 
-        .file-upload-btn { background: #374151; color: #f3f4f6; padding: 6px 12px; border-radius: 8px; font-size: 12px; cursor: pointer; display: inline-block; }
+        .admin-stat-card {
+            background: var(--card-inner);
+            border: 1px solid var(--border);
+            padding: 15px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .admin-stat-icon {
+            width: 45px; height: 45px; border-radius: 10px; background: rgba(56, 189, 248, 0.15); color: var(--accent);
+            display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: bold;
+        }
+
+        .admin-nav { display: flex; gap: 8px; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 12px; flex-wrap: wrap; }
+        .admin-nav-btn { background: var(--card-inner); border: 1px solid var(--border); color: var(--text-sub); padding: 10px 18px; border-radius: 10px; cursor: pointer; font-weight: 600; transition: 0.2s; }
+        .admin-nav-btn.active { background: var(--accent); color: #000; border-color: var(--accent); box-shadow: 0 0 10px var(--accent-glow); }
+
+        .admin-student-card { background: var(--card-inner); border-radius: 14px; padding: 16px; margin-bottom: 12px; border: 1px solid var(--border); }
+        .grid-inputs { display: grid; grid-template-columns: repeat(auto-fit, minmax(105px, 1fr)); gap: 10px; margin-top: 10px; }
+        .grid-inputs label { font-size: 11px; color: var(--text-sub); display: block; margin-bottom: 4px; }
+        .grid-inputs input { width: 100%; padding: 8px; border-radius: 8px; border: 1px solid var(--border); background: #080c14; color: white; font-weight: bold; box-sizing: border-box; }
+        .grid-inputs input:focus { border-color: var(--accent); outline: none; }
+
+        .file-upload-btn { background: #334155; color: #f8fafc; padding: 7px 14px; border-radius: 8px; font-size: 12px; cursor: pointer; display: inline-block; }
         .form-group { margin-bottom: 15px; }
         .form-group label { display: block; margin-bottom: 5px; color: var(--text-sub); }
         .form-group input, .form-group textarea { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border); background: var(--card-inner); color: white; box-sizing: border-box; }
-
-        .admin-nav { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
-        .admin-nav-btn { background: var(--card-inner); border: 1px solid var(--border); color: var(--text-sub); padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 600; }
-        .admin-nav-btn.active { background: var(--accent); color: #000; }
     </style>
 </head>
 <body>
@@ -468,7 +504,7 @@
                 </div>
             </div>
 
-            <!-- 🎨 Statistika Paneli (Fərqli Arxa Fonlar) -->
+            <!-- 🎨 Statistika Paneli -->
             <div class="highlights-grid">
                 <div class="highlight-card card-top-leaders">
                     <h3 style="color:var(--gold);">🥇 <span data-i18n="topLeaders">Həftənin Liderləri</span></h3>
@@ -543,11 +579,10 @@
                 </div>
             </div>
 
-            <!-- Tələbə Çoxlu Fayl Yükləmə Bölməsi -->
             <div class="info-box" style="margin-bottom:20px;">
                 <h4 style="margin:0 0 10px 0; color:var(--accent);">📁 Tapşırıq / Kod Faylları Yüklə (Çoxlu Fayl Seçimi)</h4>
                 <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
-                    <input type="file" id="studentTaskFiles" multiple style="background:#0b0f19; padding:8px; border-radius:8px; border:1px solid var(--border); color:#fff;">
+                    <input type="file" id="studentTaskFiles" multiple style="background:#080c14; padding:8px; border-radius:8px; border:1px solid var(--border); color:#fff;">
                     <button class="btn" onclick="uploadStudentTasks()">Yüklə və Adminə Göndər</button>
                 </div>
                 <div id="studentTaskStatus" style="margin-top:10px; font-size:13px; font-weight:bold;"></div>
@@ -559,13 +594,32 @@
             </div>
         </div>
 
-        <!-- 📄 TAM SƏHİFƏ ADMİN EKRANI -->
+        <!-- 📄 PEŞƏKAR TAM SƏHİFƏ ADMİN EKRANI -->
         <div id="fullAdminPage">
-            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:20px;">
-                <h2 id="welcomeAdmin" style="margin:0; color:var(--accent);">⚙️ Admin Paneli</h2>
+            <div class="admin-dashboard-header">
+                <div>
+                    <h2 id="welcomeAdmin" style="margin:0; color:var(--accent); font-size:24px;">⚙️ Admin Dashboard</h2>
+                    <span style="font-size:12px; color:var(--text-sub);">Sistem Analitikası Və Tələbə İdarəetmə Mərkəzi</span>
+                </div>
                 <div style="display:flex; gap:10px;">
                     <button class="btn" style="background:#e11d48;" onclick="logoutAdmin()">🔒 Çıxış Et</button>
                     <button class="back-btn" style="margin:0;" onclick="closeAdminPanel()">⬅️ Ana Səhifəyə Qayıt</button>
+                </div>
+            </div>
+
+            <!-- Analitik Xülasə Kartları -->
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:15px; margin-bottom:20px;">
+                <div class="admin-stat-card">
+                    <div class="admin-stat-icon">👥</div>
+                    <div><span style="font-size:11px; color:var(--text-sub);">ÜMUMİ TƏLƏBƏ</span><strong style="font-size:18px; display:block; color:#fff;" id="statStudentsCount">25</strong></div>
+                </div>
+                <div class="admin-stat-card">
+                    <div class="admin-stat-icon" style="background:rgba(245, 158, 11, 0.15); color:var(--gold);">📁</div>
+                    <div><span style="font-size:11px; color:var(--text-sub);">YÜKLƏNƏN FAYLLAR</span><strong style="font-size:18px; display:block; color:#fff;" id="statFilesCount">0</strong></div>
+                </div>
+                <div class="admin-stat-card">
+                    <div class="admin-stat-icon" style="background:rgba(34, 197, 94, 0.15); color:var(--positive);">💬</div>
+                    <div><span style="font-size:11px; color:var(--text-sub);">FEEDBACK-LƏR</span><strong style="font-size:18px; display:block; color:#fff;" id="statFeedbacksCount">0</strong></div>
                 </div>
             </div>
 
@@ -578,8 +632,8 @@
 
             <!-- SUB TAB 1: Reytinq Və Bal Redaktəsi -->
             <div id="adminTabStudents">
-                <div style="background:rgba(245, 158, 11, 0.1); padding:12px 16px; border-radius:12px; border:1px solid var(--gold); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:20px;">
-                    <span style="font-size:13px; color:var(--gold); font-weight:600;">🗓️ Həftə Bitişi: Cari reytinqləri Keçmiş Reytinqə çevirir.</span>
+                <div style="background:rgba(245, 158, 11, 0.1); padding:14px 18px; border-radius:14px; border:1px solid var(--gold); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:20px;">
+                    <span style="font-size:13px; color:var(--gold); font-weight:600;">🗓️ Həftə Bitişi: İndiki Cari reytinqləri Keçmiş Reytinqə çevirir.</span>
                     <button class="btn btn-gold" onclick="finishWeekAndTransferRating()">Həftəni Tamamla</button>
                 </div>
                 <div id="adminBody"></div>
@@ -648,15 +702,18 @@
         </div>
     </div>
 
-    <!-- 🏆 Qaliblər Modal (Əla Effekti Və Güllər Çiçəklər) -->
+    <!-- 🏆 QALİBLƏR MODAL (ÜST KONFETTİ CATCHING & GÜLLƏR) -->
     <div id="winnersModal" class="modal">
-        <div class="modal-content" style="text-align:center;">
-            <h1 style="color:var(--gold); margin-top:0; font-size:28px;">👑 HƏFTƏNİN QALİBLƏRİ 🏆</h1>
-            <p style="color:var(--text-sub); font-size:13px; margin-bottom:20px;">Təbrik edirik! Bu həftənin ən yüksək nəticə göstərən tələbələri:</p>
+        <div class="modal-content" style="text-align:center; position:relative;">
+            <div style="font-size:35px; position:absolute; top:15px; left:20px;">🌹🌸</div>
+            <div style="font-size:35px; position:absolute; top:15px; right:20px;">🌺💐</div>
+
+            <h1 style="color:var(--gold); margin-top:10px; font-size:28px;">👑 HƏFTƏNİN QALİBLƏRİ 🏆</h1>
+            <p style="color:var(--text-sub); font-size:13px; margin-bottom:20px;">Təbrik edirik! Kartların üzərinə klikləyərək fərdi konfetti sürprizini aktiv edin!</p>
             
             <div id="winnersListGrid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(140px, 1fr)); gap:15px; margin:20px 0;"></div>
             
-            <button class="btn btn-gold" style="width:100%; padding:12px;" onclick="closeWinnersModal()">Möhtəşəmdir! 🎉👏</button>
+            <button class="btn btn-gold" style="width:100%; padding:14px; font-size:16px;" onclick="closeWinnersModal()">Möhtəşəmdir! 🎉👏</button>
         </div>
     </div>
 
@@ -706,20 +763,30 @@ Yat, qal dala, laylay!</span>
         </div>
     </div>
 
-    <!-- V2.0 Yeniliklər Modal -->
+    <!-- V2.0 Yeniliklər Modal (Xüsusi Sabit Mətn) -->
     <div id="versionModal" class="modal">
-        <div class="modal-content" style="max-width:500px;">
-            <h2 style="color:var(--accent); margin-top:0;">🚀 Versiya 2.0 (V2.0) Yenilikləri</h2>
-            <ul style="text-align:left; font-size:14px; line-height:1.7; color:var(--text-sub);">
-                <li>✅ Fotoların uzanması və yassılaşması tamamilə aradan qaldırıldı.</li>
-                <li>✅ Çoxlu fayl yükləmə sistemi və avtomatik ekran təmizlənməsi.</li>
-                <li>✅ Admin panelində silmə təsdiqı (Confirm Dialog) ilə fayl silmə.</li>
-                <li>✅ Adminlər üçün xüsusi Fayl Yoxlama və Cihaz Log səhifələri.</li>
-                <li>✅ Adminlər tərəfindən Qalib və Outsider musiqilərinin yüklənməsi.</li>
-                <li>✅ Ətrafa güllər-çiçəklər saçan təmtəraqlı Qaliblər ekranı.</li>
-                <li>✅ Dislike yağışı yağdıran Həftənin Outsiderləri ekranı.</li>
+        <div class="modal-content" style="max-width:550px;">
+            <h2 style="color:var(--accent); margin-top:0;">🚀 Versiya 2.0 (V2.0) Və Əsas Dəyişikliklər</h2>
+            
+            <h4 style="color:var(--gold); margin:15px 0 5px 0;">📌 V2.0 İlkin Dəyişiklikləri:</h4>
+            <ul style="text-align:left; font-size:13.5px; line-height:1.6; color:var(--text-sub); margin-top:5px;">
+                <li>"Şagird" ➔ "Tələbə", "Çempion" ➔ "Lider", "Yüksəliş gözlənilənlər" ➔ "Outsiderlər" edildi.</li>
+                <li>Cədvəldə platformaların rəsmi linkləri əlavə olundu.</li>
+                <li>Çoxdilli sistem (AZ, RU, TR, EN) inteqrasiya edildi.</li>
+                <li>Outsiderlər üçün Səsli Oxunan Xüsusi Şeir bölməsi əlavə edildi.</li>
             </ul>
-            <button class="btn" style="width:100%;" onclick="closeVersionModal()">Əla!</button>
+
+            <h4 style="color:var(--accent); margin:15px 0 5px 0;">⚡ Sonrakı Əsas Təkmilləşdirmələr:</h4>
+            <ul style="text-align:left; font-size:13.5px; line-height:1.6; color:var(--text-sub); margin-top:5px;">
+                <li>Fotoların yassılaşması tamamilə aradan qaldırıldı (HQ mərkəzi kəsim).</li>
+                <li>Çoxlu fayl yükləmə və avtomatik ekran təmizlənməsi sistemi.</li>
+                <li>Adminlər üçün Təsdiq İlə Fayl Silmə və xüsusi Fayl Yoxlama Səhifəsi.</li>
+                <li>Cihaz Logları və Analitik Admin Dashboard-u.</li>
+                <li>Adminlər tərəfindən Qalib/Outsider musiqilərinin sərbəst yüklənməsi.</li>
+                <li>Modalın tam üstündə saçaqlanan Qaliblər Konfetti və Dislike Yağışı.</li>
+            </ul>
+
+            <button class="btn" style="width:100%; margin-top:15px;" onclick="closeVersionModal()">Aydındır!</button>
         </div>
     </div>
 
@@ -822,7 +889,6 @@ Yat, qal dala, laylay!</span>
         setInterval(updateLiveDateTime, 1000);
         updateLiveDateTime();
 
-        // Cihaz Məlumatı Loglayan Funksiya
         function logDeviceInfo(action, detail="") {
             const deviceInfo = `${navigator.userAgent} | Screen: ${window.innerWidth}x${window.innerHeight}`;
             database.ref('device_logs').push({
@@ -967,7 +1033,7 @@ Yat, qal dala, laylay!</span>
             renderTable();
         }
 
-        /* 📄 Profil Səhifəsi Və Çoxlu Fayl Yükləmə */
+        /* 📄 Profil Səhifəsi */
         function openProfilePage(index) {
             const student = globalData[currentTab][index];
             if (!student) return;
@@ -1018,7 +1084,6 @@ Yat, qal dala, laylay!</span>
             });
         }
 
-        // Çoxlu Fayl Yükləmə Və Ekrani Təmizləmə
         function uploadStudentTasks() {
             const fileInput = document.getElementById('studentTaskFiles');
             const files = fileInput.files;
@@ -1040,7 +1105,7 @@ Yat, qal dala, laylay!</span>
                         uploadedCount++;
                         if (uploadedCount === files.length) {
                             alert(`${files.length} ədəd fayl uğurla admine göndərildi! ✅`);
-                            fileInput.value = ''; // Ekranı Və Seçilmiş Faylları Təmizlə
+                            fileInput.value = '';
                         }
                     });
                 };
@@ -1071,7 +1136,16 @@ Yat, qal dala, laylay!</span>
             });
         }
 
-        /* 🎉 QALİBLƏR MÖHTƏŞƏM TƏNTƏNƏSİ, GÜLLƏR VƏ MUSİQİ */
+        /* 🎉 QALİBLƏR ƏLAVƏ İNTERAKTİV DİZAYN VƏ ÜST-KÖLGƏSİZ KONFETTİ */
+        function triggerCardConfetti(event) {
+            event.stopPropagation();
+            confetti({
+                particleCount: 50,
+                spread: 70,
+                origin: { y: 0.6 }
+            });
+        }
+
         function showWinnersCelebration() {
             const rawList = globalData[currentTab] || [];
             const list = rawList.map(s => calculateTotals(s)).sort((a,b) => b.cari_reyting - a.cari_reyting);
@@ -1085,30 +1159,34 @@ Yat, qal dala, laylay!</span>
                 let crown = idx === 0 ? '👑 1-ci YER (ÇEMPİON)' : (idx === 1 ? '🥈 2-ci YER' : (idx === 2 ? '🥉 3-cü YER' : `${idx+1}-ci YER`));
                 
                 grid.innerHTML += `
-                    <div class="winner-card ${placeClass}">
+                    <div class="winner-card-v2 ${placeClass}" onclick="triggerCardConfetti(event)">
                         <div style="font-size:12px; font-weight:800; color:var(--gold); margin-bottom:8px;">${crown}</div>
-                        <div class="winner-avatar"><img src="${s.foto || DEFAULT_AVATAR_URL}"></div>
-                        <strong style="display:block; font-size:15px; color:#fff;">${s.ad}</strong>
-                        <span style="color:var(--accent); font-weight:bold; font-size:14px; margin-top:5px; display:block;">${s.cari_reyting} pt</span>
+                        <div class="winner-avatar-v2"><img src="${s.foto || DEFAULT_AVATAR_URL}"></div>
+                        <strong style="display:block; font-size:16px; color:#fff;">${s.ad}</strong>
+                        <span style="color:var(--accent); font-weight:bold; font-size:15px; margin-top:5px; display:block;">${s.cari_reyting} pt</span>
                     </div>
                 `;
             });
 
             document.getElementById('winnersModal').style.display = 'flex';
 
-            // Güllər Və Konfetti Partlayışı
-            const duration = 5 * 1000;
+            // Z-INDEX FIX: Konfetti modalın üzərində görsənir
+            const duration = 4 * 1000;
             const animationEnd = Date.now() + duration;
 
             const interval = setInterval(function() {
                 const timeLeft = animationEnd - Date.now();
                 if (timeLeft <= 0) return clearInterval(interval);
 
-                confetti({ particleCount: 40, spread: 100, origin: { x: 0.1, y: 0.5 }, shapes: ['circle', 'square'] });
-                confetti({ particleCount: 40, spread: 100, origin: { x: 0.9, y: 0.5 }, shapes: ['circle', 'square'] });
-            }, 300);
+                confetti({
+                    particleCount: 40,
+                    startVelocity: 30,
+                    spread: 360,
+                    ticks: 60,
+                    origin: { x: Math.random(), y: Math.random() - 0.2 }
+                });
+            }, 250);
 
-            // Adminin Yüklədiyi Musiqini Səsələndir
             database.ref('audio_winner').once('value', (snap) => {
                 const audioData = snap.val();
                 if (audioData) {
@@ -1124,7 +1202,7 @@ Yat, qal dala, laylay!</span>
             document.getElementById('winnersModal').style.display = 'none'; 
         }
 
-        /* 😭 Həftənin Outsiderləri Və Dislike Yağışı */
+        /* 😭 Həftənin Outsiderləri */
         function showOutsidersModal() {
             const rawList = globalData[currentTab] || [];
             const list = rawList.map(s => calculateTotals(s)).sort((a,b) => a.cari_reyting - b.cari_reyting);
@@ -1135,7 +1213,7 @@ Yat, qal dala, laylay!</span>
             bottom3.forEach((s) => {
                 grid.innerHTML += `
                     <div style="background:var(--card-inner); padding:12px 18px; border-radius:12px; border:1px solid var(--negative); text-align:center;">
-                        <img src="${s.foto || DEFAULT_AVATAR_URL}" style="width:55px; height:55px; border-radius:50%; border:2px solid var(--negative); object-fit:cover;">
+                        <img src="${s.foto || DEFAULT_AVATAR_URL}" style="width:60px; height:60px; border-radius:50%; border:2px solid var(--negative); object-fit:cover;">
                         <strong style="display:block; font-size:13px; margin-top:5px; color:#fff;">😭 ${s.ad}</strong>
                         <span style="color:var(--negative); font-weight:bold; font-size:12px;">${s.cari_reyting} pt</span>
                     </div>
@@ -1144,7 +1222,6 @@ Yat, qal dala, laylay!</span>
 
             document.getElementById('outsidersModal').style.display = 'flex';
 
-            // Dislike Yağışı Animasiyası
             for (let i = 0; i < 25; i++) {
                 setTimeout(() => {
                     const dislike = document.createElement('div');
@@ -1152,11 +1229,10 @@ Yat, qal dala, laylay!</span>
                     dislike.innerText = ['👎', '💔', '😴', '💩'][Math.floor(Math.random() * 4)];
                     dislike.style.left = Math.random() * 95 + 'vw';
                     document.body.appendChild(dislike);
-                    setTimeout(() => dislike.remove(), 3000);
+                    setTimeout(() => dislike.remove(), 3500);
                 }, i * 120);
             }
 
-            // Adminin Yüklədiyi Outsider Musiqisini Səsələndir
             database.ref('audio_outsider').once('value', (snap) => {
                 const audioData = snap.val();
                 if (audioData) {
@@ -1184,7 +1260,7 @@ Yat, qal dala, laylay!</span>
             document.getElementById('outsidersModal').style.display = 'none';
         }
 
-        /* 💬 Feedback (Fikir Bildir) */
+        /* 💬 Feedback */
         function openFeedbackModal() { document.getElementById('feedbackModal').style.display = 'flex'; }
         function closeFeedbackModal() { document.getElementById('feedbackModal').style.display = 'none'; }
         function sendFeedback() {
@@ -1200,7 +1276,7 @@ Yat, qal dala, laylay!</span>
             });
         }
 
-        /* ⚙️ Admin Paneli Və Alt Səhifələri (Sub-Tabs) */
+        /* ⚙️ PEŞƏKAR ADMİN DASHBOARD MƏNTİQLƏRİ */
         function checkSavedLoginOrModal() {
             const savedUser = localStorage.getItem('admin_user');
             const savedPass = localStorage.getItem('admin_pass');
@@ -1256,19 +1332,24 @@ Yat, qal dala, laylay!</span>
             document.getElementById('adminTabLogs').style.display = tabName === 'logs' ? 'block' : 'none';
         }
 
-        // Faylları Və Logları Yüklə
         function loadAdminTasksAndLogs() {
-            // Fayllar Səhifəsi
             database.ref('student_tasks').on('value', (snap) => {
                 const tasks = snap.val();
                 const listDiv = document.getElementById('adminTaskFilesList');
                 listDiv.innerHTML = '';
-                if (!tasks) { listDiv.innerHTML = 'Hələ heç bir tələbə fayl yükləməyib.'; return; }
+                if (!tasks) { 
+                    listDiv.innerHTML = 'Hələ heç bir tələbə fayl yükləməyib.';
+                    document.getElementById('statFilesCount').innerText = "0";
+                    return; 
+                }
 
-                Object.keys(tasks).forEach(key => {
+                const keys = Object.keys(tasks);
+                document.getElementById('statFilesCount').innerText = keys.length;
+
+                keys.forEach(key => {
                     const t = tasks[key];
                     listDiv.innerHTML += `
-                        <div style="background:#0b0f19; padding:12px; border-radius:10px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; border:1px solid var(--border);">
+                        <div style="background:#080c14; padding:12px; border-radius:10px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; border:1px solid var(--border);">
                             <div>
                                 <strong style="color:var(--accent);">${t.studentName}</strong>: 
                                 <a href="${t.fileData}" download="${t.fileName}" style="color:#fff; font-weight:bold;">📄 ${t.fileName}</a>
@@ -1284,24 +1365,29 @@ Yat, qal dala, laylay!</span>
                 });
             });
 
-            // Feedback-lər
             database.ref('feedbacks').on('value', (snap) => {
                 const feedbacks = snap.val();
                 const fbDiv = document.getElementById('adminFeedbackList');
                 fbDiv.innerHTML = '';
-                if (!feedbacks) { fbDiv.innerHTML = 'Mesaj yoxdur.'; return; }
+                if (!feedbacks) { 
+                    fbDiv.innerHTML = 'Mesaj yoxdur.';
+                    document.getElementById('statFeedbacksCount').innerText = "0";
+                    return; 
+                }
 
-                Object.keys(feedbacks).forEach(k => {
+                const keys = Object.keys(feedbacks);
+                document.getElementById('statFeedbacksCount').innerText = keys.length;
+
+                keys.forEach(k => {
                     const f = feedbacks[k];
                     fbDiv.innerHTML += `
-                        <div style="background:#0b0f19; padding:10px; border-radius:8px; margin-bottom:8px; font-size:13px;">
+                        <div style="background:#080c14; padding:10px; border-radius:8px; margin-bottom:8px; font-size:13px;">
                             <strong style="color:var(--gold);">${f.name}:</strong> ${f.msg}
                         </div>
                     `;
                 });
             });
 
-            // Cihaz Logları
             database.ref('device_logs').limitToLast(15).on('value', (snap) => {
                 const logs = snap.val();
                 const logDiv = document.getElementById('adminLogsList');
@@ -1311,7 +1397,7 @@ Yat, qal dala, laylay!</span>
                 Object.keys(logs).reverse().forEach(k => {
                     const l = logs[k];
                     logDiv.innerHTML += `
-                        <div style="background:#0b0f19; padding:8px 12px; border-radius:8px; margin-bottom:6px; font-size:11px; color:var(--text-sub);">
+                        <div style="background:#080c14; padding:8px 12px; border-radius:8px; margin-bottom:6px; font-size:11px; color:var(--text-sub);">
                             <strong style="color:var(--accent);">${l.action}</strong> (${l.detail}): ${l.deviceInfo}
                         </div>
                     `;
@@ -1319,7 +1405,6 @@ Yat, qal dala, laylay!</span>
             });
         }
 
-        // Təsdiq İlə Faylı Silmək
         function deleteStudentTask(taskKey) {
             if (confirm("Bu faylı silmək istədiyinizdən əminsiniz?")) {
                 database.ref('student_tasks/' + taskKey).remove().then(() => {
@@ -1352,7 +1437,6 @@ Yat, qal dala, laylay!</span>
             });
         }
 
-        // Musiqi Yükləmələri
         function uploadWinnerAudio() {
             const file = document.getElementById('winnerAudioFile').files[0];
             if (!file) return alert("Fayl seçin!");
@@ -1397,18 +1481,18 @@ Yat, qal dala, laylay!</span>
                 if (currentTab === 'common') {
                     fieldsHTML = `
                         <div style="grid-column: span 2;">
-                            <label>📷 Foto Yüklə (HQ - Proporsional Kəsim)</label>
+                            <label>📷 Foto Yüklə (HQ Kəsim)</label>
                             <label class="file-upload-btn">📁 Fayl Seç <input type="file" accept="image/*" style="display:none;" onchange="handleHQImageUpload(event, ${index})"></label>
-                            ${isCustomPhoto ? '<span style="font-size:11px; color:var(--positive); margin-left:8px;">✓ HQ Foto Aktivdir</span>' : ''}
+                            ${isCustomPhoto ? '<span style="font-size:11px; color:var(--positive); margin-left:8px;">✓ HQ Aktivdir</span>' : ''}
                         </div>
                         <div><label>Doğulduğu Yer</label><input type="text" id="inp_${index}_yer" value="${defaultYer}"></div>
                     `;
                 } else {
                     fieldsHTML = `
                         <div style="grid-column: span 2;">
-                            <label>📷 Foto Yüklə (HQ - Proporsional Kəsim)</label>
+                            <label>📷 Foto Yüklə (HQ Kəsim)</label>
                             <label class="file-upload-btn">📁 Fayl Seç <input type="file" accept="image/*" style="display:none;" onchange="handleHQImageUpload(event, ${index})"></label>
-                            ${isCustomPhoto ? '<span style="font-size:11px; color:var(--positive); margin-left:8px;">✓ HQ Foto Aktivdir</span>' : ''}
+                            ${isCustomPhoto ? '<span style="font-size:11px; color:var(--positive); margin-left:8px;">✓ HQ Aktivdir</span>' : ''}
                         </div>
                         <div><label>FM</label><input type="number" id="inp_${index}_fm" value="${student.fm || 0}"></div>
                         <div><label>Stepping</label><input type="number" id="inp_${index}_stepping" value="${student.stepping || 0}"></div>
@@ -1428,7 +1512,6 @@ Yat, qal dala, laylay!</span>
             });
         }
 
-        // HQ Foto Yükləmə Və Proporsional Mərkəzləşdirilmiş Kəsim (Uzanmanın Qarşısını Alır)
         function handleHQImageUpload(event, index) {
             const file = event.target.files[0];
             if (!file) return;
