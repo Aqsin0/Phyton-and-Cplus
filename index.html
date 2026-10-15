@@ -1315,7 +1315,7 @@ Yat, qal dala, laylay!</span>
             window.scrollTo(0, 0);
         }
 
-        // 📈 YENİLƏNMİŞ HƏFTƏLİK DİAQRAM (Sırf Həftəlik Qazanılan Balın Həftə İçi İnkişaf Qrafiki)
+        // 📈 YENİLƏNMİŞ HƏFTƏLİK DİAQRAM (Gün adları olmadan, estetik mərhələli inkişaf)
         function renderStudentChart(weeklyGained) {
             const ctx = document.getElementById('studentChart').getContext('2d');
             if (chartInstance) chartInstance.destroy();
@@ -1323,30 +1323,49 @@ Yat, qal dala, laylay!</span>
             chartInstance = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: ['Bazar ertəsi', 'Çərşənbə axşamı', 'Çərşənbə', 'Cümə axşamı', 'Cümə / Bu gün'],
+                    // Gün adları yoxdur, sadəcə həftəlik addım-addım inkişaf dərəcəsi var
+                    labels: ['Start (0 pt)', 'Ⅰ Mərhələ', 'Ⅱ Mərhələ', 'Ⅲ Mərhələ', 'Cari Nəticə'],
                     datasets: [{
                         label: 'Bu həftə qazanılan bal',
                         data: [
                             0, 
-                            Math.round(weeklyGained * 0.25), 
-                            Math.round(weeklyGained * 0.5), 
-                            Math.round(weeklyGained * 0.75), 
+                            Math.round(weeklyGained * 0.2), 
+                            Math.round(weeklyGained * 0.55), 
+                            Math.round(weeklyGained * 0.8), 
                             weeklyGained
                         ],
                         borderColor: '#38bdf8', 
-                        backgroundColor: 'rgba(56, 189, 248, 0.15)', 
+                        backgroundColor: 'rgba(56, 189, 248, 0.2)', 
                         fill: true, 
-                        tension: 0.35, 
-                        pointRadius: 6
+                        tension: 0.4, // Xətti hamar və dalğalı göstərir
+                        pointBackgroundColor: '#f59e0b',
+                        pointBorderColor: '#fff',
+                        pointRadius: 6,
+                        pointHoverRadius: 9
                     }]
                 },
                 options: { 
                     responsive: true, 
                     plugins: { 
-                        legend: { display: true, labels: { color: '#94a3b8' } } 
+                        legend: { display: true, labels: { color: '#94a3b8', font: { weight: 'bold' } } },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `Artım: +${context.raw} pt`;
+                                }
+                            }
+                        }
                     },
                     scales: {
-                        y: { beginAtZero: true }
+                        x: {
+                            grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                            ticks: { color: '#94a3b8' }
+                        },
+                        y: { 
+                            beginAtZero: true,
+                            grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                            ticks: { color: '#94a3b8' }
+                        }
                     }
                 }
             });
@@ -1539,7 +1558,7 @@ Yat, qal dala, laylay!</span>
         }
 
         function openAdminPanel() {
-            const isRestricted = (activeAdminUser === "rəho" || activeAdminUser === "reho");
+            const isRestricted = (activeAdminUser === "Adminka" || activeAdminUser === "Adminka");
             
             document.getElementById('welcomeAdmin').innerText = `⚙️ Admin: ${activeAdminUser} (${currentTab.toUpperCase()})`;
             document.getElementById('adminRoleSubtext').innerText = isRestricted ? "⚠️ Limitli Yoxlama Və Bal Admin Paneli" : "TT-08 Tam İdarəetmə Və Yoxlama Mərkəzi";
@@ -1562,7 +1581,7 @@ Yat, qal dala, laylay!</span>
         }
 
         function switchAdminSubTab(tabName) {
-            const isRestricted = (activeAdminUser === "rəho" || activeAdminUser === "reho");
+            const isRestricted = (activeAdminUser === "Adminka" || activeAdminUser === "Adminka");
             if (isRestricted && (tabName === 'audio' || tabName === 'logs')) return;
 
             document.querySelectorAll('.admin-nav-btn').forEach(btn => btn.classList.remove('active'));
@@ -1584,7 +1603,7 @@ Yat, qal dala, laylay!</span>
         }
 
         function loadAdminTasksAndLogs() {
-            const isRestricted = (activeAdminUser === "rəho" || activeAdminUser === "reho");
+            const isRestricted = (activeAdminUser === "Adminka" || activeAdminUser === "Adminka");
 
             database.ref('student_tasks').on('value', (snap) => {
                 const tasks = snap.val();
@@ -1703,7 +1722,7 @@ Yat, qal dala, laylay!</span>
         }
 
         function gradeTaskAndAddPoints(taskKey, studentName, targetSubject) {
-            const isRestricted = (activeAdminUser === "rəho" || activeAdminUser === "reho");
+            const isRestricted = (activeAdminUser === "Adminka" || activeAdminUser === "Adminka");
             if (isRestricted && RESTRICTED_STUDENTS_FOR_REHO.includes(studentName)) {
                 alert("⚠️ Sizin bu tələbənin balını dəyişməyə icazəniz yoxdur!");
                 return;
@@ -1733,7 +1752,7 @@ Yat, qal dala, laylay!</span>
         }
 
         function uploadWinnerAudio() {
-            const isRestricted = (activeAdminUser === "rəho" || activeAdminUser === "reho");
+            const isRestricted = (activeAdminUser === "Adminka" || activeAdminUser === "Adminka");
             if (isRestricted) return;
             const file = document.getElementById('winnerAudioFile').files[0];
             if (!file) return alert("Zəhmət olmasa bir səs faylı seçin!");
@@ -1745,7 +1764,7 @@ Yat, qal dala, laylay!</span>
         }
 
         function uploadOutsiderAudio() {
-            const isRestricted = (activeAdminUser === "rəho" || activeAdminUser === "reho");
+            const isRestricted = (activeAdminUser === "Adminka" || activeAdminUser === "Adminka");
             if (isRestricted) return;
             const file = document.getElementById('outsiderAudioFile').files[0];
             if (!file) return alert("Zəhmət olmasa bir səs faylı seçin!");
@@ -1757,7 +1776,7 @@ Yat, qal dala, laylay!</span>
         }
 
         function handleGroupPhotoUpload(event) {
-            const isRestricted = (activeAdminUser === "rəho" || activeAdminUser === "reho");
+            const isRestricted = (activeAdminUser === "Adminka" || activeAdminUser === "Adminka");
             if (isRestricted) return;
             const file = event.target.files[0];
             if (!file) return;
@@ -1770,7 +1789,7 @@ Yat, qal dala, laylay!</span>
         }
 
         function renderAdminBody() {
-            const isRestricted = (activeAdminUser === "rəho" || activeAdminUser === "reho");
+            const isRestricted = (activeAdminUser === "Adminka" || activeAdminUser === "Adminka");
             const rawList = globalData[currentTab] || [];
             const adminBody = document.getElementById('adminBody');
             if(!adminBody) return;
@@ -1829,7 +1848,7 @@ Yat, qal dala, laylay!</span>
         }
 
         function handleHQImageUpload(event, index) {
-            const isRestricted = (activeAdminUser === "rəho" || activeAdminUser === "reho");
+            const isRestricted = (activeAdminUser === "Adminka" || activeAdminUser === "Adminka");
             if (isRestricted) return;
             const file = event.target.files[0];
             if (!file) return;
@@ -1869,7 +1888,7 @@ Yat, qal dala, laylay!</span>
         }
 
         function saveAdminChanges() {
-            const isRestricted = (activeAdminUser === "rəho" || activeAdminUser === "reho");
+            const isRestricted = (activeAdminUser === "Adminka" || activeAdminUser === "Adminka");
 
             (globalData[currentTab] || []).forEach((student, index) => {
                 const targetName = student.ad;
@@ -1906,7 +1925,7 @@ Yat, qal dala, laylay!</span>
         }
 
         function finishWeekAndTransferRating() {
-            const isRestricted = (activeAdminUser === "rəho" || activeAdminUser === "reho");
+            const isRestricted = (activeAdminUser === "Adminka" || activeAdminUser === "Adminka");
             if (isRestricted) return;
             if (!confirm("Cari həftəni tamamlayıb indikı Cari Reytinqləri Keçmiş Reytinq kimi yadda saxlamaq istədiyinizdən əminsiniz? (Bütün tələbə faylları təmizlənəcək)")) return;
 
