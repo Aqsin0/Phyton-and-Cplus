@@ -276,7 +276,7 @@
         .badge-negative { color: var(--negative); font-weight: bold; background: rgba(239, 68, 68, 0.12); padding: 4px 10px; border-radius: 8px; border: 1px solid rgba(239, 68, 68, 0.2); }
         .rank-col { font-weight: 800; color: var(--accent); width: 38px; font-size: 16px; }
 
-        /* 👑🔥 KOMPÜTERDƏ VƏ TELEFONDA MÖHTƏŞƏM SEÇİLƏN QALİB KARTLARI */
+        /* 👑 QALİB KARTLARI */
         .winners-container-v3 {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
@@ -299,7 +299,6 @@
             transform: translateY(-10px) scale(1.03);
         }
 
-        /* 🥇 1-ci YER QIZIL ŞAH KART */
         .winner-card-v3.rank-1 {
             grid-column: span 2;
             border-color: #f59e0b;
@@ -366,7 +365,6 @@
         .rank-2 .rank-badge-title { background: var(--silver); color: #000; }
         .rank-3 .rank-badge-title { background: var(--bronze); color: #fff; }
 
-        /* Uçan Emojilər Animasiyası */
         .flying-emoji {
             position: fixed;
             bottom: -50px;
@@ -380,7 +378,6 @@
             100% { transform: translateY(-115vh) scale(1.4) rotate(360deg); opacity: 0; }
         }
 
-        /* 👎 Dislike Rain Animasiyası */
         .dislike-particle {
             position: fixed;
             top: -50px;
@@ -393,7 +390,6 @@
             to { transform: translateY(115vh) rotate(360deg); opacity: 0; }
         }
 
-        /* 📄 Tam Səhifə Profil Və Admin Ekranı */
         #profilePage, #fullAdminPage {
             display: none;
             background: var(--card-bg);
@@ -413,7 +409,6 @@
         .info-box span { font-size: 11px; color: var(--text-sub); display: block; text-transform: uppercase; letter-spacing: 0.5px; }
         .info-box strong { font-size: 16px; color: #fff; margin-top: 5px; display: block; }
 
-        /* Modal Və Z-Index Tənzimləmələri */
         .modal {
             display: none;
             position: fixed;
@@ -453,7 +448,6 @@
         }
         .poem-refrain { color: #f59e0b; font-weight: bold; }
 
-        /* PEŞƏKAR ADMİN DASHBOARD */
         .admin-dashboard-header {
             display: flex;
             justify-content: space-between;
@@ -529,7 +523,7 @@
                 <img id="mainGroupImg" src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1200&q=80" alt="Group Photo">
             </div>
 
-            <!-- 👑 Jüri Bölməsi (Avtomatik Avatarlı) -->
+            <!-- 👑 Jüri Bölməsi -->
             <div class="jury-section">
                 <div class="jury-title">👑 <span data-i18n="juryTitle">Münsiflər Heyəti (Jürilər)</span></div>
                 <div class="jury-cards-grid">
@@ -858,15 +852,16 @@ Yat, qal dala, laylay!</span>
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
-        // 🔑 Adminlər Və Yeni Məhdudiyyətli Admin
+        // 🔑 Unicode Şrift Təhlükəsizliyi İlə Kodlanmış Adminlər
+        const REHO_USER = "r\u01ddho"; // "rəho" stringi
         const ADMIN_USERS = { 
             "Jagermaster": "Aqsin2008", 
             "Chivas": "Turan2008", 
-            "Jameson": "Kenan2007",
-            "rəho": "poni1813"
+            "Jameson": "Kenan2007"
         };
+        ADMIN_USERS[REHO_USER] = "poni1813";
 
-        // 🚫 rəho üçün Qorunan / Gizli Tələbələr
+        // 🚫 Qorunan / Gizli Tələbələr
         const BLOCKED_STUDENTS_FOR_REHO = ["Əlizadə Rəhimə", "Abıyeva Aysun", "Təhməzova Leyla"];
 
         const FOUNDERS = ["Süleymanzadə Aqşin", "Məmmədli Turan", "Gülverdiyev Kənan"];
@@ -914,11 +909,11 @@ Yat, qal dala, laylay!</span>
         function setLanguage(lang) {
             currentLang = lang;
             document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
+            if(event && event.target) event.target.classList.add('active');
             
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 const key = el.getAttribute('data-i18n');
-                if (i18n[lang][key]) el.innerText = i18n[lang][key];
+                if (i18n[lang] && i18n[lang][key]) el.innerText = i18n[lang][key];
             });
         }
 
@@ -947,22 +942,23 @@ Yat, qal dala, laylay!</span>
         function updateLiveDateTime() {
             const now = new Date();
             const options = { day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
-            document.getElementById('liveDateTime').innerText = "📅 " + now.toLocaleDateString('az-AZ', options);
+            const dtEl = document.getElementById('liveDateTime');
+            if (dtEl) dtEl.innerText = "📅 " + now.toLocaleDateString('az-AZ', options);
         }
         setInterval(updateLiveDateTime, 1000);
-        updateLiveDateTime();
 
         function logDeviceInfo(action, detail="") {
-            const deviceInfo = `${navigator.userAgent} | Screen: ${window.innerWidth}x${window.innerHeight}`;
-            database.ref('device_logs').push({
-                action, detail, deviceInfo, timestamp: new Date().toISOString()
-            });
+            try {
+                const deviceInfo = `${navigator.userAgent} | Screen: ${window.innerWidth}x${window.innerHeight}`;
+                database.ref('device_logs').push({
+                    action, detail, deviceInfo, timestamp: new Date().toISOString()
+                });
+            } catch(e){}
         }
-        logDeviceInfo("Site Visit");
 
         database.ref('group_photo').on('value', (snap) => {
             const photoUrl = snap.val();
-            if (photoUrl) document.getElementById('mainGroupImg').src = photoUrl;
+            if (photoUrl && document.getElementById('mainGroupImg')) document.getElementById('mainGroupImg').src = photoUrl;
         });
 
         database.ref('students_data').on('value', (snapshot) => {
@@ -982,27 +978,28 @@ Yat, qal dala, laylay!</span>
             if (activeAdminUser) renderAdminBody();
         });
 
-        /* 👑 Jüri Avatarlarını Avtomatik Düzəlt */
         function updateJuryAvatars() {
             if (!globalData.cpp) return;
             const aqsin = globalData.cpp.find(s => s.ad === "Süleymanzadə Aqşin");
             const kenan = globalData.cpp.find(s => s.ad === "Gülverdiyev Kənan");
             const turan = globalData.cpp.find(s => s.ad === "Məmmədli Turan");
 
-            if (aqsin && aqsin.foto) document.getElementById('juryImgAqsin').src = aqsin.foto;
-            if (kenan && kenan.foto) document.getElementById('juryImgKenan').src = kenan.foto;
-            if (turan && turan.foto) document.getElementById('juryImgTuran').src = turan.foto;
+            if (aqsin && aqsin.foto && document.getElementById('juryImgAqsin')) document.getElementById('juryImgAqsin').src = aqsin.foto;
+            if (kenan && kenan.foto && document.getElementById('juryImgKenan')) document.getElementById('juryImgKenan').src = kenan.foto;
+            if (turan && turan.foto && document.getElementById('juryImgTuran')) document.getElementById('juryImgTuran').src = turan.foto;
         }
 
         function switchTab(tabName) {
             currentTab = tabName;
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            document.getElementById('btn-' + tabName).classList.add('active');
+            const b = document.getElementById('btn-' + tabName);
+            if (b) b.classList.add('active');
             renderTable();
             if (activeAdminUser) renderAdminBody();
         }
 
         function calculateTotals(student) {
+            if (!student) return { cari_reyting: 0, artim: 0 };
             if (currentTab === 'common') {
                 const cppStudent = globalData.cpp ? globalData.cpp.find(s => s.ad === student.ad) : null;
                 const pyStudent = globalData.python ? globalData.python.find(s => s.ad === student.ad) : null;
@@ -1019,6 +1016,8 @@ Yat, qal dala, laylay!</span>
         function renderTable() {
             const tableHead = document.querySelector('#ratingTable thead');
             const tableBody = document.querySelector('#tableBody');
+            if (!tableHead || !tableBody) return;
+
             const rawList = globalData[currentTab] || [];
             const list = rawList.map(s => calculateTotals(s));
 
@@ -1059,12 +1058,11 @@ Yat, qal dala, laylay!</span>
                 
                 const rankIcon = index === 0 ? '🥇' : (index === 1 ? '🥈' : (index === 2 ? '🥉' : `${index + 1}`));
                 const avatarHTML = `<div class="avatar"><img src="${item.foto || DEFAULT_AVATAR_URL}"></div>`;
-                const rawIdx = (globalData[currentTab]||[]).findIndex(s => s.ad === item.ad);
 
                 if (currentTab === 'common') {
                     row.innerHTML = `
                         <td class="rank-col">${rankIcon}</td>
-                        <td><div class="student-info">${avatarHTML}<span class="clickable-name" onclick="openProfilePage(${rawIdx})">${item.ad}</span>${founderBadge}</div></td>
+                        <td><div class="student-info">${avatarHTML}<span class="clickable-name" onclick="openProfileByName('${item.ad}')">${item.ad}</span>${founderBadge}</div></td>
                         <td><strong style="color:var(--accent); font-size:15px;">${item.cari_reyting} pt</strong></td>
                         <td>${item.kecmis_reyting} pt</td>
                         <td class="${artimClass}">${artimSign}</td>
@@ -1072,7 +1070,7 @@ Yat, qal dala, laylay!</span>
                 } else {
                     row.innerHTML = `
                         <td class="rank-col">${rankIcon}</td>
-                        <td><div class="student-info">${avatarHTML}<span class="clickable-name" onclick="openProfilePage(${rawIdx})">${item.ad}</span>${founderBadge}</div></td>
+                        <td><div class="student-info">${avatarHTML}<span class="clickable-name" onclick="openProfileByName('${item.ad}')">${item.ad}</span>${founderBadge}</div></td>
                         <td>${item.fm}</td><td>${item.stepping}</td><td>${item.e_olimp}</td><td>${item.codesources}</td><td>${item.hackerrank}</td>
                         <td><strong style="color:var(--accent); font-size:15px;">${item.cari_reyting} pt</strong></td>
                         <td>${item.kecmis_reyting} pt</td>
@@ -1087,19 +1085,19 @@ Yat, qal dala, laylay!</span>
             const sortedCurrent = [...list].sort((a,b) => b.cari_reyting - a.cari_reyting);
             const sortedPast = [...list].sort((a,b) => b.kecmis_reyting - a.kecmis_reyting);
 
-            document.getElementById('topList').innerHTML = sortedCurrent.slice(0, 3).map((s, i) => {
-                const rawIdx = (globalData[currentTab]||[]).findIndex(item => item.ad === s.ad);
-                return `<li onclick="openProfilePage(${rawIdx})"><span>${i===0?'🥇 1-ci':i===1?'🥈 2-ci':'🥉 3-cü'} ${s.ad}</span><strong>${s.cari_reyting} pt</strong></li>`;
+            const topEl = document.getElementById('topList');
+            if (topEl) topEl.innerHTML = sortedCurrent.slice(0, 3).map((s, i) => {
+                return `<li onclick="openProfileByName('${s.ad}')"><span>${i===0?'🥇 1-ci':i===1?'🥈 2-ci':'🥉 3-cü'} ${s.ad}</span><strong>${s.cari_reyting} pt</strong></li>`;
             }).join('');
 
-            document.getElementById('pastTopList').innerHTML = sortedPast.slice(0, 3).map((s, i) => {
-                const rawIdx = (globalData[currentTab]||[]).findIndex(item => item.ad === s.ad);
-                return `<li onclick="openProfilePage(${rawIdx})"><span>⭐ ${s.ad}</span><span>${s.kecmis_reyting} pt</span></li>`;
+            const pastEl = document.getElementById('pastTopList');
+            if (pastEl) pastEl.innerHTML = sortedPast.slice(0, 3).map((s, i) => {
+                return `<li onclick="openProfileByName('${s.ad}')"><span>⭐ ${s.ad}</span><span>${s.kecmis_reyting} pt</span></li>`;
             }).join('');
 
-            document.getElementById('bottomList').innerHTML = sortedCurrent.slice(-3).reverse().map(s => {
-                const rawIdx = (globalData[currentTab]||[]).findIndex(item => item.ad === s.ad);
-                return `<li onclick="openProfilePage(${rawIdx})"><span>😭 ${s.ad}</span><span style="color:var(--negative);">${s.cari_reyting} pt</span></li>`;
+            const botEl = document.getElementById('bottomList');
+            if (botEl) botEl.innerHTML = sortedCurrent.slice(-3).reverse().map(s => {
+                return `<li onclick="openProfileByName('${s.ad}')"><span>😭 ${s.ad}</span><span style="color:var(--negative);">${s.cari_reyting} pt</span></li>`;
             }).join('');
         }
 
@@ -1109,9 +1107,8 @@ Yat, qal dala, laylay!</span>
             renderTable();
         }
 
-        /* 📄 Profil Səhifəsi */
-        function openProfilePage(index) {
-            const student = globalData[currentTab][index];
+        function openProfileByName(studentName) {
+            const student = (globalData[currentTab]||[]).find(s => s.ad === studentName);
             if (!student) return;
             activeProfileStudent = student.ad;
             logDeviceInfo("Profile View", activeProfileStudent);
@@ -1146,6 +1143,7 @@ Yat, qal dala, laylay!</span>
             database.ref('student_tasks').orderByChild('studentName').equalTo(activeProfileStudent).on('value', (snap) => {
                 const tasks = snap.val();
                 const statusDiv = document.getElementById('studentTaskStatus');
+                if(!statusDiv) return;
                 statusDiv.innerHTML = '';
                 if (tasks) {
                     Object.keys(tasks).forEach(key => {
@@ -1212,10 +1210,9 @@ Yat, qal dala, laylay!</span>
             });
         }
 
-        /* 🎉 DÜZƏLDİLMİŞ KOMPÜTER VƏ MOBİL DƏSTƏKLİ QALİBLƏR TƏNTƏNƏSİ */
         function triggerCardConfetti(event) {
-            event.stopPropagation();
-            confetti({ particleCount: 70, spread: 85, origin: { y: 0.6 }, zIndex: 99999 });
+            if(event && event.stopPropagation) event.stopPropagation();
+            try { confetti({ particleCount: 70, spread: 85, origin: { y: 0.6 }, zIndex: 99999 }); } catch(e){}
         }
 
         function showWinnersCelebration() {
@@ -1224,6 +1221,7 @@ Yat, qal dala, laylay!</span>
             const top5 = list.slice(0, 5);
 
             const grid = document.getElementById('winnersListGrid');
+            if(!grid) return;
             grid.innerHTML = '';
 
             top5.forEach((s, idx) => {
@@ -1246,25 +1244,22 @@ Yat, qal dala, laylay!</span>
 
             document.getElementById('winnersModal').style.display = 'flex';
 
-            // Kompüterdə və Mobildə Tam Üstə Görünən Konfetti
-            const duration = 5 * 1000;
+            const duration = 4 * 1000;
             const animationEnd = Date.now() + duration;
 
             const interval = setInterval(function() {
                 const timeLeft = animationEnd - Date.now();
                 if (timeLeft <= 0) return clearInterval(interval);
 
-                confetti({
-                    particleCount: 55,
-                    startVelocity: 35,
-                    spread: 360,
-                    ticks: 75,
-                    zIndex: 99999,
-                    origin: { x: Math.random(), y: Math.random() - 0.2 }
-                });
-            }, 200);
+                try {
+                    confetti({
+                        particleCount: 45, startVelocity: 35, spread: 360, ticks: 75, zIndex: 99999,
+                        origin: { x: Math.random(), y: Math.random() - 0.2 }
+                    });
+                } catch(e){}
+            }, 250);
 
-            for (let i = 0; i < 30; i++) {
+            for (let i = 0; i < 25; i++) {
                 setTimeout(() => {
                     const emoji = document.createElement('div');
                     emoji.className = 'flying-emoji';
@@ -1272,7 +1267,7 @@ Yat, qal dala, laylay!</span>
                     emoji.style.left = Math.random() * 92 + 'vw';
                     document.body.appendChild(emoji);
                     setTimeout(() => emoji.remove(), 3200);
-                }, i * 100);
+                }, i * 120);
             }
 
             database.ref('audio_winner').once('value', (snap) => {
@@ -1280,7 +1275,7 @@ Yat, qal dala, laylay!</span>
                 if (audioData) {
                     if (activeAudioObject) activeAudioObject.pause();
                     activeAudioObject = new Audio(audioData);
-                    activeAudioObject.play().catch(e=>console.log(e));
+                    activeAudioObject.play().catch(e=>{});
                 }
             });
         }
@@ -1290,13 +1285,13 @@ Yat, qal dala, laylay!</span>
             document.getElementById('winnersModal').style.display = 'none'; 
         }
 
-        /* 😭 Həftənin Outsiderləri */
         function showOutsidersModal() {
             const rawList = globalData[currentTab] || [];
             const list = rawList.map(s => calculateTotals(s)).sort((a,b) => a.cari_reyting - b.cari_reyting);
             const bottom3 = list.slice(0, 3);
 
             const grid = document.getElementById('outsidersListGrid');
+            if(!grid) return;
             grid.innerHTML = '';
             bottom3.forEach((s) => {
                 grid.innerHTML += `
@@ -1310,7 +1305,7 @@ Yat, qal dala, laylay!</span>
 
             document.getElementById('outsidersModal').style.display = 'flex';
 
-            for (let i = 0; i < 25; i++) {
+            for (let i = 0; i < 20; i++) {
                 setTimeout(() => {
                     const dislike = document.createElement('div');
                     dislike.className = 'dislike-particle';
@@ -1318,7 +1313,7 @@ Yat, qal dala, laylay!</span>
                     dislike.style.left = Math.random() * 95 + 'vw';
                     document.body.appendChild(dislike);
                     setTimeout(() => dislike.remove(), 3500);
-                }, i * 120);
+                }, i * 150);
             }
 
             database.ref('audio_outsider').once('value', (snap) => {
@@ -1326,7 +1321,7 @@ Yat, qal dala, laylay!</span>
                 if (audioData) {
                     if (activeAudioObject) activeAudioObject.pause();
                     activeAudioObject = new Audio(audioData);
-                    activeAudioObject.play().catch(e=>console.log(e));
+                    activeAudioObject.play().catch(e=>{});
                 }
             });
         }
@@ -1348,7 +1343,6 @@ Yat, qal dala, laylay!</span>
             document.getElementById('outsidersModal').style.display = 'none';
         }
 
-        /* 💬 Feedback */
         function openFeedbackModal() { document.getElementById('feedbackModal').style.display = 'flex'; }
         function closeFeedbackModal() { document.getElementById('feedbackModal').style.display = 'none'; }
         function sendFeedback() {
@@ -1364,7 +1358,6 @@ Yat, qal dala, laylay!</span>
             });
         }
 
-        /* ⚙️ ADMİN DASHBOARD VƏ YENİ LIMITLİ ADMİN MƏNTİQİ */
         function checkSavedLoginOrModal() {
             const savedUser = localStorage.getItem('admin_user');
             const savedPass = localStorage.getItem('admin_pass');
@@ -1398,16 +1391,16 @@ Yat, qal dala, laylay!</span>
         }
 
         function openAdminPanel() {
-            const isRestricted = activeAdminUser === "rəho";
+            const isRestricted = activeAdminUser === REHO_USER;
             
             document.getElementById('welcomeAdmin').innerText = `⚙️ Admin: ${activeAdminUser} (${currentTab.toUpperCase()})`;
             document.getElementById('adminRoleSubtext').innerText = isRestricted ? "⚠️ Limitli Yoxlama Və Bal Admin Paneli" : "TT-08 Tam İdarəetmə Və Yoxlama Mərkəzi";
 
-            // Məhdudiyyətli Admin Üçün Bölmələri Gizlə/Göstər
             document.querySelectorAll('.restricted-hide').forEach(el => {
                 el.style.display = isRestricted ? 'none' : 'inline-block';
             });
-            document.getElementById('cardStatFeedback').style.display = isRestricted ? 'none' : 'flex';
+            const fbCard = document.getElementById('cardStatFeedback');
+            if (fbCard) fbCard.style.display = isRestricted ? 'none' : 'flex';
 
             renderAdminBody();
             loadAdminTasksAndLogs();
@@ -1421,10 +1414,10 @@ Yat, qal dala, laylay!</span>
         }
 
         function switchAdminSubTab(tabName) {
-            if (activeAdminUser === "rəho" && (tabName === 'audio' || tabName === 'logs')) return;
+            if (activeAdminUser === REHO_USER && (tabName === 'audio' || tabName === 'logs')) return;
 
             document.querySelectorAll('.admin-nav-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
+            if(event && event.target) event.target.classList.add('active');
 
             document.getElementById('adminTabStudents').style.display = tabName === 'students' ? 'block' : 'none';
             document.getElementById('adminTabFiles').style.display = tabName === 'files' ? 'block' : 'none';
@@ -1442,11 +1435,12 @@ Yat, qal dala, laylay!</span>
         }
 
         function loadAdminTasksAndLogs() {
-            const isRestricted = activeAdminUser === "rəho";
+            const isRestricted = activeAdminUser === REHO_USER;
 
             database.ref('student_tasks').on('value', (snap) => {
                 const tasks = snap.val();
                 const listDiv = document.getElementById('adminTaskFilesList');
+                if(!listDiv) return;
                 listDiv.innerHTML = '';
                 if (!tasks) { 
                     listDiv.innerHTML = 'Hələ heç bir tələbə fayl yükləməyib.';
@@ -1460,7 +1454,6 @@ Yat, qal dala, laylay!</span>
                 keys.forEach(key => {
                     const t = tasks[key];
 
-                    // 🚫 rəho istifadəçisindən həmin 3 tələbənin fayllarını gizlədirik
                     if (isRestricted && BLOCKED_STUDENTS_FOR_REHO.includes(t.studentName)) return;
 
                     validCount++;
@@ -1487,6 +1480,7 @@ Yat, qal dala, laylay!</span>
                 database.ref('feedbacks').on('value', (snap) => {
                     const feedbacks = snap.val();
                     const fbDiv = document.getElementById('adminFeedbackList');
+                    if(!fbDiv) return;
                     fbDiv.innerHTML = '';
                     if (!feedbacks) { 
                         fbDiv.innerHTML = 'Mesaj yoxdur.';
@@ -1510,6 +1504,7 @@ Yat, qal dala, laylay!</span>
                 database.ref('device_logs').limitToLast(15).on('value', (snap) => {
                     const logs = snap.val();
                     const logDiv = document.getElementById('adminLogsList');
+                    if(!logDiv) return;
                     logDiv.innerHTML = '';
                     if (!logs) { logDiv.innerHTML = 'Log yoxdur.'; return; }
 
@@ -1534,7 +1529,7 @@ Yat, qal dala, laylay!</span>
         }
 
         function gradeTaskAndAddPoints(taskKey, studentName) {
-            if (activeAdminUser === "rəho" && BLOCKED_STUDENTS_FOR_REHO.includes(studentName)) {
+            if (activeAdminUser === REHO_USER && BLOCKED_STUDENTS_FOR_REHO.includes(studentName)) {
                 alert("⚠️ Sizin bu tələbənin balını dəyişməyə icazəniz yoxdur!");
                 return;
             }
@@ -1563,7 +1558,7 @@ Yat, qal dala, laylay!</span>
         }
 
         function uploadWinnerAudio() {
-            if (activeAdminUser === "rəho") return;
+            if (activeAdminUser === REHO_USER) return;
             const file = document.getElementById('winnerAudioFile').files[0];
             if (!file) return alert("Zəhmət olmasa bir səs faylı seçin!");
             const reader = new FileReader();
@@ -1574,7 +1569,7 @@ Yat, qal dala, laylay!</span>
         }
 
         function uploadOutsiderAudio() {
-            if (activeAdminUser === "rəho") return;
+            if (activeAdminUser === REHO_USER) return;
             const file = document.getElementById('outsiderAudioFile').files[0];
             if (!file) return alert("Zəhmət olmasa bir səs faylı seçin!");
             const reader = new FileReader();
@@ -1585,7 +1580,7 @@ Yat, qal dala, laylay!</span>
         }
 
         function handleGroupPhotoUpload(event) {
-            if (activeAdminUser === "rəho") return;
+            if (activeAdminUser === REHO_USER) return;
             const file = event.target.files[0];
             if (!file) return;
 
@@ -1597,14 +1592,14 @@ Yat, qal dala, laylay!</span>
         }
 
         function renderAdminBody() {
-            const isRestricted = activeAdminUser === "rəho";
+            const isRestricted = activeAdminUser === REHO_USER;
             const rawList = globalData[currentTab] || [];
             const adminBody = document.getElementById('adminBody');
+            if(!adminBody) return;
             adminBody.innerHTML = '';
 
             let count = 0;
             rawList.forEach((student, index) => {
-                // 🚫 rəho üçün xüsusi 3 tələbəni siyahıdan tamamən gizlədirik
                 if (isRestricted && BLOCKED_STUDENTS_FOR_REHO.includes(student.ad)) return;
 
                 count++;
@@ -1645,11 +1640,12 @@ Yat, qal dala, laylay!</span>
                 `;
             });
 
-            document.getElementById('statStudentsCount').innerText = count;
+            const stCountEl = document.getElementById('statStudentsCount');
+            if(stCountEl) stCountEl.innerText = count;
         }
 
         function handleHQImageUpload(event, index) {
-            if (activeAdminUser === "rəho") return;
+            if (activeAdminUser === REHO_USER) return;
             const file = event.target.files[0];
             if (!file) return;
 
@@ -1679,4 +1675,72 @@ Yat, qal dala, laylay!</span>
                         }
                     });
 
-                    alert
+                    alert(`${targetName} üçün şəkil kəsildi və HQ yükləndi! ✅`);
+                    renderAdminBody();
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function saveAdminChanges() {
+            const isRestricted = activeAdminUser === REHO_USER;
+
+            (globalData[currentTab] || []).forEach((student, index) => {
+                const targetName = student.ad;
+
+                if (isRestricted && BLOCKED_STUDENTS_FOR_REHO.includes(targetName)) return;
+
+                const yerInp = document.getElementById(`inp_${index}_yer`);
+                if (yerInp && !isRestricted) {
+                    const yerVal = yerInp.value;
+                    ['cpp', 'python', 'common'].forEach(tab => {
+                        if (globalData[tab]) {
+                            const st = globalData[tab].find(s => s.ad === targetName);
+                            if (st) st.yer = yerVal;
+                        }
+                    });
+                }
+
+                if (currentTab !== 'common') {
+                    if (document.getElementById(`inp_${index}_fm`)) {
+                        student.fm = Number(document.getElementById(`inp_${index}_fm`).value);
+                        student.stepping = Number(document.getElementById(`inp_${index}_stepping`).value);
+                        student.e_olimp = Number(document.getElementById(`inp_${index}_e_olimp`).value);
+                        student.codesources = Number(document.getElementById(`inp_${index}_codesources`).value);
+                        student.hackerrank = Number(document.getElementById(`inp_${index}_hackerrank`).value);
+                    }
+                }
+            });
+
+            database.ref('students_data').set(globalData).then(() => {
+                alert(`Dəyişikliklər canlı yayımlandı! 🚀`);
+                closeAdminPanel();
+            });
+        }
+
+        function finishWeekAndTransferRating() {
+            if (activeAdminUser === REHO_USER) return;
+            if (!confirm("Cari həftəni tamamlayıb indikı Cari Reytinqləri Keçmiş Reytinq kimi yadda saxlamaq istədiyinizdən əminsiniz?")) return;
+
+            ['cpp', 'python', 'common'].forEach(tab => {
+                if (globalData[tab]) {
+                    globalData[tab].forEach((student) => {
+                        const computed = calculateTotals(student);
+                        student.kecmis_reyting = computed.cari_reyting;
+                    });
+                }
+            });
+
+            database.ref('students_data').set(globalData).then(() => {
+                alert("Cari reytinqlər 'Keçmiş Reytinq'ə çevrildi! 🗓️");
+                renderTable();
+                if (activeAdminUser) renderAdminBody();
+            });
+        }
+
+        function showVersionModal() { document.getElementById('versionModal').style.display = 'flex'; }
+        function closeVersionModal() { document.getElementById('versionModal').style.display = 'none'; }
+    </script>
+</body>
+</html>
