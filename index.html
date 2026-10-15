@@ -107,7 +107,6 @@
             box-shadow: 0 0 12px var(--accent-glow);
         }
 
-        /* 👑 Jüri Bölməsi */
         .jury-section {
             background: linear-gradient(135deg, rgba(245, 158, 11, 0.08), rgba(15, 23, 42, 0.8));
             border: 1px solid var(--gold);
@@ -231,7 +230,6 @@
             cursor: pointer;
         }
 
-        /* 🎨 CƏDVƏL DİZAYNI */
         .table-wrapper {
             background-color: var(--card-bg);
             border-radius: 16px;
@@ -276,7 +274,6 @@
         .badge-negative { color: var(--negative); font-weight: bold; background: rgba(239, 68, 68, 0.12); padding: 4px 10px; border-radius: 8px; border: 1px solid rgba(239, 68, 68, 0.2); }
         .rank-col { font-weight: 800; color: var(--accent); width: 38px; font-size: 16px; }
 
-        /* 👑 QALİB KARTLARI */
         .winners-container-v3 {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
@@ -735,8 +732,8 @@
     <div id="loginModal" class="modal">
         <div class="modal-content" style="max-width:400px;">
             <h2 style="margin-top:0; color:var(--accent);">🔑 Admin Girişi</h2>
-            <div class="form-group"><label>İstifadəçi Adı:</label><input type="text" id="loginUser"></div>
-            <div class="form-group"><label>Şifrə:</label><input type="password" id="loginPass"></div>
+            <div class="form-group"><label>İstifadəçi Adı:</label><input type="text" id="loginUser" placeholder="İstifadəçi adı..."></div>
+            <div class="form-group"><label>Şifrə:</label><input type="password" id="loginPass" placeholder="Şifrə..."></div>
             <button class="btn btn-admin" style="width:100%;" onclick="handleLogin()">Giriş Et</button>
             <button class="btn btn-dark" style="width:100%; margin-top:10px;" onclick="closeLoginModal()">Ləğv Et</button>
         </div>
@@ -852,18 +849,16 @@ Yat, qal dala, laylay!</span>
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
-        // 🔑 Unicode Şrift Təhlükəsizliyi İlə Kodlanmış Adminlər
-        const REHO_USER = "r\u01ddho"; // "rəho" stringi
+        // 🔑 Admin Məlumat Bazası (Bütün Hərflərə Həssaslıq Aradan Qaldırıldı)
         const ADMIN_USERS = { 
-            "Jagermaster": "Aqsin2008", 
-            "Chivas": "Turan2008", 
-            "Jameson": "Kenan2007"
+            "jagermaster": "Aqsin2008", 
+            "chivas": "Turan2008", 
+            "jameson": "Kenan2007",
+            "rəho": "poni1813",
+            "reho": "poni1813"
         };
-        ADMIN_USERS[REHO_USER] = "poni1813";
 
-        // 🚫 Qorunan / Gizli Tələbələr
         const BLOCKED_STUDENTS_FOR_REHO = ["Əlizadə Rəhimə", "Abıyeva Aysun", "Təhməzova Leyla"];
-
         const FOUNDERS = ["Süleymanzadə Aqşin", "Məmmədli Turan", "Gülverdiyev Kənan"];
         const DEFAULT_AVATAR_URL = "https://svgsilh.com/svg/1300331.svg";
 
@@ -1361,21 +1356,29 @@ Yat, qal dala, laylay!</span>
         function checkSavedLoginOrModal() {
             const savedUser = localStorage.getItem('admin_user');
             const savedPass = localStorage.getItem('admin_pass');
-            if (savedUser && savedPass && ADMIN_USERS[savedUser] === savedPass) {
-                activeAdminUser = savedUser;
+            if (savedUser && savedPass && checkCredentials(savedUser, savedPass)) {
+                activeAdminUser = savedUser.toLowerCase();
                 openAdminPanel();
             } else {
                 document.getElementById('loginModal').style.display = 'flex';
             }
         }
 
+        // 🛡️ Bütün Hərf Böyüklüyü Və Boşluq Problemlərini Həll Edən Düzgün Giriş Yoxlanışı
+        function checkCredentials(inputUser, inputPass) {
+            const cleanUser = inputUser.trim().toLowerCase();
+            const cleanPass = inputPass.trim();
+            return ADMIN_USERS[cleanUser] && ADMIN_USERS[cleanUser] === cleanPass;
+        }
+
         function handleLogin() {
-            const user = document.getElementById('loginUser').value.trim();
-            const pass = document.getElementById('loginPass').value.trim();
-            if (ADMIN_USERS[user] && ADMIN_USERS[user] === pass) {
-                activeAdminUser = user;
-                localStorage.setItem('admin_user', user);
-                localStorage.setItem('admin_pass', pass);
+            const user = document.getElementById('loginUser').value;
+            const pass = document.getElementById('loginPass').value;
+
+            if (checkCredentials(user, pass)) {
+                activeAdminUser = user.trim().toLowerCase();
+                localStorage.setItem('admin_user', activeAdminUser);
+                localStorage.setItem('admin_pass', pass.trim());
                 closeLoginModal();
                 openAdminPanel();
             } else {
@@ -1391,7 +1394,7 @@ Yat, qal dala, laylay!</span>
         }
 
         function openAdminPanel() {
-            const isRestricted = activeAdminUser === REHO_USER;
+            const isRestricted = (activeAdminUser === "rəho" || activeAdminUser === "reho");
             
             document.getElementById('welcomeAdmin').innerText = `⚙️ Admin: ${activeAdminUser} (${currentTab.toUpperCase()})`;
             document.getElementById('adminRoleSubtext').innerText = isRestricted ? "⚠️ Limitli Yoxlama Və Bal Admin Paneli" : "TT-08 Tam İdarəetmə Və Yoxlama Mərkəzi";
@@ -1414,7 +1417,8 @@ Yat, qal dala, laylay!</span>
         }
 
         function switchAdminSubTab(tabName) {
-            if (activeAdminUser === REHO_USER && (tabName === 'audio' || tabName === 'logs')) return;
+            const isRestricted = (activeAdminUser === "rəho" || activeAdminUser === "reho");
+            if (isRestricted && (tabName === 'audio' || tabName === 'logs')) return;
 
             document.querySelectorAll('.admin-nav-btn').forEach(btn => btn.classList.remove('active'));
             if(event && event.target) event.target.classList.add('active');
@@ -1435,7 +1439,7 @@ Yat, qal dala, laylay!</span>
         }
 
         function loadAdminTasksAndLogs() {
-            const isRestricted = activeAdminUser === REHO_USER;
+            const isRestricted = (activeAdminUser === "rəho" || activeAdminUser === "reho");
 
             database.ref('student_tasks').on('value', (snap) => {
                 const tasks = snap.val();
@@ -1529,7 +1533,8 @@ Yat, qal dala, laylay!</span>
         }
 
         function gradeTaskAndAddPoints(taskKey, studentName) {
-            if (activeAdminUser === REHO_USER && BLOCKED_STUDENTS_FOR_REHO.includes(studentName)) {
+            const isRestricted = (activeAdminUser === "rəho" || activeAdminUser === "reho");
+            if (isRestricted && BLOCKED_STUDENTS_FOR_REHO.includes(studentName)) {
                 alert("⚠️ Sizin bu tələbənin balını dəyişməyə icazəniz yoxdur!");
                 return;
             }
@@ -1558,7 +1563,8 @@ Yat, qal dala, laylay!</span>
         }
 
         function uploadWinnerAudio() {
-            if (activeAdminUser === REHO_USER) return;
+            const isRestricted = (activeAdminUser === "rəho" || activeAdminUser === "reho");
+            if (isRestricted) return;
             const file = document.getElementById('winnerAudioFile').files[0];
             if (!file) return alert("Zəhmət olmasa bir səs faylı seçin!");
             const reader = new FileReader();
@@ -1569,7 +1575,8 @@ Yat, qal dala, laylay!</span>
         }
 
         function uploadOutsiderAudio() {
-            if (activeAdminUser === REHO_USER) return;
+            const isRestricted = (activeAdminUser === "rəho" || activeAdminUser === "reho");
+            if (isRestricted) return;
             const file = document.getElementById('outsiderAudioFile').files[0];
             if (!file) return alert("Zəhmət olmasa bir səs faylı seçin!");
             const reader = new FileReader();
@@ -1580,7 +1587,8 @@ Yat, qal dala, laylay!</span>
         }
 
         function handleGroupPhotoUpload(event) {
-            if (activeAdminUser === REHO_USER) return;
+            const isRestricted = (activeAdminUser === "rəho" || activeAdminUser === "reho");
+            if (isRestricted) return;
             const file = event.target.files[0];
             if (!file) return;
 
@@ -1592,7 +1600,7 @@ Yat, qal dala, laylay!</span>
         }
 
         function renderAdminBody() {
-            const isRestricted = activeAdminUser === REHO_USER;
+            const isRestricted = (activeAdminUser === "rəho" || activeAdminUser === "reho");
             const rawList = globalData[currentTab] || [];
             const adminBody = document.getElementById('adminBody');
             if(!adminBody) return;
@@ -1645,7 +1653,8 @@ Yat, qal dala, laylay!</span>
         }
 
         function handleHQImageUpload(event, index) {
-            if (activeAdminUser === REHO_USER) return;
+            const isRestricted = (activeAdminUser === "rəho" || activeAdminUser === "reho");
+            if (isRestricted) return;
             const file = event.target.files[0];
             if (!file) return;
 
@@ -1684,7 +1693,7 @@ Yat, qal dala, laylay!</span>
         }
 
         function saveAdminChanges() {
-            const isRestricted = activeAdminUser === REHO_USER;
+            const isRestricted = (activeAdminUser === "rəho" || activeAdminUser === "reho");
 
             (globalData[currentTab] || []).forEach((student, index) => {
                 const targetName = student.ad;
@@ -1720,7 +1729,8 @@ Yat, qal dala, laylay!</span>
         }
 
         function finishWeekAndTransferRating() {
-            if (activeAdminUser === REHO_USER) return;
+            const isRestricted = (activeAdminUser === "rəho" || activeAdminUser === "reho");
+            if (isRestricted) return;
             if (!confirm("Cari həftəni tamamlayıb indikı Cari Reytinqləri Keçmiş Reytinq kimi yadda saxlamaq istədiyinizdən əminsiniz?")) return;
 
             ['cpp', 'python', 'common'].forEach(tab => {
