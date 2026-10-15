@@ -12,7 +12,7 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         :root {
-            --bg-color: #070a12;
+            --bg-color: #030712;
             --card-bg: #0f172a;
             --card-inner: #1e293b;
             --text-main: #f8fafc;
@@ -36,6 +36,7 @@
             color: var(--text-main);
             margin: 0;
             padding: 14px;
+            background-image: radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.08), transparent 70%);
         }
 
         .container { max-width: 1250px; margin: 0 auto; }
@@ -47,11 +48,12 @@
             flex-wrap: wrap;
             gap: 15px;
             margin-bottom: 20px;
-            background: var(--card-bg);
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(12px);
             padding: 18px 22px;
-            border-radius: 16px;
+            border-radius: 18px;
             border: 1px solid var(--border);
-            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.5);
+            box-shadow: 0 10px 30px -5px rgba(0,0,0,0.6);
         }
 
         .header-title-box h1 { margin: 0; font-size: 22px; color: var(--accent); display: flex; align-items: center; gap: 10px; }
@@ -59,10 +61,11 @@
             background: linear-gradient(135deg, #38bdf8, #2563eb);
             color: #fff;
             font-size: 11px;
-            padding: 3px 8px;
+            padding: 3px 9px;
             border-radius: 8px;
             cursor: pointer;
-            box-shadow: 0 0 10px var(--accent-glow);
+            box-shadow: 0 0 12px var(--accent-glow);
+            font-weight: 800;
         }
 
         .lang-picker { display: flex; gap: 5px; background: var(--card-inner); padding: 4px; border-radius: 10px; border: 1px solid var(--border); }
@@ -70,19 +73,19 @@
         .lang-btn.active { background: var(--accent); color: #000; }
 
         .group-photo-card {
-            background: linear-gradient(135deg, rgba(56, 189, 248, 0.08), rgba(15, 23, 42, 0.9));
+            background: linear-gradient(135deg, rgba(56, 189, 248, 0.1), rgba(15, 23, 42, 0.95));
             border: 1px solid var(--accent);
-            border-radius: 16px;
+            border-radius: 18px;
             padding: 15px;
             margin-bottom: 20px;
             text-align: center;
-            box-shadow: 0 0 20px var(--accent-glow);
+            box-shadow: 0 0 25px var(--accent-glow);
         }
         .group-photo-card img {
             max-width: 100%;
             height: auto;
             max-height: 400px;
-            border-radius: 12px;
+            border-radius: 14px;
             border: 2px solid var(--border);
             object-fit: cover;
         }
@@ -97,23 +100,23 @@
             border-radius: 10px;
             cursor: pointer;
             font-weight: 600;
-            transition: all 0.2s ease;
+            transition: all 0.25s ease;
         }
 
         .tab-btn.active, .tab-btn:hover {
             background-color: var(--accent);
             color: #000;
             border-color: var(--accent);
-            box-shadow: 0 0 12px var(--accent-glow);
+            box-shadow: 0 0 14px var(--accent-glow);
         }
 
         .jury-section {
-            background: linear-gradient(135deg, rgba(245, 158, 11, 0.08), rgba(15, 23, 42, 0.8));
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(15, 23, 42, 0.9));
             border: 1px solid var(--gold);
-            border-radius: 16px;
+            border-radius: 18px;
             padding: 18px 22px;
             margin-bottom: 20px;
-            box-shadow: 0 0 20px var(--gold-glow);
+            box-shadow: 0 0 25px var(--gold-glow);
         }
 
         .jury-title {
@@ -133,19 +136,21 @@
         }
 
         .jury-card {
-            background: rgba(30, 41, 59, 0.7);
-            border: 1px solid rgba(245, 158, 11, 0.3);
-            border-radius: 12px;
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(245, 158, 11, 0.35);
+            border-radius: 14px;
             padding: 12px 16px;
             display: flex;
             align-items: center;
             gap: 12px;
             cursor: pointer;
+            transition: transform 0.2s;
         }
+        .jury-card:hover { transform: translateY(-3px); }
 
         .jury-card-avatar {
-            width: 45px;
-            height: 45px;
+            width: 46px;
+            height: 46px;
             border-radius: 50%;
             border: 2px solid var(--gold);
             overflow: hidden;
@@ -188,24 +193,24 @@
         }
 
         .highlight-card {
-            border-radius: 16px;
+            border-radius: 18px;
             padding: 16px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
             border: 1px solid var(--border);
         }
 
         .card-top-leaders {
-            background: linear-gradient(135deg, rgba(245, 158, 11, 0.18), rgba(15, 23, 42, 0.95));
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(15, 23, 42, 0.95));
             border-color: var(--gold);
         }
 
         .card-past-leaders {
-            background: linear-gradient(135deg, rgba(56, 189, 248, 0.18), rgba(15, 23, 42, 0.95));
+            background: linear-gradient(135deg, rgba(56, 189, 248, 0.2), rgba(15, 23, 42, 0.95));
             border-color: var(--accent);
         }
 
         .card-outsiders {
-            background: linear-gradient(135deg, rgba(239, 68, 68, 0.18), rgba(15, 23, 42, 0.95));
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(15, 23, 42, 0.95));
             border-color: var(--negative);
         }
 
@@ -232,10 +237,10 @@
 
         .table-wrapper {
             background-color: var(--card-bg);
-            border-radius: 16px;
+            border-radius: 18px;
             overflow-x: auto;
             border: 1px solid var(--border);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
         table { width: 100%; border-collapse: collapse; text-align: left; min-width: 850px; }
@@ -256,9 +261,9 @@
         tr { transition: background 0.2s ease; }
         tr:hover { background-color: rgba(56, 189, 248, 0.08) !important; }
 
-        .rank-1-row { background: linear-gradient(90deg, rgba(245, 158, 11, 0.15), transparent) !important; }
-        .rank-2-row { background: linear-gradient(90deg, rgba(203, 213, 225, 0.1), transparent) !important; }
-        .rank-3-row { background: linear-gradient(90deg, rgba(217, 119, 6, 0.1), transparent) !important; }
+        .rank-1-row { background: linear-gradient(90deg, rgba(245, 158, 11, 0.18), transparent) !important; }
+        .rank-2-row { background: linear-gradient(90deg, rgba(203, 213, 225, 0.12), transparent) !important; }
+        .rank-3-row { background: linear-gradient(90deg, rgba(217, 119, 6, 0.12), transparent) !important; }
 
         .clickable-name { cursor: pointer; color: #f8fafc; font-weight: 600; font-size: 14.5px; }
         .clickable-name:hover { color: var(--accent); text-decoration: underline; }
@@ -516,12 +521,13 @@
             border: 1px solid var(--border);
             border-left: 4px solid var(--accent);
             padding: 12px 16px;
-            border-radius: 10px;
+            border-radius: 12px;
             margin-bottom: 10px;
-            font-size: 12px;
+            font-size: 12.5px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
         }
         .log-card-header { display: flex; justify-content: space-between; color: var(--gold); font-weight: bold; margin-bottom: 6px; }
-        .log-card-body { color: var(--text-sub); line-height: 1.5; }
+        .log-card-body { color: var(--text-sub); line-height: 1.6; }
     </style>
 </head>
 <body>
@@ -757,7 +763,7 @@
                     <div id="adminFeedbackList">Mesaj yoxdur.</div>
                 </div>
                 <div class="info-box">
-                    <h3 style="margin:0 0 15px 0; color:var(--accent);">📲 Cihaz & Giriş Logları</h3>
+                    <h3 style="margin:0 0 15px 0; color:var(--accent);">📲 Cihaz & Giriş Logları (Tam Anlaşılır)</h3>
                     <div id="adminLogsList">Log yoxdur.</div>
                 </div>
             </div>
@@ -855,14 +861,13 @@ Yat, qal dala, laylay!</span>
         <div class="modal-content" style="max-width:550px;">
             <h2 style="color:var(--accent); margin-top:0;">🚀 Versiya 2.3 (V2.3) Yenilikləri</h2>
             
-            <h4 style="color:var(--gold); margin:15px 0 5px 0;">⚡ Əsas Dəyişikliklər:</h4>
+            <h4 style="color:var(--gold); margin:15px 0 5px 0;">⚡ Əsas Yeniliklər:</h4>
             <ul style="text-align:left; font-size:13.5px; line-height:1.6; color:var(--text-sub); margin-top:5px;">
-                <li>Ağazadə Poladxanın adı tam olaraq <strong>"Ağazadə Poladxan"</strong> kimi düzəldildi.</li>
-                <li>Admin faylı yoxladıqdan (bal verdikdən/səhv etdikdən) sonra fayl <strong>yalnız Admin panelindən silinir</strong>.</li>
-                <li>Tələbələrin öz profilindəki fayllar və yoxlama statusları (✅ Düzgün/❌ Səhv) saxlanılır.</li>
-                <li>Tələbə profilindəki fayllar yalnız <strong>"Həftəni Tamamla"</strong> düyməsinə basıldıqda təmizlənir.</li>
-                <li>Giriş ekranında `Enter` klavişi ilə keçid və giriş funksiyaları bərpa olundu.</li>
-                <li>Cihaz və giriş logları vizual kartlar şəklində tam anlaşıqlı və oxunaqlı vəziyyətə gətirildi.</li>
+                <li><strong>"Sil" Düyməsinin Məntiqi:</strong> Faylı Sil düyməsinə basdıqda həm Admin, həm də Tələbə profilindən (bütün bazadan) silinir.</li>
+                <li><strong>Tam Anlaşıqlı Cihaz Logları:</strong> Mozilla yazıları ləğv edildi, daxil olan istifadəçilərin dəqiq cihaz modeli (iPhone/Android/Kompüter) göstərilir.</li>
+                <li><strong>Giriş Ekranında Enter Klavişi:</strong> Şifrəni yazıb Enter-ə basdıqda avtomatik giriş olunması təmin edildi.</li>
+                <li><strong>Həftəni Tamamla:</strong> Tələbə profilindəki bütün yoxlanılmış fayl siyahısı yalnız həftə tamamlanarkən sıfırlanır.</li>
+                <li><strong>Yenilənmiş Dizayn:</strong> Neon kartlar, canlı animasiyalar və interfeys gətirildi.</li>
             </ul>
 
             <button class="btn" style="width:100%; margin-top:15px;" onclick="closeVersionModal()">Aydındır!</button>
@@ -904,6 +909,7 @@ Yat, qal dala, laylay!</span>
         const FOUNDERS = ["Süleymanzadə Aqşin", "Məmmədli Turan", "Gülverdiyev Kənan"];
         const DEFAULT_AVATAR_URL = "https://svgsilh.com/svg/1300331.svg";
 
+        // ✏️ Ağazadə Poladxan adı dəqiq olaraq böyük hərfə çevrildi
         const BIRTH_DATES = {
             "Abbasov Rüfət": "2008-01-23", "Abıyeva Aysun": "2008-03-01", "Ağazadə Poladxan": "2008-06-07",
             "Allahverdiyev Amid": "2008-05-31", "Bəbirov Soltan": "2008-02-22", "Cavadzadə Mirzə": "2008-03-29",
@@ -984,24 +990,29 @@ Yat, qal dala, laylay!</span>
         }
         setInterval(updateLiveDateTime, 1000);
 
-        function parseUserAgent(ua) {
-            let os = "Kompüter (Desktop)";
-            if (/android/i.test(ua)) os = "Android Mobil";
-            else if (/iphone|ipad|ipod/i.test(ua)) os = "iOS (iPhone/iPad)";
-            
+        // 📱 Cihazı Tam Dəqiq Və Anlaşıqlı Müəyyən Edən Təkmilləşdirilmiş Funksiya
+        function parseUserAgentClean(ua) {
+            let os = "Kompüter (PC)";
+            if (/iphone/i.test(ua)) os = "📱 iPhone";
+            else if (/ipad/i.test(ua)) os = "📱 iPad";
+            else if (/android/i.test(ua)) os = "📱 Android Mobil";
+            else if (/windows/i.test(ua)) os = "💻 Windows Kompüter";
+            else if (/macintosh|mac os x/i.test(ua)) os = "💻 Mac Kompüter";
+
             let browser = "Brauzer";
-            if (/chrome/i.test(ua)) browser = "Chrome";
-            else if (/safari/i.test(ua)) browser = "Safari";
-            else if (/firefox/i.test(ua)) browser = "Firefox";
+            if (/chrome|crios/i.test(ua) && !/edg/i.test(ua)) browser = "Chrome";
+            else if (/safari/i.test(ua) && !/chrome/i.test(ua)) browser = "Safari";
+            else if (/firefox|fxios/i.test(ua)) browser = "Firefox";
+            else if (/edg/i.test(ua)) browser = "Edge";
 
             return `${os} • ${browser}`;
         }
 
         function logDeviceInfo(action, detail="") {
             try {
-                const deviceInfo = parseUserAgent(navigator.userAgent);
+                const cleanDevice = parseUserAgentClean(navigator.userAgent);
                 database.ref('device_logs').push({
-                    action, detail, deviceInfo, timestamp: new Date().toLocaleString('az-AZ')
+                    action, detail, deviceInfo: cleanDevice, timestamp: new Date().toLocaleString('az-AZ')
                 });
             } catch(e){}
         }
@@ -1189,7 +1200,6 @@ Yat, qal dala, laylay!</span>
             window.scrollTo(0, 0);
         }
 
-        // 📁 Tələbə Profilində Fayllar Və Statuslar SAQLANILIR
         function loadStudentUploadedTasksList() {
             database.ref('student_tasks').orderByChild('studentName').equalTo(activeProfileStudent).on('value', (snap) => {
                 const tasks = snap.val();
@@ -1414,7 +1424,7 @@ Yat, qal dala, laylay!</span>
             });
         }
 
-        // ⌨️ Enter Klavişi ilə Giriş
+        // ⌨️ Enter Klavişi İlə Keçid Və Avtomatik Giriş
         function handleLoginInputKey(e, type) {
             if (e.key === 'Enter') {
                 if (type === 'user') {
@@ -1510,7 +1520,6 @@ Yat, qal dala, laylay!</span>
             });
         }
 
-        // 📁 Admin Panelində Yalnız YOXLAMALI Olunan (Aktiv) Fayllar Görünür
         function loadAdminTasksAndLogs() {
             const isRestricted = (activeAdminUser === "rəho" || activeAdminUser === "reho");
 
@@ -1531,7 +1540,6 @@ Yat, qal dala, laylay!</span>
                 keys.forEach(key => {
                     const t = tasks[key];
 
-                    // Əgər admin tərəfindən artıq yoxlanılıbsa admin panelindən silinir
                     if (t.checkedByAdmin) return;
                     if (isRestricted && RESTRICTED_STUDENTS_FOR_REHO.includes(t.studentName)) return;
 
@@ -1545,7 +1553,7 @@ Yat, qal dala, laylay!</span>
                             <div style="display:flex; gap:6px;">
                                 <button class="btn" style="background:var(--positive); font-size:11px; padding:6px 10px;" onclick="gradeTaskAndAddPoints('${key}', '${t.studentName}')">✅ Düzgün (Bal Ver)</button>
                                 <button class="btn" style="background:var(--negative); font-size:11px; padding:6px 10px;" onclick="gradeTask('${key}', 'wrong')">❌ Səhv</button>
-                                <button class="btn" style="background:#64748b; font-size:11px; padding:6px 10px;" onclick="deleteStudentTask('${key}')">🗑️ Sil (Admin Panelindən)</button>
+                                <button class="btn" style="background:#e11d48; font-size:11px; padding:6px 10px;" onclick="deleteStudentTaskCompletely('${key}')">🗑️ Sil (Hər Yerdən)</button>
                             </div>
                         </div>
                     `;
@@ -1583,6 +1591,7 @@ Yat, qal dala, laylay!</span>
                     });
                 });
 
+                // 📱 Tam Dəqiq Və Aydın Log Formatı
                 database.ref('device_logs').limitToLast(20).on('value', (snap) => {
                     const logs = snap.val();
                     const logDiv = document.getElementById('adminLogsList');
@@ -1599,8 +1608,8 @@ Yat, qal dala, laylay!</span>
                                     <span style="font-size:11px; color:var(--text-sub);">${l.timestamp || ''}</span>
                                 </div>
                                 <div class="log-card-body">
-                                    📌 <strong>Ətraflı:</strong> ${l.detail || 'Qeyd yoxdur'}<br>
-                                    📱 <strong>Cihaz & Brauzer:</strong> ${l.deviceInfo}
+                                    📌 <strong>Təfərrüat:</strong> ${l.detail || 'Qeyd yoxdur'}<br>
+                                    📱 <strong>Cihaz & Brauzer:</strong> <span style="color:var(--accent); font-weight:bold;">${l.deviceInfo}</span>
                                 </div>
                             </div>
                         `;
@@ -1609,14 +1618,16 @@ Yat, qal dala, laylay!</span>
             }
         }
 
-        // 🗑️ Admin faylı sildikdə YALNIZ Admin panelindən silinir
-        function deleteStudentTask(taskKey) {
-            database.ref('student_tasks/' + taskKey).update({ checkedByAdmin: true }).then(() => {
-                alert("Fayl Admin panelindən silindi! 🗑️");
-            });
+        // 🗑️ "Sil" düyməsinə basıldıqda HƏM Admin, HƏM Tələbə profilindən (BÜTÜN BAZADAN) silinir
+        function deleteStudentTaskCompletely(taskKey) {
+            if (confirm("Bu faylı tamamilə hər yerdən (həm admin, həm tələbə profilindən) silmək istədiyinizdən əminsiniz?")) {
+                database.ref('student_tasks/' + taskKey).remove().then(() => {
+                    alert("Fayl bazadan və hər iki paneldən tamamilə silindi! 🗑️");
+                });
+            }
         }
 
-        // ✅ Bal verdikdə fayl Admin panelindən silinir, tələbədə "✅ Düzgün" olaraq qalır
+        // ✅ Bal verildikdə Admin panelindən silinir, tələbədə "✅ Düzgün" olaraq qalır
         function gradeTaskAndAddPoints(taskKey, studentName) {
             const isRestricted = (activeAdminUser === "rəho" || activeAdminUser === "reho");
             if (isRestricted && RESTRICTED_STUDENTS_FOR_REHO.includes(studentName)) {
@@ -1641,7 +1652,7 @@ Yat, qal dala, laylay!</span>
             });
         }
 
-        // ❌ Səhv etdikdə fayl Admin panelindən silinir, tələbədə "❌ Səhv" olaraq qalır
+        // ❌ Səhv edildikdə Admin panelindən silinir, tələbədə "❌ Səhv" olaraq qalır
         function gradeTask(taskKey, status) {
             database.ref('student_tasks/' + taskKey).update({ status, checkedByAdmin: true }).then(() => {
                 alert("Fayl səhv olaraq qeyd edildi və admin panelindən təmizləndi! ❌");
@@ -1820,7 +1831,6 @@ Yat, qal dala, laylay!</span>
             });
         }
 
-        // 🗓️ Həftəni Tamamladıqda BÜTÜN tələbə faylları tələbələrin profilindən təmizlənir
         function finishWeekAndTransferRating() {
             const isRestricted = (activeAdminUser === "rəho" || activeAdminUser === "reho");
             if (isRestricted) return;
@@ -1835,7 +1845,6 @@ Yat, qal dala, laylay!</span>
                 }
             });
 
-            // Tələbə fayllarını bazadan təmizləyirik
             database.ref('student_tasks').remove();
 
             database.ref('students_data').set(globalData).then(() => {
