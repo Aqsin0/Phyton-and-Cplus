@@ -528,6 +528,22 @@
         }
         .log-card-header { display: flex; justify-content: space-between; color: var(--gold); font-weight: bold; margin-bottom: 6px; }
         .log-card-body { color: var(--text-sub); line-height: 1.6; }
+
+        .task-folder-box {
+            background: #0b1329;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+        .task-folder-title {
+            font-size: 15px;
+            font-weight: bold;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
     </style>
 </head>
 <body>
@@ -659,18 +675,23 @@
                     <strong id="pYer">Gəncə şəhəri</strong>
                 </div>
                 <div class="info-box">
-                    <span>⭐ Cari Reytinq</span>
+                    <span>⭐ Cari Reytinq (Ümumi)</span>
                     <strong id="pCari" style="color:var(--accent);">0 pt</strong>
                 </div>
                 <div class="info-box">
-                    <span>📊 Həftəlik Artım/Azalma</span>
+                    <span>📊 Həftəlik Qazanılan Bal</span>
                     <strong id="pArtim">0</strong>
                 </div>
             </div>
 
+            <!-- 📁 VARIANT 1: Tələbə Fənni Seçərək Fayl Yükləyir -->
             <div class="info-box" style="margin-bottom:20px;">
-                <h4 style="margin:0 0 10px 0; color:var(--accent);">📁 Tapşırıq / Kod Faylları Yüklə (Çoxlu Fayl Seçimi)</h4>
+                <h4 style="margin:0 0 10px 0; color:var(--accent);">📁 Tapşırıq / Kod Faylları Yüklə</h4>
                 <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+                    <select id="studentSubjectSelect" style="background:#070a12; padding:9px; border-radius:8px; border:1px solid var(--border); color:#fff; font-weight:bold;">
+                        <option value="cpp">🔵 C++ Tapşırığı</option>
+                        <option value="python">🟡 Python Tapşırığı</option>
+                    </select>
                     <input type="file" id="studentTaskFiles" multiple style="background:#070a12; padding:8px; border-radius:8px; border:1px solid var(--border); color:#fff;">
                     <button class="btn" onclick="uploadStudentTasks()">Yüklə və Adminə Göndər</button>
                 </div>
@@ -678,7 +699,7 @@
             </div>
 
             <div class="chart-container" style="background:var(--card-inner); padding:15px; border-radius:12px; border:1px solid var(--border);">
-                <h3 style="margin:0 0 15px 0; font-size:16px; color:var(--accent);">📈 Reytinq Dəyişim Diaqramı</h3>
+                <h3 style="margin:0 0 15px 0; font-size:16px; color:var(--accent);">📈 Həftəlik Qazanılan Bal Diaqramı</h3>
                 <canvas id="studentChart" height="120"></canvas>
             </div>
         </div>
@@ -728,11 +749,16 @@
                 <button class="btn" style="width:100%; margin-top:20px; padding:14px; font-size:16px;" onclick="saveAdminChanges()">💾 Yadda Saxla və Yayımla</button>
             </div>
 
-            <!-- SUB TAB 2: Fayl Yoxlama Səhifəsi -->
+            <!-- SUB TAB 2: VARIANT 4 - C++ Və Python Qovluqlarına Bölünmüş Fayl Yoxlama Səhifəsi -->
             <div id="adminTabFiles" style="display:none;">
-                <div class="info-box">
-                    <h3 style="margin:0 0 15px 0; color:var(--accent);">📁 Yoxlanılacaq Fayllar</h3>
-                    <div id="adminTaskFilesList">Yüklənir...</div>
+                <div class="task-folder-box">
+                    <div class="task-folder-title" style="color:var(--accent);">🔵 C++ Yoxlanılacaq Fayllar</div>
+                    <div id="adminCppTasksList">Yüklənir...</div>
+                </div>
+
+                <div class="task-folder-box">
+                    <div class="task-folder-title" style="color:var(--gold);">🟡 Python Yoxlanılacaq Fayllar</div>
+                    <div id="adminPythonTasksList">Yüklənir...</div>
                 </div>
             </div>
 
@@ -854,7 +880,7 @@ Yat, qal dala, laylay!</span>
         </div>
     </div>
 
-    <!-- V2.3 Yeniliklər Modal (Xüsusi İstifadəçi Təqdimatı) -->
+    <!-- V2.3 Yeniliklər Modal -->
     <div id="versionModal" class="modal">
         <div class="modal-content" style="max-width:550px;">
             <h2 style="color:var(--accent); margin-top:0;">🚀 Saytın Yenilikləri (V2.3)</h2>
@@ -863,8 +889,8 @@ Yat, qal dala, laylay!</span>
             <ul style="text-align:left; font-size:13.5px; line-height:1.6; color:var(--text-sub); margin-top:5px;">
                 <li><strong>🎉 Həftənin Qalibləri Şousu:</strong> Xüsusi bayram musiqisi, konfetti saçılması və animasiyalarla qaliblərin təqdim olunması.</li>
                 <li><strong>😭 Həftənin Outsiderləri Bölməsi:</strong> Kədərli musiqi fonunda həftənin sonuncu yerlərinin əyləncəli təqdimatı.</li>
-                <li><strong>📈 Tələbə Reytinq Diaqramı:</strong> Şəxsi profil pəncərəsində həftəlik inkişafın canlı vizual qrafiki.</li>
-                <li><strong>📁 Çoxlu Fayl Göndərmə:</strong> Ev tapşırıqlarını tək-tək yox, birdəfəyə çoxlu sayda fayl seçərək göndərmək imkanı.</li>
+                <li><strong>📈 Tələbə Reytinq Diaqramı:</strong> Şəxsi profil pəncərəsində sırf həmin həftə qazanılan xalların canlı dinamika qrafiki.</li>
+                <li><strong>📁 Çoxlu Və Fənni Seçilmiş Fayl Göndərmə:</strong> C++ və Python tapşırıqlarını ayrılıqda seçərək göndərmək imkanı.</li>
             </ul>
 
             <h4 style="color:var(--accent); margin:15px 0 5px 0;">⚡ Əlavələr</h4>
@@ -912,7 +938,6 @@ Yat, qal dala, laylay!</span>
         const FOUNDERS = ["Süleymanzadə Aqşin", "Məmmədli Turan", "Gülverdiyev Kənan"];
         const DEFAULT_AVATAR_URL = "https://svgsilh.com/svg/1300331.svg";
 
-        // ✏️ Ad Siyahısında Tam Düzgün Baş Hərf
         const BIRTH_DATES = {
             "Abbasov Rüfət": "2008-01-23", "Abıyeva Aysun": "2008-03-01", "Ağazadə Poladxan": "2008-06-07",
             "Allahverdiyev Amid": "2008-05-31", "Bəbirov Soltan": "2008-02-22", "Cavadzadə Mirzə": "2008-03-29",
@@ -1024,13 +1049,11 @@ Yat, qal dala, laylay!</span>
             if (photoUrl && document.getElementById('mainGroupImg')) document.getElementById('mainGroupImg').src = photoUrl;
         });
 
-        // 🛠️ Baza Yenilənməsi Və Düzəlişlərin Tetiklənməsi
         database.ref('students_data').on('value', (snapshot) => {
             const data = snapshot.val();
             if (data && data.cpp && data.cpp.length === 25) {
                 globalData = data;
                 
-                // 🔄 Poladxan Adının Bazasında Məcburi Düzəliş
                 let needUpdate = false;
                 ['cpp', 'python', 'common'].forEach(tab => {
                     if (globalData[tab]) {
@@ -1190,6 +1213,7 @@ Yat, qal dala, laylay!</span>
             renderTable();
         }
 
+        // 🎯 YENİLƏNMİŞ PROFİL BAXIŞI (Sırf Həftəlik Xalis Bal Əsasında)
         function openProfileByName(studentName) {
             const student = (globalData[currentTab]||[]).find(s => s.ad === studentName);
             if (!student) return;
@@ -1208,14 +1232,20 @@ Yat, qal dala, laylay!</span>
             document.getElementById('pKurs').innerText = calculateAutoCourse();
             document.getElementById('pYos').innerText = `${birthInfo.age} Yaş (${birthInfo.birthFormatted})`;
             document.getElementById('pYer').innerText = student.yer || DEFAULT_BIRTH_PLACES[student.ad] || "Bakı şəhəri";
+            
+            // Ümumi Cari Reytinq (Ballar silinmir və üzərinə gəlir)
             document.getElementById('pCari').innerText = computed.cari_reyting + " pt";
 
-            const artimSign = computed.artim >= 0 ? `+${computed.artim}` : computed.artim;
-            document.getElementById('pArtim').innerText = artimSign + " pt";
-            document.getElementById('pArtim').style.color = computed.artim >= 0 ? 'var(--positive)' : 'var(--negative)';
+            // Sırf bu həftə qazanılan xalis bal (Cari - Keçmiş)
+            const weeklyGained = computed.cari_reyting - Number(student.kecmis_reyting || 0);
+            const artimSign = weeklyGained >= 0 ? `+${weeklyGained}` : weeklyGained;
+            document.getElementById('pArtim').innerText = artimSign + " pt (Bu həftə)";
+            document.getElementById('pArtim').style.color = weeklyGained >= 0 ? 'var(--positive)' : 'var(--negative)';
 
             loadStudentUploadedTasksList();
-            renderStudentChart(student.kecmis_reyting || 0, computed.cari_reyting);
+            
+            // Diaqrama sırf bu həftə qazanılan balı göndəririk
+            renderStudentChart(weeklyGained);
 
             document.getElementById('mainDashboard').style.display = 'none';
             document.getElementById('profilePage').style.display = 'block';
@@ -1234,9 +1264,10 @@ Yat, qal dala, laylay!</span>
                     Object.keys(tasks).forEach(key => {
                         const t = tasks[key];
                         count++;
+                        let subjTag = (t.subject === 'python' || (t.fileName && t.fileName.endsWith('.py'))) ? '🟡 [Python]' : '🔵 [C++]';
                         let stText = t.status === 'correct' ? `✅ Düzgün (+${t.addedPoints || 0} Bal)` : (t.status === 'wrong' ? '❌ Səhv' : '⏳ Yoxlanılır');
                         let stColor = t.status === 'correct' ? 'var(--positive)' : (t.status === 'wrong' ? 'var(--negative)' : 'var(--gold)');
-                        statusDiv.innerHTML += `<div style="margin-top:6px;"><span style="color:${stColor}">📄 ${t.fileName} - (${stText})</span></div>`;
+                        statusDiv.innerHTML += `<div style="margin-top:6px;"><span style="color:${stColor}">${subjTag} 📄 ${t.fileName} - (${stText})</span></div>`;
                     });
                 }
                 
@@ -1249,9 +1280,11 @@ Yat, qal dala, laylay!</span>
         function uploadStudentTasks() {
             const fileInput = document.getElementById('studentTaskFiles');
             const files = fileInput.files;
+            const subject = document.getElementById('studentSubjectSelect').value || 'cpp';
+
             if (!files || files.length === 0) { alert("Zəhmət olmasa ən azı bir fayl seçin!"); return; }
 
-            logDeviceInfo("Fayl Yükləmə", `${activeProfileStudent} - ${files.length} fayl`);
+            logDeviceInfo("Fayl Yükləmə", `${activeProfileStudent} - ${files.length} fayl (${subject.toUpperCase()})`);
 
             let uploadedCount = 0;
             Array.from(files).forEach(file => {
@@ -1261,12 +1294,13 @@ Yat, qal dala, laylay!</span>
                         studentName: activeProfileStudent,
                         fileName: file.name,
                         fileData: e.target.result,
+                        subject: subject,
                         status: 'pending',
                         timestamp: new Date().toISOString()
                     }).then(() => {
                         uploadedCount++;
                         if (uploadedCount === files.length) {
-                            alert(`${files.length} ədəd fayl uğurla admine göndərildi! ✅`);
+                            alert(`${files.length} ədəd fayl ${subject.toUpperCase()} tapşırığı olaraq admine göndərildi! ✅`);
                             fileInput.value = '';
                         }
                     });
@@ -1281,20 +1315,40 @@ Yat, qal dala, laylay!</span>
             window.scrollTo(0, 0);
         }
 
-        function renderStudentChart(pastRating, currentRating) {
+        // 📈 YENİLƏNMİŞ HƏFTƏLİK DİAQRAM (Sırf Həftəlik Qazanılan Balın Həftə İçi İnkişaf Qrafiki)
+        function renderStudentChart(weeklyGained) {
             const ctx = document.getElementById('studentChart').getContext('2d');
             if (chartInstance) chartInstance.destroy();
+            
             chartInstance = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: ['1-ci Həftə', '2-ci Həftə', '3-cü Həftə', 'Ötən Həftə', 'Cari Həftə'],
+                    labels: ['Bazar ertəsi', 'Çərşənbə axşamı', 'Çərşənbə', 'Cümə axşamı', 'Cümə / Bu gün'],
                     datasets: [{
-                        label: 'Reytinq Balları',
-                        data: [Math.max(0, pastRating - 40), Math.max(0, pastRating - 20), Math.max(0, pastRating - 10), pastRating, currentRating],
-                        borderColor: '#38bdf8', backgroundColor: 'rgba(56, 189, 248, 0.15)', fill: true, tension: 0.35, pointRadius: 6
+                        label: 'Bu həftə qazanılan bal',
+                        data: [
+                            0, 
+                            Math.round(weeklyGained * 0.25), 
+                            Math.round(weeklyGained * 0.5), 
+                            Math.round(weeklyGained * 0.75), 
+                            weeklyGained
+                        ],
+                        borderColor: '#38bdf8', 
+                        backgroundColor: 'rgba(56, 189, 248, 0.15)', 
+                        fill: true, 
+                        tension: 0.35, 
+                        pointRadius: 6
                     }]
                 },
-                options: { responsive: true, plugins: { legend: { display: false } } }
+                options: { 
+                    responsive: true, 
+                    plugins: { 
+                        legend: { display: true, labels: { color: '#94a3b8' } } 
+                    },
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
             });
         }
 
@@ -1534,17 +1588,23 @@ Yat, qal dala, laylay!</span>
 
             database.ref('student_tasks').on('value', (snap) => {
                 const tasks = snap.val();
-                const listDiv = document.getElementById('adminTaskFilesList');
-                if(!listDiv) return;
-                listDiv.innerHTML = '';
+                const cppDiv = document.getElementById('adminCppTasksList');
+                const pyDiv = document.getElementById('adminPythonTasksList');
+
+                if(!cppDiv || !pyDiv) return;
+                cppDiv.innerHTML = '';
+                pyDiv.innerHTML = '';
+
                 if (!tasks) { 
-                    listDiv.innerHTML = 'Hələ heç bir tələbə fayl yükləməyib.';
+                    cppDiv.innerHTML = 'C++ üçün yoxlanılacaq fayl yoxdur. ✅';
+                    pyDiv.innerHTML = 'Python üçün yoxlanılacaq fayl yoxdur. ✅';
                     document.getElementById('statFilesCount').innerText = "0";
                     return; 
                 }
 
                 const keys = Object.keys(tasks);
-                let validCount = 0;
+                let cppCount = 0;
+                let pyCount = 0;
 
                 keys.forEach(key => {
                     const t = tasks[key];
@@ -1552,27 +1612,35 @@ Yat, qal dala, laylay!</span>
                     if (t.checkedByAdmin) return;
                     if (isRestricted && RESTRICTED_STUDENTS_FOR_REHO.includes(t.studentName)) return;
 
-                    validCount++;
-                    listDiv.innerHTML += `
+                    let isPython = (t.subject === 'python') || (t.fileName && t.fileName.toLowerCase().endsWith('.py'));
+                    
+                    const cardHTML = `
                         <div style="background:#070a12; padding:12px; border-radius:10px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; border:1px solid var(--border);">
                             <div>
                                 <strong style="color:var(--accent);">${t.studentName}</strong>: 
                                 <a href="${t.fileData}" download="${t.fileName}" style="color:#fff; font-weight:bold;">📄 ${t.fileName}</a>
                             </div>
                             <div style="display:flex; gap:6px;">
-                                <button class="btn" style="background:var(--positive); font-size:11px; padding:6px 10px;" onclick="gradeTaskAndAddPoints('${key}', '${t.studentName}')">✅ Düzgün (Bal Ver)</button>
+                                <button class="btn" style="background:var(--positive); font-size:11px; padding:6px 10px;" onclick="gradeTaskAndAddPoints('${key}', '${t.studentName}', '${isPython ? 'python' : 'cpp'}')">✅ Düzgün (Bal Ver)</button>
                                 <button class="btn" style="background:var(--negative); font-size:11px; padding:6px 10px;" onclick="gradeTask('${key}', 'wrong')">❌ Səhv</button>
                                 <button class="btn" style="background:#e11d48; font-size:11px; padding:6px 10px;" onclick="deleteStudentTaskCompletely('${key}')">🗑️ Sil (Hər Yerdən)</button>
                             </div>
                         </div>
                     `;
+
+                    if (isPython) {
+                        pyCount++;
+                        pyDiv.innerHTML += cardHTML;
+                    } else {
+                        cppCount++;
+                        cppDiv.innerHTML += cardHTML;
+                    }
                 });
 
-                if (validCount === 0) {
-                    listDiv.innerHTML = 'Yoxlanılacaq yeni fayl yoxdur. Bütün fayllar yoxlanılıb! ✅';
-                }
+                if (cppCount === 0) cppDiv.innerHTML = 'C++ üçün yoxlanılacaq fayl yoxdur. ✅';
+                if (pyCount === 0) pyDiv.innerHTML = 'Python üçün yoxlanılacaq fayl yoxdur. ✅';
 
-                document.getElementById('statFilesCount').innerText = validCount;
+                document.getElementById('statFilesCount').innerText = (cppCount + pyCount);
             });
 
             if (!isRestricted) {
@@ -1634,26 +1702,26 @@ Yat, qal dala, laylay!</span>
             }
         }
 
-        function gradeTaskAndAddPoints(taskKey, studentName) {
+        function gradeTaskAndAddPoints(taskKey, studentName, targetSubject) {
             const isRestricted = (activeAdminUser === "rəho" || activeAdminUser === "reho");
             if (isRestricted && RESTRICTED_STUDENTS_FOR_REHO.includes(studentName)) {
                 alert("⚠️ Sizin bu tələbənin balını dəyişməyə icazəniz yoxdur!");
                 return;
             }
 
-            const pts = prompt(`${studentName} üçün neçə bal əlavə etmək istəyirsiniz?`, "10");
+            const pts = prompt(`${studentName} üçün ${targetSubject.toUpperCase()} fənnindən neçə bal əlavə etmək istəyirsiniz?`, "10");
             if (pts === null) return;
             const addedPoints = Number(pts) || 0;
 
-            const targetTab = currentTab === 'common' ? 'cpp' : currentTab;
-            if (globalData[targetTab]) {
-                const st = globalData[targetTab].find(s => s.ad === studentName);
+            if (globalData[targetSubject]) {
+                const st = globalData[targetSubject].find(s => s.ad === studentName);
                 if (st) st.fm = Number(st.fm || 0) + addedPoints;
             }
 
             database.ref('student_tasks/' + taskKey).update({ status: 'correct', addedPoints, checkedByAdmin: true }).then(() => {
                 database.ref('students_data').set(globalData).then(() => {
-                    alert(`${studentName} üçün +${addedPoints} bal əlavə olundu və fayl yoxlanıldı! 🚀`);
+                    alert(`${studentName} üçün ${targetSubject.toUpperCase()} fənnindən +${addedPoints} bal əlavə olundu! 🚀`);
+                    renderTable();
                 });
             });
         }
@@ -1800,7 +1868,6 @@ Yat, qal dala, laylay!</span>
             reader.readAsDataURL(file);
         }
 
-        // 🛠️ Admin Panelində Doğulduğu Yeri (Şəhəri) Bütün Tablarda Düzgün Yeniləmə
         function saveAdminChanges() {
             const isRestricted = (activeAdminUser === "rəho" || activeAdminUser === "reho");
 
