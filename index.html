@@ -815,8 +815,6 @@
         <div class="modal-content" style="text-align:center;">
             <h1 style="color:var(--negative); margin-top:0;">😭 HƏFTƏNİN OUTSİDERLƏRİ 😴</h1>
             <div id="outsidersListGrid" style="display:flex; justify-content:center; gap:15px; flex-wrap:wrap; margin-bottom:15px;"></div>
-            
-            <button class="btn" style="background:#e11d48; margin-bottom:10px;" onclick="speakPoem()">🔊 Şeiri Səsli Oxu</button>
 
             <div class="poem-box">
 Tərpənmə, amandır, bala, qəflətdən ayılma!
@@ -856,18 +854,23 @@ Yat, qal dala, laylay!</span>
         </div>
     </div>
 
-    <!-- V2.3 Yeniliklər Modal -->
+    <!-- V2.3 Yeniliklər Modal (Xüsusi İstifadəçi Təqdimatı) -->
     <div id="versionModal" class="modal">
         <div class="modal-content" style="max-width:550px;">
-            <h2 style="color:var(--accent); margin-top:0;">🚀 Versiya 2.3 (V2.3) Yenilikləri</h2>
+            <h2 style="color:var(--accent); margin-top:0;">🚀 Saytın Yenilikləri (V2.3)</h2>
             
-            <h4 style="color:var(--gold); margin:15px 0 5px 0;">⚡ Əsas Yeniliklər:</h4>
+            <h4 style="color:var(--gold); margin:15px 0 5px 0;">⭐ Əsas Yeniliklər (V2.0-dan Bəri)</h4>
             <ul style="text-align:left; font-size:13.5px; line-height:1.6; color:var(--text-sub); margin-top:5px;">
-                <li><strong>"Sil" Düyməsinin Məntiqi:</strong> Faylı Sil düyməsinə basdıqda həm Admin, həm də Tələbə profilindən (bütün bazadan) silinir.</li>
-                <li><strong>Tam Anlaşıqlı Cihaz Logları:</strong> Mozilla yazıları ləğv edildi, daxil olan istifadəçilərin dəqiq cihaz modeli (iPhone/Android/Kompüter) göstərilir.</li>
-                <li><strong>Giriş Ekranında Enter Klavişi:</strong> Şifrəni yazıb Enter-ə basdıqda avtomatik giriş olunması təmin edildi.</li>
-                <li><strong>Həftəni Tamamla:</strong> Tələbə profilindəki bütün yoxlanılmış fayl siyahısı yalnız həftə tamamlanarkən sıfırlanır.</li>
-                <li><strong>Yenilənmiş Dizayn:</strong> Neon kartlar, canlı animasiyalar və interfeys gətirildi.</li>
+                <li><strong>🎉 Həftənin Qalibləri Şousu:</strong> Xüsusi bayram musiqisi, konfetti saçılması və animasiyalarla qaliblərin təqdim olunması.</li>
+                <li><strong>😭 Həftənin Outsiderləri Bölməsi:</strong> Kədərli musiqi fonunda həftənin sonuncu yerlərinin əyləncəli təqdimatı.</li>
+                <li><strong>📈 Tələbə Reytinq Diaqramı:</strong> Şəxsi profil pəncərəsində həftəlik inkişafın canlı vizual qrafiki.</li>
+                <li><strong>📁 Çoxlu Fayl Göndərmə:</strong> Ev tapşırıqlarını tək-tək yox, birdəfəyə çoxlu sayda fayl seçərək göndərmək imkanı.</li>
+            </ul>
+
+            <h4 style="color:var(--accent); margin:15px 0 5px 0;">⚡ Əlavələr</h4>
+            <ul style="text-align:left; font-size:13.5px; line-height:1.6; color:var(--text-sub); margin-top:5px;">
+                <li><strong>👤 Tələbə Profil Pəncərəsi:</strong> Tələbənin adına tıkladıqda kurs, yaş, doğum yeri və reytinq xallarının detallı göstərilməsi.</li>
+                <li><strong>🌐 4 Dildə İnterfeys Və Canlı Saat:</strong> Azərbaycan, Rus, Türk və İngilis dilləri arasında anında keçid.</li>
             </ul>
 
             <button class="btn" style="width:100%; margin-top:15px;" onclick="closeVersionModal()">Aydındır!</button>
@@ -909,7 +912,7 @@ Yat, qal dala, laylay!</span>
         const FOUNDERS = ["Süleymanzadə Aqşin", "Məmmədli Turan", "Gülverdiyev Kənan"];
         const DEFAULT_AVATAR_URL = "https://svgsilh.com/svg/1300331.svg";
 
-        // ✏️ Ağazadə Poladxan adı dəqiq olaraq böyük hərfə çevrildi
+        // ✏️ Ad Siyahısında Tam Düzgün Baş Hərf
         const BIRTH_DATES = {
             "Abbasov Rüfət": "2008-01-23", "Abıyeva Aysun": "2008-03-01", "Ağazadə Poladxan": "2008-06-07",
             "Allahverdiyev Amid": "2008-05-31", "Bəbirov Soltan": "2008-02-22", "Cavadzadə Mirzə": "2008-03-29",
@@ -990,7 +993,6 @@ Yat, qal dala, laylay!</span>
         }
         setInterval(updateLiveDateTime, 1000);
 
-        // 📱 Cihazı Tam Dəqiq Və Anlaşıqlı Müəyyən Edən Təkmilləşdirilmiş Funksiya
         function parseUserAgentClean(ua) {
             let os = "Kompüter (PC)";
             if (/iphone/i.test(ua)) os = "📱 iPhone";
@@ -1022,10 +1024,30 @@ Yat, qal dala, laylay!</span>
             if (photoUrl && document.getElementById('mainGroupImg')) document.getElementById('mainGroupImg').src = photoUrl;
         });
 
+        // 🛠️ Baza Yenilənməsi Və Düzəlişlərin Tetiklənməsi
         database.ref('students_data').on('value', (snapshot) => {
             const data = snapshot.val();
             if (data && data.cpp && data.cpp.length === 25) {
                 globalData = data;
+                
+                // 🔄 Poladxan Adının Bazasında Məcburi Düzəliş
+                let needUpdate = false;
+                ['cpp', 'python', 'common'].forEach(tab => {
+                    if (globalData[tab]) {
+                        globalData[tab].forEach(s => {
+                            if (s.ad && s.ad.toLowerCase().includes("poladxan")) {
+                                if (s.ad !== "Ağazadə Poladxan") {
+                                    s.ad = "Ağazadə Poladxan";
+                                    needUpdate = true;
+                                }
+                            }
+                        });
+                    }
+                });
+                if (needUpdate) {
+                    database.ref('students_data').set(globalData);
+                }
+
             } else {
                 globalData = {
                     cpp: STUDENT_NAMES.map((name, i) => ({ id: i+1, ad: name, foto: DEFAULT_AVATAR_URL, yer: DEFAULT_BIRTH_PLACES[name] || "Bakı şəhəri", fm: 0, stepping: 0, e_olimp: 0, codesources: 0, hackerrank: 0, kecmis_reyting: 0 })),
@@ -1185,7 +1207,7 @@ Yat, qal dala, laylay!</span>
             const birthInfo = calculateAgeAndFormattedBirth(BIRTH_DATES[student.ad]);
             document.getElementById('pKurs').innerText = calculateAutoCourse();
             document.getElementById('pYos').innerText = `${birthInfo.age} Yaş (${birthInfo.birthFormatted})`;
-            document.getElementById('pYer').innerText = DEFAULT_BIRTH_PLACES[student.ad] || student.yer || "Bakı şəhəri";
+            document.getElementById('pYer').innerText = student.yer || DEFAULT_BIRTH_PLACES[student.ad] || "Bakı şəhəri";
             document.getElementById('pCari').innerText = computed.cari_reyting + " pt";
 
             const artimSign = computed.artim >= 0 ? `+${computed.artim}` : computed.artim;
@@ -1392,20 +1414,8 @@ Yat, qal dala, laylay!</span>
             });
         }
 
-        function speakPoem() {
-            if ('speechSynthesis' in window) {
-                window.speechSynthesis.cancel();
-                const poemText = "Tərpənmə, amandır, bala, qəflətdən ayılma! Açma gözünü, xabi-cəhalətdən ayılma! Laylay, bala, laylay! Yat, qal dala, laylay!";
-                const utterance = new SpeechSynthesisUtterance(poemText);
-                utterance.lang = 'az-AZ';
-                utterance.rate = 0.85;
-                window.speechSynthesis.speak(utterance);
-            }
-        }
-
         function closeOutsidersModal() {
             if (activeAudioObject) activeAudioObject.pause();
-            if ('speechSynthesis' in window) window.speechSynthesis.cancel();
             document.getElementById('outsidersModal').style.display = 'none';
         }
 
@@ -1424,7 +1434,6 @@ Yat, qal dala, laylay!</span>
             });
         }
 
-        // ⌨️ Enter Klavişi İlə Keçid Və Avtomatik Giriş
         function handleLoginInputKey(e, type) {
             if (e.key === 'Enter') {
                 if (type === 'user') {
@@ -1591,7 +1600,6 @@ Yat, qal dala, laylay!</span>
                     });
                 });
 
-                // 📱 Tam Dəqiq Və Aydın Log Formatı
                 database.ref('device_logs').limitToLast(20).on('value', (snap) => {
                     const logs = snap.val();
                     const logDiv = document.getElementById('adminLogsList');
@@ -1618,7 +1626,6 @@ Yat, qal dala, laylay!</span>
             }
         }
 
-        // 🗑️ "Sil" düyməsinə basıldıqda HƏM Admin, HƏM Tələbə profilindən (BÜTÜN BAZADAN) silinir
         function deleteStudentTaskCompletely(taskKey) {
             if (confirm("Bu faylı tamamilə hər yerdən (həm admin, həm tələbə profilindən) silmək istədiyinizdən əminsiniz?")) {
                 database.ref('student_tasks/' + taskKey).remove().then(() => {
@@ -1627,7 +1634,6 @@ Yat, qal dala, laylay!</span>
             }
         }
 
-        // ✅ Bal verildikdə Admin panelindən silinir, tələbədə "✅ Düzgün" olaraq qalır
         function gradeTaskAndAddPoints(taskKey, studentName) {
             const isRestricted = (activeAdminUser === "rəho" || activeAdminUser === "reho");
             if (isRestricted && RESTRICTED_STUDENTS_FOR_REHO.includes(studentName)) {
@@ -1652,7 +1658,6 @@ Yat, qal dala, laylay!</span>
             });
         }
 
-        // ❌ Səhv edildikdə Admin panelindən silinir, tələbədə "❌ Səhv" olaraq qalır
         function gradeTask(taskKey, status) {
             database.ref('student_tasks/' + taskKey).update({ status, checkedByAdmin: true }).then(() => {
                 alert("Fayl səhv olaraq qeyd edildi və admin panelindən təmizləndi! ❌");
@@ -1710,7 +1715,7 @@ Yat, qal dala, laylay!</span>
                 count++;
                 let fieldsHTML = '';
                 const isCustomPhoto = student.foto && student.foto !== DEFAULT_AVATAR_URL;
-                const defaultYer = DEFAULT_BIRTH_PLACES[student.ad] || student.yer || "Bakı şəhəri";
+                const defaultYer = student.yer || DEFAULT_BIRTH_PLACES[student.ad] || "Bakı şəhəri";
 
                 if (currentTab === 'common') {
                     fieldsHTML = `
@@ -1795,6 +1800,7 @@ Yat, qal dala, laylay!</span>
             reader.readAsDataURL(file);
         }
 
+        // 🛠️ Admin Panelində Doğulduğu Yeri (Şəhəri) Bütün Tablarda Düzgün Yeniləmə
         function saveAdminChanges() {
             const isRestricted = (activeAdminUser === "rəho" || activeAdminUser === "reho");
 
@@ -1805,7 +1811,7 @@ Yat, qal dala, laylay!</span>
 
                 const yerInp = document.getElementById(`inp_${index}_yer`);
                 if (yerInp && !isRestricted) {
-                    const yerVal = yerInp.value;
+                    const yerVal = yerInp.value.trim();
                     ['cpp', 'python', 'common'].forEach(tab => {
                         if (globalData[tab]) {
                             const st = globalData[tab].find(s => s.ad === targetName);
@@ -1827,6 +1833,7 @@ Yat, qal dala, laylay!</span>
 
             database.ref('students_data').set(globalData).then(() => {
                 alert(`Dəyişikliklər canlı yayımlandı! 🚀`);
+                renderTable();
                 closeAdminPanel();
             });
         }
