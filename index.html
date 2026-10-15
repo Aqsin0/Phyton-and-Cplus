@@ -292,9 +292,7 @@
             transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             z-index: 2200;
         }
-        .winner-card-v3:hover {
-            transform: translateY(-10px) scale(1.03);
-        }
+        .winner-card-v3:hover { transform: translateY(-10px) scale(1.03); }
 
         .winner-card-v3.rank-1 {
             grid-column: span 2;
@@ -476,16 +474,54 @@
         .admin-nav-btn { background: var(--card-inner); border: 1px solid var(--border); color: var(--text-sub); padding: 10px 18px; border-radius: 10px; cursor: pointer; font-weight: 600; transition: 0.2s; }
         .admin-nav-btn.active { background: var(--accent); color: #000; border-color: var(--accent); box-shadow: 0 0 10px var(--accent-glow); }
 
-        .admin-student-card { background: var(--card-inner); border-radius: 14px; padding: 16px; margin-bottom: 12px; border: 1px solid var(--border); }
+        .admin-student-card {
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            border-radius: 16px;
+            padding: 18px;
+            margin-bottom: 15px;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: transform 0.2s, border-color 0.2s;
+        }
+        .admin-student-card:hover { border-color: var(--accent); }
+        .admin-card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            padding-bottom: 10px;
+        }
+        .admin-card-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: 2px solid var(--accent);
+            object-fit: cover;
+        }
+
         .grid-inputs { display: grid; grid-template-columns: repeat(auto-fit, minmax(105px, 1fr)); gap: 10px; margin-top: 10px; }
         .grid-inputs label { font-size: 11px; color: var(--text-sub); display: block; margin-bottom: 4px; }
         .grid-inputs input { width: 100%; padding: 8px; border-radius: 8px; border: 1px solid var(--border); background: #070a12; color: white; font-weight: bold; box-sizing: border-box; }
         .grid-inputs input:focus { border-color: var(--accent); outline: none; }
+        .grid-inputs input:disabled { opacity: 0.4; cursor: not-allowed; }
 
         .file-upload-btn { background: #334155; color: #f8fafc; padding: 7px 14px; border-radius: 8px; font-size: 12px; cursor: pointer; display: inline-block; }
         .form-group { margin-bottom: 15px; }
         .form-group label { display: block; margin-bottom: 5px; color: var(--text-sub); }
         .form-group input, .form-group textarea { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border); background: var(--card-inner); color: white; box-sizing: border-box; }
+
+        .log-card {
+            background: #0b1329;
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--accent);
+            padding: 12px 16px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            font-size: 12px;
+        }
+        .log-card-header { display: flex; justify-content: space-between; color: var(--gold); font-weight: bold; margin-bottom: 6px; }
+        .log-card-body { color: var(--text-sub); line-height: 1.5; }
     </style>
 </head>
 <body>
@@ -495,7 +531,7 @@
         <div id="mainDashboard">
             <div class="header">
                 <div class="header-title-box">
-                    <h1>🏆 <span data-i18n="title">TT-08 Proqram Saytı</span> <span class="version-badge" onclick="showVersionModal()">V2.0</span></h1>
+                    <h1>🏆 <span data-i18n="title">TT-08 Proqram Saytı</span> <span class="version-badge" onclick="showVersionModal()">V2.3</span></h1>
                     <div class="live-datetime" id="liveDateTime">📅 Yüklənir...</div>
                 </div>
 
@@ -689,7 +725,7 @@
             <!-- SUB TAB 2: Fayl Yoxlama Səhifəsi -->
             <div id="adminTabFiles" style="display:none;">
                 <div class="info-box">
-                    <h3 style="margin:0 0 15px 0; color:var(--accent);">📁 Tələbələrin Yüklədiyi Bütün Fayllar</h3>
+                    <h3 style="margin:0 0 15px 0; color:var(--accent);">📁 Yoxlanılacaq Fayllar</h3>
                     <div id="adminTaskFilesList">Yüklənir...</div>
                 </div>
             </div>
@@ -721,7 +757,7 @@
                     <div id="adminFeedbackList">Mesaj yoxdur.</div>
                 </div>
                 <div class="info-box">
-                    <h3 style="margin:0 0 15px 0; color:var(--accent);">📲 Giriş Edilən Cihazlar & Loglar</h3>
+                    <h3 style="margin:0 0 15px 0; color:var(--accent);">📲 Cihaz & Giriş Logları</h3>
                     <div id="adminLogsList">Log yoxdur.</div>
                 </div>
             </div>
@@ -732,8 +768,14 @@
     <div id="loginModal" class="modal">
         <div class="modal-content" style="max-width:400px;">
             <h2 style="margin-top:0; color:var(--accent);">🔑 Admin Girişi</h2>
-            <div class="form-group"><label>İstifadəçi Adı:</label><input type="text" id="loginUser" placeholder="İstifadəçi adı..."></div>
-            <div class="form-group"><label>Şifrə:</label><input type="password" id="loginPass" placeholder="Şifrə..."></div>
+            <div class="form-group">
+                <label>İstifadəçi Adı:</label>
+                <input type="text" id="loginUser" placeholder="İstifadəçi adı..." onkeydown="handleLoginInputKey(event, 'user')">
+            </div>
+            <div class="form-group">
+                <label>Şifrə:</label>
+                <input type="password" id="loginPass" placeholder="Şifrə..." onkeydown="handleLoginInputKey(event, 'pass')">
+            </div>
             <button class="btn btn-admin" style="width:100%;" onclick="handleLogin()">Giriş Et</button>
             <button class="btn btn-dark" style="width:100%; margin-top:10px;" onclick="closeLoginModal()">Ləğv Et</button>
         </div>
@@ -808,26 +850,19 @@ Yat, qal dala, laylay!</span>
         </div>
     </div>
 
-    <!-- V2.0 Yeniliklər Modal -->
+    <!-- V2.3 Yeniliklər Modal -->
     <div id="versionModal" class="modal">
         <div class="modal-content" style="max-width:550px;">
-            <h2 style="color:var(--accent); margin-top:0;">🚀 Versiya 2.0 (V2.0) Xülasəsi</h2>
+            <h2 style="color:var(--accent); margin-top:0;">🚀 Versiya 2.3 (V2.3) Yenilikləri</h2>
             
-            <h4 style="color:var(--gold); margin:15px 0 5px 0;">📌 V2.0 İlkin Dəyişiklikləri:</h4>
+            <h4 style="color:var(--gold); margin:15px 0 5px 0;">⚡ Əsas Dəyişikliklər:</h4>
             <ul style="text-align:left; font-size:13.5px; line-height:1.6; color:var(--text-sub); margin-top:5px;">
-                <li>"Şagird" ➔ "Tələbə", "Çempion" ➔ "Lider", "Yüksəliş gözlənilənlər" ➔ "Outsiderlər" edildi.</li>
-                <li>Cədvəldə platformaların rəsmi linkləri əlavə olundu.</li>
-                <li>Çoxdilli sistem (AZ, RU, TR, EN) inteqrasiya edildi.</li>
-                <li>Outsiderlər üçün Səsli Oxunan Xüsusi Şeir bölməsi əlavə edildi.</li>
-            </ul>
-
-            <h4 style="color:var(--accent); margin:15px 0 5px 0;">⚡ Əsas Təkmilləşdirmələr:</h4>
-            <ul style="text-align:left; font-size:13.5px; line-height:1.6; color:var(--text-sub); margin-top:5px;">
-                <li>Fotoların uzanması və yassılaşması aradan qaldırıldı (HQ Mərkəzi Kəsim).</li>
-                <li>Çoxlu fayl yükləmə və təmizlənmə sistemi.</li>
-                <li>Admin Təsdiqli Fayl Silmə Və Canlı Axtarışlı Admin Dashboard.</li>
-                <li>Möhtəşəm Abartılı Qaliblər Ekranı Və Uçan Canlı Emojilər.</li>
-                <li>Düzəldilmiş Musiqi Yükləmə Bölməsi.</li>
+                <li>Ağazadə Poladxanın adı tam olaraq <strong>"Ağazadə Poladxan"</strong> kimi düzəldildi.</li>
+                <li>Admin faylı yoxladıqdan (bal verdikdən/səhv etdikdən) sonra fayl <strong>yalnız Admin panelindən silinir</strong>.</li>
+                <li>Tələbələrin öz profilindəki fayllar və yoxlama statusları (✅ Düzgün/❌ Səhv) saxlanılır.</li>
+                <li>Tələbə profilindəki fayllar yalnız <strong>"Həftəni Tamamla"</strong> düyməsinə basıldıqda təmizlənir.</li>
+                <li>Giriş ekranında `Enter` klavişi ilə keçid və giriş funksiyaları bərpa olundu.</li>
+                <li>Cihaz və giriş logları vizual kartlar şəklində tam anlaşıqlı və oxunaqlı vəziyyətə gətirildi.</li>
             </ul>
 
             <button class="btn" style="width:100%; margin-top:15px;" onclick="closeVersionModal()">Aydındır!</button>
@@ -849,7 +884,6 @@ Yat, qal dala, laylay!</span>
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
-        // 🔑 Admin Məlumat Bazası (Bütün Hərflərə Həssaslıq Aradan Qaldırıldı)
         const ADMIN_USERS = { 
             "jagermaster": "Aqsin2008", 
             "chivas": "Turan2008", 
@@ -858,7 +892,15 @@ Yat, qal dala, laylay!</span>
             "reho": "poni1813"
         };
 
-        const BLOCKED_STUDENTS_FOR_REHO = ["Əlizadə Rəhimə", "Abıyeva Aysun", "Təhməzova Leyla"];
+        const RESTRICTED_STUDENTS_FOR_REHO = [
+            "Əlizadə Rəhimə", 
+            "Abıyeva Aysun", 
+            "Təhməzova Leyla",
+            "Süleymanzadə Aqşin",
+            "Məmmədli Turan",
+            "Gülverdiyev Kənan"
+        ];
+
         const FOUNDERS = ["Süleymanzadə Aqşin", "Məmmədli Turan", "Gülverdiyev Kənan"];
         const DEFAULT_AVATAR_URL = "https://svgsilh.com/svg/1300331.svg";
 
@@ -942,11 +984,24 @@ Yat, qal dala, laylay!</span>
         }
         setInterval(updateLiveDateTime, 1000);
 
+        function parseUserAgent(ua) {
+            let os = "Kompüter (Desktop)";
+            if (/android/i.test(ua)) os = "Android Mobil";
+            else if (/iphone|ipad|ipod/i.test(ua)) os = "iOS (iPhone/iPad)";
+            
+            let browser = "Brauzer";
+            if (/chrome/i.test(ua)) browser = "Chrome";
+            else if (/safari/i.test(ua)) browser = "Safari";
+            else if (/firefox/i.test(ua)) browser = "Firefox";
+
+            return `${os} • ${browser}`;
+        }
+
         function logDeviceInfo(action, detail="") {
             try {
-                const deviceInfo = `${navigator.userAgent} | Screen: ${window.innerWidth}x${window.innerHeight}`;
+                const deviceInfo = parseUserAgent(navigator.userAgent);
                 database.ref('device_logs').push({
-                    action, detail, deviceInfo, timestamp: new Date().toISOString()
+                    action, detail, deviceInfo, timestamp: new Date().toLocaleString('az-AZ')
                 });
             } catch(e){}
         }
@@ -1106,7 +1161,7 @@ Yat, qal dala, laylay!</span>
             const student = (globalData[currentTab]||[]).find(s => s.ad === studentName);
             if (!student) return;
             activeProfileStudent = student.ad;
-            logDeviceInfo("Profile View", activeProfileStudent);
+            logDeviceInfo("Profilə Baxış", activeProfileStudent);
 
             const computed = calculateTotals(student);
 
@@ -1134,21 +1189,27 @@ Yat, qal dala, laylay!</span>
             window.scrollTo(0, 0);
         }
 
+        // 📁 Tələbə Profilində Fayllar Və Statuslar SAQLANILIR
         function loadStudentUploadedTasksList() {
             database.ref('student_tasks').orderByChild('studentName').equalTo(activeProfileStudent).on('value', (snap) => {
                 const tasks = snap.val();
                 const statusDiv = document.getElementById('studentTaskStatus');
                 if(!statusDiv) return;
                 statusDiv.innerHTML = '';
+                
+                let count = 0;
                 if (tasks) {
                     Object.keys(tasks).forEach(key => {
                         const t = tasks[key];
+                        count++;
                         let stText = t.status === 'correct' ? `✅ Düzgün (+${t.addedPoints || 0} Bal)` : (t.status === 'wrong' ? '❌ Səhv' : '⏳ Yoxlanılır');
                         let stColor = t.status === 'correct' ? 'var(--positive)' : (t.status === 'wrong' ? 'var(--negative)' : 'var(--gold)');
-                        statusDiv.innerHTML += `<div style="margin-top:4px;"><span style="color:${stColor}">📄 ${t.fileName} - (${stText})</span></div>`;
+                        statusDiv.innerHTML += `<div style="margin-top:6px;"><span style="color:${stColor}">📄 ${t.fileName} - (${stText})</span></div>`;
                     });
-                } else {
-                    statusDiv.innerHTML = 'Hələ heç bir fayl yüklənməyib.';
+                }
+                
+                if (count === 0) {
+                    statusDiv.innerHTML = 'Hələ heç bir yüklənmiş fayl yoxdur.';
                 }
             });
         }
@@ -1158,7 +1219,7 @@ Yat, qal dala, laylay!</span>
             const files = fileInput.files;
             if (!files || files.length === 0) { alert("Zəhmət olmasa ən azı bir fayl seçin!"); return; }
 
-            logDeviceInfo("Task Upload", `${activeProfileStudent} - ${files.length} fayl`);
+            logDeviceInfo("Fayl Yükləmə", `${activeProfileStudent} - ${files.length} fayl`);
 
             let uploadedCount = 0;
             Array.from(files).forEach(file => {
@@ -1353,6 +1414,17 @@ Yat, qal dala, laylay!</span>
             });
         }
 
+        // ⌨️ Enter Klavişi ilə Giriş
+        function handleLoginInputKey(e, type) {
+            if (e.key === 'Enter') {
+                if (type === 'user') {
+                    document.getElementById('loginPass').focus();
+                } else if (type === 'pass') {
+                    handleLogin();
+                }
+            }
+        }
+
         function checkSavedLoginOrModal() {
             const savedUser = localStorage.getItem('admin_user');
             const savedPass = localStorage.getItem('admin_pass');
@@ -1364,7 +1436,6 @@ Yat, qal dala, laylay!</span>
             }
         }
 
-        // 🛡️ Bütün Hərf Böyüklüyü Və Boşluq Problemlərini Həll Edən Düzgün Giriş Yoxlanışı
         function checkCredentials(inputUser, inputPass) {
             const cleanUser = inputUser.trim().toLowerCase();
             const cleanPass = inputPass.trim();
@@ -1379,6 +1450,7 @@ Yat, qal dala, laylay!</span>
                 activeAdminUser = user.trim().toLowerCase();
                 localStorage.setItem('admin_user', activeAdminUser);
                 localStorage.setItem('admin_pass', pass.trim());
+                logDeviceInfo("Admin Girişi", `Admin: ${activeAdminUser}`);
                 closeLoginModal();
                 openAdminPanel();
             } else {
@@ -1438,6 +1510,7 @@ Yat, qal dala, laylay!</span>
             });
         }
 
+        // 📁 Admin Panelində Yalnız YOXLAMALI Olunan (Aktiv) Fayllar Görünür
         function loadAdminTasksAndLogs() {
             const isRestricted = (activeAdminUser === "rəho" || activeAdminUser === "reho");
 
@@ -1458,7 +1531,9 @@ Yat, qal dala, laylay!</span>
                 keys.forEach(key => {
                     const t = tasks[key];
 
-                    if (isRestricted && BLOCKED_STUDENTS_FOR_REHO.includes(t.studentName)) return;
+                    // Əgər admin tərəfindən artıq yoxlanılıbsa admin panelindən silinir
+                    if (t.checkedByAdmin) return;
+                    if (isRestricted && RESTRICTED_STUDENTS_FOR_REHO.includes(t.studentName)) return;
 
                     validCount++;
                     listDiv.innerHTML += `
@@ -1466,16 +1541,19 @@ Yat, qal dala, laylay!</span>
                             <div>
                                 <strong style="color:var(--accent);">${t.studentName}</strong>: 
                                 <a href="${t.fileData}" download="${t.fileName}" style="color:#fff; font-weight:bold;">📄 ${t.fileName}</a>
-                                <span style="font-size:11px; margin-left:8px; color:var(--text-sub);">(${t.status === 'correct' ? '✅ Düzgün' : (t.status === 'wrong' ? '❌ Səhv' : '⏳ Yoxlanılır')})</span>
                             </div>
                             <div style="display:flex; gap:6px;">
                                 <button class="btn" style="background:var(--positive); font-size:11px; padding:6px 10px;" onclick="gradeTaskAndAddPoints('${key}', '${t.studentName}')">✅ Düzgün (Bal Ver)</button>
                                 <button class="btn" style="background:var(--negative); font-size:11px; padding:6px 10px;" onclick="gradeTask('${key}', 'wrong')">❌ Səhv</button>
-                                <button class="btn" style="background:#64748b; font-size:11px; padding:6px 10px;" onclick="deleteStudentTask('${key}')">🗑️ Sil</button>
+                                <button class="btn" style="background:#64748b; font-size:11px; padding:6px 10px;" onclick="deleteStudentTask('${key}')">🗑️ Sil (Admin Panelindən)</button>
                             </div>
                         </div>
                     `;
                 });
+
+                if (validCount === 0) {
+                    listDiv.innerHTML = 'Yoxlanılacaq yeni fayl yoxdur. Bütün fayllar yoxlanılıb! ✅';
+                }
 
                 document.getElementById('statFilesCount').innerText = validCount;
             });
@@ -1505,7 +1583,7 @@ Yat, qal dala, laylay!</span>
                     });
                 });
 
-                database.ref('device_logs').limitToLast(15).on('value', (snap) => {
+                database.ref('device_logs').limitToLast(20).on('value', (snap) => {
                     const logs = snap.val();
                     const logDiv = document.getElementById('adminLogsList');
                     if(!logDiv) return;
@@ -1515,8 +1593,15 @@ Yat, qal dala, laylay!</span>
                     Object.keys(logs).reverse().forEach(k => {
                         const l = logs[k];
                         logDiv.innerHTML += `
-                            <div style="background:#070a12; padding:8px 12px; border-radius:8px; margin-bottom:6px; font-size:11px; color:var(--text-sub);">
-                                <strong style="color:var(--accent);">${l.action}</strong> (${l.detail}): ${l.deviceInfo}
+                            <div class="log-card">
+                                <div class="log-card-header">
+                                    <span>⚡ ${l.action}</span>
+                                    <span style="font-size:11px; color:var(--text-sub);">${l.timestamp || ''}</span>
+                                </div>
+                                <div class="log-card-body">
+                                    📌 <strong>Ətraflı:</strong> ${l.detail || 'Qeyd yoxdur'}<br>
+                                    📱 <strong>Cihaz & Brauzer:</strong> ${l.deviceInfo}
+                                </div>
                             </div>
                         `;
                     });
@@ -1524,17 +1609,17 @@ Yat, qal dala, laylay!</span>
             }
         }
 
+        // 🗑️ Admin faylı sildikdə YALNIZ Admin panelindən silinir
         function deleteStudentTask(taskKey) {
-            if (confirm("Bu faylı silmək istədiyinizdən əminsiniz?")) {
-                database.ref('student_tasks/' + taskKey).remove().then(() => {
-                    alert("Fayl uğurla silindi! 🗑️");
-                });
-            }
+            database.ref('student_tasks/' + taskKey).update({ checkedByAdmin: true }).then(() => {
+                alert("Fayl Admin panelindən silindi! 🗑️");
+            });
         }
 
+        // ✅ Bal verdikdə fayl Admin panelindən silinir, tələbədə "✅ Düzgün" olaraq qalır
         function gradeTaskAndAddPoints(taskKey, studentName) {
             const isRestricted = (activeAdminUser === "rəho" || activeAdminUser === "reho");
-            if (isRestricted && BLOCKED_STUDENTS_FOR_REHO.includes(studentName)) {
+            if (isRestricted && RESTRICTED_STUDENTS_FOR_REHO.includes(studentName)) {
                 alert("⚠️ Sizin bu tələbənin balını dəyişməyə icazəniz yoxdur!");
                 return;
             }
@@ -1549,16 +1634,17 @@ Yat, qal dala, laylay!</span>
                 if (st) st.fm = Number(st.fm || 0) + addedPoints;
             }
 
-            database.ref('student_tasks/' + taskKey).update({ status: 'correct', addedPoints }).then(() => {
+            database.ref('student_tasks/' + taskKey).update({ status: 'correct', addedPoints, checkedByAdmin: true }).then(() => {
                 database.ref('students_data').set(globalData).then(() => {
-                    alert(`${studentName} üçün +${addedPoints} bal əlavə olundu! 🚀`);
+                    alert(`${studentName} üçün +${addedPoints} bal əlavə olundu və fayl yoxlanıldı! 🚀`);
                 });
             });
         }
 
+        // ❌ Səhv etdikdə fayl Admin panelindən silinir, tələbədə "❌ Səhv" olaraq qalır
         function gradeTask(taskKey, status) {
-            database.ref('student_tasks/' + taskKey).update({ status }).then(() => {
-                alert("Fayl statusu yeniləndi! ❌");
+            database.ref('student_tasks/' + taskKey).update({ status, checkedByAdmin: true }).then(() => {
+                alert("Fayl səhv olaraq qeyd edildi və admin panelindən təmizləndi! ❌");
             });
         }
 
@@ -1608,7 +1694,7 @@ Yat, qal dala, laylay!</span>
 
             let count = 0;
             rawList.forEach((student, index) => {
-                if (isRestricted && BLOCKED_STUDENTS_FOR_REHO.includes(student.ad)) return;
+                const isStudentRestricted = isRestricted && RESTRICTED_STUDENTS_FOR_REHO.includes(student.ad);
 
                 count++;
                 let fieldsHTML = '';
@@ -1631,18 +1717,24 @@ Yat, qal dala, laylay!</span>
                             <label class="file-upload-btn">📁 Fayl Seç <input type="file" accept="image/*" style="display:none;" onchange="handleHQImageUpload(event, ${index})"></label>
                             ${isCustomPhoto ? '<span style="font-size:11px; color:var(--positive); margin-left:8px;">✓ HQ Aktivdir</span>' : ''}
                         </div>
-                        <div><label>FM</label><input type="number" id="inp_${index}_fm" value="${student.fm || 0}"></div>
-                        <div><label>Stepping</label><input type="number" id="inp_${index}_stepping" value="${student.stepping || 0}"></div>
-                        <div><label>e-Olimp</label><input type="number" id="inp_${index}_e_olimp" value="${student.e_olimp || 0}"></div>
-                        <div><label>CodeSources</label><input type="number" id="inp_${index}_codesources" value="${student.codesources || 0}"></div>
-                        <div><label>HackerRank</label><input type="number" id="inp_${index}_hackerrank" value="${student.hackerrank || 0}"></div>
+                        <div><label>FM</label><input type="number" id="inp_${index}_fm" value="${student.fm || 0}" ${isStudentRestricted ? 'disabled' : ''}></div>
+                        <div><label>Stepping</label><input type="number" id="inp_${index}_stepping" value="${student.stepping || 0}" ${isStudentRestricted ? 'disabled' : ''}></div>
+                        <div><label>e-Olimp</label><input type="number" id="inp_${index}_e_olimp" value="${student.e_olimp || 0}" ${isStudentRestricted ? 'disabled' : ''}></div>
+                        <div><label>CodeSources</label><input type="number" id="inp_${index}_codesources" value="${student.codesources || 0}" ${isStudentRestricted ? 'disabled' : ''}></div>
+                        <div><label>HackerRank</label><input type="number" id="inp_${index}_hackerrank" value="${student.hackerrank || 0}" ${isStudentRestricted ? 'disabled' : ''}></div>
                         <div style="${isRestricted ? 'display:none;' : ''}"><label>Doğulduğu Yer</label><input type="text" id="inp_${index}_yer" value="${defaultYer}"></div>
                     `;
                 }
 
+                const restrictedBadge = isStudentRestricted ? `<span style="color:var(--negative); font-size:11px; margin-left:auto;">🔒 Redaktə Bloklanıb</span>` : '';
+
                 adminBody.innerHTML += `
                     <div class="admin-student-card">
-                        <strong>${student.ad}</strong>
+                        <div class="admin-card-header">
+                            <img src="${student.foto || DEFAULT_AVATAR_URL}" class="admin-card-avatar">
+                            <strong style="font-size:16px; color:#fff;">${student.ad}</strong>
+                            ${restrictedBadge}
+                        </div>
                         <div class="grid-inputs">${fieldsHTML}</div>
                     </div>
                 `;
@@ -1698,7 +1790,7 @@ Yat, qal dala, laylay!</span>
             (globalData[currentTab] || []).forEach((student, index) => {
                 const targetName = student.ad;
 
-                if (isRestricted && BLOCKED_STUDENTS_FOR_REHO.includes(targetName)) return;
+                if (isRestricted && RESTRICTED_STUDENTS_FOR_REHO.includes(targetName)) return;
 
                 const yerInp = document.getElementById(`inp_${index}_yer`);
                 if (yerInp && !isRestricted) {
@@ -1728,10 +1820,11 @@ Yat, qal dala, laylay!</span>
             });
         }
 
+        // 🗓️ Həftəni Tamamladıqda BÜTÜN tələbə faylları tələbələrin profilindən təmizlənir
         function finishWeekAndTransferRating() {
             const isRestricted = (activeAdminUser === "rəho" || activeAdminUser === "reho");
             if (isRestricted) return;
-            if (!confirm("Cari həftəni tamamlayıb indikı Cari Reytinqləri Keçmiş Reytinq kimi yadda saxlamaq istədiyinizdən əminsiniz?")) return;
+            if (!confirm("Cari həftəni tamamlayıb indikı Cari Reytinqləri Keçmiş Reytinq kimi yadda saxlamaq istədiyinizdən əminsiniz? (Bütün tələbə faylları təmizlənəcək)")) return;
 
             ['cpp', 'python', 'common'].forEach(tab => {
                 if (globalData[tab]) {
@@ -1742,8 +1835,11 @@ Yat, qal dala, laylay!</span>
                 }
             });
 
+            // Tələbə fayllarını bazadan təmizləyirik
+            database.ref('student_tasks').remove();
+
             database.ref('students_data').set(globalData).then(() => {
-                alert("Cari reytinqlər 'Keçmiş Reytinq'ə çevrildi! 🗓️");
+                alert("Cari reytinqlər 'Keçmiş Reytinq'ə çevrildi və tələbələrin faylları sıfırlandı! 🗓️");
                 renderTable();
                 if (activeAdminUser) renderAdminBody();
             });
