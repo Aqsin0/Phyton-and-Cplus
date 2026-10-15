@@ -181,7 +181,6 @@
         .btn-gold { background-color: var(--gold); color: #000; font-weight: 800; box-shadow: 0 0 15px var(--gold-glow); }
         .btn-dark { background-color: #334155; }
 
-        /* 🎨 ARXA FONU FƏRQLİ KARTLAR */
         .highlights-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -277,10 +276,10 @@
         .badge-negative { color: var(--negative); font-weight: bold; background: rgba(239, 68, 68, 0.12); padding: 4px 10px; border-radius: 8px; border: 1px solid rgba(239, 68, 68, 0.2); }
         .rank-col { font-weight: 800; color: var(--accent); width: 38px; font-size: 16px; }
 
-        /* 👑🔥 MÖHTƏŞƏM SEÇİLƏN QALİB KARTLARI */
+        /* 👑🔥 KOMPÜTERDƏ VƏ TELEFONDA MÖHTƏŞƏM SEÇİLƏN QALİB KARTLARI */
         .winners-container-v3 {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
             gap: 16px;
             margin: 25px 0;
         }
@@ -294,6 +293,7 @@
             position: relative;
             cursor: pointer;
             transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 2200;
         }
         .winner-card-v3:hover {
             transform: translateY(-10px) scale(1.03);
@@ -309,17 +309,15 @@
         }
         @keyframes goldGlowPulse {
             0% { box-shadow: 0 0 25px rgba(245, 158, 11, 0.4); }
-            100% { box-shadow: 0 0 50px rgba(245, 158, 11, 0.8); }
+            100% { box-shadow: 0 0 50px rgba(245, 158, 11, 0.9); }
         }
 
-        /* 🥈 2-ci YER GÜMÜŞ KART */
         .winner-card-v3.rank-2 {
             border-color: var(--silver);
             background: linear-gradient(145deg, rgba(203, 213, 225, 0.25), rgba(15, 23, 42, 0.95));
             box-shadow: 0 0 25px var(--silver-glow);
         }
 
-        /* 🥉 3-cü YER BÜRÜNC KART */
         .winner-card-v3.rank-3 {
             border-color: var(--bronze);
             background: linear-gradient(145deg, rgba(217, 119, 6, 0.25), rgba(15, 23, 42, 0.95));
@@ -344,14 +342,15 @@
 
         .crown-icon {
             position: absolute;
-            top: -16px;
+            top: -22px;
             left: 50%;
             transform: translateX(-50%);
-            font-size: 26px;
+            font-size: 32px;
             filter: drop-shadow(0 0 10px var(--gold));
             animation: crownBounce 1.5s infinite alternate;
+            z-index: 2300;
         }
-        @keyframes crownBounce { 0% { transform: translateX(-50%) translateY(0); } 100% { transform: translateX(-50%) translateY(-6px); } }
+        @keyframes crownBounce { 0% { transform: translateX(-50%) translateY(0); } 100% { transform: translateX(-50%) translateY(-8px); } }
 
         .rank-badge-title {
             font-size: 11px;
@@ -371,27 +370,27 @@
         .flying-emoji {
             position: fixed;
             bottom: -50px;
-            font-size: 35px;
-            z-index: 3500;
+            font-size: 38px;
+            z-index: 99999 !important;
             pointer-events: none;
-            animation: flyUp 3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+            animation: flyUp 3.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
         }
         @keyframes flyUp {
             0% { transform: translateY(0) scale(0.5) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(-110vh) scale(1.4) rotate(360deg); opacity: 0; }
+            100% { transform: translateY(-115vh) scale(1.4) rotate(360deg); opacity: 0; }
         }
 
         /* 👎 Dislike Rain Animasiyası */
         .dislike-particle {
             position: fixed;
             top: -50px;
-            font-size: 32px;
-            z-index: 3500;
+            font-size: 34px;
+            z-index: 99999 !important;
             pointer-events: none;
             animation: fallAnimation 3.5s linear forwards;
         }
         @keyframes fallAnimation {
-            to { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+            to { transform: translateY(115vh) rotate(360deg); opacity: 0; }
         }
 
         /* 📄 Tam Səhifə Profil Və Admin Ekranı */
@@ -422,7 +421,7 @@
             background: rgba(3, 7, 18, 0.95);
             backdrop-filter: blur(12px);
             justify-content: center; align-items: center;
-            z-index: 2000;
+            z-index: 20000;
         }
 
         .modal-content {
@@ -435,7 +434,7 @@
             overflow-y: auto;
             border: 1px solid var(--border);
             position: relative;
-            z-index: 2100;
+            z-index: 21000;
         }
 
         .poem-box {
@@ -530,12 +529,12 @@
                 <img id="mainGroupImg" src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1200&q=80" alt="Group Photo">
             </div>
 
-            <!-- 👑 Jüri Bölməsi -->
+            <!-- 👑 Jüri Bölməsi (Avtomatik Avatarlı) -->
             <div class="jury-section">
                 <div class="jury-title">👑 <span data-i18n="juryTitle">Münsiflər Heyəti (Jürilər)</span></div>
                 <div class="jury-cards-grid">
                     <div class="jury-card">
-                        <div class="jury-card-avatar"><img src="https://svgsilh.com/svg/1300331.svg" alt="Aqşin"></div>
+                        <div class="jury-card-avatar"><img id="juryImgAqsin" src="https://svgsilh.com/svg/1300331.svg" alt="Aqşin"></div>
                         <div class="jury-card-info">
                             <strong>Süleymanzadə Aqşin</strong>
                             <span>⭐ Baş Jüri / Təsisçi</span>
@@ -543,7 +542,7 @@
                         </div>
                     </div>
                     <div class="jury-card">
-                        <div class="jury-card-avatar"><img src="https://svgsilh.com/svg/1300331.svg" alt="Kənan"></div>
+                        <div class="jury-card-avatar"><img id="juryImgKenan" src="https://svgsilh.com/svg/1300331.svg" alt="Kənan"></div>
                         <div class="jury-card-info">
                             <strong>Gülverdiyev Kənan</strong>
                             <span>⭐ Jüri / Təsisçi</span>
@@ -551,7 +550,7 @@
                         </div>
                     </div>
                     <div class="jury-card">
-                        <div class="jury-card-avatar"><img src="https://svgsilh.com/svg/1300331.svg" alt="Turan"></div>
+                        <div class="jury-card-avatar"><img id="juryImgTuran" src="https://svgsilh.com/svg/1300331.svg" alt="Turan"></div>
                         <div class="jury-card-info">
                             <strong>Məmmədli Turan</strong>
                             <span>⭐ Jüri / Təsisçi</span>
@@ -656,7 +655,7 @@
             <div class="admin-dashboard-header">
                 <div>
                     <h2 id="welcomeAdmin" style="margin:0; color:var(--accent); font-size:24px;">⚙️ Admin Control Panel</h2>
-                    <span style="font-size:12px; color:var(--text-sub);">TT-08 İdarəetmə Və Yoxlama Mərkəzi</span>
+                    <span style="font-size:12px; color:var(--text-sub);" id="adminRoleSubtext">TT-08 İdarəetmə Və Yoxlama Mərkəzi</span>
                 </div>
                 <div style="display:flex; gap:10px;">
                     <button class="btn" style="background:#e11d48;" onclick="logoutAdmin()">🔒 Çıxış Et</button>
@@ -667,30 +666,30 @@
             <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:15px; margin-bottom:20px;">
                 <div class="admin-stat-card">
                     <div class="admin-stat-icon">👥</div>
-                    <div><span style="font-size:11px; color:var(--text-sub);">ÜMUMİ TƏLƏBƏ</span><strong style="font-size:18px; display:block; color:#fff;" id="statStudentsCount">25</strong></div>
+                    <div><span style="font-size:11px; color:var(--text-sub);">ƏLÇATAN TƏLƏBƏ</span><strong style="font-size:18px; display:block; color:#fff;" id="statStudentsCount">25</strong></div>
                 </div>
                 <div class="admin-stat-card">
                     <div class="admin-stat-icon" style="background:rgba(245, 158, 11, 0.15); color:var(--gold);">📁</div>
                     <div><span style="font-size:11px; color:var(--text-sub);">YÜKLƏNƏN FAYLLAR</span><strong style="font-size:18px; display:block; color:#fff;" id="statFilesCount">0</strong></div>
                 </div>
-                <div class="admin-stat-card">
+                <div class="admin-stat-card" id="cardStatFeedback">
                     <div class="admin-stat-icon" style="background:rgba(34, 197, 94, 0.15); color:var(--positive);">💬</div>
                     <div><span style="font-size:11px; color:var(--text-sub);">FEEDBACK-LƏR</span><strong style="font-size:18px; display:block; color:#fff;" id="statFeedbacksCount">0</strong></div>
                 </div>
             </div>
 
-            <div class="admin-nav">
+            <div class="admin-nav" id="adminNavTabs">
                 <button class="admin-nav-btn active" onclick="switchAdminSubTab('students')">👥 Tələbələrin Reytinqi</button>
                 <button class="admin-nav-btn" onclick="switchAdminSubTab('files')">📁 Faylları Yoxlama Səhifəsi</button>
-                <button class="admin-nav-btn" onclick="switchAdminSubTab('audio')">🎵 Musiqi & Media İdarəsi</button>
-                <button class="admin-nav-btn" onclick="switchAdminSubTab('logs')">📲 Cihaz & Giriş Logları</button>
+                <button class="admin-nav-btn restricted-hide" onclick="switchAdminSubTab('audio')">🎵 Musiqi & Media İdarəsi</button>
+                <button class="admin-nav-btn restricted-hide" onclick="switchAdminSubTab('logs')">📲 Cihaz & Giriş Logları</button>
             </div>
 
             <!-- SUB TAB 1: Reytinq Redaktəsi Və Axtarış -->
             <div id="adminTabStudents">
                 <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:15px;">
                     <input type="text" id="adminSearchInput" onkeyup="filterAdminStudents()" placeholder="🔍 Tələbə adı ilə axtar..." style="background:var(--card-inner); border:1px solid var(--border); color:#fff; padding:10px 14px; border-radius:10px; width:280px; font-size:13px;">
-                    <button class="btn btn-gold" onclick="finishWeekAndTransferRating()">🗓️ Həftəni Tamamla</button>
+                    <button class="btn btn-gold restricted-hide" onclick="finishWeekAndTransferRating()">🗓️ Həftəni Tamamla</button>
                 </div>
                 <div id="adminBody"></div>
                 <button class="btn" style="width:100%; margin-top:20px; padding:14px; font-size:16px;" onclick="saveAdminChanges()">💾 Yadda Saxla və Yayımla</button>
@@ -704,7 +703,7 @@
                 </div>
             </div>
 
-            <!-- SUB TAB 3: Musiqi Və Qrup Şəkli (HƏLL OLUNMUŞ ACCEPT) -->
+            <!-- SUB TAB 3: Musiqi Və Qrup Şəkli -->
             <div id="adminTabAudio" style="display:none;">
                 <div class="info-box" style="margin-bottom:15px;">
                     <h3 style="margin:0 0 10px 0; color:var(--gold);">🎉 Qaliblər Musiqisini Yüklə</h3>
@@ -859,7 +858,17 @@ Yat, qal dala, laylay!</span>
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
-        const ADMIN_USERS = { "Jagermaster": "Aqsin2008", "Chivas": "Turan2008", "Jameson": "Kenan2007" };
+        // 🔑 Adminlər Və Yeni Məhdudiyyətli Admin
+        const ADMIN_USERS = { 
+            "Jagermaster": "Aqsin2008", 
+            "Chivas": "Turan2008", 
+            "Jameson": "Kenan2007",
+            "rəho": "poni1813"
+        };
+
+        // 🚫 rəho üçün Qorunan / Gizli Tələbələr
+        const BLOCKED_STUDENTS_FOR_REHO = ["Əlizadə Rəhimə", "Abıyeva Aysun", "Təhməzova Leyla"];
+
         const FOUNDERS = ["Süleymanzadə Aqşin", "Məmmədli Turan", "Gülverdiyev Kənan"];
         const DEFAULT_AVATAR_URL = "https://svgsilh.com/svg/1300331.svg";
 
@@ -968,9 +977,22 @@ Yat, qal dala, laylay!</span>
                 };
                 database.ref('students_data').set(globalData);
             }
+            updateJuryAvatars();
             renderTable();
             if (activeAdminUser) renderAdminBody();
         });
+
+        /* 👑 Jüri Avatarlarını Avtomatik Düzəlt */
+        function updateJuryAvatars() {
+            if (!globalData.cpp) return;
+            const aqsin = globalData.cpp.find(s => s.ad === "Süleymanzadə Aqşin");
+            const kenan = globalData.cpp.find(s => s.ad === "Gülverdiyev Kənan");
+            const turan = globalData.cpp.find(s => s.ad === "Məmmədli Turan");
+
+            if (aqsin && aqsin.foto) document.getElementById('juryImgAqsin').src = aqsin.foto;
+            if (kenan && kenan.foto) document.getElementById('juryImgKenan').src = kenan.foto;
+            if (turan && turan.foto) document.getElementById('juryImgTuran').src = turan.foto;
+        }
 
         function switchTab(tabName) {
             currentTab = tabName;
@@ -1190,10 +1212,10 @@ Yat, qal dala, laylay!</span>
             });
         }
 
-        /* 🎉 ABARTILI QALİBLƏR TƏNTƏNƏSİ */
+        /* 🎉 DÜZƏLDİLMİŞ KOMPÜTER VƏ MOBİL DƏSTƏKLİ QALİBLƏR TƏNTƏNƏSİ */
         function triggerCardConfetti(event) {
             event.stopPropagation();
-            confetti({ particleCount: 60, spread: 80, origin: { y: 0.6 } });
+            confetti({ particleCount: 70, spread: 85, origin: { y: 0.6 }, zIndex: 99999 });
         }
 
         function showWinnersCelebration() {
@@ -1224,6 +1246,7 @@ Yat, qal dala, laylay!</span>
 
             document.getElementById('winnersModal').style.display = 'flex';
 
+            // Kompüterdə və Mobildə Tam Üstə Görünən Konfetti
             const duration = 5 * 1000;
             const animationEnd = Date.now() + duration;
 
@@ -1232,10 +1255,11 @@ Yat, qal dala, laylay!</span>
                 if (timeLeft <= 0) return clearInterval(interval);
 
                 confetti({
-                    particleCount: 50,
+                    particleCount: 55,
                     startVelocity: 35,
                     spread: 360,
-                    ticks: 70,
+                    ticks: 75,
+                    zIndex: 99999,
                     origin: { x: Math.random(), y: Math.random() - 0.2 }
                 });
             }, 200);
@@ -1247,7 +1271,7 @@ Yat, qal dala, laylay!</span>
                     emoji.innerText = ['👑', '🏆', '🌹', '💐', '⭐', '🎉', '🥇'][Math.floor(Math.random() * 7)];
                     emoji.style.left = Math.random() * 92 + 'vw';
                     document.body.appendChild(emoji);
-                    setTimeout(() => emoji.remove(), 3000);
+                    setTimeout(() => emoji.remove(), 3200);
                 }, i * 100);
             }
 
@@ -1340,7 +1364,7 @@ Yat, qal dala, laylay!</span>
             });
         }
 
-        /* ⚙️ PEŞƏKAR ADMİN DASHBOARD */
+        /* ⚙️ ADMİN DASHBOARD VƏ YENİ LIMITLİ ADMİN MƏNTİQİ */
         function checkSavedLoginOrModal() {
             const savedUser = localStorage.getItem('admin_user');
             const savedPass = localStorage.getItem('admin_pass');
@@ -1374,7 +1398,17 @@ Yat, qal dala, laylay!</span>
         }
 
         function openAdminPanel() {
+            const isRestricted = activeAdminUser === "rəho";
+            
             document.getElementById('welcomeAdmin').innerText = `⚙️ Admin: ${activeAdminUser} (${currentTab.toUpperCase()})`;
+            document.getElementById('adminRoleSubtext').innerText = isRestricted ? "⚠️ Limitli Yoxlama Və Bal Admin Paneli" : "TT-08 Tam İdarəetmə Və Yoxlama Mərkəzi";
+
+            // Məhdudiyyətli Admin Üçün Bölmələri Gizlə/Göstər
+            document.querySelectorAll('.restricted-hide').forEach(el => {
+                el.style.display = isRestricted ? 'none' : 'inline-block';
+            });
+            document.getElementById('cardStatFeedback').style.display = isRestricted ? 'none' : 'flex';
+
             renderAdminBody();
             loadAdminTasksAndLogs();
             document.getElementById('mainDashboard').style.display = 'none';
@@ -1387,6 +1421,8 @@ Yat, qal dala, laylay!</span>
         }
 
         function switchAdminSubTab(tabName) {
+            if (activeAdminUser === "rəho" && (tabName === 'audio' || tabName === 'logs')) return;
+
             document.querySelectorAll('.admin-nav-btn').forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
 
@@ -1406,6 +1442,8 @@ Yat, qal dala, laylay!</span>
         }
 
         function loadAdminTasksAndLogs() {
+            const isRestricted = activeAdminUser === "rəho";
+
             database.ref('student_tasks').on('value', (snap) => {
                 const tasks = snap.val();
                 const listDiv = document.getElementById('adminTaskFilesList');
@@ -1417,10 +1455,15 @@ Yat, qal dala, laylay!</span>
                 }
 
                 const keys = Object.keys(tasks);
-                document.getElementById('statFilesCount').innerText = keys.length;
+                let validCount = 0;
 
                 keys.forEach(key => {
                     const t = tasks[key];
+
+                    // 🚫 rəho istifadəçisindən həmin 3 tələbənin fayllarını gizlədirik
+                    if (isRestricted && BLOCKED_STUDENTS_FOR_REHO.includes(t.studentName)) return;
+
+                    validCount++;
                     listDiv.innerHTML += `
                         <div style="background:#070a12; padding:12px; border-radius:10px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; border:1px solid var(--border);">
                             <div>
@@ -1436,46 +1479,50 @@ Yat, qal dala, laylay!</span>
                         </div>
                     `;
                 });
+
+                document.getElementById('statFilesCount').innerText = validCount;
             });
 
-            database.ref('feedbacks').on('value', (snap) => {
-                const feedbacks = snap.val();
-                const fbDiv = document.getElementById('adminFeedbackList');
-                fbDiv.innerHTML = '';
-                if (!feedbacks) { 
-                    fbDiv.innerHTML = 'Mesaj yoxdur.';
-                    document.getElementById('statFeedbacksCount').innerText = "0";
-                    return; 
-                }
+            if (!isRestricted) {
+                database.ref('feedbacks').on('value', (snap) => {
+                    const feedbacks = snap.val();
+                    const fbDiv = document.getElementById('adminFeedbackList');
+                    fbDiv.innerHTML = '';
+                    if (!feedbacks) { 
+                        fbDiv.innerHTML = 'Mesaj yoxdur.';
+                        document.getElementById('statFeedbacksCount').innerText = "0";
+                        return; 
+                    }
 
-                const keys = Object.keys(feedbacks);
-                document.getElementById('statFeedbacksCount').innerText = keys.length;
+                    const keys = Object.keys(feedbacks);
+                    document.getElementById('statFeedbacksCount').innerText = keys.length;
 
-                keys.forEach(k => {
-                    const f = feedbacks[k];
-                    fbDiv.innerHTML += `
-                        <div style="background:#070a12; padding:10px; border-radius:8px; margin-bottom:8px; font-size:13px;">
-                            <strong style="color:var(--gold);">${f.name}:</strong> ${f.msg}
-                        </div>
-                    `;
+                    keys.forEach(k => {
+                        const f = feedbacks[k];
+                        fbDiv.innerHTML += `
+                            <div style="background:#070a12; padding:10px; border-radius:8px; margin-bottom:8px; font-size:13px;">
+                                <strong style="color:var(--gold);">${f.name}:</strong> ${f.msg}
+                            </div>
+                        `;
+                    });
                 });
-            });
 
-            database.ref('device_logs').limitToLast(15).on('value', (snap) => {
-                const logs = snap.val();
-                const logDiv = document.getElementById('adminLogsList');
-                logDiv.innerHTML = '';
-                if (!logs) { logDiv.innerHTML = 'Log yoxdur.'; return; }
+                database.ref('device_logs').limitToLast(15).on('value', (snap) => {
+                    const logs = snap.val();
+                    const logDiv = document.getElementById('adminLogsList');
+                    logDiv.innerHTML = '';
+                    if (!logs) { logDiv.innerHTML = 'Log yoxdur.'; return; }
 
-                Object.keys(logs).reverse().forEach(k => {
-                    const l = logs[k];
-                    logDiv.innerHTML += `
-                        <div style="background:#070a12; padding:8px 12px; border-radius:8px; margin-bottom:6px; font-size:11px; color:var(--text-sub);">
-                            <strong style="color:var(--accent);">${l.action}</strong> (${l.detail}): ${l.deviceInfo}
-                        </div>
-                    `;
+                    Object.keys(logs).reverse().forEach(k => {
+                        const l = logs[k];
+                        logDiv.innerHTML += `
+                            <div style="background:#070a12; padding:8px 12px; border-radius:8px; margin-bottom:6px; font-size:11px; color:var(--text-sub);">
+                                <strong style="color:var(--accent);">${l.action}</strong> (${l.detail}): ${l.deviceInfo}
+                            </div>
+                        `;
+                    });
                 });
-            });
+            }
         }
 
         function deleteStudentTask(taskKey) {
@@ -1487,6 +1534,11 @@ Yat, qal dala, laylay!</span>
         }
 
         function gradeTaskAndAddPoints(taskKey, studentName) {
+            if (activeAdminUser === "rəho" && BLOCKED_STUDENTS_FOR_REHO.includes(studentName)) {
+                alert("⚠️ Sizin bu tələbənin balını dəyişməyə icazəniz yoxdur!");
+                return;
+            }
+
             const pts = prompt(`${studentName} üçün neçə bal əlavə etmək istəyirsiniz?`, "10");
             if (pts === null) return;
             const addedPoints = Number(pts) || 0;
@@ -1511,6 +1563,7 @@ Yat, qal dala, laylay!</span>
         }
 
         function uploadWinnerAudio() {
+            if (activeAdminUser === "rəho") return;
             const file = document.getElementById('winnerAudioFile').files[0];
             if (!file) return alert("Zəhmət olmasa bir səs faylı seçin!");
             const reader = new FileReader();
@@ -1521,6 +1574,7 @@ Yat, qal dala, laylay!</span>
         }
 
         function uploadOutsiderAudio() {
+            if (activeAdminUser === "rəho") return;
             const file = document.getElementById('outsiderAudioFile').files[0];
             if (!file) return alert("Zəhmət olmasa bir səs faylı seçin!");
             const reader = new FileReader();
@@ -1531,6 +1585,7 @@ Yat, qal dala, laylay!</span>
         }
 
         function handleGroupPhotoUpload(event) {
+            if (activeAdminUser === "rəho") return;
             const file = event.target.files[0];
             if (!file) return;
 
@@ -1542,27 +1597,33 @@ Yat, qal dala, laylay!</span>
         }
 
         function renderAdminBody() {
+            const isRestricted = activeAdminUser === "rəho";
             const rawList = globalData[currentTab] || [];
             const adminBody = document.getElementById('adminBody');
             adminBody.innerHTML = '';
 
+            let count = 0;
             rawList.forEach((student, index) => {
+                // 🚫 rəho üçün xüsusi 3 tələbəni siyahıdan tamamən gizlədirik
+                if (isRestricted && BLOCKED_STUDENTS_FOR_REHO.includes(student.ad)) return;
+
+                count++;
                 let fieldsHTML = '';
                 const isCustomPhoto = student.foto && student.foto !== DEFAULT_AVATAR_URL;
                 const defaultYer = DEFAULT_BIRTH_PLACES[student.ad] || student.yer || "Bakı şəhəri";
 
                 if (currentTab === 'common') {
                     fieldsHTML = `
-                        <div style="grid-column: span 2;">
+                        <div style="grid-column: span 2; ${isRestricted ? 'display:none;' : ''}">
                             <label>📷 Foto Yüklə (HQ Kəsim)</label>
                             <label class="file-upload-btn">📁 Fayl Seç <input type="file" accept="image/*" style="display:none;" onchange="handleHQImageUpload(event, ${index})"></label>
                             ${isCustomPhoto ? '<span style="font-size:11px; color:var(--positive); margin-left:8px;">✓ HQ Aktivdir</span>' : ''}
                         </div>
-                        <div><label>Doğulduğu Yer</label><input type="text" id="inp_${index}_yer" value="${defaultYer}"></div>
+                        <div><label>Doğulduğu Yer</label><input type="text" id="inp_${index}_yer" value="${defaultYer}" ${isRestricted ? 'disabled' : ''}></div>
                     `;
                 } else {
                     fieldsHTML = `
-                        <div style="grid-column: span 2;">
+                        <div style="grid-column: span 2; ${isRestricted ? 'display:none;' : ''}">
                             <label>📷 Foto Yüklə (HQ Kəsim)</label>
                             <label class="file-upload-btn">📁 Fayl Seç <input type="file" accept="image/*" style="display:none;" onchange="handleHQImageUpload(event, ${index})"></label>
                             ${isCustomPhoto ? '<span style="font-size:11px; color:var(--positive); margin-left:8px;">✓ HQ Aktivdir</span>' : ''}
@@ -1572,20 +1633,23 @@ Yat, qal dala, laylay!</span>
                         <div><label>e-Olimp</label><input type="number" id="inp_${index}_e_olimp" value="${student.e_olimp || 0}"></div>
                         <div><label>CodeSources</label><input type="number" id="inp_${index}_codesources" value="${student.codesources || 0}"></div>
                         <div><label>HackerRank</label><input type="number" id="inp_${index}_hackerrank" value="${student.hackerrank || 0}"></div>
-                        <div><label>Doğulduğu Yer</label><input type="text" id="inp_${index}_yer" value="${defaultYer}"></div>
+                        <div style="${isRestricted ? 'display:none;' : ''}"><label>Doğulduğu Yer</label><input type="text" id="inp_${index}_yer" value="${defaultYer}"></div>
                     `;
                 }
 
                 adminBody.innerHTML += `
                     <div class="admin-student-card">
-                        <strong>${index+1}. ${student.ad}</strong>
+                        <strong>${student.ad}</strong>
                         <div class="grid-inputs">${fieldsHTML}</div>
                     </div>
                 `;
             });
+
+            document.getElementById('statStudentsCount').innerText = count;
         }
 
         function handleHQImageUpload(event, index) {
+            if (activeAdminUser === "rəho") return;
             const file = event.target.files[0];
             if (!file) return;
 
@@ -1615,64 +1679,4 @@ Yat, qal dala, laylay!</span>
                         }
                     });
 
-                    alert(`${targetName} üçün şəkil kəsildi və HQ yükləndi! ✅`);
-                    renderAdminBody();
-                };
-                img.src = e.target.result;
-            };
-            reader.readAsDataURL(file);
-        }
-
-        function saveAdminChanges() {
-            (globalData[currentTab] || []).forEach((student, index) => {
-                const targetName = student.ad;
-                const yerVal = document.getElementById(`inp_${index}_yer`) ? document.getElementById(`inp_${index}_yer`).value : student.yer;
-
-                ['cpp', 'python', 'common'].forEach(tab => {
-                    if (globalData[tab]) {
-                        const st = globalData[tab].find(s => s.ad === targetName);
-                        if (st) st.yer = yerVal;
-                    }
-                });
-
-                if (currentTab !== 'common') {
-                    if (document.getElementById(`inp_${index}_fm`)) {
-                        student.fm = Number(document.getElementById(`inp_${index}_fm`).value);
-                        student.stepping = Number(document.getElementById(`inp_${index}_stepping`).value);
-                        student.e_olimp = Number(document.getElementById(`inp_${index}_e_olimp`).value);
-                        student.codesources = Number(document.getElementById(`inp_${index}_codesources`).value);
-                        student.hackerrank = Number(document.getElementById(`inp_${index}_hackerrank`).value);
-                    }
-                }
-            });
-
-            database.ref('students_data').set(globalData).then(() => {
-                alert(`Dəyişikliklər canlı yayımlandı! 🚀`);
-                closeAdminPanel();
-            });
-        }
-
-        function finishWeekAndTransferRating() {
-            if (!confirm("Cari həftəni tamamlayıb indikı Cari Reytinqləri Keçmiş Reytinq kimi yadda saxlamaq istədiyinizdən əminsiniz?")) return;
-
-            ['cpp', 'python', 'common'].forEach(tab => {
-                if (globalData[tab]) {
-                    globalData[tab].forEach((student) => {
-                        const computed = calculateTotals(student);
-                        student.kecmis_reyting = computed.cari_reyting;
-                    });
-                }
-            });
-
-            database.ref('students_data').set(globalData).then(() => {
-                alert("Cari reytinqlər 'Keçmiş Reytinq'ə çevrildi! 🗓️");
-                renderTable();
-                if (activeAdminUser) renderAdminBody();
-            });
-        }
-
-        function showVersionModal() { document.getElementById('versionModal').style.display = 'flex'; }
-        function closeVersionModal() { document.getElementById('versionModal').style.display = 'none'; }
-    </script>
-</body>
-</html>
+                    alert
