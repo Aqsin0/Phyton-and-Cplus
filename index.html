@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TT-08 Proqram Saytı</title>
-    <!-- Firebase SDK (Compat) -->
+    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     <!-- Chart.js & Canvas Confetti -->
@@ -30,8 +30,6 @@
             --bronze-glow: rgba(217, 119, 6, 0.4);
         }
 
-        * { box-sizing: border-box; }
-
         body {
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             background-color: var(--bg-color);
@@ -39,7 +37,6 @@
             margin: 0;
             padding: 14px;
             background-image: radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.08), transparent 70%);
-            min-height: 100vh;
         }
 
         .container { max-width: 1250px; margin: 0 auto; }
@@ -51,7 +48,7 @@
             flex-wrap: wrap;
             gap: 15px;
             margin-bottom: 20px;
-            background: rgba(15, 23, 42, 0.85);
+            background: rgba(15, 23, 42, 0.8);
             backdrop-filter: blur(12px);
             padding: 18px 22px;
             border-radius: 18px;
@@ -59,15 +56,7 @@
             box-shadow: 0 10px 30px -5px rgba(0,0,0,0.6);
         }
 
-        .header-title-box h1 {
-            margin: 0;
-            font-size: 22px;
-            color: var(--accent);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
+        .header-title-box h1 { margin: 0; font-size: 22px; color: var(--accent); display: flex; align-items: center; gap: 10px; }
         .version-badge {
             background: linear-gradient(135deg, #38bdf8, #2563eb);
             color: #fff;
@@ -77,45 +66,11 @@
             cursor: pointer;
             box-shadow: 0 0 12px var(--accent-glow);
             font-weight: 800;
-            transition: transform 0.2s;
-        }
-        .version-badge:hover { transform: scale(1.05); }
-
-        .live-date-time {
-            font-size: 12.5px;
-            color: var(--text-sub);
-            font-weight: 600;
-            background: rgba(255,255,255,0.03);
-            padding: 6px 12px;
-            border-radius: 8px;
-            border: 1px solid var(--border);
         }
 
-        .lang-picker {
-            display: flex;
-            gap: 5px;
-            background: var(--card-inner);
-            padding: 4px;
-            border-radius: 10px;
-            border: 1px solid var(--border);
-        }
-
-        .lang-btn {
-            background: none;
-            border: none;
-            color: var(--text-sub);
-            padding: 5px 10px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 12px;
-            transition: all 0.2s;
-        }
-
-        .lang-btn.active {
-            background: var(--accent);
-            color: #000;
-        }
+        .lang-picker { display: flex; gap: 5px; background: var(--card-inner); padding: 4px; border-radius: 10px; border: 1px solid var(--border); }
+        .lang-btn { background: none; border: none; color: var(--text-sub); padding: 5px 10px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 12px; }
+        .lang-btn.active { background: var(--accent); color: #000; }
 
         .group-photo-card {
             background: linear-gradient(135deg, rgba(56, 189, 248, 0.1), rgba(15, 23, 42, 0.95));
@@ -125,32 +80,27 @@
             margin-bottom: 20px;
             text-align: center;
             box-shadow: 0 0 25px var(--accent-glow);
-            position: relative;
-            overflow: hidden;
         }
-
         .group-photo-card img {
             max-width: 100%;
             height: auto;
-            max-height: 420px;
+            max-height: 400px;
             border-radius: 14px;
             border: 2px solid var(--border);
             object-fit: cover;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
         }
 
-        .tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 15px; }
+        .tabs { display: flex; gap: 8px; flex-wrap: wrap; }
 
         .tab-btn {
             background-color: var(--card-inner);
             color: var(--text-sub);
             border: 1px solid var(--border);
-            padding: 10px 20px;
+            padding: 9px 18px;
             border-radius: 10px;
             cursor: pointer;
             font-weight: 600;
             transition: all 0.25s ease;
-            font-size: 14px;
         }
 
         .tab-btn.active, .tab-btn:hover {
@@ -170,7 +120,7 @@
         }
 
         .jury-title {
-            margin: 0 0 14px 0;
+            margin: 0 0 12px 0;
             font-size: 16px;
             color: var(--gold);
             display: flex;
@@ -181,12 +131,12 @@
 
         .jury-cards-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 12px;
         }
 
         .jury-card {
-            background: rgba(30, 41, 59, 0.85);
+            background: rgba(30, 41, 59, 0.8);
             border: 1px solid rgba(245, 158, 11, 0.35);
             border-radius: 14px;
             padding: 12px 16px;
@@ -194,18 +144,13 @@
             align-items: center;
             gap: 12px;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: transform 0.2s;
         }
-
-        .jury-card:hover {
-            transform: translateY(-3px);
-            border-color: var(--gold);
-            box-shadow: 0 5px 15px rgba(245, 158, 11, 0.2);
-        }
+        .jury-card:hover { transform: translateY(-3px); }
 
         .jury-card-avatar {
-            width: 48px;
-            height: 48px;
+            width: 46px;
+            height: 46px;
             border-radius: 50%;
             border: 2px solid var(--gold);
             overflow: hidden;
@@ -234,21 +179,15 @@
             cursor: pointer;
             font-weight: 600;
             transition: all 0.2s ease;
-            font-size: 13.5px;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
         }
-
         .btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
         .btn-admin { background-color: #e11d48; }
         .btn-gold { background-color: var(--gold); color: #000; font-weight: 800; box-shadow: 0 0 15px var(--gold-glow); }
         .btn-dark { background-color: #334155; }
-        .btn-danger { background-color: #ef4444; }
 
         .highlights-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
             gap: 15px;
             margin-bottom: 25px;
         }
@@ -290,13 +229,11 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 9px 0;
+            padding: 8px 0;
             border-bottom: 1px solid rgba(255,255,255,0.04);
             font-size: 13.5px;
             cursor: pointer;
-            transition: background 0.15s;
         }
-        .mini-list li:hover { background: rgba(255,255,255,0.03); padding-left: 5px; }
 
         .table-wrapper {
             background-color: var(--card-bg);
@@ -318,6 +255,8 @@
             text-transform: uppercase;
             border-bottom: 2px solid var(--border);
         }
+        th a { color: var(--accent); text-decoration: none; }
+        th a:hover { text-decoration: underline; }
 
         tr { transition: background 0.2s ease; }
         tr:hover { background-color: rgba(56, 189, 248, 0.08) !important; }
@@ -339,6 +278,117 @@
         .badge-positive { color: var(--positive); font-weight: bold; background: rgba(34, 197, 94, 0.12); padding: 4px 10px; border-radius: 8px; border: 1px solid rgba(34, 197, 94, 0.2); }
         .badge-negative { color: var(--negative); font-weight: bold; background: rgba(239, 68, 68, 0.12); padding: 4px 10px; border-radius: 8px; border: 1px solid rgba(239, 68, 68, 0.2); }
         .rank-col { font-weight: 800; color: var(--accent); width: 38px; font-size: 16px; }
+
+        .winners-container-v3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 16px;
+            margin: 25px 0;
+        }
+
+        .winner-card-v3 {
+            background: #1e293b;
+            border-radius: 20px;
+            padding: 18px 12px;
+            text-align: center;
+            border: 2px solid var(--border);
+            position: relative;
+            cursor: pointer;
+            transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 2200;
+        }
+        .winner-card-v3:hover { transform: translateY(-10px) scale(1.03); }
+
+        .winner-card-v3.rank-1 {
+            grid-column: span 2;
+            border-color: #f59e0b;
+            background: linear-gradient(145deg, rgba(245, 158, 11, 0.35), rgba(15, 23, 42, 0.98));
+            box-shadow: 0 0 45px var(--gold-glow);
+            animation: goldGlowPulse 2.5s infinite alternate;
+        }
+        @keyframes goldGlowPulse {
+            0% { box-shadow: 0 0 25px rgba(245, 158, 11, 0.4); }
+            100% { box-shadow: 0 0 50px rgba(245, 158, 11, 0.9); }
+        }
+
+        .winner-card-v3.rank-2 {
+            border-color: var(--silver);
+            background: linear-gradient(145deg, rgba(203, 213, 225, 0.25), rgba(15, 23, 42, 0.95));
+            box-shadow: 0 0 25px var(--silver-glow);
+        }
+
+        .winner-card-v3.rank-3 {
+            border-color: var(--bronze);
+            background: linear-gradient(145deg, rgba(217, 119, 6, 0.25), rgba(15, 23, 42, 0.95));
+            box-shadow: 0 0 25px var(--bronze-glow);
+        }
+
+        .winner-avatar-box {
+            position: relative;
+            width: 85px;
+            height: 85px;
+            margin: 0 auto 12px auto;
+        }
+        .rank-1 .winner-avatar-box { width: 110px; height: 110px; }
+
+        .winner-avatar-box img {
+            width: 100%; height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #fff;
+            box-shadow: 0 0 15px rgba(0,0,0,0.6);
+        }
+
+        .crown-icon {
+            position: absolute;
+            top: -22px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 32px;
+            filter: drop-shadow(0 0 10px var(--gold));
+            animation: crownBounce 1.5s infinite alternate;
+            z-index: 2300;
+        }
+        @keyframes crownBounce { 0% { transform: translateX(-50%) translateY(0); } 100% { transform: translateX(-50%) translateY(-8px); } }
+
+        .rank-badge-title {
+            font-size: 11px;
+            font-weight: 800;
+            padding: 3px 10px;
+            border-radius: 12px;
+            display: inline-block;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .rank-1 .rank-badge-title { background: #f59e0b; color: #000; font-size: 12.5px; }
+        .rank-2 .rank-badge-title { background: var(--silver); color: #000; }
+        .rank-3 .rank-badge-title { background: var(--bronze); color: #fff; }
+
+        .flying-emoji {
+            position: fixed;
+            bottom: -50px;
+            font-size: 38px;
+            z-index: 99999 !important;
+            pointer-events: none;
+            animation: flyUp 3.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+        }
+        @keyframes flyUp {
+            0% { transform: translateY(0) scale(0.5) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-115vh) scale(1.4) rotate(360deg); opacity: 0; }
+        }
+
+        .dislike-particle {
+            position: fixed;
+            top: -50px;
+            font-size: 34px;
+            z-index: 99999 !important;
+            pointer-events: none;
+            animation: fallAnimation 3.5s linear forwards;
+        }
+        @keyframes fallAnimation {
+            to { transform: translateY(115vh) rotate(360deg); opacity: 0; }
+        }
 
         #profilePage, #fullAdminPage {
             display: none;
@@ -382,1028 +432,1519 @@
             z-index: 21000;
         }
 
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; margin-bottom: 6px; font-size: 13px; color: var(--text-sub); }
-        .form-group input, .form-group textarea, .form-group select {
-            width: 100%;
+        .poem-box {
+            background: rgba(239, 68, 68, 0.05);
+            border: 1px solid var(--negative);
+            border-radius: 14px;
+            padding: 20px;
+            color: #fca5a5;
+            font-family: 'Georgia', serif;
+            font-size: 15px;
+            line-height: 1.8;
+            text-align: center;
+            white-space: pre-line;
+            margin-top: 15px;
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.2);
+        }
+        .poem-refrain { color: #f59e0b; font-weight: bold; }
+
+        .admin-dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            padding: 20px;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            margin-bottom: 20px;
+        }
+
+        .admin-stat-card {
             background: var(--card-inner);
             border: 1px solid var(--border);
-            color: #fff;
-            padding: 10px 14px;
-            border-radius: 8px;
-            font-size: 14px;
-        }
-
-        .winners-container-v3 {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            padding: 15px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
             gap: 15px;
-            margin: 20px 0;
+        }
+        .admin-stat-icon {
+            width: 45px; height: 45px; border-radius: 10px; background: rgba(56, 189, 248, 0.15); color: var(--accent);
+            display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: bold;
         }
 
-        .winner-card-v3 {
-            background: var(--card-inner);
+        .admin-nav { display: flex; gap: 8px; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 12px; flex-wrap: wrap; }
+        .admin-nav-btn { background: var(--card-inner); border: 1px solid var(--border); color: var(--text-sub); padding: 10px 18px; border-radius: 10px; cursor: pointer; font-weight: 600; transition: 0.2s; }
+        .admin-nav-btn.active { background: var(--accent); color: #000; border-color: var(--accent); box-shadow: 0 0 10px var(--accent-glow); }
+
+        .admin-student-card {
+            background: linear-gradient(135deg, #1e293b, #0f172a);
             border-radius: 16px;
             padding: 18px;
-            border: 2px solid var(--gold);
-            position: relative;
-            box-shadow: 0 0 20px var(--gold-glow);
+            margin-bottom: 15px;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: transform 0.2s, border-color 0.2s;
         }
-        .winner-card-v3.rank-1 { border-color: var(--gold); }
-        .winner-card-v3.rank-2 { border-color: var(--silver); box-shadow: 0 0 15px var(--silver-glow); }
-        .winner-card-v3.rank-3 { border-color: var(--bronze); box-shadow: 0 0 15px var(--bronze-glow); }
+        .admin-student-card:hover { border-color: var(--accent); }
+        .admin-card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            padding-bottom: 10px;
+        }
+        .admin-card-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: 2px solid var(--accent);
+            object-fit: cover;
+        }
 
-        .winner-avatar-box { width: 75px; height: 75px; margin: 0 auto 10px auto; border-radius: 50%; overflow: hidden; border: 2px solid #fff; }
-        .winner-avatar-box img { width: 100%; height: 100%; object-fit: cover; }
+        .grid-inputs { display: grid; grid-template-columns: repeat(auto-fit, minmax(105px, 1fr)); gap: 10px; margin-top: 10px; }
+        .grid-inputs label { font-size: 11px; color: var(--text-sub); display: block; margin-bottom: 4px; }
+        .grid-inputs input { width: 100%; padding: 8px; border-radius: 8px; border: 1px solid var(--border); background: #070a12; color: white; font-weight: bold; box-sizing: border-box; }
+        .grid-inputs input:focus { border-color: var(--accent); outline: none; }
+        .grid-inputs input:disabled { opacity: 0.4; cursor: not-allowed; }
 
-        .crown-icon { position: absolute; top: -15px; left: 50%; transform: translateX(-50%); font-size: 26px; }
+        .file-upload-btn { background: #334155; color: #f8fafc; padding: 7px 14px; border-radius: 8px; font-size: 12px; cursor: pointer; display: inline-block; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; color: var(--text-sub); }
+        .form-group input, .form-group textarea { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border); background: var(--card-inner); color: white; box-sizing: border-box; }
 
-        .poem-box {
-            background: rgba(239, 68, 68, 0.1);
-            border: 1px solid var(--negative);
+        .log-card {
+            background: #0b1329;
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--accent);
+            padding: 12px 16px;
             border-radius: 12px;
-            padding: 15px;
-            margin-top: 15px;
-            font-style: italic;
-            color: #fca5a5;
-            font-size: 13.5px;
-            line-height: 1.6;
+            margin-bottom: 10px;
+            font-size: 12.5px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
         }
-        .poem-refrain { font-weight: bold; color: var(--negative); display: block; margin-top: 5px; }
+        .log-card-header { display: flex; justify-content: space-between; color: var(--gold); font-weight: bold; margin-bottom: 6px; }
+        .log-card-body { color: var(--text-sub); line-height: 1.6; }
 
-        .admin-dashboard-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 15px; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
-        .admin-stat-card { background: var(--card-inner); border: 1px solid var(--border); padding: 15px; border-radius: 12px; display: flex; align-items: center; gap: 12px; }
-        .admin-stat-icon { font-size: 24px; }
-
-        .admin-nav { display: flex; gap: 8px; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 10px; overflow-x: auto; }
-        .admin-nav-btn { background: none; border: none; color: var(--text-sub); padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; white-space: nowrap; }
-        .admin-nav-btn.active { background: var(--accent); color: #000; }
-
-        .admin-student-card { background: var(--card-inner); border: 1px solid var(--border); border-radius: 12px; padding: 15px; margin-bottom: 12px; }
-        .admin-card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
-        .admin-card-avatar { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; }
-        .grid-inputs { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; }
-        .grid-inputs label { font-size: 11px; color: var(--text-sub); display: block; margin-bottom: 3px; }
-        .grid-inputs input { width: 100%; background: var(--bg-color); border: 1px solid var(--border); color: #fff; padding: 6px 10px; border-radius: 6px; font-weight: bold; }
-
-        .task-folder-box { background: var(--card-inner); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 12px; }
-        .task-folder-title { font-weight: bold; color: var(--accent); margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
-
-        /* Mobil Cihaz Uyğunlaşdırması */
-        @media (max-width: 768px) {
-            body { padding: 8px; }
-            .header { padding: 14px; }
-            .student-upload-box { flex-direction: column !important; align-items: stretch !important; }
-            #studentSubjectSelect, #studentTaskFiles, .student-upload-box .btn { width: 100% !important; box-sizing: border-box !important; font-size: 15px !important; padding: 12px !important; }
-            .tabs { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 5px; }
-            .tab-btn { white-space: nowrap; font-size: 13px; padding: 8px 14px; }
+        .task-folder-box {
+            background: #0b1329;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+        .task-folder-title {
+            font-size: 15px;
+            font-weight: bold;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
     </style>
 </head>
 <body>
-    <div class="container" id="mainDashboard">
-        <!-- 🔝 ÜST BAŞLIQ & NƏZARƏT ZONASI -->
-        <div class="header">
-            <div class="header-title-box">
-                <h1>
-                    <span>🚀 TT-08 Proqram Saytı</span>
-                    <span class="version-badge" onclick="showVersionModal()">v2.3</span>
-                </h1>
-            </div>
-            <div class="live-date-time" id="liveDateTime">📅 Yüklənir...</div>
-            <div class="lang-picker">
-                <button class="lang-btn active" onclick="setLanguage('az')">AZ</button>
-                <button class="lang-btn" onclick="setLanguage('ru')">RU</button>
-                <button class="lang-btn" onclick="setLanguage('tr')">TR</button>
-                <button class="lang-btn" onclick="setLanguage('en')">EN</button>
-            </div>
-        </div>
 
-        <!-- 📸 QRUP FOTO KARTI -->
-        <div class="group-photo-card">
-            <h3 style="margin:0 0 10px 0; color:var(--accent);" data-i18n="groupPhoto">👥 Bizim TT-08 Ailəmiz</h3>
-            <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1200&q=80" alt="TT-08 Group Photo">
-        </div>
+    <div class="container">
+        <!-- 🏠 ƏSAS REYTİNQ EKRANI -->
+        <div id="mainDashboard">
+            <div class="header">
+                <div class="header-title-box">
+                    <h1>🏆 <span data-i18n="title">TT-08 Proqram Saytı</span> <span class="version-badge" onclick="showVersionModal()">V2.3</span></h1>
+                    <div class="live-datetime" id="liveDateTime">📅 Yüklənir...</div>
+                </div>
 
-        <!-- 👑 MÜNSİFLƏR HEYƏTİ (JÜRİLƏR) -->
-        <div class="jury-section">
-            <div class="jury-title" data-i18n="juryTitle">
-                <span>👑 Münsiflər Heyəti & Rəhbərlik</span>
-            </div>
-            <div class="jury-cards-grid">
-                <div class="jury-card" onclick="openProfile(1)">
-                    <div class="jury-card-avatar">
-                        <img src="https://svgsilh.com/svg/1300331.svg" alt="Aqşin">
+                <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+                    <div class="lang-picker">
+                        <button class="lang-btn active" onclick="setLanguage('az')">AZ</button>
+                        <button class="lang-btn" onclick="setLanguage('ru')">RU</button>
+                        <button class="lang-btn" onclick="setLanguage('tr')">TR</button>
+                        <button class="lang-btn" onclick="setLanguage('en')">EN</button>
                     </div>
-                    <div class="jury-card-info">
-                        <strong>Aqşin Süleymanzadə</strong>
-                        <span>⭐ Təsisçi / Baş Admin</span>
-                    </div>
-                </div>
-                <div class="jury-card" onclick="openProfile(2)">
-                    <div class="jury-card-avatar">
-                        <img src="https://svgsilh.com/svg/1300331.svg" alt="Kənan">
-                    </div>
-                    <div class="jury-card-info">
-                        <strong>Kənan Gülverdiyev</strong>
-                        <span>⭐ Təsisçi / Münsif</span>
-                    </div>
-                </div>
-                <div class="jury-card" onclick="openProfile(3)">
-                    <div class="jury-card-avatar">
-                        <img src="https://svgsilh.com/svg/1300331.svg" alt="Turan">
-                    </div>
-                    <div class="jury-card-info">
-                        <strong>Turan Məmmədli</strong>
-                        <span>⭐ Təsisçi / Münsif</span>
+                    <div class="tabs">
+                        <button class="tab-btn active" id="btn-cpp" onclick="switchTab('cpp')">C++</button>
+                        <button class="tab-btn" id="btn-python" onclick="switchTab('python')">Python</button>
+                        <button class="tab-btn" id="btn-common" onclick="switchTab('common')">Common</button>
                     </div>
                 </div>
             </div>
+
+            <!-- 📸 Qrup Foto Bölməsi -->
+            <div class="group-photo-card">
+                <h3 style="margin:0 0 10px 0; color:var(--accent);">📸 <span data-i18n="groupPhoto">Bizim Qrupumuz</span></h3>
+                <img id="mainGroupImg" src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1200&q=80" alt="Group Photo">
+            </div>
+
+            <!-- 👑 Jüri Bölməsi -->
+            <div class="jury-section">
+                <div class="jury-title">👑 <span data-i18n="juryTitle">Münsiflər Heyəti (Jürilər)</span></div>
+                <div class="jury-cards-grid">
+                    <div class="jury-card">
+                        <div class="jury-card-avatar"><img id="juryImgAqsin" src="https://svgsilh.com/svg/1300331.svg" alt="Aqşin"></div>
+                        <div class="jury-card-info">
+                            <strong>Süleymanzadə Aqşin</strong>
+                            <span>⭐ Baş Jüri / Təsisçi</span>
+                            <div>📞 <a href="tel:0772172623">077-217-26-23</a></div>
+                        </div>
+                    </div>
+                    <div class="jury-card">
+                        <div class="jury-card-avatar"><img id="juryImgKenan" src="https://svgsilh.com/svg/1300331.svg" alt="Kənan"></div>
+                        <div class="jury-card-info">
+                            <strong>Gülverdiyev Kənan</strong>
+                            <span>⭐ Jüri / Təsisçi</span>
+                            <div>📞 <a href="tel:0707383756">070-738-37-56</a></div>
+                        </div>
+                    </div>
+                    <div class="jury-card">
+                        <div class="jury-card-avatar"><img id="juryImgTuran" src="https://svgsilh.com/svg/1300331.svg" alt="Turan"></div>
+                        <div class="jury-card-info">
+                            <strong>Məmmədli Turan</strong>
+                            <span>⭐ Jüri / Təsisçi</span>
+                            <div>📞 <a href="tel:0775214166">077-521-41-66</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 🎨 Statistika Paneli -->
+            <div class="highlights-grid">
+                <div class="highlight-card card-top-leaders">
+                    <h3 style="color:var(--gold);">🥇 <span data-i18n="topLeaders">Həftənin Liderləri</span></h3>
+                    <ul class="mini-list" id="topList"></ul>
+                </div>
+                <div class="highlight-card card-past-leaders">
+                    <h3 style="color:var(--accent);">⚡ <span data-i18n="pastLeaders">Ötən Həftənin Liderləri</span></h3>
+                    <ul class="mini-list" id="pastTopList"></ul>
+                </div>
+                <div class="highlight-card card-outsiders">
+                    <h3 style="color:var(--negative);">😭 <span data-i18n="outsiders">Həftənin Outsiderləri</span></h3>
+                    <ul class="mini-list" id="bottomList"></ul>
+                </div>
+            </div>
+
+            <div class="action-bar">
+                <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                    <button class="btn btn-gold" onclick="showWinnersCelebration()">🎉 <span data-i18n="btnWinners">Həftənin Qalibləri</span></button>
+                    <button class="btn" style="background:#ef4444;" onclick="showOutsidersModal()">😭 <span data-i18n="btnOutsiders">Həftənin Outsiderləri</span></button>
+                    <button class="btn btn-dark" onclick="openFeedbackModal()">💬 <span data-i18n="btnFeedback">Feedback</span></button>
+                </div>
+                <div style="display:flex; gap:8px;">
+                    <button class="btn btn-admin" onclick="checkSavedLoginOrModal()">🔑 <span data-i18n="btnAdmin">Admin Paneli</span></button>
+                    <button class="btn" onclick="sortAndRender()">🔄 <span data-i18n="btnSort">Sırala</span></button>
+                </div>
+            </div>
+
+            <div class="table-wrapper">
+                <table id="ratingTable">
+                    <thead></thead>
+                    <tbody id="tableBody"></tbody>
+                </table>
+            </div>
         </div>
 
-        <!-- 🔘 FƏNN TABLARI -->
-        <div class="tabs">
-            <button class="tab-btn active" id="btn-cpp" onclick="switchTab('cpp')">🔵 C++ Reytinqi</button>
-            <button class="tab-btn" id="btn-python" onclick="switchTab('python')">🟡 Python Reytinqi</button>
-            <button class="tab-btn" id="btn-common" onclick="switchTab('common')">📊 Ümumi Reytinq</button>
-        </div>
-
-        <!-- ⚡ ƏMƏLİYYAT DÜYMƏLƏRİ -->
-        <div class="action-bar">
-            <div style="display:flex; gap:8px; flex-wrap:wrap;">
-                <button class="btn btn-gold" onclick="showWinnersCelebration()" data-i18n="btnWinners">🏆 Həftənin Qalibləri</button>
-                <button class="btn btn-dark" onclick="showOutsidersModal()" data-i18n="btnOutsiders">😭 Həftənin Outsiderləri</button>
-                <button class="btn btn-dark" onclick="openFeedbackModal()" data-i18n="btnFeedback">💬 Feedback Göndər</button>
-            </div>
-            <button class="btn btn-admin" onclick="checkSavedLoginOrModal()" data-i18n="btnAdmin">🔑 Admin Paneli</button>
-        </div>
-
-        <!-- 🌟 MİNİ-LİDERLƏR VƏ OUTSİDERLƏR BLOKLARI -->
-        <div class="highlights-grid">
-            <div class="highlight-card card-top-leaders">
-                <h3 data-i18n="topLeaders">🥇 Həftənin Liderləri</h3>
-                <ul class="mini-list" id="topList"></ul>
-            </div>
-            <div class="highlight-card card-past-leaders">
-                <h3 data-i18n="pastLeaders">⚡ Ötən Həftənin Liderləri</h3>
-                <ul class="mini-list" id="pastTopList"></ul>
-            </div>
-            <div class="highlight-card card-outsiders">
-                <h3 data-i18n="outsiders">😭 Həftənin Outsiderləri</h3>
-                <ul class="mini-list" id="bottomList"></ul>
-            </div>
-        </div>
-
-        <!-- 📋 ƏSAS REYTİNQ CƏDVƏLİ -->
-        <div class="table-wrapper">
-            <table id="ratingTable">
-                <thead>
-                    <!-- JavaScript tərəfindən dinamik doldurulacaq -->
-                </thead>
-                <tbody id="tableBody">
-                    <!-- Tələbələr buraya render olunacaq -->
-                </tbody>
-            </table>
-        </div>
-    </div>
-    <!-- 👤 TƏLƏBƏ PROFİLİ SƏHİFƏSİ -->
+        <!-- 📄 TAM SƏHİFƏ PROFiL EKRANI -->
         <div id="profilePage">
-            <button class="back-btn" onclick="closeProfile()">⬅️ Reytinqə Qayıt</button>
+            <button class="back-btn" onclick="closeProfilePage()">⬅️ <span data-i18n="btnBack">Reytinq Cədvəlinə Qayıt</span></button>
+            
             <div class="profile-header-card">
-                <img src="" id="profileAvatar" class="profile-avatar-large" alt="Profile Avatar">
+                <img id="pAvatar" class="profile-avatar-large" src="" alt="Avatar">
                 <div>
-                    <h2 id="profileName" style="margin:0 0 5px 0; color:#fff;">-</h2>
-                    <span id="profileSub" style="color:var(--accent); font-weight:bold;">-</span>
+                    <h2 id="pName" style="margin:0; font-size:24px; color:var(--accent);"></h2>
+                    <div id="pBadge" style="margin-top:6px;"></div>
                 </div>
             </div>
 
             <div class="profile-grid-info">
                 <div class="info-box">
-                    <span>🔵 C++ Həftəlik / Ümumi</span>
-                    <strong id="profileCppScore">0 / 0</strong>
+                    <span>🎓 İxtisası</span>
+                    <strong style="color:var(--accent);">İnformasiya Təhlükəsizliyi</strong>
                 </div>
                 <div class="info-box">
-                    <span>🟡 Python Həftəlik / Ümumi</span>
-                    <strong id="profilePyScore">0 / 0</strong>
+                    <span>📚 Kursu</span>
+                    <strong id="pKurs">1-ci Kurs</strong>
                 </div>
                 <div class="info-box">
-                    <span>🔥 Aktivlik Streak</span>
-                    <strong id="profileStreak">0 Gün</strong>
+                    <span>🎂 Yaşı (Doğum Tarixi)</span>
+                    <strong id="pYos">18 Yaş</strong>
+                </div>
+                <div class="info-box">
+                    <span>📍 Doğulduğu Yer</span>
+                    <strong id="pYer">Gəncə şəhəri</strong>
+                </div>
+                <div class="info-box">
+                    <span>⭐ Cari Reytinq (Ümumi)</span>
+                    <strong id="pCari" style="color:var(--accent);">0 pt</strong>
+                </div>
+                <div class="info-box">
+                    <span>📊 Həftəlik Qazanılan Bal</span>
+                    <strong id="pArtim">0</strong>
                 </div>
             </div>
 
-            <!-- 📤 Tələbə Tapşırıq Yükləmə Zonu -->
-            <div style="background:var(--card-inner); padding:20px; border-radius:16px; border:1px solid var(--border); margin-bottom:25px;">
-                <h3 style="margin-top:0; color:var(--accent);">📤 Tapşırığını Yüklə (Münsiflər Yoxlayacaq)</h3>
-                <div class="student-upload-box" style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
-                    <select id="studentSubjectSelect" style="background:var(--bg-color); color:#fff; border:1px solid var(--border); padding:10px; border-radius:8px;">
+            <!-- 📁 Tələbə Mobil Və ya PC-dən Fənni Seçərək Fayl Yükləyir -->
+            <div class="info-box" style="margin-bottom:20px;">
+                <h4 style="margin:0 0 10px 0; color:var(--accent);">📁 Tapşırıq / Kod Faylları Yüklə</h4>
+                <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+                    <select id="studentSubjectSelect" style="background:#070a12; padding:9px; border-radius:8px; border:1px solid var(--border); color:#fff; font-weight:bold;">
                         <option value="cpp">🔵 C++ Tapşırığı</option>
                         <option value="python">🟡 Python Tapşırığı</option>
                     </select>
-                    <input type="file" id="studentTaskFiles" multiple style="background:var(--bg-color); color:#fff; border:1px solid var(--border); padding:8px; border-radius:8px;">
-                    <button class="btn btn-gold" onclick="uploadStudentTasks()">🚀 Yüklə və Göndər</button>
+                    <input type="file" id="studentTaskFiles" multiple style="background:#070a12; padding:8px; border-radius:8px; border:1px solid var(--border); color:#fff;">
+                    <button class="btn" onclick="uploadStudentTasks()">Yüklə və Adminə Göndər</button>
                 </div>
-                <div id="studentTaskStatus" style="margin-top:10px; font-weight:bold; font-size:13px;"></div>
+                <div id="studentTaskStatus" style="margin-top:10px; font-size:13px; font-weight:bold;"></div>
             </div>
 
-            <div style="background:var(--card-inner); padding:20px; border-radius:16px; border:1px solid var(--border);">
-                <h3 style="margin-top:0; color:var(--text-sub);">📈 Şəxsi İnkişaf Qrafiki</h3>
-                <div style="height:300px; position:relative;">
-                    <canvas id="profileChart"></canvas>
-                </div>
+            <div class="chart-container" style="background:var(--card-inner); padding:15px; border-radius:12px; border:1px solid var(--border);">
+                <h3 style="margin:0 0 15px 0; font-size:16px; color:var(--accent);">📈 Həftəlik Qazanılan Bal Diaqramı</h3>
+                <canvas id="studentChart" height="120"></canvas>
             </div>
         </div>
 
-        <!-- 🔑 GENİŞLƏNDİRİLMİŞ ADMİN PANELİ -->
+        <!-- 📄 PEŞƏKAR ADMİN EKRANI -->
         <div id="fullAdminPage">
             <div class="admin-dashboard-header">
                 <div>
-                    <h2 id="welcomeAdmin" style="margin:0; color:var(--accent);">⚙️ Admin Mərkəzi</h2>
-                    <span id="adminRoleSubtext" style="font-size:12px; color:var(--text-sub);">TT-08 İdarəetmə və Yoxlama Sistemi</span>
+                    <h2 id="welcomeAdmin" style="margin:0; color:var(--accent); font-size:24px;">⚙️ Admin Control Panel</h2>
+                    <span style="font-size:12px; color:var(--text-sub);" id="adminRoleSubtext">TT-08 İdarəetmə Və Yoxlama Mərkəzi</span>
                 </div>
-                <button class="btn btn-danger" onclick="closeAdminPanel()">🚪 Çıxış Et</button>
+                <div style="display:flex; gap:10px;">
+                    <button class="btn" style="background:#e11d48;" onclick="logoutAdmin()">🔒 Çıxış Et</button>
+                    <button class="back-btn" style="margin:0;" onclick="closeAdminPanel()">⬅️ Ana Səhifəyə Qayıt</button>
+                </div>
             </div>
 
             <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:15px; margin-bottom:20px;">
                 <div class="admin-stat-card">
-                    <div class="admin-stat-icon">🎓</div>
-                    <div>
-                        <span style="font-size:11px; color:var(--text-sub);">Ümumi Tələbə</span>
-                        <strong id="statStudentCount" style="display:block; font-size:18px; color:#fff;">0</strong>
-                    </div>
+                    <div class="admin-stat-icon">👥</div>
+                    <div><span style="font-size:11px; color:var(--text-sub);">ƏLÇATAN TƏLƏBƏ</span><strong style="font-size:18px; display:block; color:#fff;" id="statStudentsCount">25</strong></div>
+                </div>
+                <div class="admin-stat-card">
+                    <div class="admin-stat-icon" style="background:rgba(245, 158, 11, 0.15); color:var(--gold);">📁</div>
+                    <div><span style="font-size:11px; color:var(--text-sub);">YÜKLƏNƏN FAYLLAR</span><strong style="font-size:18px; display:block; color:#fff;" id="statFilesCount">0</strong></div>
                 </div>
                 <div class="admin-stat-card" id="cardStatFeedback">
-                    <div class="admin-stat-icon">💬</div>
-                    <div>
-                        <span style="font-size:11px; color:var(--text-sub);">Daxil Olan Feedback</span>
-                        <strong id="statFeedbackCount" style="display:block; font-size:18px; color:var(--accent);">0</strong>
-                    </div>
+                    <div class="admin-stat-icon" style="background:rgba(34, 197, 94, 0.15); color:var(--positive);">💬</div>
+                    <div><span style="font-size:11px; color:var(--text-sub);">FEEDBACK-LƏR</span><strong style="font-size:18px; display:block; color:#fff;" id="statFeedbacksCount">0</strong></div>
                 </div>
             </div>
 
-            <div class="admin-nav">
-                <button class="admin-nav-btn active" onclick="switchAdminSubTab('scores')">✏️ Bal Qiymətləndirmə</button>
-                <button class="admin-nav-btn" onclick="switchAdminSubTab('tasks')">📂 Yüklənmiş Tapşırıqlar</button>
-                <button class="admin-nav-btn restricted-hide" onclick="switchAdminSubTab('feedback')">💬 Feedbacklər</button>
-                <button class="admin-nav-btn restricted-hide" onclick="switchAdminSubTab('reset')">🔄 Həftəlik Sıfırlama</button>
+            <div class="admin-nav" id="adminNavTabs">
+                <button class="admin-nav-btn active" onclick="switchAdminSubTab('students')">👥 Tələbələrin Reytinqi</button>
+                <button class="admin-nav-btn" onclick="switchAdminSubTab('files')">📁 Faylları Yoxlama Səhifəsi</button>
+                <button class="admin-nav-btn restricted-hide" onclick="switchAdminSubTab('audio')">🎵 Musiqi & Media İdarəsi</button>
+                <button class="admin-nav-btn restricted-hide" onclick="switchAdminSubTab('logs')">📲 Cihaz & Giriş Logları</button>
             </div>
 
-            <div id="adminTabContent">
-                <!-- Dinamik daxil olacaq -->
+            <!-- SUB TAB 1: Reytinq Redaktəsi Və Axtarış -->
+            <div id="adminTabStudents">
+                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:15px;">
+                    <input type="text" id="adminSearchInput" onkeyup="filterAdminStudents()" placeholder="🔍 Tələbə adı ilə axtar..." style="background:var(--card-inner); border:1px solid var(--border); color:#fff; padding:10px 14px; border-radius:10px; width:280px; font-size:13px;">
+                    <button class="btn btn-gold restricted-hide" onclick="finishWeekAndTransferRating()">🗓️ Həftəni Tamamla</button>
+                </div>
+                <div id="adminBody"></div>
+                <button class="btn" style="width:100%; margin-top:20px; padding:14px; font-size:16px;" onclick="saveAdminChanges()">💾 Yadda Saxla və Yayımla</button>
+            </div>
+
+            <!-- SUB TAB 2: C++ Və Python Qovluqlarına Bölünmüş Fayl Yoxlama Səhifəsi -->
+            <div id="adminTabFiles" style="display:none;">
+                <div class="task-folder-box">
+                    <div class="task-folder-title" style="color:var(--accent);">🔵 C++ Yoxlanılacaq Fayllar</div>
+                    <div id="adminCppTasksList">Yüklənir...</div>
+                </div>
+
+                <div class="task-folder-box">
+                    <div class="task-folder-title" style="color:var(--gold);">🟡 Python Yoxlanılacaq Fayllar</div>
+                    <div id="adminPythonTasksList">Yüklənir...</div>
+                </div>
+            </div>
+
+            <!-- SUB TAB 3: Musiqi Və Qrup Şəkli -->
+            <div id="adminTabAudio" style="display:none;">
+                <div class="info-box" style="margin-bottom:15px;">
+                    <h3 style="margin:0 0 10px 0; color:var(--gold);">🎉 Qaliblər Musiqisini Yüklə</h3>
+                    <p style="font-size:12px; color:var(--text-sub); margin-bottom:8px;">İstənilən səs faylını (MP3, WAV, M4A və s.) seçə bilərsiniz:</p>
+                    <input type="file" id="winnerAudioFile" accept="audio/*, .mp3, .wav, .m4a, .ogg, .aac, .flac" style="margin-bottom:10px; background:#070a12; padding:8px; border-radius:8px; border:1px solid var(--border); color:#fff; width:100%;">
+                    <button class="btn btn-gold" onclick="uploadWinnerAudio()">Yüklə</button>
+                </div>
+                <div class="info-box" style="margin-bottom:15px;">
+                    <h3 style="margin:0 0 10px 0; color:var(--negative);">😭 Outsiderlər Musiqisini Yüklə</h3>
+                    <p style="font-size:12px; color:var(--text-sub); margin-bottom:8px;">İstənilən səs faylını (MP3, WAV, M4A və s.) seçə bilərsiniz:</p>
+                    <input type="file" id="outsiderAudioFile" accept="audio/*, .mp3, .wav, .m4a, .ogg, .aac, .flac" style="margin-bottom:10px; background:#070a12; padding:8px; border-radius:8px; border:1px solid var(--border); color:#fff; width:100%;">
+                    <button class="btn" style="background:var(--negative);" onclick="uploadOutsiderAudio()">Yüklə</button>
+                </div>
+                <div class="info-box">
+                    <h3 style="margin:0 0 10px 0; color:var(--accent);">📸 Qrup Şəklini Yenilə</h3>
+                    <input type="file" accept="image/*" onchange="handleGroupPhotoUpload(event)" style="background:#070a12; padding:8px; border-radius:8px; border:1px solid var(--border); color:#fff; width:100%;">
+                </div>
+            </div>
+
+            <!-- SUB TAB 4: Loglar -->
+            <div id="adminTabLogs" style="display:none;">
+                <div class="info-box" style="margin-bottom:20px;">
+                    <h3 style="margin:0 0 15px 0; color:var(--gold);">💬 Feedback Mesajları</h3>
+                    <div id="adminFeedbackList">Mesaj yoxdur.</div>
+                </div>
+                <div class="info-box">
+                    <h3 style="margin:0 0 15px 0; color:var(--accent);">📲 Cihaz & Giriş Logları (Tam Anlaşılır)</h3>
+                    <div id="adminLogsList">Log yoxdur.</div>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- 🔑 ADMİN LOGİN MODAL -->
-    <div class="modal" id="adminLoginModal">
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
         <div class="modal-content" style="max-width:400px;">
-            <h3 style="margin-top:0; color:var(--accent);">🔑 Admin Girişi</h3>
+            <h2 style="margin-top:0; color:var(--accent);">🔑 Admin Girişi</h2>
             <div class="form-group">
-                <label>İstifadəçi Adı</label>
-                <input type="text" id="adminUsernameInput" placeholder="İstifadəçi adını daxil edin">
+                <label>İstifadəçi Adı:</label>
+                <input type="text" id="loginUser" placeholder="İstifadəçi adı..." onkeydown="handleLoginInputKey(event, 'user')">
             </div>
             <div class="form-group">
-                <label>Şifrə</label>
-                <input type="password" id="adminPasswordInput" placeholder="Şifrəni daxil edin">
+                <label>Şifrə:</label>
+                <input type="password" id="loginPass" placeholder="Şifrə..." onkeydown="handleLoginInputKey(event, 'pass')">
             </div>
-            <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:20px;">
-                <button class="btn btn-dark" onclick="closeAdminLoginModal()">Ləğv et</button>
-                <button class="btn" onclick="processAdminLogin()">Daxil Ol</button>
-            </div>
+            <button class="btn btn-admin" style="width:100%;" onclick="handleLogin()">Giriş Et</button>
+            <button class="btn btn-dark" style="width:100%; margin-top:10px;" onclick="closeLoginModal()">Ləğv Et</button>
         </div>
     </div>
 
-    <!-- 💬 FEEDBACK MODAL -->
-    <div class="modal" id="feedbackModal">
-        <div class="modal-content" style="max-width:500px;">
-            <h3 style="margin-top:0; color:var(--accent);">💬 Feedback & Təklif Göndər</h3>
-            <div class="form-group">
-                <label>Adınız (İstəyə bağlı)</label>
-                <input type="text" id="fbAuthor" placeholder="Anonim qalmaq üçün boş saxlayın">
-            </div>
-            <div class="form-group">
-                <label>Mesajınız / Fikriniz</label>
-                <textarea id="fbText" rows="4" placeholder="Təklif və ya şikayətinizi yazın..."></textarea>
-            </div>
-            <div style="display:flex; justify-content:flex-end; gap:10px;">
-                <button class="btn btn-dark" onclick="closeFeedbackModal()">Ləğv et</button>
-                <button class="btn btn-gold" onclick="submitFeedback()">Göndər</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- 🏆 HƏFTƏNİN QALİBLƏRİ MODAL -->
-    <div class="modal" id="winnersModal">
-        <div class="modal-content" style="text-align:center;">
-            <h2 style="color:var(--gold); margin-top:0;">🏆 HƏFTƏNİN QALİBLƏRİ 🏆</h2>
-            <p style="color:var(--text-sub);">Cari həftə üzrə ən yüksək nəticə göstərən tələbələr!</p>
-            <div class="winners-container-v3" id="winnersContent"></div>
-            <button class="btn btn-gold" style="margin-top:15px;" onclick="closeWinnersModal()">Təbrik Edirik! 🎉</button>
-        </div>
-    </div>
-
-    <!-- 😭 OUTSİDERLƏR MODAL -->
-    <div class="modal" id="outsidersModal">
-        <div class="modal-content" style="max-width:550px; text-align:center;">
-            <h2 style="color:var(--negative); margin-top:0;">😭 HƏFTƏNİN OUTSİDERLƏRİ</h2>
-            <div id="outsidersContent" style="margin:20px 0;"></div>
-            <div class="poem-box">
-                "Bilməm nədən bəxtimiz böylə qara oldu,<br>
-                Hər keçən gün ballarımız daha da azaldı..."
-                <span class="poem-refrain">Gələn həftə daha çox çalışmaq vaxtıdır! 💪</span>
-            </div>
-            <button class="btn btn-dark" style="margin-top:20px;" onclick="closeOutsidersModal()">Bağla</button>
-        </div>
-    </div>
-
-    <!-- ℹ️ VERSİYA INFO MODAL -->
-    <div class="modal" id="versionModal">
+    <!-- Feedback Modal -->
+    <div id="feedbackModal" class="modal">
         <div class="modal-content" style="max-width:450px;">
-            <h3 style="margin-top:0; color:var(--accent);">ℹ️ Sayt Haqqında - v2.3</h3>
-            <p style="color:var(--text-sub); line-height:1.6;">
-                <strong>TT-08 Proqram Saytı</strong> - Tələbələrin akademik reytinqini, tapşırıq yükləmələrini və dərslərə davamiyyətini real-vaxt rejimində izləmək üçün hazırlanmış xüsusi platformadır.
-            </p>
-            <ul style="color:var(--text-sub); font-size:13px; padding-left:20px;">
-                <li>🔥 Firebase Realtime Database inteqrasiyası</li>
-                <li>📊 Şəxsi inkişaf grafikləri (Chart.js)</li>
-                <li>⚙️ Adminka və baş admin rolları</li>
-                <li>🌐 Çoxdilli interfeys dəstəyi</li>
-            </ul>
-            <div style="text-align:right; margin-top:20px;">
-                <button class="btn btn-dark" onclick="closeVersionModal()">Aydındır</button>
-            </div>
+            <h2 style="margin-top:0; color:var(--accent);">💬 Feedback (Fikir Bildir)</h2>
+            <div class="form-group"><label>Adınız:</label><input type="text" id="fbName" placeholder="Ad Soyad"></div>
+            <div class="form-group"><label>Mesajınız / Fikriniz:</label><textarea id="fbMsg" rows="4" placeholder="Sayt haqqında təklif və ya fikriniz..."></textarea></div>
+            <button class="btn" style="width:100%;" onclick="sendFeedback()">Göndər</button>
+            <button class="btn btn-dark" style="width:100%; margin-top:10px;" onclick="closeFeedbackModal()">Bağla</button>
         </div>
     </div>
+
+    <!-- 🏆 QALİBLƏR MODAL -->
+    <div id="winnersModal" class="modal">
+        <div class="modal-content" style="text-align:center;">
+            <h1 style="color:var(--gold); margin-top:5px; font-size:28px;">👑 HƏFTƏNİN QALİBLƏRİ 🏆</h1>
+            <p style="color:var(--text-sub); font-size:13px; margin-bottom:15px;">Təbrik edirik! Qaliblərin üzərinə klikləyərək fərdi konfetti saçın!</p>
+
+            <div id="winnersListGrid" class="winners-container-v3"></div>
+            
+            <button class="btn btn-gold" style="width:100%; padding:14px; font-size:16px;" onclick="closeWinnersModal()">Möhtəşəmdir! 🎉👏</button>
+        </div>
+    </div>
+
+    <!-- 😭 Outsiderlər Modal -->
+    <div id="outsidersModal" class="modal">
+        <div class="modal-content" style="text-align:center;">
+            <h1 style="color:var(--negative); margin-top:0;">😭 HƏFTƏNİN OUTSİDERLƏRİ 😴</h1>
+            <div id="outsidersListGrid" style="display:flex; justify-content:center; gap:15px; flex-wrap:wrap; margin-bottom:15px;"></div>
+
+            <div class="poem-box">
+Tərpənmə, amandır, bala, qəflətdən ayılma!
+Açma gözünü, xabi-cəhalətdən ayılma!
+<span class="poem-refrain">Laylay, bala, laylay!
+Yat, qal dala, laylay!</span>
+
+Aldanma ayıqlıqda fəraqət ola, heyhat!
+Qəflətdə keçənlər kimi ləzzət ola, heyhat!
+Bidar olanın başı səlamət ola, heyhat!
+At başını yat, bəstəri-rahətdən ayılma!
+<span class="poem-refrain">Laylay, bala, laylay!
+Yat, qal dala, laylay!</span>
+
+Açsan gözünü rəngü məşəqqət görəcəksən,
+Millətdə qəm ümmətdə, küdurət görəcəksən,
+Qıldıqca nəzər millətə heyrat görəcəksən,
+Çək başına yorğanını, nikbətdən ayılma!
+<span class="poem-refrain">Laylay, bala, laylay!
+Yat, qal dala, laylay!</span>
+
+Bir ləhzə ayıldınsa, qutar canın yuxla,
+At tiryakını, meyl elə qəlyanını, yuxla,
+İncinsə sağın, ver yerə sol yanın, yuxla,
+İllərcə şüar etdiyin adətən ayılma!
+<span class="poem-refrain">Laylay, bala, laylay!
+Yat, qal dala, laylay!</span>
+
+Göz nurudur uyqu, onu dur etmə gözündən,
+Yol vermə məbada çıxa bir ləhzə sözündən,
+Amma elə bərk yuxula ki, hətta get özündən,
+Afaqı tutan şurü qiyamətdən ayılma!
+<span class="poem-refrain">Laylay, bala, laylay!
+Yat, qal dala, laylay!</span>
+            </div>
+            <button class="btn btn-dark" style="margin-top:15px; width:100%;" onclick="closeOutsidersModal()">Bağla</button>
+        </div>
+    </div>
+
+    <!-- V2.3 Yeniliklər Modal -->
+    <div id="versionModal" class="modal">
+        <div class="modal-content" style="max-width:550px;">
+            <h2 style="color:var(--accent); margin-top:0;">🚀 Saytın Yenilikləri (V2.3)</h2>
+            
+            <h4 style="color:var(--gold); margin:15px 0 5px 0;">⭐ Əsas Yeniliklər (V2.0-dan Bəri)</h4>
+            <ul style="text-align:left; font-size:13.5px; line-height:1.6; color:var(--text-sub); margin-top:5px;">
+                <li><strong>🎉 Həftənin Qalibləri Şousu:</strong> Xüsusi bayram musiqisi, konfetti saçılması və animasiyalarla qaliblərin təqdim olunması.</li>
+                <li><strong>😭 Həftənin Outsiderləri Bölməsi:</strong> Kədərli musiqi fonunda həftənin sonuncu yerlərinin əyləncəli təqdimatı.</li>
+                <li><strong>📈 Tələbə Reytinq Diaqramı:</strong> Şəxsi profil pəncərəsində sırf həmin həftə qazanılan xalların canlı dinamika qrafiki.</li>
+                <li><strong>📁 Çoxlu Və Fənni Seçilmiş Fayl Göndərmə:</strong> C++ və Python tapşırıqlarını mobildən və ya PC-dən ayrılıqda seçərək göndərmək imkanı.</li>
+            </ul>
+
+            <h4 style="color:var(--accent); margin:15px 0 5px 0;">⚡ Əlavələr</h4>
+            <ul style="text-align:left; font-size:13.5px; line-height:1.6; color:var(--text-sub); margin-top:5px;">
+                <li><strong>👤 Tələbə Profil Pəncərəsi:</strong> Tələbənin adına tıkladıqda kurs, yaş, doğum yeri və reytinq xallarının detallı göstərilməsi.</li>
+                <li><strong>🌐 4 Dildə İnterfeys Və Canlı Saat:</strong> Azərbaycan, Rus, Türk və İngilis dilləri arasında anında keçid.</li>
+            </ul>
+
+            <button class="btn" style="width:100%; margin-top:15px;" onclick="closeVersionModal()">Aydındır!</button>
+        </div>
+    </div>
+
     <script>
-        // -------------------------------------------------------------
-        // 1. FIREBASE CONFIGURATION & GLOBAL STATE
-        // -------------------------------------------------------------
         const firebaseConfig = {
-            databaseURL: "https://phyton-and-cplus-default-rtdb.firebaseio.com/"
+            apiKey: "AIzaSyAug3XL0WtYr6a-_9qcLMjiE16oEA-y5XU",
+            authDomain: "phyton-and-cplus.firebaseapp.com",
+            databaseURL: "https://phyton-and-cplus-default-rtdb.firebaseio.com",
+            projectId: "phyton-and-cplus",
+            storageBucket: "phyton-and-cplus.firebasestorage.app",
+            messagingSenderId: "717355992977",
+            appId: "1:717355992977:web:90a1dd87e1de84e4a8fc30",
+            measurementId: "G-6QEQ76ZJV1"
         };
+
         firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
+        const database = firebase.database();
 
-        let currentTab = 'cpp';
+        const ADMIN_USERS = { 
+            "jagermaster": "Aqsin2008", 
+            "chivas": "Turan2008", 
+            "jameson": "Kenan2007",
+            "rəho": "poni1813",
+            "reho": "poni1813"
+        };
+
+        // Rəho istifadəçisinin ekranda görünən tam adı
+        const ADMIN_DISPLAY_NAMES = {
+            "jagermaster": "Aqşin Süleymanzadə (Baş Admin)",
+            "chivas": "Turan Məmmədli (Admin)",
+            "jameson": "Kənan Gülverdiyev (Admin)",
+            "rəho": "Əlizadə Rəhimə (Admin)",
+            "reho": "Əlizadə Rəhimə (Admin)"
+        };
+
+        const RESTRICTED_STUDENTS_FOR_REHO = [
+            "Əlizadə Rəhimə", 
+            "Abıyeva Aysun", 
+            "Təhməzova Leyla",
+            "Süleymanzadə Aqşin",
+            "Məmmədli Turan",
+            "Gülverdiyev Kənan"
+        ];
+
+        const FOUNDERS = ["Süleymanzadə Aqşin", "Məmmədli Turan", "Gülverdiyev Kənan"];
+        const DEFAULT_AVATAR_URL = "https://svgsilh.com/svg/1300331.svg";
+
+        const BIRTH_DATES = {
+            "Abbasov Rüfət": "2008-01-23", "Abıyeva Aysun": "2008-03-01", "Ağazadə Poladxan": "2008-06-07",
+            "Allahverdiyev Amid": "2008-05-31", "Bəbirov Soltan": "2008-02-22", "Cavadzadə Mirzə": "2008-03-29",
+            "Əhmədli Bahar": "2008-03-21", "Əliyeva Əsmər": "2008-05-11", "Əliyeva Hüsna": "2008-04-02",
+            "Əliyeva Mehriban": "2007-12-24", "Əlizadə Rəhimə": "2007-09-18", "Əsgərova Çinarə": "2008-06-30",
+            "Fərzalı Səma": "2008-06-17", "Gülverdiyev Kənan": "2007-12-06", "Həşimova Fatimə": "2008-05-05",
+            "Hüseyinova Səbinə": "2007-06-07", "Hüseyinzadə Aygün": "2007-12-17", "İbrahimova Rəşqəndə": "2008-01-04",
+            "Məmmədli Əhməd": "2007-12-14", "Məmmədli Turan": "2008-10-19", "Məmmədova Sabrina": "2008-07-19",
+            "Musazadə Rəşad": "2008-07-02", "Süleymanzadə Aqşin": "2008-11-30", "Şəmsiyev Xosu": "2008-04-21",
+            "Təhməzova Leyla": "2008-11-08"
+        };
+
+        const DEFAULT_BIRTH_PLACES = {
+            "Abbasov Rüfət": "Lerik rayonu", "Abıyeva Aysun": "Masallı rayonu", "Ağazadə Poladxan": "Bakı şəhəri",
+            "Allahverdiyev Amid": "Siyəzən rayonu", "Bəbirov Soltan": "İsmayıllı rayonu", "Cavadzadə Mirzə": "Bakı şəhəri",
+            "Əhmədli Bahar": "Şəki şəhəri", "Əliyeva Əsmər": "Şəki şəhəri", "Əliyeva Hüsna": "Bakı şəhəri",
+            "Əliyeva Mehriban": "Masallı rayonu", "Əlizadə Rəhimə": "Bakı şəhəri", "Əsgərova Çinarə": "Siyəzən rayonu",
+            "Gülverdiyev Kənan": "Şamaxı rayonu", "Hüseyinova Səbinə": "Şəmkir rayonu", "Hüseyinzadə Aygün": "Bakı şəhəri",
+            "Məmmədli Turan": "Şabran rayonu", "Süleymanzadə Aqşin": "Gəncə şəhəri", "Şəmsiyev Xosu": "Qazax rayonu",
+            "Təhməzova Leyla": "Sabirabad rayonu"
+        };
+
+        const STUDENT_NAMES = Object.keys(BIRTH_DATES);
+
         let activeAdminUser = null;
-        let adminSubTab = 'scores';
-        let currentLanguage = 'az';
-        let myChart = null;
+        let globalData = {};
+        let currentTab = 'cpp';
+        let chartInstance = null;
+        let currentLang = 'az';
+        let activeProfileStudent = null;
+        let activeAudioObject = null;
 
-        // Dil Tərcümələri
-        const translations = {
-            az: {
-                title: "TT-08 Proqram Saytı",
-                groupPhoto: "Bizim TT-08 Ailəmiz",
-                juryTitle: "Münsiflər Heyəti & Rəhbərlik",
-                topLeaders: "🥇 Həftənin Liderləri",
-                pastLeaders: "⚡ Ötən Həftənin Liderləri",
-                outsiders: "😭 Həftənin Outsiderləri",
-                btnWinners: "🏆 Həftənin Qalibləri",
-                btnOutsiders: "😭 Həftənin Outsiderləri",
-                btnFeedback: "💬 Feedback Göndər",
-                btnAdmin: "🔑 Admin Paneli"
-            },
-            ru: {
-                title: "TT-08 Программный Сайт",
-                groupPhoto: "Наша Семья TT-08",
-                juryTitle: "Жюри и Руководство",
-                topLeaders: "🥇 Лидеры Недели",
-                pastLeaders: "⚡ Прошлые Лидеры",
-                outsiders: "😭 Аутсайдеры Недели",
-                btnWinners: "🏆 Победители Недели",
-                btnOutsiders: "😭 Аутсайдеры Недели",
-                btnFeedback: "💬 Отправить Отзыв",
-                btnAdmin: "🔑 Панель Админа"
-            },
-            tr: {
-                title: "TT-08 Program Sitesi",
-                groupPhoto: "Bizim TT-08 Ailemiz",
-                juryTitle: "Jüri Heyeti ve Yönetim",
-                topLeaders: "🥇 Haftanın Liderleri",
-                pastLeaders: "⚡ Geçen Haftanın Liderleri",
-                outsiders: "😭 Haftanın Geride Kalanları",
-                btnWinners: "🏆 Haftanın Kazananları",
-                btnOutsiders: "😭 Haftanın Geride Kalanları",
-                btnFeedback: "💬 Geri Bildirim Gönder",
-                btnAdmin: "🔑 Yönetici Paneli"
-            },
-            en: {
-                title: "TT-08 Program Site",
-                groupPhoto: "Our TT-08 Family",
-                juryTitle: "Jury Panel & Leadership",
-                topLeaders: "🥇 Weekly Leaders",
-                pastLeaders: "⚡ Previous Leaders",
-                outsiders: "😭 Weekly Outsiders",
-                btnWinners: "🏆 Weekly Winners",
-                btnOutsiders: "😭 Weekly Outsiders",
-                btnFeedback: "💬 Send Feedback",
-                btnAdmin: "🔑 Admin Panel"
-            }
+        const i18n = {
+            az: { title: "TT-08 Proqram Saytı", groupPhoto: "Bizim Qrupumuz", juryTitle: "Münsiflər Heyəti (Jürilər)", topLeaders: "Həftənin Liderləri", pastLeaders: "Ötən Həftənin Liderləri", outsiders: "Həftənin Outsiderləri", btnWinners: "Həftənin Qalibləri", btnOutsiders: "Həftənin Outsiderləri", btnFeedback: "Feedback", btnAdmin: "Admin Paneli", btnSort: "Sırala", btnBack: "Reytinq Cədvəlinə Qayıt" },
+            ru: { title: "TT-08 Программа", groupPhoto: "Наша Группа", juryTitle: "Жюри", topLeaders: "Лидеры Недели", pastLeaders: "Прошлые Лидеры", outsiders: "Аутсайдеры Недели", btnWinners: "Победители", btnOutsiders: "Аутсайдеры Недели", btnFeedback: "Обратная связь", btnAdmin: "Панель Админа", btnSort: "Сортировать", btnBack: "Назад к Таблице" },
+            tr: { title: "TT-08 Program Sitesi", groupPhoto: "Grubumuz", juryTitle: "Jüri Üyeleri", topLeaders: "Haftanın Liderleri", pastLeaders: "Geçen Haftanın Liderleri", outsiders: "Haftanın Outsiderları", btnWinners: "Kazananlar", btnOutsiders: "Haftanın Outsiderları", btnFeedback: "Geri Bildirim", btnAdmin: "Admin Paneli", btnSort: "Sırala", btnBack: "Listeye Dön" },
+            en: { title: "TT-08 Program Site", groupPhoto: "Our Group", juryTitle: "Jury Panel", topLeaders: "Top Leaders", pastLeaders: "Past Leaders", outsiders: "Weekly Outsiders", btnWinners: "Winners", btnOutsiders: "Weekly Outsiders", btnFeedback: "Feedback", btnAdmin: "Admin Panel", btnSort: "Sort", btnBack: "Back to Table" }
         };
 
         function setLanguage(lang) {
-            currentLanguage = lang;
+            currentLang = lang;
             document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
             if(event && event.target) event.target.classList.add('active');
-
+            
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 const key = el.getAttribute('data-i18n');
-                if (translations[lang] && translations[lang][key]) {
-                    el.innerText = translations[lang][key];
-                }
+                if (i18n[lang] && i18n[lang][key]) el.innerText = i18n[lang][key];
             });
-            sortAndRender();
         }
 
-        // -------------------------------------------------------------
-        // 2. TAM TƏLƏBƏ SİYAHISI (20+ Tələbə)
-        // -------------------------------------------------------------
-        let studentsData = [
-            { id: 1, name: "Aqşin Süleymanzadə", isFounder: true, avatar: "https://svgsilh.com/svg/1300331.svg", cppWeekly: 0, cppTotal: 0, pyWeekly: 0, pyTotal: 0, pastWeeklyCpp: 0, pastWeeklyPy: 0, streak: 5 },
-            { id: 2, name: "Kənan Gülverdiyev", isFounder: true, avatar: "https://svgsilh.com/svg/1300331.svg", cppWeekly: 0, cppTotal: 0, pyWeekly: 0, pyTotal: 0, pastWeeklyCpp: 0, pastWeeklyPy: 0, streak: 4 },
-            { id: 3, name: "Turan Məmmədli", isFounder: true, avatar: "https://svgsilh.com/svg/1300331.svg", cppWeekly: 0, cppTotal: 0, pyWeekly: 0, pyTotal: 0, pastWeeklyCpp: 0, pastWeeklyPy: 0, streak: 3 },
-            { id: 4, name: "Əli Əliyev", isFounder: false, avatar: "https://svgsilh.com/svg/1300331.svg", cppWeekly: 0, cppTotal: 0, pyWeekly: 0, pyTotal: 0, pastWeeklyCpp: 0, pastWeeklyPy: 0, streak: 2 },
-            { id: 5, name: "Leyla Məmmədova", isFounder: false, avatar: "https://svgsilh.com/svg/1300331.svg", cppWeekly: 0, cppTotal: 0, pyWeekly: 0, pyTotal: 0, pastWeeklyCpp: 0, pastWeeklyPy: 0, streak: 1 },
-            { id: 6, name: "Murad Həsənov", isFounder: false, avatar: "https://svgsilh.com/svg/1300331.svg", cppWeekly: 0, cppTotal: 0, pyWeekly: 0, pyTotal: 0, pastWeeklyCpp: 0, pastWeeklyPy: 0, streak: 0 },
-            { id: 7, name: "Aysel Qasımova", isFounder: false, avatar: "https://svgsilh.com/svg/1300331.svg", cppWeekly: 0, cppTotal: 0, pyWeekly: 0, pyTotal: 0, pastWeeklyCpp: 0, pastWeeklyPy: 0, streak: 2 },
-            { id: 8, name: "Rəşad İbrahimov", isFounder: false, avatar: "https://svgsilh.com/svg/1300331.svg", cppWeekly: 0, cppTotal: 0, pyWeekly: 0, pyTotal: 0, pastWeeklyCpp: 0, pastWeeklyPy: 0, streak: 3 },
-            { id: 9, name: "Nərmin İsmayılova", isFounder: false, avatar: "https://svgsilh.com/svg/1300331.svg", cppWeekly: 0, cppTotal: 0, pyWeekly: 0, pyTotal: 0, pastWeeklyCpp: 0, pastWeeklyPy: 0, streak: 1 },
-            { id: 10, name: "Elvin Quliyev", isFounder: false, avatar: "https://svgsilh.com/svg/1300331.svg", cppWeekly: 0, cppTotal: 0, pyWeekly: 0, pyTotal: 0, pastWeeklyCpp: 0, pastWeeklyPy: 0, streak: 0 },
-            { id: 11, name: "Günel Hüseynova", isFounder: false, avatar: "https://svgsilh.com/svg/1300331.svg", cppWeekly: 0, cppTotal: 0, pyWeekly: 0, pyTotal: 0, pastWeeklyCpp: 0, pastWeeklyPy: 0, streak: 2 },
-            { id: 12, name: "Rauf Səfərov", isFounder: false, avatar: "https://svgsilh.com/svg/1300331.svg", cppWeekly: 0, cppTotal: 0, pyWeekly: 0, pyTotal: 0, pastWeeklyCpp: 0, pastWeeklyPy: 0, streak: 4 },
-            { id: 13, name: "Fidan Əhmədova", isFounder: false, avatar: "https://svgsilh.com/svg/1300331.svg", cppWeekly: 0, cppTotal: 0, pyWeekly: 0, pyTotal: 0, pastWeeklyCpp: 0, pastWeeklyPy: 0, streak: 1 },
-            { id: 14, name: "Orxan Cabbarov", isFounder: false, avatar: "https://svgsilh.com/svg/1300331.svg", cppWeekly: 0, cppTotal: 0, pyWeekly: 0, pyTotal: 0, pastWeeklyCpp: 0, pastWeeklyPy: 0, streak: 0 },
-            { id: 15, name: "Zəhra Əliyeva", isFounder: false, avatar: "https://svgsilh.com/svg/1300331.svg", cppWeekly: 0, cppTotal: 0, pyWeekly: 0, pyTotal: 0, pastWeeklyCpp: 0, pastWeeklyPy: 0, streak: 3 },
-            { id: 16, name: "Teymur Mədətov", isFounder: false, avatar: "https://svgsilh.com/svg/1300331.svg", cppWeekly: 0, cppTotal: 0, pyWeekly: 0, pyTotal: 0, pastWeeklyCpp: 0, pastWeeklyPy: 0, streak: 2 },
-            { id: 17, name: "Mərim Nağıyeva", isFounder: false, avatar: "https://svgsilh.com/svg/1300331.svg", cppWeekly: 0, cppTotal: 0, pyWeekly: 0, pyTotal: 0, pastWeeklyCpp: 0, pastWeeklyPy: 0, streak: 1 },
-            { id: 18, name: "Kərim Paşayev", isFounder: false, avatar: "https://svgsilh.com/svg/1300331.svg", cppWeekly: 0, cppTotal: 0, pyWeekly: 0, pyTotal: 0, pastWeeklyCpp: 0, pastWeeklyPy: 0, streak: 0 },
-            { id: 19, name: "Səbinə Rəhimova", isFounder: false, avatar: "https://svgsilh.com/svg/1300331.svg", cppWeekly: 0, cppTotal: 0, pyWeekly: 0, pyTotal: 0, pastWeeklyCpp: 0, pastWeeklyPy: 0, streak: 2 },
-            { id: 20, name: "Vüsal Zeynalov", isFounder: false, avatar: "https://svgsilh.com/svg/1300331.svg", cppWeekly: 0, cppTotal: 0, pyWeekly: 0, pyTotal: 0, pastWeeklyCpp: 0, pastWeeklyPy: 0, streak: 1 },
-            { id: 21, name: "Nigar Abdullayeva", isFounder: false, avatar: "https://svgsilh.com/svg/1300331.svg", cppWeekly: 0, cppTotal: 0, pyWeekly: 0, pyTotal: 0, pastWeeklyCpp: 0, pastWeeklyPy: 0, streak: 3 }
-        ];
+        function calculateAgeAndFormattedBirth(birthStr) {
+            if (!birthStr) return { age: 18, birthFormatted: "Məlum deyil" };
+            const birthDate = new Date(birthStr);
+            const today = new Date();
+            let age = today.getFullYear() - birthDate.getFullYear();
+            const monthDiff = today.getMonth() - birthDate.getMonth();
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) age--;
+            const day = String(birthDate.getDate()).padStart(2, '0');
+            const month = String(birthDate.getMonth() + 1).padStart(2, '0');
+            return { age, birthFormatted: `${day}.${month}.${birthDate.getFullYear()}` };
+        }
 
-        // Canlı Saat
+        function calculateAutoCourse() {
+            const startYear = 2025;
+            const today = new Date();
+            let courseNumber = today.getFullYear() - startYear + 1;
+            if (today.getMonth() < 5) courseNumber--;
+            if (courseNumber < 1) courseNumber = 1;
+            if (courseNumber > 4) courseNumber = 4;
+            return `${courseNumber}-ci Kurs`;
+        }
+
         function updateLiveDateTime() {
             const now = new Date();
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
-            document.getElementById('liveDateTime').innerText = "📅 " + now.toLocaleDateString('az-AZ', options);
+            const options = { day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+            const dtEl = document.getElementById('liveDateTime');
+            if (dtEl) dtEl.innerText = "📅 " + now.toLocaleDateString('az-AZ', options);
         }
         setInterval(updateLiveDateTime, 1000);
-        updateLiveDateTime();
-        // -------------------------------------------------------------
-        // 3. TAB KEÇİDLƏRİ VƏ REYTİNQ CƏDVƏLİNİN RENDERİ
-        // -------------------------------------------------------------
-        function switchTab(tab) {
-            currentTab = tab;
+
+        function parseUserAgentClean(ua) {
+            let os = "Kompüter (PC)";
+            if (/iphone/i.test(ua)) os = "📱 iPhone";
+            else if (/ipad/i.test(ua)) os = "📱 iPad";
+            else if (/android/i.test(ua)) os = "📱 Android Mobil";
+            else if (/windows/i.test(ua)) os = "💻 Windows Kompüter";
+            else if (/macintosh|mac os x/i.test(ua)) os = "💻 Mac Kompüter";
+
+            let browser = "Brauzer";
+            if (/chrome|crios/i.test(ua) && !/edg/i.test(ua)) browser = "Chrome";
+            else if (/safari/i.test(ua) && !/chrome/i.test(ua)) browser = "Safari";
+            else if (/firefox|fxios/i.test(ua)) browser = "Firefox";
+            else if (/edg/i.test(ua)) browser = "Edge";
+
+            return `${os} • ${browser}`;
+        }
+
+        function logDeviceInfo(action, detail="") {
+            try {
+                const cleanDevice = parseUserAgentClean(navigator.userAgent);
+                database.ref('device_logs').push({
+                    action, detail, deviceInfo: cleanDevice, timestamp: new Date().toLocaleString('az-AZ')
+                });
+            } catch(e){}
+        }
+
+        database.ref('group_photo').on('value', (snap) => {
+            const photoUrl = snap.val();
+            if (photoUrl && document.getElementById('mainGroupImg')) document.getElementById('mainGroupImg').src = photoUrl;
+        });
+
+        database.ref('students_data').on('value', (snapshot) => {
+            const data = snapshot.val();
+            if (data && data.cpp && data.cpp.length === 25) {
+                globalData = data;
+                
+                let needUpdate = false;
+                ['cpp', 'python', 'common'].forEach(tab => {
+                    if (globalData[tab]) {
+                        globalData[tab].forEach(s => {
+                            if (s.ad && s.ad.toLowerCase().includes("poladxan")) {
+                                if (s.ad !== "Ağazadə Poladxan") {
+                                    s.ad = "Ağazadə Poladxan";
+                                    needUpdate = true;
+                                }
+                            }
+                        });
+                    }
+                });
+                if (needUpdate) {
+                    database.ref('students_data').set(globalData);
+                }
+
+            } else {
+                globalData = {
+                    cpp: STUDENT_NAMES.map((name, i) => ({ id: i+1, ad: name, foto: DEFAULT_AVATAR_URL, yer: DEFAULT_BIRTH_PLACES[name] || "Bakı şəhəri", fm: 0, stepping: 0, e_olimp: 0, codesources: 0, hackerrank: 0, kecmis_reyting: 0 })),
+                    python: STUDENT_NAMES.map((name, i) => ({ id: i+1, ad: name, foto: DEFAULT_AVATAR_URL, yer: DEFAULT_BIRTH_PLACES[name] || "Bakı şəhəri", fm: 0, stepping: 0, e_olimp: 0, codesources: 0, hackerrank: 0, kecmis_reyting: 0 })),
+                    common: STUDENT_NAMES.map((name, i) => ({ id: i+1, ad: name, foto: DEFAULT_AVATAR_URL, yer: DEFAULT_BIRTH_PLACES[name] || "Bakı şəhəri", kecmis_reyting: 0 }))
+                };
+                database.ref('students_data').set(globalData);
+            }
+            updateJuryAvatars();
+            renderTable();
+            if (activeAdminUser) renderAdminBody();
+        });
+
+        function updateJuryAvatars() {
+            if (!globalData.cpp) return;
+            const aqsin = globalData.cpp.find(s => s.ad === "Süleymanzadə Aqşin");
+            const kenan = globalData.cpp.find(s => s.ad === "Gülverdiyev Kənan");
+            const turan = globalData.cpp.find(s => s.ad === "Məmmədli Turan");
+
+            if (aqsin && aqsin.foto && document.getElementById('juryImgAqsin')) document.getElementById('juryImgAqsin').src = aqsin.foto;
+            if (kenan && kenan.foto && document.getElementById('juryImgKenan')) document.getElementById('juryImgKenan').src = kenan.foto;
+            if (turan && turan.foto && document.getElementById('juryImgTuran')) document.getElementById('juryImgTuran').src = turan.foto;
+        }
+
+        function switchTab(tabName) {
+            currentTab = tabName;
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            document.getElementById(`btn-${tab}`).classList.add('active');
-            sortAndRender();
+            const b = document.getElementById('btn-' + tabName);
+            if (b) b.classList.add('active');
+            renderTable();
+            if (activeAdminUser) renderAdminBody();
+        }
+
+        function calculateTotals(student) {
+            if (!student) return { cari_reyting: 0, artim: 0 };
+            if (currentTab === 'common') {
+                const cppStudent = globalData.cpp ? globalData.cpp.find(s => s.ad === student.ad) : null;
+                const pyStudent = globalData.python ? globalData.python.find(s => s.ad === student.ad) : null;
+                const cppCari = cppStudent ? (Number(cppStudent.fm)||0)+(Number(cppStudent.stepping)||0)+(Number(cppStudent.e_olimp)||0)+(Number(cppStudent.codesources)||0)+(Number(cppStudent.hackerrank)||0) : 0;
+                const pyCari = pyStudent ? (Number(pyStudent.fm)||0)+(Number(pyStudent.stepping)||0)+(Number(pyStudent.e_olimp)||0)+(Number(pyStudent.codesources)||0)+(Number(pyStudent.hackerrank)||0) : 0;
+                const cari = cppCari + pyCari;
+                return { ...student, cari_reyting: cari, artim: cari - Number(student.kecmis_reyting || 0) };
+            } else {
+                const cari = Number(student.fm || 0) + Number(student.stepping || 0) + Number(student.e_olimp || 0) + Number(student.codesources || 0) + Number(student.hackerrank || 0);
+                return { ...student, cari_reyting: cari, artim: cari - Number(student.kecmis_reyting || 0) };
+            }
+        }
+
+        function renderTable() {
+            const tableHead = document.querySelector('#ratingTable thead');
+            const tableBody = document.querySelector('#tableBody');
+            if (!tableHead || !tableBody) return;
+
+            const rawList = globalData[currentTab] || [];
+            const list = rawList.map(s => calculateTotals(s));
+
+            updateHighlights(list);
+
+            if (currentTab === 'common') {
+                tableHead.innerHTML = `<tr><th>#</th><th>Tələbə</th><th>Cari Reytinq</th><th>Keçmiş Reytinq</th><th>Artım</th></tr>`;
+            } else {
+                tableHead.innerHTML = `
+                    <tr>
+                        <th>#</th>
+                        <th>Tələbə</th>
+                        <th>FM</th>
+                        <th><a href="https://stepik.org" target="_blank">stepik.org</a></th>
+                        <th><a href="https://eolymp.com" target="_blank">eolymp.com</a></th>
+                        <th><a href="https://codesources.com" target="_blank">codesource.com</a></th>
+                        <th><a href="https://hackerrank.com" target="_blank">hackerrank.com</a></th>
+                        <th>Cari Reytinq</th>
+                        <th>Keçmiş Reytinq</th>
+                        <th>Artım</th>
+                    </tr>`;
+            }
+
+            tableBody.innerHTML = '';
+            list.forEach((item, index) => {
+                const row = document.createElement('tr');
+                const isFounder = FOUNDERS.includes(item.ad);
+                
+                if (index === 0) row.classList.add('rank-1-row');
+                else if (index === 1) row.classList.add('rank-2-row');
+                else if (index === 2) row.classList.add('rank-3-row');
+
+                if (isFounder) row.classList.add('founder-row');
+
+                const artimClass = item.artim >= 0 ? 'badge-positive' : 'badge-negative';
+                const artimSign = item.artim >= 0 ? `+${item.artim}` : item.artim;
+                const founderBadge = isFounder ? `<span class="founder-badge">👑 JÜRİ</span>` : '';
+                
+                const rankIcon = index === 0 ? '🥇' : (index === 1 ? '🥈' : (index === 2 ? '🥉' : `${index + 1}`));
+                const avatarHTML = `<div class="avatar"><img src="${item.foto || DEFAULT_AVATAR_URL}"></div>`;
+
+                if (currentTab === 'common') {
+                    row.innerHTML = `
+                        <td class="rank-col">${rankIcon}</td>
+                        <td><div class="student-info">${avatarHTML}<span class="clickable-name" onclick="openProfileByName('${item.ad}')">${item.ad}</span>${founderBadge}</div></td>
+                        <td><strong style="color:var(--accent); font-size:15px;">${item.cari_reyting} pt</strong></td>
+                        <td>${item.kecmis_reyting} pt</td>
+                        <td class="${artimClass}">${artimSign}</td>
+                    `;
+                } else {
+                    row.innerHTML = `
+                        <td class="rank-col">${rankIcon}</td>
+                        <td><div class="student-info">${avatarHTML}<span class="clickable-name" onclick="openProfileByName('${item.ad}')">${item.ad}</span>${founderBadge}</div></td>
+                        <td>${item.fm}</td><td>${item.stepping}</td><td>${item.e_olimp}</td><td>${item.codesources}</td><td>${item.hackerrank}</td>
+                        <td><strong style="color:var(--accent); font-size:15px;">${item.cari_reyting} pt</strong></td>
+                        <td>${item.kecmis_reyting} pt</td>
+                        <td class="${artimClass}">${artimSign}</td>
+                    `;
+                }
+                tableBody.appendChild(row);
+            });
+        }
+
+        function updateHighlights(list) {
+            const sortedCurrent = [...list].sort((a,b) => b.cari_reyting - a.cari_reyting);
+            const sortedPast = [...list].sort((a,b) => b.kecmis_reyting - a.kecmis_reyting);
+
+            const topEl = document.getElementById('topList');
+            if (topEl) topEl.innerHTML = sortedCurrent.slice(0, 3).map((s, i) => {
+                return `<li onclick="openProfileByName('${s.ad}')"><span>${i===0?'🥇 1-ci':i===1?'🥈 2-ci':'🥉 3-cü'} ${s.ad}</span><strong>${s.cari_reyting} pt</strong></li>`;
+            }).join('');
+
+            const pastEl = document.getElementById('pastTopList');
+            if (pastEl) pastEl.innerHTML = sortedPast.slice(0, 3).map((s, i) => {
+                return `<li onclick="openProfileByName('${s.ad}')"><span>⭐ ${s.ad}</span><span>${s.kecmis_reyting} pt</span></li>`;
+            }).join('');
+
+            const botEl = document.getElementById('bottomList');
+            if (botEl) botEl.innerHTML = sortedCurrent.slice(-3).reverse().map(s => {
+                return `<li onclick="openProfileByName('${s.ad}')"><span>😭 ${s.ad}</span><span style="color:var(--negative);">${s.cari_reyting} pt</span></li>`;
+            }).join('');
         }
 
         function sortAndRender() {
-            let sorted = [...studentsData];
-
-            if (currentTab === 'cpp') {
-                sorted.sort((a, b) => b.cppWeekly - a.cppWeekly || b.cppTotal - a.cppTotal);
-            } else if (currentTab === 'python') {
-                sorted.sort((a, b) => b.pyWeekly - a.pyWeekly || b.pyTotal - a.pyTotal);
-            } else {
-                sorted.sort((a, b) => (b.cppTotal + b.pyTotal) - (a.cppTotal + a.pyTotal));
-            }
-
-            renderTableHeaders();
-            renderTableBody(sorted);
-            renderHighlights();
+            if (!globalData[currentTab]) return;
+            globalData[currentTab].sort((a, b) => calculateTotals(b).cari_reyting - calculateTotals(a).cari_reyting);
+            renderTable();
         }
 
-        function renderTableHeaders() {
-            const thead = document.querySelector('#ratingTable thead');
-            if (currentTab === 'cpp') {
-                thead.innerHTML = `
-                    <tr>
-                        <th style="width:50px;">#</th>
-                        <th>Tələbə</th>
-                        <th>Həftəlik (C++)</th>
-                        <th>Ümumi Bal (C++)</th>
-                        <th>Streak</th>
-                    </tr>
-                `;
-            } else if (currentTab === 'python') {
-                thead.innerHTML = `
-                    <tr>
-                        <th style="width:50px;">#</th>
-                        <th>Tələbə</th>
-                        <th>Həftəlik (Python)</th>
-                        <th>Ümumi Bal (Python)</th>
-                        <th>Streak</th>
-                    </tr>
-                `;
-            } else {
-                thead.innerHTML = `
-                    <tr>
-                        <th style="width:50px;">#</th>
-                        <th>Tələbə</th>
-                        <th>Ümumi C++</th>
-                        <th>Ümumi Python</th>
-                        <th>CƏM BAL</th>
-                    </tr>
-                `;
-            }
+        // 🎯 PROFİL BAXIŞI 
+        function openProfileByName(studentName) {
+            const student = (globalData[currentTab]||[]).find(s => s.ad === studentName);
+            if (!student) return;
+            activeProfileStudent = student.ad;
+            logDeviceInfo("Profilə Baxış", activeProfileStudent);
+
+            const computed = calculateTotals(student);
+
+            document.getElementById('pAvatar').src = student.foto || DEFAULT_AVATAR_URL;
+            document.getElementById('pName').innerText = student.ad;
+            
+            const isFounder = FOUNDERS.includes(student.ad);
+            document.getElementById('pBadge').innerHTML = isFounder ? `<span class="founder-badge">👑 JÜRİ / TƏSİSÇİ</span>` : '';
+
+            const birthInfo = calculateAgeAndFormattedBirth(BIRTH_DATES[student.ad]);
+            document.getElementById('pKurs').innerText = calculateAutoCourse();
+            document.getElementById('pYos').innerText = `${birthInfo.age} Yaş (${birthInfo.birthFormatted})`;
+            document.getElementById('pYer').innerText = student.yer || DEFAULT_BIRTH_PLACES[student.ad] || "Bakı şəhəri";
+            
+            document.getElementById('pCari').innerText = computed.cari_reyting + " pt";
+
+            const weeklyGained = computed.cari_reyting - Number(student.kecmis_reyting || 0);
+            const artimSign = weeklyGained >= 0 ? `+${weeklyGained}` : weeklyGained;
+            document.getElementById('pArtim').innerText = artimSign + " pt (Bu həftə)";
+            document.getElementById('pArtim').style.color = weeklyGained >= 0 ? 'var(--positive)' : 'var(--negative)';
+
+            loadStudentUploadedTasksList();
+            renderStudentChart(weeklyGained);
+
+            document.getElementById('mainDashboard').style.display = 'none';
+            document.getElementById('profilePage').style.display = 'block';
+            window.scrollTo(0, 0);
         }
 
-        function renderTableBody(data) {
-            const tbody = document.getElementById('tableBody');
-            tbody.innerHTML = '';
-
-            data.forEach((student, index) => {
-                const tr = document.createElement('tr');
-                const rank = index + 1;
-
-                if (rank === 1) tr.classList.add('rank-1-row');
-                else if (rank === 2) tr.classList.add('rank-2-row');
-                else if (rank === 3) tr.classList.add('rank-3-row');
-
-                if (student.isFounder) tr.classList.add('founder-row');
-
-                let medal = rank;
-                if (rank === 1) medal = '🥇';
-                else if (rank === 2) medal = '🥈';
-                else if (rank === 3) medal = '🥉';
-
-                let founderTag = student.isFounder ? `<span class="founder-badge">FOUNDER</span>` : '';
-
-                if (currentTab === 'cpp') {
-                    tr.innerHTML = `
-                        <td class="rank-col">${medal}</td>
-                        <td>
-                            <div class="student-info">
-                                <div class="avatar"><img src="${student.avatar}" alt="${student.name}"></div>
-                                <div>
-                                    <span class="clickable-name" onclick="openProfile(${student.id})">${student.name}</span>
-                                    ${founderTag}
-                                </div>
-                            </div>
-                        </td>
-                        <td><span class="badge-positive">+${student.cppWeekly}</span></td>
-                        <td><strong>${student.cppTotal}</strong></td>
-                        <td>🔥 ${student.streak} Gün</td>
-                    `;
-                } else if (currentTab === 'python') {
-                    tr.innerHTML = `
-                        <td class="rank-col">${medal}</td>
-                        <td>
-                            <div class="student-info">
-                                <div class="avatar"><img src="${student.avatar}" alt="${student.name}"></div>
-                                <div>
-                                    <span class="clickable-name" onclick="openProfile(${student.id})">${student.name}</span>
-                                    ${founderTag}
-                                </div>
-                            </div>
-                        </td>
-                        <td><span class="badge-positive">+${student.pyWeekly}</span></td>
-                        <td><strong>${student.pyTotal}</strong></td>
-                        <td>🔥 ${student.streak} Gün</td>
-                    `;
-                } else {
-                    const totalScore = student.cppTotal + student.pyTotal;
-                    tr.innerHTML = `
-                        <td class="rank-col">${medal}</td>
-                        <td>
-                            <div class="student-info">
-                                <div class="avatar"><img src="${student.avatar}" alt="${student.name}"></div>
-                                <div>
-                                    <span class="clickable-name" onclick="openProfile(${student.id})">${student.name}</span>
-                                    ${founderTag}
-                                </div>
-                            </div>
-                        </td>
-                        <td>${student.cppTotal}</td>
-                        <td>${student.pyTotal}</td>
-                        <td><strong style="color:var(--accent); font-size:16px;">${totalScore}</strong></td>
-                    `;
+        function loadStudentUploadedTasksList() {
+            database.ref('student_tasks').orderByChild('studentName').equalTo(activeProfileStudent).on('value', (snap) => {
+                const tasks = snap.val();
+                const statusDiv = document.getElementById('studentTaskStatus');
+                if(!statusDiv) return;
+                statusDiv.innerHTML = '';
+                
+                let count = 0;
+                if (tasks) {
+                    Object.keys(tasks).forEach(key => {
+                        const t = tasks[key];
+                        count++;
+                        let subjTag = (t.subject === 'python' || (t.fileName && t.fileName.endsWith('.py'))) ? '🟡 [Python]' : '🔵 [C++]';
+                        let stText = t.status === 'correct' ? `✅ Düzgün (+${t.addedPoints || 0} Bal)` : (t.status === 'wrong' ? '❌ Səhv' : '⏳ Yoxlanılır');
+                        let stColor = t.status === 'correct' ? 'var(--positive)' : (t.status === 'wrong' ? 'var(--negative)' : 'var(--gold)');
+                        statusDiv.innerHTML += `<div style="margin-top:6px;"><span style="color:${stColor}">${subjTag} 📄 ${t.fileName} - (${stText})</span></div>`;
+                    });
                 }
-
-                tbody.appendChild(tr);
+                
+                if (count === 0) {
+                    statusDiv.innerHTML = 'Hələ heç bir yüklənmiş fayl yoxdur.';
+                }
             });
         }
 
-        function renderHighlights() {
-            // Həftənin Liderləri (İlk 3)
-            let topSorted = [...studentsData].sort((a, b) => (b.cppWeekly + b.pyWeekly) - (a.cppWeekly + a.pyWeekly));
-            const topList = document.getElementById('topList');
-            topList.innerHTML = topSorted.slice(0, 3).map((s, i) => `
-                <li onclick="openProfile(${s.id})">
-                    <span>${i === 0 ? '🥇' : i === 1 ? '🥈' : '🥉'} ${s.name}</span>
-                    <strong style="color:var(--positive)">+${s.cppWeekly + s.pyWeekly} B</strong>
-                </li>
-            `).join('');
+        // 📱 MOBİL VƏ YAXUD PC-DƏN SEÇİLMİŞ FƏNN İLƏ TAPŞIRIQ YÜKLƏMƏ
+        function uploadStudentTasks() {
+            const fileInput = document.getElementById('studentTaskFiles');
+            const files = fileInput.files;
+            const subject = document.getElementById('studentSubjectSelect').value || 'cpp';
 
-            // Ötən Həftənin Liderləri
-            let pastSorted = [...studentsData].sort((a, b) => (b.pastWeeklyCpp + b.pastWeeklyPy) - (a.pastWeeklyCpp + a.pastWeeklyPy));
-            const pastTopList = document.getElementById('pastTopList');
-            pastTopList.innerHTML = pastSorted.slice(0, 3).map((s, i) => `
-                <li onclick="openProfile(${s.id})">
-                    <span>⚡ ${s.name}</span>
-                    <strong style="color:var(--accent)">${s.pastWeeklyCpp + s.pastWeeklyPy} B</strong>
-                </li>
-            `).join('');
+            if (!files || files.length === 0) { alert("Zəhmət olmasa ən azı bir fayl seçin!"); return; }
 
-            // Həftənin Outsiderləri (Son 3)
-            let bottomSorted = [...studentsData].sort((a, b) => (a.cppWeekly + a.pyWeekly) - (b.cppWeekly + b.pyWeekly));
-            const bottomList = document.getElementById('bottomList');
-            bottomList.innerHTML = bottomSorted.slice(0, 3).map(s => `
-                <li onclick="openProfile(${s.id})">
-                    <span>💔 ${s.name}</span>
-                    <strong style="color:var(--negative)">${s.cppWeekly + s.pyWeekly} B</strong>
-                </li>
-            `).join('');
+            logDeviceInfo("Fayl Yükləmə", `${activeProfileStudent} - ${files.length} fayl (${subject.toUpperCase()})`);
+
+            let uploadedCount = 0;
+            Array.from(files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    database.ref('student_tasks').push({
+                        studentName: activeProfileStudent,
+                        fileName: file.name,
+                        fileData: e.target.result,
+                        subject: subject,
+                        status: 'pending',
+                        timestamp: new Date().toISOString()
+                    }).then(() => {
+                        uploadedCount++;
+                        if (uploadedCount === files.length) {
+                            alert(`${files.length} ədəd fayl ${subject.toUpperCase()} tapşırığı olaraq adminə göndərildi! ✅`);
+                            fileInput.value = '';
+                        }
+                    });
+                };
+                reader.readAsDataURL(file);
+            });
         }
 
-        // -------------------------------------------------------------
-        // 4. SHƏXSİ PROFİL SƏHİFƏSİ & CHART.JS
-        // -------------------------------------------------------------
-        let activeProfileId = null;
-
-        function openProfile(id) {
-            const student = studentsData.find(s => s.id === id);
-            if (!student) return;
-
-            activeProfileId = id;
-            document.getElementById('mainDashboard').style.display = 'none';
-            document.getElementById('profilePage').style.display = 'block';
-
-            document.getElementById('profileAvatar').src = student.avatar;
-            document.getElementById('profileName').innerText = student.name;
-            document.getElementById('profileSub').innerText = student.isFounder ? "⭐ Founder / Təsisçi" : "🎓 TT-08 Tələbəsi";
-
-            document.getElementById('profileCppScore').innerText = `${student.cppWeekly} / ${student.cppTotal}`;
-            document.getElementById('profilePyScore').innerText = `${student.pyWeekly} / ${student.pyTotal}`;
-            document.getElementById('profileStreak').innerText = `${student.streak} Gün`;
-
-            renderProfileChart(student);
-        }
-
-        function closeProfile() {
+        function closeProfilePage() {
             document.getElementById('profilePage').style.display = 'none';
             document.getElementById('mainDashboard').style.display = 'block';
-            activeProfileId = null;
+            window.scrollTo(0, 0);
         }
 
-        function renderProfileChart(student) {
-            const ctx = document.getElementById('profileChart').getContext('2d');
-            if (myChart) myChart.destroy();
-
-            myChart = new Chart(ctx, {
+        function renderStudentChart(weeklyGained) {
+            const ctx = document.getElementById('studentChart').getContext('2d');
+            if (chartInstance) chartInstance.destroy();
+            
+            chartInstance = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: ['1-ci Həftə', '2-ci Həftə', '3-cü Həftə', 'Cari Həftə'],
-                    datasets: [
-                        {
-                            label: 'C++ Balları',
-                            data: [Math.max(0, student.cppTotal - 30), Math.max(0, student.cppTotal - 15), Math.max(0, student.cppTotal - student.cppWeekly), student.cppTotal],
-                            borderColor: '#38bdf8',
-                            backgroundColor: 'rgba(56, 189, 248, 0.1)',
-                            tension: 0.3,
-                            fill: true
-                        },
-                        {
-                            label: 'Python Balları',
-                            data: [Math.max(0, student.pyTotal - 25), Math.max(0, student.pyTotal - 10), Math.max(0, student.pyTotal - student.pyWeekly), student.pyTotal],
-                            borderColor: '#f59e0b',
-                            backgroundColor: 'rgba(245, 158, 11, 0.1)',
-                            tension: 0.3,
-                            fill: true
-                        }
-                    ]
+                    labels: ['Start (0 pt)', 'Ⅰ Mərhələ', 'Ⅱ Mərhələ', 'Ⅲ Mərhələ', 'Cari Nəticə'],
+                    datasets: [{
+                        label: 'Bu həftə qazanılan bal',
+                        data: [
+                            0, 
+                            Math.round(weeklyGained * 0.2), 
+                            Math.round(weeklyGained * 0.55), 
+                            Math.round(weeklyGained * 0.8), 
+                            weeklyGained
+                        ],
+                        borderColor: '#38bdf8', 
+                        backgroundColor: 'rgba(56, 189, 248, 0.2)', 
+                        fill: true, 
+                        tension: 0.4,
+                        pointBackgroundColor: '#f59e0b',
+                        pointBorderColor: '#fff',
+                        pointRadius: 6,
+                        pointHoverRadius: 9
+                    }]
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { labels: { color: '#f8fafc' } } },
+                options: { 
+                    responsive: true, 
+                    plugins: { 
+                        legend: { display: true, labels: { color: '#94a3b8', font: { weight: 'bold' } } },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) { return `Artım: +${context.raw} pt`; }
+                            }
+                        }
+                    },
                     scales: {
-                        x: { ticks: { color: '#94a3b8' }, grid: { color: '#334155' } },
-                        y: { ticks: { color: '#94a3b8' }, grid: { color: '#334155' } }
+                        x: { grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#94a3b8' } },
+                        y: { beginAtZero: true, grid: { color: 'rgba(255, 255, 255, 0.05)' }, ticks: { color: '#94a3b8' } }
                     }
                 }
             });
         }
-        // -------------------------------------------------------------
-        // 5. ADMİN PANELİ VƏ TƏLƏBƏ TAPŞIRIQ MƏNTİQİ
-        // -------------------------------------------------------------
+
+        function triggerCardConfetti(event) {
+            if(event && event.stopPropagation) event.stopPropagation();
+            try { confetti({ particleCount: 70, spread: 85, origin: { y: 0.6 }, zIndex: 99999 }); } catch(e){}
+        }
+
+        function showWinnersCelebration() {
+            const rawList = globalData[currentTab] || [];
+            const list = rawList.map(s => calculateTotals(s)).sort((a,b) => b.cari_reyting - a.cari_reyting);
+            const top5 = list.slice(0, 5);
+
+            const grid = document.getElementById('winnersListGrid');
+            if(!grid) return;
+            grid.innerHTML = '';
+
+            top5.forEach((s, idx) => {
+                let rankClass = idx === 0 ? 'rank-1' : (idx === 1 ? 'rank-2' : (idx === 2 ? 'rank-3' : 'rank-other'));
+                let titleText = idx === 0 ? '👑 ŞAH ÇEMPİON' : (idx === 1 ? '🥈 GÜMÜŞ QALİB' : (idx === 2 ? '🥉 BÜRÜNC QALİB' : `${idx+1}-ci YER`));
+                let crownHtml = idx === 0 ? `<div class="crown-icon">👑</div>` : '';
+
+                grid.innerHTML += `
+                    <div class="winner-card-v3 ${rankClass}" onclick="triggerCardConfetti(event)">
+                        <span class="rank-badge-title">${titleText}</span>
+                        <div class="winner-avatar-box">
+                            ${crownHtml}
+                            <img src="${s.foto || DEFAULT_AVATAR_URL}">
+                        </div>
+                        <strong style="display:block; font-size:16px; color:#fff;">${s.ad}</strong>
+                        <span style="color:var(--accent); font-weight:800; font-size:15px; margin-top:4px; display:block;">${s.cari_reyting} pt</span>
+                    </div>
+                `;
+            });
+
+            document.getElementById('winnersModal').style.display = 'flex';
+
+            const duration = 4 * 1000;
+            const animationEnd = Date.now() + duration;
+
+            const interval = setInterval(function() {
+                const timeLeft = animationEnd - Date.now();
+                if (timeLeft <= 0) return clearInterval(interval);
+
+                try {
+                    confetti({
+                        particleCount: 45, startVelocity: 35, spread: 360, ticks: 75, zIndex: 99999,
+                        origin: { x: Math.random(), y: Math.random() - 0.2 }
+                    });
+                } catch(e){}
+            }, 250);
+
+            for (let i = 0; i < 25; i++) {
+                setTimeout(() => {
+                    const emoji = document.createElement('div');
+                    emoji.className = 'flying-emoji';
+                    emoji.innerText = ['👑', '🏆', '🌹', '💐', '⭐', '🎉', '🥇'][Math.floor(Math.random() * 7)];
+                    emoji.style.left = Math.random() * 92 + 'vw';
+                    document.body.appendChild(emoji);
+                    setTimeout(() => emoji.remove(), 3200);
+                }, i * 120);
+            }
+
+            database.ref('audio_winner').once('value', (snap) => {
+                const audioData = snap.val();
+                if (audioData) {
+                    if (activeAudioObject) activeAudioObject.pause();
+                    activeAudioObject = new Audio(audioData);
+                    activeAudioObject.play().catch(e=>{});
+                }
+            });
+        }
+
+        function closeWinnersModal() { 
+            if (activeAudioObject) activeAudioObject.pause();
+            document.getElementById('winnersModal').style.display = 'none'; 
+        }
+
+        function showOutsidersModal() {
+            const rawList = globalData[currentTab] || [];
+            const list = rawList.map(s => calculateTotals(s)).sort((a,b) => a.cari_reyting - b.cari_reyting);
+            const bottom3 = list.slice(0, 3);
+
+            const grid = document.getElementById('outsidersListGrid');
+            if(!grid) return;
+            grid.innerHTML = '';
+            bottom3.forEach((s) => {
+                grid.innerHTML += `
+                    <div style="background:var(--card-inner); padding:12px 18px; border-radius:12px; border:1px solid var(--negative); text-align:center;">
+                        <img src="${s.foto || DEFAULT_AVATAR_URL}" style="width:60px; height:60px; border-radius:50%; border:2px solid var(--negative); object-fit:cover;">
+                        <strong style="display:block; font-size:13px; margin-top:5px; color:#fff;">😭 ${s.ad}</strong>
+                        <span style="color:var(--negative); font-weight:bold; font-size:12px;">${s.cari_reyting} pt</span>
+                    </div>
+                `;
+            });
+
+            document.getElementById('outsidersModal').style.display = 'flex';
+
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                    const dislike = document.createElement('div');
+                    dislike.className = 'dislike-particle';
+                    dislike.innerText = ['👎', '💔', '😴', '💩'][Math.floor(Math.random() * 4)];
+                    dislike.style.left = Math.random() * 95 + 'vw';
+                    document.body.appendChild(dislike);
+                    setTimeout(() => dislike.remove(), 3500);
+                }, i * 150);
+            }
+
+            database.ref('audio_outsider').once('value', (snap) => {
+                const audioData = snap.val();
+                if (audioData) {
+                    if (activeAudioObject) activeAudioObject.pause();
+                    activeAudioObject = new Audio(audioData);
+                    activeAudioObject.play().catch(e=>{});
+                }
+            });
+        }
+
+        function closeOutsidersModal() {
+            if (activeAudioObject) activeAudioObject.pause();
+            document.getElementById('outsidersModal').style.display = 'none';
+        }
+
+        function openFeedbackModal() { document.getElementById('feedbackModal').style.display = 'flex'; }
+        function closeFeedbackModal() { document.getElementById('feedbackModal').style.display = 'none'; }
+        function sendFeedback() {
+            const name = document.getElementById('fbName').value.trim();
+            const msg = document.getElementById('fbMsg').value.trim();
+            if (!name || !msg) { alert("Zəhmət olmasa bütün xanaları doldurun!"); return; }
+
+            database.ref('feedbacks').push({ name, msg, timestamp: new Date().toISOString() }).then(() => {
+                alert("Mesajınız adminə uğurla göndərildi! 💬");
+                document.getElementById('fbName').value = '';
+                document.getElementById('fbMsg').value = '';
+                closeFeedbackModal();
+            });
+        }
+
+        function handleLoginInputKey(e, type) {
+            if (e.key === 'Enter') {
+                if (type === 'user') {
+                    document.getElementById('loginPass').focus();
+                } else if (type === 'pass') {
+                    handleLogin();
+                }
+            }
+        }
+
         function checkSavedLoginOrModal() {
-            if (activeAdminUser) {
+            const savedUser = localStorage.getItem('admin_user');
+            const savedPass = localStorage.getItem('admin_pass');
+            if (savedUser && savedPass && checkCredentials(savedUser, savedPass)) {
+                activeAdminUser = savedUser.toLowerCase();
                 openAdminPanel();
             } else {
-                document.getElementById('adminLoginModal').style.display = 'flex';
+                document.getElementById('loginModal').style.display = 'flex';
             }
         }
 
-        function closeAdminLoginModal() {
-            document.getElementById('adminLoginModal').style.display = 'none';
+        function checkCredentials(inputUser, inputPass) {
+            const cleanUser = inputUser.trim().toLowerCase();
+            const cleanPass = inputPass.trim();
+            return ADMIN_USERS[cleanUser] && ADMIN_USERS[cleanUser] === cleanPass;
         }
 
-        function processAdminLogin() {
-            const user = document.getElementById('adminUsernameInput').value.trim();
-            const pass = document.getElementById('adminPasswordInput').value.trim();
+        function handleLogin() {
+            const user = document.getElementById('loginUser').value;
+            const pass = document.getElementById('loginPass').value;
 
-            if (user === "admin" && pass === "1234") {
-                activeAdminUser = { name: "Admin (Jüri)", role: "juri" };
-            } else if (user === "aqsin" && pass === "aqsin2008") {
-                activeAdminUser = { name: "Aqşin Süleymanzadə (Baş Admin)", role: "head" };
+            if (checkCredentials(user, pass)) {
+                activeAdminUser = user.trim().toLowerCase();
+                localStorage.setItem('admin_user', activeAdminUser);
+                localStorage.setItem('admin_pass', pass.trim());
+                logDeviceInfo("Admin Girişi", `Admin: ${activeAdminUser}`);
+                closeLoginModal();
+                openAdminPanel();
             } else {
-                alert("❌ İstifadəçi adı və ya şifrə yanlışdır!");
-                return;
+                alert("İstifadəçi adı və ya şifrə yanlışdır!");
             }
+        }
 
-            closeAdminLoginModal();
-            openAdminPanel();
+        function closeLoginModal() { document.getElementById('loginModal').style.display = 'none'; }
+        function logoutAdmin() {
+            localStorage.removeItem('admin_user'); localStorage.removeItem('admin_pass');
+            activeAdminUser = null;
+            closeAdminPanel();
         }
 
         function openAdminPanel() {
+            const isRestricted = (activeAdminUser === "rəho" || activeAdminUser === "reho");
+            const displayName = ADMIN_DISPLAY_NAMES[activeAdminUser] || activeAdminUser;
+            
+            document.getElementById('welcomeAdmin').innerText = `⚙️ ${displayName} (${currentTab.toUpperCase()})`;
+            document.getElementById('adminRoleSubtext').innerText = isRestricted ? "⚠️ Limitli Yoxlama Və Bal Admin Paneli" : "TT-08 Tam İdarəetmə Və Yoxlama Mərkəzi";
+
+            document.querySelectorAll('.restricted-hide').forEach(el => {
+                el.style.display = isRestricted ? 'none' : 'inline-block';
+            });
+            const fbCard = document.getElementById('cardStatFeedback');
+            if (fbCard) fbCard.style.display = isRestricted ? 'none' : 'flex';
+
+            renderAdminBody();
+            loadAdminTasksAndLogs();
             document.getElementById('mainDashboard').style.display = 'none';
             document.getElementById('fullAdminPage').style.display = 'block';
-
-            document.getElementById('welcomeAdmin').innerText = `⚙️ Xoş gəldiniz, ${activeAdminUser.name}`;
-            
-            if (activeAdminUser.role === 'juri') {
-                document.querySelectorAll('.restricted-hide').forEach(el => el.style.display = 'none');
-            } else {
-                document.querySelectorAll('.restricted-hide').forEach(el => el.style.display = 'inline-block');
-            }
-
-            switchAdminSubTab('scores');
-            loadAdminStats();
         }
 
         function closeAdminPanel() {
             document.getElementById('fullAdminPage').style.display = 'none';
             document.getElementById('mainDashboard').style.display = 'block';
-            activeAdminUser = null;
         }
 
-        function switchAdminSubTab(subTab) {
-            adminSubTab = subTab;
+        function switchAdminSubTab(tabName) {
+            const isRestricted = (activeAdminUser === "rəho" || activeAdminUser === "reho");
+            if (isRestricted && (tabName === 'audio' || tabName === 'logs')) return;
+
             document.querySelectorAll('.admin-nav-btn').forEach(btn => btn.classList.remove('active'));
-            if (event && event.target) event.target.classList.add('active');
+            if(event && event.target) event.target.classList.add('active');
 
-            const container = document.getElementById('adminTabContent');
-            container.innerHTML = '';
+            document.getElementById('adminTabStudents').style.display = tabName === 'students' ? 'block' : 'none';
+            document.getElementById('adminTabFiles').style.display = tabName === 'files' ? 'block' : 'none';
+            document.getElementById('adminTabAudio').style.display = tabName === 'audio' ? 'block' : 'none';
+            document.getElementById('adminTabLogs').style.display = tabName === 'logs' ? 'block' : 'none';
+        }
 
-            if (subTab === 'scores') {
-                renderAdminScoresTab(container);
-            } else if (subTab === 'tasks') {
-                renderAdminTasksTab(container);
-            } else if (subTab === 'feedback') {
-                renderAdminFeedbackTab(container);
-            } else if (subTab === 'reset') {
-                renderAdminResetTab(container);
+        function filterAdminStudents() {
+            const query = document.getElementById('adminSearchInput').value.toLowerCase();
+            const cards = document.querySelectorAll('.admin-student-card');
+            cards.forEach(card => {
+                const name = card.querySelector('strong').innerText.toLowerCase();
+                card.style.display = name.includes(query) ? 'block' : 'none';
+            });
+        }
+
+        function loadAdminTasksAndLogs() {
+            const isRestricted = (activeAdminUser === "rəho" || activeAdminUser === "reho");
+
+            database.ref('student_tasks').on('value', (snap) => {
+                const tasks = snap.val();
+                const cppDiv = document.getElementById('adminCppTasksList');
+                const pyDiv = document.getElementById('adminPythonTasksList');
+
+                if(!cppDiv || !pyDiv) return;
+                cppDiv.innerHTML = '';
+                pyDiv.innerHTML = '';
+
+                if (!tasks) { 
+                    cppDiv.innerHTML = 'C++ üçün yoxlanılacaq fayl yoxdur. ✅';
+                    pyDiv.innerHTML = 'Python üçün yoxlanılacaq fayl yoxdur. ✅';
+                    document.getElementById('statFilesCount').innerText = "0";
+                    return; 
+                }
+
+                const keys = Object.keys(tasks);
+                let cppCount = 0;
+                let pyCount = 0;
+
+                keys.forEach(key => {
+                    const t = tasks[key];
+
+                    if (t.checkedByAdmin) return;
+                    if (isRestricted && RESTRICTED_STUDENTS_FOR_REHO.includes(t.studentName)) return;
+
+                    let isPython = (t.subject === 'python') || (t.fileName && t.fileName.toLowerCase().endsWith('.py'));
+                    
+                    const cardHTML = `
+                        <div style="background:#070a12; padding:12px; border-radius:10px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; border:1px solid var(--border);">
+                            <div>
+                                <strong style="color:var(--accent);">${t.studentName}</strong>: 
+                                <a href="${t.fileData}" download="${t.fileName}" style="color:#fff; font-weight:bold;">📄 ${t.fileName}</a>
+                            </div>
+                            <div style="display:flex; gap:6px;">
+                                <button class="btn" style="background:var(--positive); font-size:11px; padding:6px 10px;" onclick="gradeTaskAndAddPoints('${key}', '${t.studentName}', '${isPython ? 'python' : 'cpp'}')">✅ Düzgün (Bal Ver)</button>
+                                <button class="btn" style="background:var(--negative); font-size:11px; padding:6px 10px;" onclick="gradeTask('${key}', 'wrong')">❌ Səhv</button>
+                                <button class="btn" style="background:#e11d48; font-size:11px; padding:6px 10px;" onclick="deleteStudentTaskCompletely('${key}')">🗑️ Sil (Hər Yerdən)</button>
+                            </div>
+                        </div>
+                    `;
+
+                    if (isPython) {
+                        pyCount++;
+                        pyDiv.innerHTML += cardHTML;
+                    } else {
+                        cppCount++;
+                        cppDiv.innerHTML += cardHTML;
+                    }
+                });
+
+                if (cppCount === 0) cppDiv.innerHTML = 'C++ üçün yoxlanılacaq fayl yoxdur. ✅';
+                if (pyCount === 0) pyDiv.innerHTML = 'Python üçün yoxlanılacaq fayl yoxdur. ✅';
+
+                document.getElementById('statFilesCount').innerText = (cppCount + pyCount);
+            });
+
+            if (!isRestricted) {
+                database.ref('feedbacks').on('value', (snap) => {
+                    const feedbacks = snap.val();
+                    const fbDiv = document.getElementById('adminFeedbackList');
+                    if(!fbDiv) return;
+                    fbDiv.innerHTML = '';
+                    if (!feedbacks) { 
+                        fbDiv.innerHTML = 'Mesaj yoxdur.';
+                        document.getElementById('statFeedbacksCount').innerText = "0";
+                        return; 
+                    }
+
+                    const keys = Object.keys(feedbacks);
+                    document.getElementById('statFeedbacksCount').innerText = keys.length;
+
+                    keys.forEach(k => {
+                        const f = feedbacks[k];
+                        fbDiv.innerHTML += `
+                            <div style="background:#070a12; padding:10px; border-radius:8px; margin-bottom:8px; font-size:13px;">
+                                <strong style="color:var(--gold);">${f.name}:</strong> ${f.msg}
+                            </div>
+                        `;
+                    });
+                });
+
+                database.ref('device_logs').limitToLast(20).on('value', (snap) => {
+                    const logs = snap.val();
+                    const logDiv = document.getElementById('adminLogsList');
+                    if(!logDiv) return;
+                    logDiv.innerHTML = '';
+                    if (!logs) { logDiv.innerHTML = 'Log yoxdur.'; return; }
+
+                    Object.keys(logs).reverse().forEach(k => {
+                        const l = logs[k];
+                        logDiv.innerHTML += `
+                            <div class="log-card">
+                                <div class="log-card-header">
+                                    <span>⚡ ${l.action}</span>
+                                    <span style="font-size:11px; color:var(--text-sub);">${l.timestamp || ''}</span>
+                                </div>
+                                <div class="log-card-body">
+                                    📌 <strong>Təfərrüat:</strong> ${l.detail || 'Qeyd yoxdur'}<br>
+                                    📱 <strong>Cihaz & Brauzer:</strong> <span style="color:var(--accent); font-weight:bold;">${l.deviceInfo}</span>
+                                </div>
+                            </div>
+                        `;
+                    });
+                });
             }
         }
 
-        function renderAdminScoresTab(container) {
-            let html = `<p style="color:var(--text-sub);">Tələbələrin ballarını buradan redaktə edin və yadda saxlayın:</p>`;
-            studentsData.forEach(student => {
-                html += `
-                    <div class="admin-student-card">
-                        <div class="admin-card-header">
-                            <img src="${student.avatar}" class="admin-card-avatar">
-                            <strong>${student.name}</strong>
-                        </div>
-                        <div class="grid-inputs">
-                            <div>
-                                <label>C++ Həftəlik</label>
-                                <input type="number" id="inp_cppW_${student.id}" value="${student.cppWeekly}">
-                            </div>
-                            <div>
-                                <label>C++ Ümumi</label>
-                                <input type="number" id="inp_cppT_${student.id}" value="${student.cppTotal}">
-                            </div>
-                            <div>
-                                <label>Py Həftəlik</label>
-                                <input type="number" id="inp_pyW_${student.id}" value="${student.pyWeekly}">
-                            </div>
-                            <div>
-                                <label>Py Ümumi</label>
-                                <input type="number" id="inp_pyT_${student.id}" value="${student.pyTotal}">
-                            </div>
-                        </div>
-                        <button class="btn btn-gold" style="margin-top:10px; width:100%;" onclick="saveStudentScore(${student.id})">💾 Yadda Saxla</button>
-                    </div>
-                `;
-            });
-            container.innerHTML = html;
-        }
-
-        function saveStudentScore(id) {
-            const student = studentsData.find(s => s.id === id);
-            if (!student) return;
-
-            student.cppWeekly = parseInt(document.getElementById(`inp_cppW_${id}`).value) || 0;
-            student.cppTotal = parseInt(document.getElementById(`inp_cppT_${id}`).value) || 0;
-            student.pyWeekly = parseInt(document.getElementById(`inp_pyW_${id}`).value) || 0;
-            student.pyTotal = parseInt(document.getElementById(`inp_pyT_${id}`).value) || 0;
-
-            db.ref('studentsData').set(studentsData).then(() => {
-                alert(`✅ ${student.name} üçün ballar uğurla yeniləndi!`);
-            });
-        }
-
-        function renderAdminTasksTab(container) {
-            container.innerHTML = `<h3>📂 Yüklənmiş Tapşırıqlar</h3><div id="adminTasksList">Yüklənir...</div>`;
-            db.ref('uploadedTasks').on('value', snapshot => {
-                const data = snapshot.val();
-                const tasksList = document.getElementById('adminTasksList');
-                if (!data) {
-                    tasksList.innerHTML = `<p style="color:var(--text-sub);">Hələ heç bir tapşırıq yüklənməyib.</p>`;
-                    return;
-                }
-                let html = '';
-                Object.keys(data).forEach(key => {
-                    const task = data[key];
-                    html += `
-                        <div class="task-folder-box">
-                            <div class="task-folder-title">🎓 ${task.studentName} (${task.subject.toUpperCase()})</div>
-                            <div style="font-size:12px; color:var(--text-sub);">Tarix: ${task.date}</div>
-                            <div style="margin-top:8px;">Fayllar: <strong>${task.fileName}</strong></div>
-                        </div>
-                    `;
+        function deleteStudentTaskCompletely(taskKey) {
+            if (confirm("Bu faylı tamamilə hər yerdən (həm admin, həm tələbə profilindən) silmək istədiyinizdən əminsiniz?")) {
+                database.ref('student_tasks/' + taskKey).remove().then(() => {
+                    alert("Fayl bazadan və hər iki paneldən tamamilə silindi! 🗑️");
                 });
-                tasksList.innerHTML = html;
-            });
+            }
         }
 
-        function renderAdminFeedbackTab(container) {
-            container.innerHTML = `<h3>💬 Daxil Olan Feedbacklər</h3><div id="adminFeedbackList">Yüklənir...</div>`;
-            db.ref('feedbacks').on('value', snapshot => {
-                const data = snapshot.val();
-                const fbList = document.getElementById('adminFeedbackList');
-                if (!data) {
-                    fbList.innerHTML = `<p style="color:var(--text-sub);">Hələ heç bir feedback daxil olmayıb.</p>`;
-                    return;
-                }
-                let html = '';
-                Object.keys(data).forEach(key => {
-                    const fb = data[key];
-                    html += `
-                        <div class="task-folder-box">
-                            <div style="font-weight:bold; color:var(--accent);">${fb.author || 'Anonim'}</div>
-                            <p style="margin:5px 0;">${fb.text}</p>
-                            <span style="font-size:11px; color:var(--text-sub);">${fb.date}</span>
-                        </div>
-                    `;
-                });
-                fbList.innerHTML = html;
-            });
-        }
-
-        function renderAdminResetTab(container) {
-            container.innerHTML = `
-                <div style="background:rgba(239, 68, 68, 0.1); border:1px solid var(--negative); padding:20px; border-radius:14px;">
-                    <h3 style="color:var(--negative); margin-top:0;">⚠️ Həftəlik Sıfırlama Zone</h3>
-                    <p style="color:var(--text-sub);">Bu düyməyə basdıqda bütün tələbələrin həftəlik balları "Ötən Həftə" hissəsinə keçəcək və cari həftəlik ballar 0 olacaq.</p>
-                    <button class="btn btn-danger" onclick="triggerWeeklyReset()">🔄 Həftəlik Balları Sıfırla</button>
-                </div>
-            `;
-        }
-
-        function triggerWeeklyReset() {
-            if (!confirm("Bütün həftəlik balları sıfırlamaq istədiyinizdən əminsiniz?")) return;
-
-            studentsData.forEach(student => {
-                student.pastWeeklyCpp = student.cppWeekly;
-                student.pastWeeklyPy = student.pyWeekly;
-                student.cppWeekly = 0;
-                student.pyWeekly = 0;
-            });
-
-            db.ref('studentsData').set(studentsData).then(() => {
-                alert("✅ Həftəlik ballar sıfırlandı!");
-                switchAdminSubTab('scores');
-            });
-        }
-
-        function loadAdminStats() {
-            document.getElementById('statStudentCount').innerText = studentsData.length;
-            db.ref('feedbacks').once('value', snapshot => {
-                const data = snapshot.val();
-                document.getElementById('statFeedbackCount').innerText = data ? Object.keys(data).length : 0;
-            });
-        }
-
-        // Tələbə Tapşırıq Yükləmə
-        function uploadStudentTasks() {
-            if (!activeProfileId) return;
-            const student = studentsData.find(s => s.id === activeProfileId);
-            const subject = document.getElementById('studentSubjectSelect').value;
-            const fileInput = document.getElementById('studentTaskFiles');
-
-            if (fileInput.files.length === 0) {
-                alert("Lütfən fayl seçin!");
+        function gradeTaskAndAddPoints(taskKey, studentName, targetSubject) {
+            const isRestricted = (activeAdminUser === "rəho" || activeAdminUser === "reho");
+            if (isRestricted && RESTRICTED_STUDENTS_FOR_REHO.includes(studentName)) {
+                alert("⚠️ Sizin bu tələbənin balını dəyişməyə icazəniz yoxdur!");
                 return;
             }
 
-            const taskData = {
-                studentId: student.id,
-                studentName: student.name,
-                subject: subject,
-                fileName: fileInput.files[0].name,
-                date: new Date().toLocaleString('az-AZ')
+            const pts = prompt(`${studentName} üçün ${targetSubject.toUpperCase()} fənnindən neçə bal əlavə etmək istəyirsiniz?`, "10");
+            if (pts === null) return;
+            const addedPoints = Number(pts) || 0;
+
+            if (globalData[targetSubject]) {
+                const st = globalData[targetSubject].find(s => s.ad === studentName);
+                if (st) st.fm = Number(st.fm || 0) + addedPoints;
+            }
+
+            database.ref('student_tasks/' + taskKey).update({ status: 'correct', addedPoints, checkedByAdmin: true }).then(() => {
+                database.ref('students_data').set(globalData).then(() => {
+                    alert(`${studentName} üçün ${targetSubject.toUpperCase()} fənnindən +${addedPoints} bal əlavə olundu! 🚀`);
+                    renderTable();
+                });
+            });
+        }
+
+        function gradeTask(taskKey, status) {
+            database.ref('student_tasks/' + taskKey).update({ status, checkedByAdmin: true }).then(() => {
+                alert("Fayl səhv olaraq qeyd edildi və admin panelindən təmizləndi! ❌");
+            });
+        }
+
+        function uploadWinnerAudio() {
+            const isRestricted = (activeAdminUser === "rəho" || activeAdminUser === "reho");
+            if (isRestricted) return;
+            const file = document.getElementById('winnerAudioFile').files[0];
+            if (!file) return alert("Zəhmət olmasa bir səs faylı seçin!");
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                database.ref('audio_winner').set(e.target.result).then(() => alert("Qaliblər musiqisi uğurla yeniləndi! 🎵"));
             };
-
-            db.ref('uploadedTasks').push(taskData).then(() => {
-                document.getElementById('studentTaskStatus').innerText = "✅ Tapşırıq münsiflərə göndərildi!";
-                document.getElementById('studentTaskStatus').style.color = "var(--positive)";
-                fileInput.value = '';
-            });
+            reader.readAsDataURL(file);
         }
 
-        // -------------------------------------------------------------
-        // 6. MODALLAR & DİGƏR FUNKSİYALAR
-        // -------------------------------------------------------------
-        function openFeedbackModal() { document.getElementById('feedbackModal').style.display = 'flex'; }
-        function closeFeedbackModal() { document.getElementById('feedbackModal').style.display = 'none'; }
-
-        function submitFeedback() {
-            const author = document.getElementById('fbAuthor').value.trim();
-            const text = document.getElementById('fbText').value.trim();
-
-            if (!text) { alert("Lütfən mesajınızı yazın!"); return; }
-
-            db.ref('feedbacks').push({
-                author: author || "Anonim",
-                text: text,
-                date: new Date().toLocaleString('az-AZ')
-            }).then(() => {
-                alert("💬 Feedbackiniz üçün təşəkkür edirik!");
-                document.getElementById('fbAuthor').value = '';
-                document.getElementById('fbText').value = '';
-                closeFeedbackModal();
-            });
+        function uploadOutsiderAudio() {
+            const isRestricted = (activeAdminUser === "rəho" || activeAdminUser === "reho");
+            if (isRestricted) return;
+            const file = document.getElementById('outsiderAudioFile').files[0];
+            if (!file) return alert("Zəhmət olmasa bir səs faylı seçin!");
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                database.ref('audio_outsider').set(e.target.result).then(() => alert("Outsiderlər musiqisi uğurla yeniləndi! 🎵"));
+            };
+            reader.readAsDataURL(file);
         }
 
-        function showWinnersCelebration() {
-            const winnersModal = document.getElementById('winnersModal');
-            const container = document.getElementById('winnersContent');
-            
-            let sorted = [...studentsData].sort((a, b) => (b.cppWeekly + b.pyWeekly) - (a.cppWeekly + a.pyWeekly));
-            const top3 = sorted.slice(0, 3);
+        function handleGroupPhotoUpload(event) {
+            const isRestricted = (activeAdminUser === "rəho" || activeAdminUser === "reho");
+            if (isRestricted) return;
+            const file = event.target.files[0];
+            if (!file) return;
 
-            container.innerHTML = top3.map((s, index) => {
-                const rankClass = index === 0 ? 'rank-1' : index === 1 ? 'rank-2' : 'rank-3';
-                const crown = index === 0 ? '👑' : index === 1 ? '🥈' : '🥉';
-                return `
-                    <div class="winner-card-v3 ${rankClass}">
-                        <div class="crown-icon">${crown}</div>
-                        <div class="winner-avatar-box"><img src="${s.avatar}"></div>
-                        <strong style="color:#fff; display:block; margin-top:5px;">${s.name}</strong>
-                        <span style="color:var(--gold); font-weight:bold; font-size:14px;">+${s.cppWeekly + s.pyWeekly} B</span>
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                database.ref('group_photo').set(e.target.result).then(() => alert("Qrup şəkli yeniləndi! ✅"));
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function renderAdminBody() {
+            const isRestricted = (activeAdminUser === "rəho" || activeAdminUser === "reho");
+            const rawList = globalData[currentTab] || [];
+            const adminBody = document.getElementById('adminBody');
+            if(!adminBody) return;
+            adminBody.innerHTML = '';
+
+            let count = 0;
+            rawList.forEach((student, index) => {
+                const isStudentRestricted = isRestricted && RESTRICTED_STUDENTS_FOR_REHO.includes(student.ad);
+
+                count++;
+                let fieldsHTML = '';
+                const isCustomPhoto = student.foto && student.foto !== DEFAULT_AVATAR_URL;
+                const defaultYer = student.yer || DEFAULT_BIRTH_PLACES[student.ad] || "Bakı şəhəri";
+
+                if (currentTab === 'common') {
+                    fieldsHTML = `
+                        <div style="grid-column: span 2; ${isRestricted ? 'display:none;' : ''}">
+                            <label>📷 Foto Yüklə (HQ Kəsim)</label>
+                            <label class="file-upload-btn">📁 Fayl Seç <input type="file" accept="image/*" style="display:none;" onchange="handleHQImageUpload(event, ${index})"></label>
+                            ${isCustomPhoto ? '<span style="font-size:11px; color:var(--positive); margin-left:8px;">✓ HQ Aktivdir</span>' : ''}
+                        </div>
+                        <div><label>Doğulduğu Yer</label><input type="text" id="inp_${index}_yer" value="${defaultYer}" ${isRestricted ? 'disabled' : ''}></div>
+                    `;
+                } else {
+                    fieldsHTML = `
+                        <div style="grid-column: span 2; ${isRestricted ? 'display:none;' : ''}">
+                            <label>📷 Foto Yüklə (HQ Kəsim)</label>
+                            <label class="file-upload-btn">📁 Fayl Seç <input type="file" accept="image/*" style="display:none;" onchange="handleHQImageUpload(event, ${index})"></label>
+                            ${isCustomPhoto ? '<span style="font-size:11px; color:var(--positive); margin-left:8px;">✓ HQ Aktivdir</span>' : ''}
+                        </div>
+                        <div><label>FM</label><input type="number" id="inp_${index}_fm" value="${student.fm || 0}" ${isStudentRestricted ? 'disabled' : ''}></div>
+                        <div><label>Stepping</label><input type="number" id="inp_${index}_stepping" value="${student.stepping || 0}" ${isStudentRestricted ? 'disabled' : ''}></div>
+                        <div><label>e-Olimp</label><input type="number" id="inp_${index}_e_olimp" value="${student.e_olimp || 0}" ${isStudentRestricted ? 'disabled' : ''}></div>
+                        <div><label>CodeSources</label><input type="number" id="inp_${index}_codesources" value="${student.codesources || 0}" ${isStudentRestricted ? 'disabled' : ''}></div>
+                        <div><label>HackerRank</label><input type="number" id="inp_${index}_hackerrank" value="${student.hackerrank || 0}" ${isStudentRestricted ? 'disabled' : ''}></div>
+                        <div style="${isRestricted ? 'display:none;' : ''}"><label>Doğulduğu Yer</label><input type="text" id="inp_${index}_yer" value="${defaultYer}"></div>
+                    `;
+                }
+
+                const restrictedBadge = isStudentRestricted ? `<span style="color:var(--negative); font-size:11px; margin-left:auto;">🔒 Redaktə Bloklanıb</span>` : '';
+
+                adminBody.innerHTML += `
+                    <div class="admin-student-card">
+                        <div class="admin-card-header">
+                            <img src="${student.foto || DEFAULT_AVATAR_URL}" class="admin-card-avatar">
+                            <strong style="font-size:16px; color:#fff;">${student.ad}</strong>
+                            ${restrictedBadge}
+                        </div>
+                        <div class="grid-inputs">${fieldsHTML}</div>
                     </div>
                 `;
-            }).join('');
+            });
 
-            winnersModal.style.display = 'flex';
-            confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
+            const stCountEl = document.getElementById('statStudentsCount');
+            if(stCountEl) stCountEl.innerText = count;
         }
 
-        function closeWinnersModal() { document.getElementById('winnersModal').style.display = 'none'; }
+        function handleHQImageUpload(event, index) {
+            const isRestricted = (activeAdminUser === "rəho" || activeAdminUser === "reho");
+            if (isRestricted) return;
+            const file = event.target.files[0];
+            if (!file) return;
 
-        function showOutsidersModal() {
-            const container = document.getElementById('outsidersContent');
-            let sorted = [...studentsData].sort((a, b) => (a.cppWeekly + a.pyWeekly) - (b.cppWeekly + b.pyWeekly));
-            const bottom3 = sorted.slice(0, 3);
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    
+                    const side = Math.min(img.width, img.height);
+                    canvas.width = 400;
+                    canvas.height = 400;
 
-            container.innerHTML = bottom3.map(s => `
-                <div style="background:var(--card-inner); padding:10px; border-radius:10px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;">
-                    <span>💔 ${s.name}</span>
-                    <strong style="color:var(--negative)">${s.cppWeekly + s.pyWeekly} B</strong>
-                </div>
-            `).join('');
+                    const sx = (img.width - side) / 2;
+                    const sy = (img.height - side) / 2;
 
-            document.getElementById('outsidersModal').style.display = 'flex';
+                    ctx.drawImage(img, sx, sy, side, side, 0, 0, 400, 400);
+                    
+                    const compressedBase64 = canvas.toDataURL('image/jpeg', 0.92);
+                    const targetName = globalData[currentTab][index].ad;
+
+                    ['cpp', 'python', 'common'].forEach(tab => {
+                        if (globalData[tab]) {
+                            const st = globalData[tab].find(s => s.ad === targetName);
+                            if (st) st.foto = compressedBase64;
+                        }
+                    });
+
+                    alert(`${targetName} üçün şəkil kəsildi və HQ yükləndi! ✅`);
+                    renderAdminBody();
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
         }
 
-        function closeOutsidersModal() { document.getElementById('outsidersModal').style.display = 'none'; }
+        function saveAdminChanges() {
+            const isRestricted = (activeAdminUser === "rəho" || activeAdminUser === "reho");
+
+            (globalData[currentTab] || []).forEach((student, index) => {
+                const targetName = student.ad;
+
+                if (isRestricted && RESTRICTED_STUDENTS_FOR_REHO.includes(targetName)) return;
+
+                const yerInp = document.getElementById(`inp_${index}_yer`);
+                if (yerInp && !isRestricted) {
+                    const yerVal = yerInp.value.trim();
+                    ['cpp', 'python', 'common'].forEach(tab => {
+                        if (globalData[tab]) {
+                            const st = globalData[tab].find(s => s.ad === targetName);
+                            if (st) st.yer = yerVal;
+                        }
+                    });
+                }
+
+                if (currentTab !== 'common') {
+                    if (document.getElementById(`inp_${index}_fm`)) {
+                        student.fm = Number(document.getElementById(`inp_${index}_fm`).value);
+                        student.stepping = Number(document.getElementById(`inp_${index}_stepping`).value);
+                        student.e_olimp = Number(document.getElementById(`inp_${index}_e_olimp`).value);
+                        student.codesources = Number(document.getElementById(`inp_${index}_codesources`).value);
+                        student.hackerrank = Number(document.getElementById(`inp_${index}_hackerrank`).value);
+                    }
+                }
+            });
+
+            database.ref('students_data').set(globalData).then(() => {
+                alert(`Dəyişikliklər canlı yayımlandı! 🚀`);
+                renderTable();
+                closeAdminPanel();
+            });
+        }
+
+        function finishWeekAndTransferRating() {
+            const isRestricted = (activeAdminUser === "rəho" || activeAdminUser === "reho");
+            if (isRestricted) return;
+            if (!confirm("Cari həftəni tamamlayıb indikı Cari Reytinqləri Keçmiş Reytinq kimi yadda saxlamaq istədiyinizdən əminsiniz? (Bütün tələbə faylları təmizlənəcək)")) return;
+
+            ['cpp', 'python', 'common'].forEach(tab => {
+                if (globalData[tab]) {
+                    globalData[tab].forEach((student) => {
+                        const computed = calculateTotals(student);
+                        student.kecmis_reyting = computed.cari_reyting;
+                    });
+                }
+            });
+
+            database.ref('student_tasks').remove();
+
+            database.ref('students_data').set(globalData).then(() => {
+                alert("Cari reytinqlər 'Keçmiş Reytinq'ə çevrildi və tələbələrin faylları sıfırlandı! 🗓️");
+                renderTable();
+                if (activeAdminUser) renderAdminBody();
+            });
+        }
 
         function showVersionModal() { document.getElementById('versionModal').style.display = 'flex'; }
         function closeVersionModal() { document.getElementById('versionModal').style.display = 'none'; }
-
-        // -------------------------------------------------------------
-        // 7. FIREBASE REALTIME LISTENER (İLK YÜKLƏNMƏ)
-        // -------------------------------------------------------------
-        db.ref('studentsData').on('value', snapshot => {
-            const data = snapshot.val();
-            if (data && Array.isArray(data)) {
-                studentsData = data;
-                sortAndRender();
-            } else {
-                // Əgər bazada məlumat yoxdursa, ilkin verilənləri yazırıq
-                db.ref('studentsData').set(studentsData);
-            }
-        });
-
-        // İlkin render
-        sortAndRender();
     </script>
 </body>
 </html>
