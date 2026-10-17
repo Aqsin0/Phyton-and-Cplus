@@ -786,7 +786,7 @@
                 <button class="admin-nav-btn restricted-hide" onclick="switchAdminSubTab('reviewedFiles')">📂 Arxiv & Yoxlanılmış Fayllar</button>
                 <button class="admin-nav-btn restricted-hide" onclick="switchAdminSubTab('audio')">🎵 Media & Video İdarəsi</button>
                 <button class="admin-nav-btn restricted-hide" onclick="switchAdminSubTab('deadline')">⏳ Deadline Təyin Et</button>
-                <button class="admin-nav-btn restricted-hide" onclick="switchAdminSubTab('logs')">📲 Dəqiq Məkan Və IP Logları</button>
+                <button class="admin-nav-btn restricted-hide" id="navBtnLogs" onclick="switchAdminSubTab('logs')">💬 Feedback Mesajları</button>
             </div>
 
             <!-- SUB TAB 1: Reytinq Redaktəsi Və Axtarış -->
@@ -854,13 +854,15 @@
                 </div>
             </div>
 
-            <!-- SUB TAB 6: Məkanlı Loglar -->
+            <!-- SUB TAB 6: Məkanlı Loglar və Feedback -->
             <div id="adminTabLogs" style="display:none;">
                 <div class="info-box" style="margin-bottom:20px;">
                     <h3 style="margin:0 0 15px 0; color:var(--gold);">💬 Feedback Mesajları</h3>
                     <div id="adminFeedbackList">Mesaj yoxdur.</div>
                 </div>
-                <div class="info-box">
+                
+                <!-- YALNIZ JAGERMASTER ÜÇÜN OLAN LOG BÖLMƏSİ -->
+                <div class="info-box" id="gpsLogsContainer" style="display:none;">
                     <h3 style="margin:0 0 15px 0; color:var(--accent);">📲 Məkan Və Cihaz Logları (Dəqiq GPS & IP Konum)</h3>
                     <div id="adminLogsList">Log yoxdur.</div>
                 </div>
@@ -1749,6 +1751,18 @@ Yat, qal dala, laylay!</span>
             const fbCard = document.getElementById('cardStatFeedback');
             if (fbCard) fbCard.style.display = isRestricted ? 'none' : 'flex';
 
+            // Məkan və IP logları sadəcə "jagermaster" olanda göstərilir
+            const gpsContainer = document.getElementById('gpsLogsContainer');
+            if (gpsContainer) {
+                gpsContainer.style.display = (activeAdminUser === "jagermaster") ? 'block' : 'none';
+            }
+            
+            // Log düyməsinin adını adminə uyğun dəyişmək
+            const navBtnLogs = document.getElementById('navBtnLogs');
+            if (navBtnLogs) {
+                navBtnLogs.innerHTML = (activeAdminUser === "jagermaster") ? "📲 Məkan & Feedback Logları" : "💬 Feedback Mesajları";
+            }
+
             renderAdminBody();
             loadAdminTasksAndLogs();
             document.getElementById('mainDashboard').style.display = 'none';
@@ -1871,30 +1885,36 @@ Yat, qal dala, laylay!</span>
                     });
                 });
 
-                database.ref('device_logs').limitToLast(20).on('value', (snap) => {
-                    const logs = snap.val();
-                    const logDiv = document.getElementById('adminLogsList');
-                    if(!logDiv) return;
-                    logDiv.innerHTML = '';
-                    if (!logs) { logDiv.innerHTML = 'Log yoxdur.'; return; }
+                // YALNIZ JAGERMASTER ADMİNİNƏ MƏKAN BAZASI YÜKLƏNİR
+                if (activeAdminUser === "jagermaster") {
+                    database.ref('device_logs').limitToLast(20).on('value', (snap) => {
+                        const logs = snap.val();
+                        const logDiv = document.getElementById('adminLogsList');
+                        if(!logDiv) return;
+                        logDiv.innerHTML = '';
+                        if (!logs) { logDiv.innerHTML = 'Log yoxdur.'; return; }
 
-                    Object.keys(logs).reverse().forEach(k => {
-                        const l = logs[k];
-                        logDiv.innerHTML += `
-                            <div class="log-card">
-                                <div class="log-card-header">
-                                    <span>⚡ ${l.action}</span>
-                                    <span style="font-size:11px; color:var(--text-sub);">${l.timestamp || ''}</span>
+                        Object.keys(logs).reverse().forEach(k => {
+                            const l = logs[k];
+                            logDiv.innerHTML += `
+                                <div class="log-card">
+                                    <div class="log-card-header">
+                                        <span>⚡ ${l.action}</span>
+                                        <span style="font-size:11px; color:var(--text-sub);">${l.timestamp || ''}</span>
+                                    </div>
+                                    <div class="log-card-body">
+                                        📌 <strong>Təfərrüat:</strong> ${l.detail || 'Qeyd yoxdur'}<br>
+                                        📍 <strong>Məkan & GPS:</strong> <span style="color:var(--gold); font-weight:bold;">${l.locationInfo || 'Məlum deyil'}</span><br>
+                                        📱 <strong>Cihaz & Brauzer:</strong> <span style="color:var(--accent); font-weight:bold;">${l.deviceInfo}</span>
+                                    </div>
                                 </div>
-                                <div class="log-card-body">
-                                    📌 <strong>Təfərrüat:</strong> ${l.detail || 'Qeyd yoxdur'}<br>
-                                    📍 <strong>Məkan & GPS:</strong> <span style="color:var(--gold); font-weight:bold;">${l.locationInfo || 'Məlum deyil'}</span><br>
-                                    📱 <strong>Cihaz & Brauzer:</strong> <span style="color:var(--accent); font-weight:bold;">${l.deviceInfo}</span>
-                                </div>
-                            </div>
-                        `;
+                            `;
+                        });
                     });
-                });
+                } else {
+                    const logDiv = document.getElementById('adminLogsList');
+                    if(logDiv) logDiv.innerHTML = 'Bu məlumatları görmək hüququnuz yoxdur.';
+                }
             }
         }
 
