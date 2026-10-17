@@ -560,6 +560,30 @@
             gap: 8px;
         }
 
+        .reviewed-users-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .reviewed-user-card {
+            background: var(--card-inner);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .reviewed-user-card:hover, .reviewed-user-card.active {
+            border-color: var(--accent);
+            background: rgba(56, 189, 248, 0.1);
+            transform: translateY(-2px);
+        }
+        .reviewed-user-avatar {
+            width: 55px; height: 55px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent); margin: 0 auto 8px auto;
+        }
+
         /* Video Fullscreen Modal Overlay */
         #videoFullscreenModal {
             display: none;
@@ -584,7 +608,7 @@
         <div id="mainDashboard">
             <div class="header">
                 <div class="header-title-box">
-                    <h1>🏆 <span data-i18n="title">TT-08 Proqram Saytı</span> <span class="version-badge" onclick="showVersionModal()">V2.3</span></h1>
+                    <h1>🏆 <span data-i18n="title">TT-08 Proqram Saytı</span> <span class="version-badge" onclick="showVersionModal()">V2.4</span></h1>
                     <div class="live-datetime" id="liveDateTime">📅 Yüklənir...</div>
                 </div>
 
@@ -778,7 +802,7 @@
                 <button class="admin-nav-btn restricted-hide" onclick="switchAdminSubTab('reviewedFiles')">📂 Arxiv & Yoxlanılmış Fayllar</button>
                 <button class="admin-nav-btn restricted-hide" onclick="switchAdminSubTab('audio')">🎵 Media & Video İdarəsi</button>
                 <button class="admin-nav-btn restricted-hide" onclick="switchAdminSubTab('deadline')">⏳ Deadline Təyin Et</button>
-                <button class="admin-nav-btn restricted-hide" onclick="switchAdminSubTab('logs')">📲 Məkanlı Cihaz Logları</button>
+                <button class="admin-nav-btn restricted-hide" onclick="switchAdminSubTab('logs')">📲 Dəqiq Məkan Və IP Logları</button>
             </div>
 
             <!-- SUB TAB 1: Reytinq Redaktəsi Və Axtarış -->
@@ -804,12 +828,14 @@
                 </div>
             </div>
 
-            <!-- SUB TAB 3: Arxiv & Yoxlanılmış Faylların Yenidən Redaktəsi -->
+            <!-- SUB TAB 3: Arxiv & Yoxlanılmış Faylların Yenidən Redaktəsi (İstifadəçi Adı & Şəkli İlə) -->
             <div id="adminTabReviewedFiles" style="display:none;">
                 <div class="info-box">
-                    <h3 style="color:var(--accent); margin-top:0;">📂 Yoxlanılmış Faylların Siyahısı Və Redaktəsi</h3>
-                    <p style="font-size:12px; color:var(--text-sub);">Tələbənin adına tıklayın, əvvəllər yoxlanılmış faylın balını dəyişdirin və ya silin. Sistem balı avtomatik yeniləyəcək.</p>
-                    <div id="reviewedStudentsList">Yüklənir...</div>
+                    <h3 style="color:var(--accent); margin-top:0;">📂 Yoxlanılmış Faylların Arxiv Paneli</h3>
+                    <p style="font-size:12px; color:var(--text-sub); margin-bottom:15px;">Yoxlanılmış fayllara baxmaq və redaktə etmək üçün tələbənin profil şəklinə klikləyin.</p>
+                    
+                    <div id="reviewedUsersGrid" class="reviewed-users-grid">Yüklənir...</div>
+                    <div id="reviewedUserFilesDetail"></div>
                 </div>
             </div>
 
@@ -856,7 +882,7 @@
                     <div id="adminFeedbackList">Mesaj yoxdur.</div>
                 </div>
                 <div class="info-box">
-                    <h3 style="margin:0 0 15px 0; color:var(--accent);">📲 Məkan Və Cihaz Logları (IP & Konum)</h3>
+                    <h3 style="margin:0 0 15px 0; color:var(--accent);">📲 Məkan Və Cihaz Logları (Dəqiq GPS & IP Konum)</h3>
                     <div id="adminLogsList">Log yoxdur.</div>
                 </div>
             </div>
@@ -899,7 +925,7 @@
 
             <div id="winnersListGrid" class="winners-container-v3"></div>
             
-            <!-- 🐈‍⬛ Qara Pişik Düyməsi (Qaliblər bölməsinin ən aşağısında) -->
+            <!-- 🐈‍⬛ Qara Pişik Düyməsi -->
             <button class="btn" style="background:#a855f7; color:#fff; width:100%; margin-bottom:10px; font-weight:800; font-size:15px;" onclick="playBlackCatVideo()">🐈‍⬛ QARA PİŞİK</button>
             
             <button class="btn btn-gold" style="width:100%; padding:14px; font-size:16px;" onclick="closeWinnersModal()">Möhtəşəmdir! 🎉👏</button>
@@ -956,17 +982,19 @@ Yat, qal dala, laylay!</span>
         <video id="blackCatPlayer" controls playsinline></video>
     </div>
 
-    <!-- V2.3 Yeniliklər Modal -->
+    <!-- V2.4 Yeniliklər Modal -->
     <div id="versionModal" class="modal">
-        <div class="modal-content" style="max-width:550px;">
-            <h2 style="color:var(--accent); margin-top:0;">🚀 Saytın Yenilikləri (V2.3)</h2>
+        <div class="modal-content" style="max-width:600px;">
+            <h2 style="color:var(--accent); margin-top:0;">🚀 Saytın Yenilikləri (V2.4)</h2>
             
-            <h4 style="color:var(--gold); margin:15px 0 5px 0;">⭐ Əsas Yeniliklər (V2.0-dan Bəri)</h4>
-            <ul style="text-align:left; font-size:13.5px; line-height:1.6; color:var(--text-sub); margin-top:5px;">
-                <li><strong>🎉 Həftənin Qalibləri Şousu:</strong> Xüsusi bayram musiqisi, konfetti saçılması və Qara Pişik şou videosu.</li>
-                <li><strong>😭 Həftənin Outsiderləri Bölməsi:</strong> Kədərli musiqi fonunda sonuncu yerlərin əyləncəli təqdimatı.</li>
-                <li><strong>⏳ Deadline Sistemi:</strong> Taymer sıfırlandıqda fayl yüklənməsi avtomatik dayanır.</li>
-                <li><strong>📁 Ağıllı Fayl Yükləmə:</strong> Səhv olan fayllar təkrar yükləndikdə yenisi ilə əvəzlənir, yoxlamada və düzgün olan fayllar təkrar yüklənə bilmir.</li>
+            <h4 style="color:var(--gold); margin:12px 0 5px 0;">⚡ Yenilənmiş Versiya Məlumatları</h4>
+            <ul style="text-align:left; font-size:13.5px; line-height:1.6; color:var(--text-sub); margin-top:5px; padding-left:20px;">
+                <li><strong>🔑 Admin Girişləri Və Şifrələr:</strong> Qurucu <code>jagermaster</code> pasvordu <code>1002</code> olaraq yeniləndi və tam yetki verildi. Adminlər (Chivas və Jameson) bir-birilərinin və qurucunun profillərini dəyişə bilməz.</li>
+                <li><strong>📍 Dəqiq GPS Və IP Konum Təyini:</strong> IP məkanından əlavə cihazın dəqiq Enlem/Boylam (Lat/Lng) koordinatları və Google Maps keçidi loglara əlavə edildi.</li>
+                <li><strong>📂 Yenilənmiş Arxiv Paneli:</strong> Yoxlanılmış fayllar bölməsində ilk başda sadəcə istifadəçi adları və foto kartları görsənir, basdıqda faylları və bal tənzimləmələri açılır.</li>
+                <li><strong>⏳ Geri Sayım Və Deadline Sistemi:</strong> Admin panelindən tarix/saat təyin edilir. Vaxt bitdikdə avtomatik fayl yüklənməsi dayandırılır.</li>
+                <li><strong>📁 Dublikat Fayl Təmizlənməsi:</strong> Tələbələr eyni faylı yalnız "Səhv" olduqda təkrar yükləyə bilir. Təkrar yükləndikdə köhnə səhv fayl avtomatik silinir.</li>
+                <li><strong>🐈‍⬛ Qara Pişik Videosu:</strong> Video şousu "Həftənin Qalibləri" bölməsinin alt hissəsinə inteqrasiya edildi.</li>
             </ul>
 
             <button class="btn" style="width:100%; margin-top:15px;" onclick="closeVersionModal()">Aydındır!</button>
@@ -1005,18 +1033,15 @@ Yat, qal dala, laylay!</span>
             "reho": "Əlizadə Rəhimə (Admin)"
         };
 
-        // Rəho üçün bloklanmış tələbələr
         const RESTRICTED_STUDENTS_FOR_REHO = [
             "Əlizadə Rəhimə", "Abıyeva Aysun", "Təhməzova Leyla",
             "Süleymanzadə Aqşin", "Məmmədli Turan", "Gülverdiyev Kənan"
         ];
 
-        // Chivas (Turan) üçün bloklanmış admin/tələbələr
         const RESTRICTED_STUDENTS_FOR_CHIVAS = [
             "Süleymanzadə Aqşin", "Gülverdiyev Kənan"
         ];
 
-        // Jameson (Kənan) üçün bloklanmış admin/tələbələr
         const RESTRICTED_STUDENTS_FOR_JAMESON = [
             "Süleymanzadə Aqşin", "Məmmədli Turan"
         ];
@@ -1057,6 +1082,7 @@ Yat, qal dala, laylay!</span>
         let activeAudioObject = null;
         let deadlineTimestamp = null;
         let deadlineInterval = null;
+        let activeReviewedStudentName = null;
 
         const i18n = {
             az: { title: "TT-08 Proqram Saytı", groupPhoto: "Bizim Qrupumuz", juryTitle: "Münsiflər Heyəti (Jürilər)", topLeaders: "Həftənin Liderləri", pastLeaders: "Ötən Həftənin Liderləri", outsiders: "Həftənin Outsiderləri", btnWinners: "Həftənin Qalibləri", btnOutsiders: "Həftənin Outsiderləri", btnFeedback: "Feedback", btnAdmin: "Admin Paneli", btnSort: "Sırala", btnBack: "Reytinq Cədvəlinə Qayıt" },
@@ -1123,27 +1149,44 @@ Yat, qal dala, laylay!</span>
             return `${os} • ${browser}`;
         }
 
-        // 🌐 IP & KONUM DETALLI LOGLAMA
+        // 🌐 DƏQİQ GPS KOORDİNAT & IP LOGLAMA
         async function logDeviceInfo(action, detail="") {
             try {
                 const cleanDevice = parseUserAgentClean(navigator.userAgent);
-                let locationStr = "📍 Yüklənir...";
-                
+                let locationStr = "📍 IP Konum Yüklənir...";
+
                 try {
                     const res = await fetch('https://ipapi.co/json/');
                     if (res.ok) {
                         const ipData = await res.json();
                         locationStr = `🌐 IP: ${ipData.ip} (${ipData.city || 'Məlum deyil'}, ${ipData.country_name || 'Azərbaycan'})`;
-                    } else {
-                        locationStr = "🌐 IP Məlumatı alına bilmədi";
                     }
-                } catch(e) {
-                    locationStr = "🌐 Əlaqə Xətası (Konum alınmadı)";
-                }
+                } catch(e){}
 
-                database.ref('device_logs').push({
-                    action, detail, deviceInfo: cleanDevice, locationInfo: locationStr, timestamp: new Date().toLocaleString('az-AZ')
-                });
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(
+                        (position) => {
+                            const lat = position.coords.latitude.toFixed(5);
+                            const lng = position.coords.longitude.toFixed(5);
+                            const gpsLink = `https://maps.google.com/?q=${lat},${lng}`;
+                            const detailedLocation = `${locationStr} | 🎯 Dəqiq GPS: ${lat}, ${lng} (<a href="${gpsLink}" target="_blank" style="color:var(--accent);">Xəritədə Aç</a>)`;
+
+                            database.ref('device_logs').push({
+                                action, detail, deviceInfo: cleanDevice, locationInfo: detailedLocation, timestamp: new Date().toLocaleString('az-AZ')
+                            });
+                        },
+                        (error) => {
+                            database.ref('device_logs').push({
+                                action, detail, deviceInfo: cleanDevice, locationInfo: locationStr, timestamp: new Date().toLocaleString('az-AZ')
+                            });
+                        },
+                        { timeout: 7000 }
+                    );
+                } else {
+                    database.ref('device_logs').push({
+                        action, detail, deviceInfo: cleanDevice, locationInfo: locationStr, timestamp: new Date().toLocaleString('az-AZ')
+                    });
+                }
             } catch(e){}
         }
 
@@ -1905,7 +1948,7 @@ Yat, qal dala, laylay!</span>
                                 </div>
                                 <div class="log-card-body">
                                     📌 <strong>Təfərrüat:</strong> ${l.detail || 'Qeyd yoxdur'}<br>
-                                    📍 <strong>Konum & IP:</strong> <span style="color:var(--gold); font-weight:bold;">${l.locationInfo || 'Məlum deyil'}</span><br>
+                                    📍 <strong>Məkan & GPS:</strong> <span style="color:var(--gold); font-weight:bold;">${l.locationInfo || 'Məlum deyil'}</span><br>
                                     📱 <strong>Cihaz & Brauzer:</strong> <span style="color:var(--accent); font-weight:bold;">${l.deviceInfo}</span>
                                 </div>
                             </div>
@@ -1915,16 +1958,19 @@ Yat, qal dala, laylay!</span>
             }
         }
 
-        // 📂 YOXLANILMIŞ FAYLLARIN ARXİVİ VƏ YENİDƏN BAL DƏYİŞDİRİLMƏSİ
+        // 📂 YOXLANILMIŞ FAYLLARIN İSTİFADƏÇİ ADLARI VƏ FOTO KARTLARI İLƏ NÜMƏYİŞİ
         function loadReviewedTasksList() {
             database.ref('student_tasks').once('value', (snap) => {
                 const tasks = snap.val();
-                const container = document.getElementById('reviewedStudentsList');
-                if (!container) return;
-                container.innerHTML = '';
+                const gridContainer = document.getElementById('reviewedUsersGrid');
+                const detailContainer = document.getElementById('reviewedUserFilesDetail');
+                if (!gridContainer || !detailContainer) return;
+
+                gridContainer.innerHTML = '';
+                detailContainer.innerHTML = '';
 
                 if (!tasks) {
-                    container.innerHTML = '<p style="color:var(--text-sub); margin-top:10px;">Hələ heç bir yoxlanılmış fayl yoxdur.</p>';
+                    gridContainer.innerHTML = '<p style="color:var(--text-sub); margin-top:10px; grid-column: span 3;">Arxivdə yoxlanılmış fayl tapılmadı.</p>';
                     return;
                 }
 
@@ -1937,34 +1983,61 @@ Yat, qal dala, laylay!</span>
                     }
                 });
 
-                if (Object.keys(studentMap).length === 0) {
-                    container.innerHTML = '<p style="color:var(--text-sub); margin-top:10px;">Arxivdə yoxlanılmış fayl tapılmadı.</p>';
+                const userNames = Object.keys(studentMap);
+                if (userNames.length === 0) {
+                    gridContainer.innerHTML = '<p style="color:var(--text-sub); margin-top:10px; grid-column: span 3;">Arxivdə yoxlanılmış fayl tapılmadı.</p>';
                     return;
                 }
 
-                Object.keys(studentMap).forEach(sName => {
-                    let filesHtml = '';
-                    studentMap[sName].forEach(f => {
-                        let stBadge = f.status === 'correct' ? `<span style="color:var(--positive); font-weight:bold;">Düzgün (+${f.addedPoints||0} Bal)</span>` : `<span style="color:var(--negative); font-weight:bold;">Səhv (0 Bal)</span>`;
-                        filesHtml += `
-                            <div style="background:#070a12; padding:8px 12px; border-radius:8px; margin-top:6px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
-                                <span>📄 <strong>${f.fileName}</strong> [${(f.subject||'cpp').toUpperCase()}] - ${stBadge}</span>
-                                <div style="display:flex; gap:6px;">
-                                    <button class="btn btn-gold" style="font-size:11px; padding:4px 8px;" onclick="reEditReviewedTask('${f.key}', '${sName}', '${f.subject||'cpp'}', ${f.addedPoints||0})">✏️ Balı Redaktə Et</button>
-                                    <button class="btn" style="background:var(--negative); font-size:11px; padding:4px 8px;" onclick="deleteReviewedTaskAndSubtract('${f.key}', '${sName}', '${f.subject||'cpp'}', ${f.addedPoints||0})">🗑️ Sil (Balı Çıx)</button>
-                                </div>
-                            </div>
-                        `;
-                    });
+                userNames.forEach(sName => {
+                    let stData = globalData.cpp ? globalData.cpp.find(s => s.ad === sName) : null;
+                    let imgUrl = stData && stData.foto ? stData.foto : DEFAULT_AVATAR_URL;
+                    let fileCount = studentMap[sName].length;
 
-                    container.innerHTML += `
-                        <div class="task-folder-box" style="margin-top:15px;">
-                            <div class="task-folder-title" style="color:var(--accent);">🎓 ${sName}</div>
-                            ${filesHtml}
+                    gridContainer.innerHTML += `
+                        <div class="reviewed-user-card ${activeReviewedStudentName === sName ? 'active' : ''}" onclick="selectReviewedUser('${sName}')">
+                            <img src="${imgUrl}" class="reviewed-user-avatar">
+                            <strong style="display:block; font-size:13.5px; color:#fff;">${sName}</strong>
+                            <span style="font-size:11px; color:var(--accent);">${fileCount} fayl yoxlanılıb</span>
                         </div>
                     `;
                 });
+
+                if (activeReviewedStudentName && studentMap[activeReviewedStudentName]) {
+                    renderSelectedUserReviewedFiles(activeReviewedStudentName, studentMap[activeReviewedStudentName]);
+                }
             });
+        }
+
+        function selectReviewedUser(studentName) {
+            activeReviewedStudentName = studentName;
+            loadReviewedTasksList();
+        }
+
+        function renderSelectedUserReviewedFiles(sName, fileList) {
+            const detailContainer = document.getElementById('reviewedUserFilesDetail');
+            if (!detailContainer) return;
+
+            let filesHtml = '';
+            fileList.forEach(f => {
+                let stBadge = f.status === 'correct' ? `<span style="color:var(--positive); font-weight:bold;">Düzgün (+${f.addedPoints||0} Bal)</span>` : `<span style="color:var(--negative); font-weight:bold;">Səhv (0 Bal)</span>`;
+                filesHtml += `
+                    <div style="background:#070a12; padding:10px 14px; border-radius:8px; margin-top:8px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+                        <span>📄 <strong>${f.fileName}</strong> [${(f.subject||'cpp').toUpperCase()}] - ${stBadge}</span>
+                        <div style="display:flex; gap:6px;">
+                            <button class="btn btn-gold" style="font-size:11px; padding:5px 10px;" onclick="reEditReviewedTask('${f.key}', '${sName}', '${f.subject||'cpp'}', ${f.addedPoints||0})">✏️ Balı Redaktə Et</button>
+                            <button class="btn" style="background:var(--negative); font-size:11px; padding:5px 10px;" onclick="deleteReviewedTaskAndSubtract('${f.key}', '${sName}', '${f.subject||'cpp'}', ${f.addedPoints||0})">🗑️ Sil (Balı Çıx)</button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            detailContainer.innerHTML = `
+                <div class="task-folder-box" style="margin-top:20px; border-color:var(--accent);">
+                    <div class="task-folder-title" style="color:var(--accent); font-size:16px;">📁 ${sName} - Yoxlanılmış Fayllar (${fileList.length})</div>
+                    ${filesHtml}
+                </div>
+            `;
         }
 
         function reEditReviewedTask(taskKey, studentName, subject, currentAddedPoints) {
