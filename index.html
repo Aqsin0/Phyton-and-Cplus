@@ -835,9 +835,15 @@
                     <input type="file" id="outsiderAudioFile" accept="audio/*" style="margin-bottom:10px; background:#070a12; padding:8px; border-radius:8px; border:1px solid var(--border); color:#fff; width:100%;">
                     <button class="btn" style="background:var(--negative);" onclick="uploadOutsiderAudio()">Yüklə</button>
                 </div>
-                <div class="info-box">
+                <div class="info-box" style="margin-bottom:15px;">
                     <h3 style="margin:0 0 10px 0; color:var(--accent);">📸 Qrup Şəklini Yenilə</h3>
                     <input type="file" accept="image/*" onchange="handleGroupPhotoUpload(event)" style="background:#070a12; padding:8px; border-radius:8px; border:1px solid var(--border); color:#fff; width:100%;">
+                </div>
+                <!-- YENİ: Qara pişik videosu yükləmə qutusu -->
+                <div class="info-box">
+                    <h3 style="margin:0 0 10px 0; color:#fff;">🐈 Qara Pişik Videosunu Yüklə</h3>
+                    <input type="file" id="blackCatVideoFile" accept="video/*" style="margin-bottom:10px; background:#070a12; padding:8px; border-radius:8px; border:1px solid var(--border); color:#fff; width:100%;">
+                    <button class="btn btn-dark" onclick="uploadBlackCatVideo()">Yüklə</button>
                 </div>
             </div>
 
@@ -898,15 +904,27 @@
         </div>
     </div>
 
-    <!-- 🏆 QALİBLƏR MODAL -->
+    <!-- 🏆 QALİBLƏR MODAL (Qara pişik yazısı ilə) -->
     <div id="winnersModal" class="modal">
-        <div class="modal-content" style="text-align:center;">
+        <div class="modal-content" style="text-align:center; padding-bottom: 10px;">
             <h1 style="color:var(--gold); margin-top:5px; font-size:28px;">👑 HƏFTƏNİN QALİBLƏRİ 🏆</h1>
             <p style="color:var(--text-sub); font-size:13px; margin-bottom:15px;">Təbrik edirik! Qaliblərin üzərinə klikləyərək fərdi konfetti saçın!</p>
 
             <div id="winnersListGrid" class="winners-container-v3"></div>
             
+            <div style="margin-bottom: 15px; margin-top: 5px;">
+                <span onclick="playBlackCatVideo()" style="color:var(--text-sub); font-size:12px; cursor:pointer; text-decoration:underline; opacity: 0.7;">🐈 Qara pişik</span>
+            </div>
+
             <button class="btn btn-gold" style="width:100%; padding:14px; font-size:16px;" onclick="closeWinnersModal()">Möhtəşəmdir! 🎉👏</button>
+        </div>
+    </div>
+
+    <!-- YENİ: Tam Ekran Video Modal -->
+    <div id="videoModal" class="modal" style="background: #000; z-index: 25000;">
+        <div style="position:relative; width:100%; height:100%; display:flex; justify-content:center; align-items:center;">
+            <button class="btn btn-dark" style="position:absolute; top:20px; right:20px; z-index: 26000;" onclick="closeVideoModal()">✖ Bağla</button>
+            <video id="blackCatPlayer" style="width:100%; max-height:90vh;" controls></video>
         </div>
     </div>
 
@@ -955,16 +973,21 @@ Yat, qal dala, laylay!</span>
         </div>
     </div>
 
-    <!-- V2.4 Yeniliklər Modal (YALNIZ TƏLƏBƏLƏR ÜÇÜN OLAN MARAQLI YENİLİKLƏR) -->
+    <!-- V2.4 Yeniliklər Modal (YALNIZ TƏLƏBƏLƏR ÜÇÜN 8 VACİB YENİLİK) -->
     <div id="versionModal" class="modal">
-        <div class="modal-content" style="max-width:600px;">
+        <div class="modal-content" style="max-width:650px;">
             <h2 style="color:var(--accent); margin-top:0;">🚀 Saytın Yenilikləri (V2.4)</h2>
             
-            <h4 style="color:var(--gold); margin:12px 0 5px 0;">🌟 Tələbələr Üçün Yeni İmkanlar:</h4>
+            <h4 style="color:var(--gold); margin:12px 0 5px 0;">🌟 İndiyə Kimi Olan Əsas Dəyişikliklər:</h4>
             <ul style="text-align:left; font-size:13.5px; line-height:1.6; color:var(--text-sub); margin-top:5px; padding-left:20px;">
-                <li><strong>⏳ Deadline Sistemi (Geri Sayım):</strong> Artıq tapşırıqların son təhvil vaxtını ana səhifədəki xüsusi geri sayım taymeri ilə canlı izləyə bilərsiniz! Vaxt bitmədən tapşırıqlarınızı yükləməyi unutmayın.</li>
-                <li><strong>📁 Ağıllı Fayl Yükləmə (Dublikat Nəzarəti):</strong> Eyni faylı səhvən iki dəfə yükləməyin qarşısı alındı. Əgər tapşırığınız "Səhv" olaraq qiymətləndirilərsə, onu yenidən yükləyə bilərsiniz və köhnə fayl avtomatik yenilənəcək.</li>
-                <li><strong>⚡ Daha Sürətli və Stabil Sistem:</strong> Saytın ümumi işləmə sürəti artırıldı, profil və reytinq cədvəlinin yüklənməsi optimallaşdırıldı.</li>
+                <li><strong>⏳ Ağıllı Deadline Taymeri:</strong> Artıq tapşırıqların son təhvil vaxtını ana səhifədəki canlı geri sayım taymeri ilə izləyə bilərsiniz. Vaxt bitdikdə fayl yükləmə dayandırılır.</li>
+                <li><strong>📁 Dublikat və Səhv Fayl Nəzarəti:</strong> Eyni faylı səhvən iki dəfə yükləməyin qarşısı alındı. Əgər tapşırığınız admin tərəfindən "Səhv" olaraq qiymətləndirilərsə, onu yenidən düzəldib yükləyə bilərsiniz və köhnə fayl avtomatik yenilənəcək.</li>
+                <li><strong>📊 Şəxsi Həftəlik İnkişaf Qrafiki:</strong> Hər bir tələbə öz profilinə daxil olaraq diaqram üzərindən həftəlik bal artımını və mərhələləri izləyə bilər.</li>
+                <li><strong>👑 Möhtəşəm Qalib Kutlamaları:</strong> Həftənin liderləri üçün 1-ci, 2-ci və 3-cü yerləri fərqləndirən xüsusi konfetti yağışı və səs effektləri sistemi quruldu.</li>
+                <li><strong>🏆 Təkmilləşdirilmiş Liderlər Cədvəli:</strong> Reytinq pəncərəsində Cari Həftənin, Ötən Həftənin Liderləri və Outsiderləri xüsusi vizual bloklarda vurğulanır.</li>
+                <li><strong>📱 Tam Mobil Uyğunluq və Sürət:</strong> Saytın kod bazası optimallaşdırılaraq həm mobil telefonlarda, həm də kompüterlərdə daha stabil və sürətli işləməsi təmin edildi.</li>
+                <li><strong>🌐 Çoxdilli İnterfeys (AZ, RU, TR, EN):</strong> Reytinq cədvəlini və düymələri yuxarıdakı menyudan istədiyiniz dilə (Azərbaycan, Rus, Türk, İngilis) çevirə bilərsiniz.</li>
+                <li><strong>💬 Asan Feedback Sistemi:</strong> Ana səhifədəki "Feedback" düyməsi vasitəsilə birbaşa adminlərə saytla bağlı təklif, irad və ya sözlərinizi göndərə bilərsiniz.</li>
             </ul>
 
             <button class="btn" style="width:100%; margin-top:15px;" onclick="closeVersionModal()">Möhtəşəm! Təşəkkürlər 🎉</button>
@@ -1053,6 +1076,8 @@ Yat, qal dala, laylay!</span>
         let deadlineTimestamp = null;
         let deadlineInterval = null;
         let activeReviewedStudentName = null;
+        
+        let blackCatVideoData = null; // Video datası
 
         const i18n = {
             az: { title: "TT-08 Proqram Saytı", groupPhoto: "Bizim Qrupumuz", juryTitle: "Münsiflər Heyəti (Jürilər)", topLeaders: "Həftənin Liderləri", pastLeaders: "Ötən Həftənin Liderləri", outsiders: "Həftənin Outsiderləri", btnWinners: "Həftənin Qalibləri", btnOutsiders: "Həftənin Outsiderləri", btnFeedback: "Feedback", btnAdmin: "Admin Paneli", btnSort: "Sırala", btnBack: "Reytinq Cədvəlinə Qayıt" },
@@ -1206,6 +1231,11 @@ Yat, qal dala, laylay!</span>
         database.ref('group_photo').on('value', (snap) => {
             const photoUrl = snap.val();
             if (photoUrl && document.getElementById('mainGroupImg')) document.getElementById('mainGroupImg').src = photoUrl;
+        });
+        
+        // VIDEO PRELOAD
+        database.ref('video_black_cat').on('value', (snap) => {
+            blackCatVideoData = snap.val();
         });
 
         database.ref('students_data').on('value', (snapshot) => {
@@ -1625,6 +1655,34 @@ Yat, qal dala, laylay!</span>
         function closeWinnersModal() { 
             if (activeAudioObject) activeAudioObject.pause();
             document.getElementById('winnersModal').style.display = 'none'; 
+        }
+
+        // QARA PİŞİK VİDEO İDARƏSİ
+        function playBlackCatVideo() {
+            if (!blackCatVideoData) {
+                alert("Hələ admin tərəfindən qara pişik videosu yüklənməyib!");
+                return;
+            }
+            if (activeAudioObject) activeAudioObject.pause();
+            
+            document.getElementById('winnersModal').style.display = 'none';
+            document.getElementById('videoModal').style.display = 'flex';
+            
+            const player = document.getElementById('blackCatPlayer');
+            player.src = blackCatVideoData;
+            player.play().catch(e => { console.log(e); });
+            
+            player.onended = function() {
+                closeVideoModal();
+            };
+        }
+
+        function closeVideoModal() {
+            const player = document.getElementById('blackCatPlayer');
+            player.pause();
+            player.src = "";
+            document.getElementById('videoModal').style.display = 'none';
+            document.getElementById('winnersModal').style.display = 'flex';
         }
 
         function showOutsidersModal() {
@@ -2102,6 +2160,23 @@ Yat, qal dala, laylay!</span>
             const reader = new FileReader();
             reader.onload = function(e) {
                 database.ref('audio_outsider').set(e.target.result).then(() => alert("Outsiderlər musiqisi yeniləndi! 🎵"));
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // QARA PİŞİK VİDEO YÜKLƏMƏ FUNKSİYASI
+        function uploadBlackCatVideo() {
+            const file = document.getElementById('blackCatVideoFile').files[0];
+            if (!file) return alert("Zəhmət olmasa bir video faylı seçin!");
+            
+            // Xəbərdarlıq: Fayl çox böyük olmamalıdır (Maksimum ~5-10MB tövsiyə edilir)
+            if (file.size > 10 * 1024 * 1024) {
+                return alert("Video faylı çox böyükdür! Zəhmət olmasa maksimum 10MB-lıq bir video seçin.");
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                database.ref('video_black_cat').set(e.target.result).then(() => alert("Qara pişik videosu uğurla yükləndi! 🐈"));
             };
             reader.readAsDataURL(file);
         }
