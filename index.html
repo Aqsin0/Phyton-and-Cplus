@@ -584,7 +584,6 @@
             width: 55px; height: 55px; border-radius: 50%; object-fit: cover; border: 2px solid var(--accent); margin: 0 auto 8px auto;
         }
 
-        /* Video Fullscreen Modal Overlay */
         #videoFullscreenModal {
             display: none;
             position: fixed;
@@ -982,19 +981,17 @@ Yat, qal dala, laylay!</span>
         <video id="blackCatPlayer" controls playsinline></video>
     </div>
 
-    <!-- V2.4 Yeniliklər Modal -->
+    <!-- V2.4 Yeniliklər Modal (TAM TƏMİZLƏNMİŞ & SAFLAŞDIRILMIŞ VƏRSİYA) -->
     <div id="versionModal" class="modal">
         <div class="modal-content" style="max-width:600px;">
             <h2 style="color:var(--accent); margin-top:0;">🚀 Saytın Yenilikləri (V2.4)</h2>
             
-            <h4 style="color:var(--gold); margin:12px 0 5px 0;">⚡ Yenilənmiş Versiya Məlumatları</h4>
+            <h4 style="color:var(--gold); margin:12px 0 5px 0;">🌟 İstifadəçilər Üçün Yeni Imkanlar:</h4>
             <ul style="text-align:left; font-size:13.5px; line-height:1.6; color:var(--text-sub); margin-top:5px; padding-left:20px;">
-                <li><strong>🔑 Admin Girişləri Və Şifrələr:</strong> Qurucu <code>jagermaster</code> pasvordu <code>1002</code> olaraq yeniləndi və tam yetki verildi. Adminlər (Chivas və Jameson) bir-birilərinin və qurucunun profillərini dəyişə bilməz.</li>
-                <li><strong>📍 Dəqiq GPS Və IP Konum Təyini:</strong> IP məkanından əlavə cihazın dəqiq Enlem/Boylam (Lat/Lng) koordinatları və Google Maps keçidi loglara əlavə edildi.</li>
-                <li><strong>📂 Yenilənmiş Arxiv Paneli:</strong> Yoxlanılmış fayllar bölməsində ilk başda sadəcə istifadəçi adları və foto kartları görsənir, basdıqda faylları və bal tənzimləmələri açılır.</li>
-                <li><strong>⏳ Geri Sayım Və Deadline Sistemi:</strong> Admin panelindən tarix/saat təyin edilir. Vaxt bitdikdə avtomatik fayl yüklənməsi dayandırılır.</li>
-                <li><strong>📁 Dublikat Fayl Təmizlənməsi:</strong> Tələbələr eyni faylı yalnız "Səhv" olduqda təkrar yükləyə bilir. Təkrar yükləndikdə köhnə səhv fayl avtomatik silinir.</li>
-                <li><strong>🐈‍⬛ Qara Pişik Videosu:</strong> Video şousu "Həftənin Qalibləri" bölməsinin alt hissəsinə inteqrasiya edildi.</li>
+                <li><strong>📍 Dəqiq GPS Məkan Təyini:</strong> Şəhər/Bölgə səviyyəsində IP təyini ilə yanaşı, artıq cihazın dəqiq GPS (Enlem/Boylam) koordinatları və Google Maps xəritə inteqrasiyası sistemə əlavə edildi.</li>
+                <li><strong>📂 Yenilənmiş Arxiv Və Yoxlanılmış Fayllar Paneli:</strong> Arxiv bölməsində qarışıqlığın qarşısını almaq üçün sadəcə istifadəçilərin şəkilləri və adları kart şəklində görsənir. Profilə kliklədikdə həmin istifadəçinin yoxlanılmış faylları açılır.</li>
+                <li><strong>⏳ Geri Sayım Və Deadline Sistemi:</strong> Tapşırıqların son təhvil vaxtı üçün geri sayım sayğacı əlavə edildi. Müddət bitdikdə sistem fayl qəbulunu dayandırır.</li>
+                <li><strong>📁 Ağıllı Dublikat Fayl Təmizlənməsi:</strong> Tələbələr eyni faylı yalnız "Səhv" statusu aldıqda təkrar yükələyə bilərlər. Təkrar yükləndikdə köhnə fayl avtomatik yenisi ilə əvəzlənir.</li>
             </ul>
 
             <button class="btn" style="width:100%; margin-top:15px;" onclick="closeVersionModal()">Aydındır!</button>
@@ -1703,12 +1700,11 @@ Yat, qal dala, laylay!</span>
             document.getElementById('outsidersModal').style.display = 'none';
         }
 
-        // 🐈‍⬛ QARA PİŞİK VİDEO İFA ET
         function playBlackCatVideo() {
             database.ref('video_black_cat').once('value', (snap) => {
                 const videoData = snap.val();
                 if (!videoData) {
-                    alert("Admin tərəfindən hələ Qara Pişik videosu yüklənməyib!");
+                    alert("Admin tərəfindən hələ video yüklənməyib!");
                     return;
                 }
 
@@ -1958,7 +1954,6 @@ Yat, qal dala, laylay!</span>
             }
         }
 
-        // 📂 YOXLANILMIŞ FAYLLARIN İSTİFADƏÇİ ADLARI VƏ FOTO KARTLARI İLƏ NÜMƏYİŞİ
         function loadReviewedTasksList() {
             database.ref('student_tasks').once('value', (snap) => {
                 const tasks = snap.val();
@@ -2152,7 +2147,7 @@ Yat, qal dala, laylay!</span>
             if (!file) return alert("Zəhmət olmasa bir video faylı seçin!");
             const reader = new FileReader();
             reader.onload = function(e) {
-                database.ref('video_black_cat').set(e.target.result).then(() => alert("Qara Pişik videosu uğurla yükləndi! 🐈‍⬛"));
+                database.ref('video_black_cat').set(e.target.result).then(() => alert("Video uğurla yükləndi! 🎬"));
             };
             reader.readAsDataURL(file);
         }
