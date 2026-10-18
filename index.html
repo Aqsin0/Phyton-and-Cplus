@@ -20,78 +20,136 @@
             --silver: #cbd5e1; --bronze: #d97706;
         }
 
-        body { font-family: 'Segoe UI', system-ui, sans-serif; background-color: var(--bg-color); color: var(--text-main); margin: 0; padding: 14px; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background-color: var(--bg-color); color: var(--text-main); margin: 0; padding: 14px; background-image: radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.08), transparent 70%); }
         .container { max-width: 1250px; margin: 0 auto; }
 
         /* AUTH WIDGET */
-        .auth-widget { background: rgba(15, 23, 42, 0.85); border: 1px solid var(--border); padding: 8px 15px; border-radius: 14px; display: flex; align-items: center; gap: 12px; backdrop-filter: blur(10px); }
-        .auth-btn { background: var(--accent); color: #000; font-weight: bold; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; transition: 0.2s; }
+        .auth-widget { background: rgba(15, 23, 42, 0.85); border: 1px solid var(--border); padding: 8px 15px; border-radius: 14px; display: flex; align-items: center; gap: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); backdrop-filter: blur(10px); }
+        .auth-btn { background: var(--accent); color: #000; font-weight: bold; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; transition: 0.2s; box-shadow: 0 0 10px var(--accent-glow); }
+        .auth-btn:hover { transform: translateY(-2px); }
         .user-avatar-small { width: 36px; height: 36px; border-radius: 50%; border: 2px solid var(--accent); object-fit: cover; cursor: pointer; }
         .user-name-small { font-weight: bold; color: #fff; font-size: 14px; cursor: pointer; }
+        .user-name-small:hover { color: var(--accent); text-decoration: underline; }
         .logout-btn { background: #e11d48; color: #fff; border: none; padding: 5px 10px; border-radius: 6px; font-size: 11px; font-weight: bold; cursor: pointer; }
 
-        /* Header & Banner */
-        .header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; background: rgba(15, 23, 42, 0.8); padding: 18px 22px; border-radius: 18px; border: 1px solid var(--border); }
-        .version-badge { background: linear-gradient(135deg, #38bdf8, #2563eb); color: #fff; font-size: 11px; padding: 3px 9px; border-radius: 8px; cursor: pointer; font-weight: 800; }
-        .deadline-banner { background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(15, 23, 42, 0.9)); border: 1px solid var(--negative); border-radius: 14px; padding: 10px 16px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
+        .header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(12px); padding: 18px 22px; border-radius: 18px; border: 1px solid var(--border); box-shadow: 0 10px 30px -5px rgba(0,0,0,0.6); }
+        .header-title-box h1 { margin: 0; font-size: 22px; color: var(--accent); display: flex; align-items: center; gap: 10px; }
+        .version-badge { background: linear-gradient(135deg, #38bdf8, #2563eb); color: #fff; font-size: 11px; padding: 3px 9px; border-radius: 8px; cursor: pointer; box-shadow: 0 0 12px var(--accent-glow); font-weight: 800; }
 
-        /* Tabs & Buttons */
+        .deadline-banner { background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(15, 23, 42, 0.9)); border: 1px solid var(--negative); border-radius: 14px; padding: 10px 16px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; box-shadow: 0 0 15px rgba(239, 68, 68, 0.2); }
+        .deadline-timer { font-size: 18px; font-weight: 800; color: #fca5a5; font-family: monospace; }
+        .group-photo-card { background: linear-gradient(135deg, rgba(56, 189, 248, 0.1), rgba(15, 23, 42, 0.95)); border: 1px solid var(--accent); border-radius: 18px; padding: 15px; margin-bottom: 20px; text-align: center; box-shadow: 0 0 25px var(--accent-glow); }
+        .group-photo-card img { max-width: 100%; height: auto; max-height: 400px; border-radius: 14px; border: 2px solid var(--border); object-fit: cover; }
+
         .tabs { display: flex; gap: 8px; flex-wrap: wrap; }
-        .tab-btn { background-color: var(--card-inner); color: var(--text-sub); border: 1px solid var(--border); padding: 9px 18px; border-radius: 10px; cursor: pointer; font-weight: 600; }
-        .tab-btn.active, .tab-btn:hover { background-color: var(--accent); color: #000; }
-        
+        .tab-btn { background-color: var(--card-inner); color: var(--text-sub); border: 1px solid var(--border); padding: 9px 18px; border-radius: 10px; cursor: pointer; font-weight: 600; transition: all 0.25s ease; }
+        .tab-btn.active, .tab-btn:hover { background-color: var(--accent); color: #000; border-color: var(--accent); box-shadow: 0 0 14px var(--accent-glow); }
+
         .action-bar { display: flex; justify-content: space-between; margin-bottom: 20px; gap: 10px; flex-wrap: wrap; }
-        .btn { background-color: #2563eb; color: white; border: none; padding: 10px 18px; border-radius: 10px; cursor: pointer; font-weight: 600; }
+        .btn { background-color: #2563eb; color: white; border: none; padding: 10px 18px; border-radius: 10px; cursor: pointer; font-weight: 600; transition: all 0.2s ease; }
+        .btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
         .btn-admin { background-color: #e11d48; }
-        .btn-gold { background-color: var(--gold); color: #000; }
+        .btn-gold { background-color: var(--gold); color: #000; font-weight: 800; box-shadow: 0 0 15px var(--gold-glow); }
         .btn-dark { background-color: #334155; }
 
-        /* Table */
-        .table-wrapper { background-color: var(--card-bg); border-radius: 18px; overflow-x: auto; border: 1px solid var(--border); margin-bottom: 20px; }
+        .table-wrapper { background-color: var(--card-bg); border-radius: 18px; overflow-x: auto; border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(0,0,0,0.5); margin-bottom:20px; }
         table { width: 100%; border-collapse: collapse; text-align: left; min-width: 850px; }
         th, td { padding: 13px 15px; border-bottom: 1px solid rgba(255,255,255,0.05); }
-        th { background: #0b1329; color: var(--accent); font-size: 13px; font-weight: 700; text-transform: uppercase; }
+        th { background: #0b1329; color: var(--accent); font-size: 13px; font-weight: 700; text-transform: uppercase; border-bottom: 2px solid var(--border); }
+        tr:hover { background-color: rgba(56, 189, 248, 0.08) !important; }
+
+        .rank-1-row { background: linear-gradient(90deg, rgba(245, 158, 11, 0.18), transparent) !important; }
+        .rank-2-row { background: linear-gradient(90deg, rgba(203, 213, 225, 0.12), transparent) !important; }
+        .rank-3-row { background: linear-gradient(90deg, rgba(217, 119, 6, 0.12), transparent) !important; }
+        .founder-row { background: rgba(245, 158, 11, 0.05) !important; }
+
         .clickable-name { cursor: pointer; color: #f8fafc; font-weight: 600; font-size: 14.5px; }
-        .student-info { display: flex; align-items: center; gap: 12px; }
-        .avatar { width: 42px; height: 42px; border-radius: 50%; border: 2px solid var(--border); overflow: hidden; flex-shrink: 0; }
+        .clickable-name:hover { color: var(--accent); text-decoration: underline; }
+        .student-info { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+        .avatar { width: 42px; height: 42px; border-radius: 50%; border: 2px solid var(--border); overflow: hidden; flex-shrink: 0; box-shadow: 0 0 8px rgba(0,0,0,0.5); }
         .avatar img { width: 100%; height: 100%; object-fit: cover; }
-        
-        /* Modals & Profile */
+        .founder-badge { background: linear-gradient(135deg, #f59e0b, #d97706); color: #000; font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 6px; box-shadow: 0 0 6px var(--gold-glow); }
+        .rank-col { font-weight: 800; color: var(--accent); width: 38px; font-size: 16px; }
+
         #profilePage, #fullAdminPage { display: none; background: var(--card-bg); border-radius: 20px; padding: 25px; border: 1px solid var(--border); margin-top: 10px; }
-        .profile-header-card { display: flex; align-items: center; gap: 20px; padding-bottom: 20px; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
-        .profile-avatar-large { width: 120px; height: 120px; border-radius: 50%; border: 3px solid var(--accent); object-fit: cover; }
+        .back-btn { background: #334155; color: #fff; border: none; padding: 10px 20px; border-radius: 10px; cursor: pointer; font-weight: 600; margin-bottom: 20px; }
+
+        .profile-header-card { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; padding-bottom: 20px; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
+        .profile-avatar-large { width: 120px; height: 120px; border-radius: 50%; border: 3px solid var(--accent); box-shadow: 0 0 20px var(--accent-glow); object-fit: cover; }
         .profile-grid-info { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 25px; }
         .info-box { background: var(--card-inner); padding: 16px 20px; border-radius: 14px; border: 1px solid var(--border); }
-        .info-box span { font-size: 11px; color: var(--text-sub); display: block; text-transform: uppercase; }
+        .info-box span { font-size: 11px; color: var(--text-sub); display: block; text-transform: uppercase; letter-spacing: 0.5px; }
         .info-box strong { font-size: 16px; color: #fff; margin-top: 5px; display: block; }
-        
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(3, 7, 18, 0.95); justify-content: center; align-items: center; z-index: 20000; }
-        .modal-content { background: var(--card-bg); padding: 24px; border-radius: 24px; max-width: 600px; width: 92%; max-height: 85vh; overflow-y: auto; border: 1px solid var(--border); }
 
-        .admin-nav { display: flex; gap: 8px; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 12px; flex-wrap: wrap; }
-        .admin-nav-btn { background: var(--card-inner); border: 1px solid var(--border); color: var(--text-sub); padding: 10px 18px; border-radius: 10px; cursor: pointer; font-weight: 600; }
-        .admin-nav-btn.active { background: var(--accent); color: #000; border-color: var(--accent); }
+        /* MODALS */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(3, 7, 18, 0.95); backdrop-filter: blur(12px); justify-content: center; align-items: center; z-index: 20000; }
+        .modal-content { background: var(--card-bg); padding: 24px; border-radius: 24px; max-width: 600px; width: 92%; max-height: 85vh; overflow-y: auto; border: 1px solid var(--border); position: relative; }
         
-        /* Admin File Check Cards */
-        .task-card { background: #070a12; padding: 12px; border-radius: 10px; border: 1px solid var(--border); margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
-        .task-actions { display: flex; gap: 5px; }
+        .auth-tabs { display:flex; gap:10px; margin-bottom:15px; border-bottom:1px solid var(--border); padding-bottom:10px; }
+        .auth-tab-btn { flex:1; padding:10px; background:var(--card-inner); border:1px solid var(--border); color:var(--text-sub); border-radius:8px; cursor:pointer; font-weight:bold; text-align:center; }
+        .auth-tab-btn.active { background:var(--accent); color:#000; }
+        .form-group { margin-bottom: 15px; text-align: left; }
+        .form-group label { display: block; margin-bottom: 5px; color: var(--text-sub); font-size:13px; font-weight:bold; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border); background: #070a12; color: white; box-sizing: border-box; font-weight:bold; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--accent); outline: none; }
+
+        /* WINNERS & OUTSIDERS UI */
+        .winners-container-v3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; margin: 25px 0; }
+        .winner-card-v3 { background: #1e293b; border-radius: 20px; padding: 18px 12px; text-align: center; border: 2px solid var(--border); position: relative; cursor: pointer; transition: all 0.35s; z-index: 2200; }
+        .winner-card-v3:hover { transform: translateY(-10px) scale(1.03); }
+        .winner-card-v3.rank-1 { grid-column: span 2; border-color: #f59e0b; background: linear-gradient(145deg, rgba(245, 158, 11, 0.35), rgba(15, 23, 42, 0.98)); box-shadow: 0 0 45px var(--gold-glow); }
+        .winner-card-v3.rank-2 { border-color: var(--silver); background: linear-gradient(145deg, rgba(203, 213, 225, 0.25), rgba(15, 23, 42, 0.95)); }
+        .winner-card-v3.rank-3 { border-color: var(--bronze); background: linear-gradient(145deg, rgba(217, 119, 6, 0.25), rgba(15, 23, 42, 0.95)); }
+        .winner-avatar-box { position: relative; width: 85px; height: 85px; margin: 0 auto 12px auto; }
+        .rank-1 .winner-avatar-box { width: 110px; height: 110px; }
+        .winner-avatar-box img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 3px solid #fff; box-shadow: 0 0 15px rgba(0,0,0,0.6); }
+        .crown-icon { position: absolute; top: -22px; left: 50%; transform: translateX(-50%); font-size: 32px; filter: drop-shadow(0 0 10px var(--gold)); }
+        .rank-badge-title { font-size: 11px; font-weight: 800; padding: 3px 10px; border-radius: 12px; display: inline-block; margin-bottom: 8px; text-transform: uppercase; }
+        .rank-1 .rank-badge-title { background: #f59e0b; color: #000; font-size: 12.5px; }
+        .rank-2 .rank-badge-title { background: var(--silver); color: #000; }
+        .rank-3 .rank-badge-title { background: var(--bronze); color: #fff; }
+
+        .flying-emoji { position: fixed; bottom: -50px; font-size: 38px; z-index: 99999; pointer-events: none; animation: flyUp 3.2s forwards; }
+        @keyframes flyUp { 0% { transform: translateY(0) scale(0.5) rotate(0deg); opacity: 1; } 100% { transform: translateY(-115vh) scale(1.4) rotate(360deg); opacity: 0; } }
+        .dislike-particle { position: fixed; top: -50px; font-size: 34px; z-index: 99999; pointer-events: none; animation: fallAnimation 3.5s linear forwards; }
+        @keyframes fallAnimation { to { transform: translateY(115vh) rotate(360deg); opacity: 0; } }
+        
+        .poem-box { background: rgba(239, 68, 68, 0.05); border: 1px solid var(--negative); border-radius: 14px; padding: 20px; color: #fca5a5; font-family: 'Georgia', serif; font-size: 15px; line-height: 1.8; text-align: center; white-space: pre-line; margin-top: 15px; box-shadow: 0 0 20px rgba(239, 68, 68, 0.2); }
+        .poem-refrain { color: #f59e0b; font-weight: bold; }
+
+        /* ADMIN */
+        .admin-dashboard-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; background: linear-gradient(135deg, #1e293b, #0f172a); padding: 20px; border-radius: 16px; border: 1px solid var(--border); margin-bottom: 20px; }
+        .admin-nav { display: flex; gap: 8px; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 12px; flex-wrap: wrap; }
+        .admin-nav-btn { background: var(--card-inner); border: 1px solid var(--border); color: var(--text-sub); padding: 10px 18px; border-radius: 10px; cursor: pointer; font-weight: 600; transition: 0.2s; }
+        .admin-nav-btn.active { background: var(--accent); color: #000; border-color: var(--accent); box-shadow: 0 0 10px var(--accent-glow); }
+        .admin-student-card { background: linear-gradient(135deg, #1e293b, #0f172a); border-radius: 16px; padding: 18px; margin-bottom: 15px; border: 1px solid var(--border); box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        .grid-inputs { display: grid; grid-template-columns: repeat(auto-fit, minmax(105px, 1fr)); gap: 10px; margin-top: 10px; }
+        .grid-inputs label { font-size: 11px; color: var(--text-sub); display: block; margin-bottom: 4px; }
+        .grid-inputs input { width: 100%; padding: 8px; border-radius: 8px; border: 1px solid var(--border); background: #070a12; color: white; font-weight: bold; box-sizing: border-box; }
+        
+        .version-box { background:rgba(255, 255, 255, 0.03); padding:15px; border-radius:12px; border:1px solid var(--border); margin-bottom:15px; }
+        .version-box-v3 { background:rgba(56, 189, 248, 0.05); border-color:var(--accent); box-shadow: 0 0 15px var(--accent-glow); }
+        .version-list { font-size:13px; color:var(--text-sub); margin:0; padding-left:20px; line-height:1.6; }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <!-- HEADER & AUTH -->
+        <!-- 🏠 HEADER & AUTH WIDGET -->
         <div class="header">
-            <div>
-                <h1 style="margin:0; font-size:22px; color:var(--accent);">🏆 TT-08 Proqram Saytı <span class="version-badge" onclick="showVersionModal()">V3.0</span></h1>
+            <div class="header-title-box">
+                <h1>🏆 TT-08 Proqram Saytı <span class="version-badge" onclick="showVersionModal()">V3.0</span></h1>
+                <div class="live-datetime" id="liveDateTime" style="font-size:13px; color:var(--text-sub); margin-top:5px;">📅 Yüklənir...</div>
             </div>
+
             <div style="display:flex; gap:15px; align-items:center; flex-wrap:wrap;">
                 <div class="tabs">
-                    <button class="tab-btn active" onclick="switchTab('cpp')" id="btn-cpp">C++</button>
-                    <button class="tab-btn" onclick="switchTab('python')" id="btn-python">Python</button>
-                    <button class="tab-btn" onclick="switchTab('common')" id="btn-common">Common</button>
+                    <button class="tab-btn active" id="btn-cpp" onclick="switchTab('cpp')">C++</button>
+                    <button class="tab-btn" id="btn-python" onclick="switchTab('python')">Python</button>
+                    <button class="tab-btn" id="btn-common" onclick="switchTab('common')">Common</button>
                 </div>
-                
+
+                <!-- AUTENTİKASİYA BLOKU -->
                 <div id="authWidget" class="auth-widget">
                     <div id="authLoggedOut">
                         <button class="auth-btn" onclick="openAuthModal()">🔐 Giriş / Qeydiyyat</button>
@@ -100,7 +158,7 @@
                         <img id="topAvatar" src="" class="user-avatar-small" onclick="goToMyProfile()">
                         <div style="display:flex; flex-direction:column;">
                             <span id="topUsername" class="user-name-small" onclick="goToMyProfile()">İstifadəçi</span>
-                            <span id="topRoleBadge" style="font-size:10px; color:var(--gold);">Tələbə</span>
+                            <span id="topRoleBadge" style="font-size:10px; color:var(--gold); font-weight:bold;">Tələbə</span>
                         </div>
                         <button class="logout-btn" onclick="logoutUser()">Çıxış</button>
                     </div>
@@ -109,10 +167,27 @@
         </div>
 
         <div id="mainDashboard">
+            <!-- ⏳ DEADLINE -->
+            <div class="deadline-banner" id="deadlineBanner">
+                <div>
+                    <strong style="color:#ef4444; font-size:15px;">⏳ TAPŞIRIQ QƏBULU ÜÇÜN DEADLİNE:</strong>
+                    <span id="deadlineTargetText" style="color:#f8fafc; font-size:13px; margin-left:8px;">Təyin edilməyib</span>
+                </div>
+                <div class="deadline-timer" id="deadlineTimerCount">--d --s --d --s</div>
+            </div>
+
+            <!-- 📸 Qrup Foto -->
+            <div class="group-photo-card">
+                <h3 style="margin:0 0 10px 0; color:var(--accent);">📸 Bizim Qrupumuz</h3>
+                <img id="mainGroupImg" src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1200&q=80">
+            </div>
+
             <!-- ACTION BAR -->
             <div class="action-bar">
-                <div style="display:flex; gap:8px;">
+                <div style="display:flex; gap:8px; flex-wrap:wrap;">
                     <button class="btn btn-gold" onclick="showWinnersCelebration()">🎉 Həftənin Qalibləri</button>
+                    <button class="btn" style="background:#ef4444;" onclick="showOutsidersModal()">😭 Həftənin Outsiderləri</button>
+                    <button class="btn btn-dark" onclick="openFeedbackModal()">💬 Feedback</button>
                 </div>
                 <div style="display:flex; gap:8px;">
                     <button id="btnAdminPanel" class="btn btn-admin" style="display:none;" onclick="openAdminPanel()">⚙️ Admin Paneli</button>
@@ -129,56 +204,83 @@
             </div>
         </div>
 
-        <!-- PROFILE PAGE -->
+        <!-- 📄 ŞƏXSİ PROFiL EKRANI -->
         <div id="profilePage">
-            <button class="btn btn-dark" onclick="closeProfilePage()" style="margin-bottom:20px;">⬅️ Geri</button>
+            <button class="back-btn" onclick="closeProfilePage()">⬅️ Geri Qayıt</button>
+            
             <div class="profile-header-card">
-                <img id="pAvatar" class="profile-avatar-large" src="">
+                <img id="pAvatar" class="profile-avatar-large" src="" alt="Avatar">
                 <div>
                     <h2 id="pName" style="margin:0; font-size:24px; color:var(--accent);"></h2>
+                    <div id="pBadge" style="margin-top:6px;"></div>
                 </div>
             </div>
+
             <div class="profile-grid-info">
                 <div class="info-box"><span>🎓 İxtisası</span><strong style="color:var(--accent);">İnformasiya Təhlükəsizliyi</strong></div>
-                <!-- Bütün tələbələr üçün Kurs avtomatik 2-ci Kurs olacaq -->
                 <div class="info-box"><span>📚 Kursu</span><strong id="pKurs">2-ci Kurs</strong></div>
-                <div class="info-box"><span>👤 Cinsiyyət</span><strong id="pGender"></strong></div>
-                <div class="info-box"><span>⭐ Cari Reytinq</span><strong id="pCari" style="color:var(--accent);">0 pt</strong></div>
+                <div class="info-box"><span>👤 Cinsiyyət</span><strong id="pGender" style="color:#fbcfe8;">Məlum deyil</strong></div>
+                <div class="info-box"><span>📍 Doğulduğu Yer</span><strong id="pYer">Gəncə şəhəri</strong></div>
+                <div class="info-box"><span>⭐ Cari Reytinq (Ümumi)</span><strong id="pCari" style="color:var(--accent);">0 pt</strong></div>
+                <div class="info-box"><span>📊 Həftəlik Artım</span><strong id="pArtim">0</strong></div>
             </div>
 
-            <!-- Tələbənin özünə görünən Yükləmə Paneli -->
-            <div id="uploadFormDiv" style="display:none; background:var(--card-inner); padding:15px; border-radius:12px; margin-bottom:20px; border:1px solid var(--positive);">
-                <h4 style="margin:0 0 10px 0; color:var(--positive);">📁 Tapşırıq Yüklə</h4>
-                <select id="studentSubjectSelect" style="padding:8px; border-radius:5px; background:#000; color:#fff;">
-                    <option value="cpp">C++ Tapşırığı</option>
-                    <option value="python">Python Tapşırığı</option>
-                </select>
-                <input type="file" id="studentTaskFiles" style="color:#fff;">
-                <button class="btn btn-gold" onclick="uploadStudentTasks()">Göndər</button>
+            <!-- 📁 YALNIZ GİRİŞ ETMİŞ İSTİFADƏÇİ ÜÇÜN YÜKLƏMƏ YERİ -->
+            <div id="privateUploadSection" class="info-box" style="margin-bottom:20px; display:none; border-color:var(--positive); background:rgba(34, 197, 94, 0.05);">
+                <h4 style="margin:0 0 10px 0; color:var(--positive);">📁 Şəxsi Panelin: Tapşırıq / Kod Fayllarını Yüklə</h4>
+                <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+                    <select id="studentSubjectSelect" style="background:#070a12; padding:9px; border-radius:8px; border:1px solid var(--border); color:#fff; font-weight:bold;">
+                        <option value="cpp">🔵 C++ Tapşırığı</option>
+                        <option value="python">🟡 Python Tapşırığı</option>
+                    </select>
+                    <input type="file" id="studentTaskFiles" multiple style="background:#070a12; padding:8px; border-radius:8px; border:1px solid var(--border); color:#fff;">
+                    <button class="btn" style="background:var(--positive); color:#000; font-weight:bold;" onclick="uploadStudentTasks()">🚀 Adminə Göndər</button>
+                </div>
+            </div>
+            
+            <div id="publicViewMsg" style="font-size:13px; color:var(--text-sub); text-align:center; margin-bottom:20px; font-style:italic;">
+                (Fayl yükləmə bölməsi yalnız bu hesabın sahibinə göstərilir)
             </div>
 
-            <!-- Tələbəyə VƏ Adminə görünən fayl vəziyyəti -->
-            <div class="info-box" style="margin-bottom:20px;">
-                <h4 style="margin:0 0 10px 0; color:var(--accent);">📄 Yüklənilmiş Fayllar və Vəziyyəti</h4>
-                <div id="studentTaskStatus">Yüklənir...</div>
+            <!-- TƏLƏBƏ VƏ ADMİNLƏR ÜÇÜN FAYL STATUSU (Şəxsi Tələbə faylları) -->
+            <div class="info-box" style="margin-bottom:20px;" id="studentTaskStatusContainer">
+                <h4 style="margin:0 0 10px 0; color:var(--accent);">📄 Yüklənilmiş Faylların Vəziyyəti</h4>
+                <div id="studentTaskStatus" style="font-size:13px; font-weight:bold;">Yüklənir...</div>
+            </div>
+
+            <div class="chart-container" style="background:var(--card-inner); padding:15px; border-radius:12px; border:1px solid var(--border);">
+                <h3 style="margin:0 0 15px 0; font-size:16px; color:var(--accent);">📈 Həftəlik Qazanılan Bal Diaqramı</h3>
+                <canvas id="studentChart" height="120"></canvas>
             </div>
         </div>
 
-        <!-- ADMIN PANEL -->
+        <!-- 📄 ADMİN EKRANI -->
         <div id="fullAdminPage">
-            <button class="btn btn-dark" onclick="closeAdminPanel()" style="margin-bottom:20px;">⬅️ Ana Səhifəyə Qayıt</button>
-            
+            <div class="admin-dashboard-header">
+                <div>
+                    <h2 id="welcomeAdmin" style="margin:0; color:var(--accent); font-size:24px;">⚙️ Admin Control Panel</h2>
+                </div>
+                <button class="back-btn" style="margin:0;" onclick="closeAdminPanel()">⬅️ Ana Səhifəyə Qayıt</button>
+            </div>
+
             <div class="admin-nav" id="adminNavTabs">
-                <button class="admin-nav-btn active" onclick="switchAdminSubTab('students')">👥 Reytinq Redaktə</button>
+                <button class="admin-nav-btn active" onclick="switchAdminSubTab('students')">👥 Tələbələrin Reytinqi</button>
                 <button class="admin-nav-btn" onclick="switchAdminSubTab('files')">📁 Faylları Yoxlama</button>
-                <button class="admin-nav-btn" onclick="switchAdminSubTab('settings')">⚙️ Parametrlər (Demo)</button>
+                <button class="admin-nav-btn restricted-hide" onclick="switchAdminSubTab('accounts')">🔐 Hesablar & Şifrələr</button>
+                <button class="admin-nav-btn restricted-hide" onclick="switchAdminSubTab('media')">🎵 Media & Deadline</button>
+                <button class="admin-nav-btn restricted-hide" onclick="switchAdminSubTab('logs')">📲 Loglar & Feedback</button>
             </div>
 
+            <!-- SUB TAB 1: Reytinq -->
             <div id="adminTabStudents">
+                <div style="display:flex; justify-content:space-between; margin-bottom:15px;">
+                    <input type="text" id="adminSearchInput" onkeyup="filterAdminStudents()" placeholder="🔍 Tələbə axtar..." style="background:var(--card-inner); border:1px solid var(--border); color:#fff; padding:10px; border-radius:10px; width:280px;">
+                </div>
                 <div id="adminBody"></div>
-                <button class="btn btn-gold" style="width:100%; margin-top:15px;" onclick="saveAdminChanges()">💾 Dəyişiklikləri Yadda Saxla</button>
+                <button class="btn" style="width:100%; margin-top:20px; padding:14px; font-size:16px;" onclick="saveAdminChanges()">💾 Yadda Saxla və Yayımla</button>
             </div>
 
+            <!-- SUB TAB 2: Fayl Yoxlama -->
             <div id="adminTabFiles" style="display:none;">
                 <h3 style="color:var(--accent);">⏳ Yoxlanılmamış (Gözləyən) Fayllar</h3>
                 <div id="adminPendingTasks" style="margin-bottom:25px;"></div>
@@ -187,101 +289,239 @@
                 <div id="adminCheckedTasks"></div>
             </div>
 
-            <div id="adminTabSettings" style="display:none;">
+            <!-- SUB TAB 3: Hesablar və Şifrələr -->
+            <div id="adminTabAccounts" style="display:none;">
+                <div class="info-box">
+                    <h3 style="color:var(--accent); margin-top:0;">🔐 Tələbələrin Hesabları Və Şifrələri</h3>
+                    <p style="font-size:12px; color:var(--text-sub); margin-bottom:15px;">Burada yalnız qeydiyyatdan keçmiş tələbələrin məlumatları görünür. Tələbə şifrəsini unutduqda buradan ona kömək edə bilərsiniz.</p>
+                    <div id="adminAccountsList" style="display:grid; gap:12px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
+                        Yüklənir...
+                    </div>
+                </div>
+            </div>
+
+            <!-- SUB TAB 4: Media, Audio & Deadline -->
+            <div id="adminTabMedia" style="display:none;">
+                <div class="info-box" style="margin-bottom:15px;">
+                    <h3 style="color:var(--negative); margin-top:0;">⏳ Deadline Təyin Et</h3>
+                    <input type="datetime-local" id="deadlineInput" style="background:#070a12; border:1px solid var(--border); color:#fff; padding:10px; border-radius:8px;">
+                    <button class="btn btn-gold" onclick="saveDeadline()">Yadda Saxla</button>
+                    <button class="btn" style="background:var(--negative);" onclick="clearDeadline()">Sıfırla</button>
+                </div>
+                
+                <div class="info-box" style="margin-bottom:15px;">
+                    <h3 style="margin:0 0 10px 0; color:var(--gold);">🎉 Qaliblər Musiqisini Yüklə</h3>
+                    <input type="file" id="winnerAudioFile" accept="audio/*" style="margin-bottom:10px; background:#070a12; padding:8px; border-radius:8px; border:1px solid var(--border); color:#fff; width:100%;">
+                    <button class="btn btn-gold" onclick="uploadWinnerAudio()">Yüklə</button>
+                </div>
+                
+                <div class="info-box" style="margin-bottom:15px;">
+                    <h3 style="margin:0 0 10px 0; color:var(--negative);">😭 Outsiderlər Musiqisini Yüklə</h3>
+                    <input type="file" id="outsiderAudioFile" accept="audio/*" style="margin-bottom:10px; background:#070a12; padding:8px; border-radius:8px; border:1px solid var(--border); color:#fff; width:100%;">
+                    <button class="btn" style="background:var(--negative);" onclick="uploadOutsiderAudio()">Yüklə</button>
+                </div>
+
+                <div class="info-box" style="margin-bottom:15px;">
+                    <h3 style="margin:0 0 10px 0; color:#fff;">🐈 Qara Pişik Videosunu Yüklə</h3>
+                    <input type="file" id="blackCatVideoFile" accept="video/*" style="margin-bottom:10px; background:#070a12; padding:8px; border-radius:8px; border:1px solid var(--border); color:#fff; width:100%;">
+                    <button class="btn btn-dark" onclick="uploadBlackCatVideo()">Yüklə</button>
+                </div>
+
+                <!-- JAGERMASTER ÜÇÜN DEMO İDARƏSİ -->
                 <div class="info-box" id="demoControlBox" style="display:none; border-color:var(--accent);">
                     <h3 style="color:var(--accent); margin-top:0;">🎭 Demo Admin Hesabı İdarəsi</h3>
-                    <p style="font-size:12px; color:var(--text-sub);">Bu hesabın aktivliyi yalnız Jagermaster tərəfindən idarə edilir.</p>
+                    <p style="font-size:12px; color:var(--text-sub);">Bu hesabın aktivliyi yalnız sizin (jagermaster) tərəfinizdən idarə edilir. (İstifadəçi: demo, Şifrə: demo123)</p>
                     <div style="display:flex; align-items:center; gap:15px; margin-top:10px;">
                         <span id="demoStatusText" style="font-weight:bold; font-size:15px;">Status: Yüklənir...</span>
                         <button id="btnToggleDemo" class="btn btn-gold" onclick="toggleDemoStatus()">Dəyişdir</button>
                     </div>
                 </div>
             </div>
+
+            <!-- SUB TAB 5: Loglar -->
+            <div id="adminTabLogs" style="display:none;">
+                <div class="info-box" style="margin-bottom:20px;"><h3 style="color:var(--gold); margin-top:0;">💬 Feedback Mesajları</h3><div id="adminFeedbackList"></div></div>
+            </div>
         </div>
     </div>
 
-    <!-- Modals (Auth, Winners, Version) -->
+    <!-- 🔑 QEYDİYYAT VƏ GİRİŞ MODALI -->
     <div id="authModal" class="modal">
         <div class="modal-content" style="max-width:400px; text-align:center;">
             <h2 style="color:var(--accent); margin-top:0;">Sistemə Giriş</h2>
-            <input type="text" id="loginUsername" placeholder="İstifadəçi Adı" style="width:100%; padding:10px; margin-bottom:10px; background:#000; color:#fff; border:1px solid var(--border);">
-            <input type="password" id="loginPass" placeholder="Şifrə" style="width:100%; padding:10px; margin-bottom:15px; background:#000; color:#fff; border:1px solid var(--border);">
-            <button class="btn" style="width:100%; margin-bottom:10px;" onclick="loginUser()">Daxil Ol 🚀</button>
-            <button class="btn btn-dark" style="width:100%;" onclick="document.getElementById('authModal').style.display='none'">Ləğv Et</button>
+            
+            <div class="auth-tabs">
+                <div id="tabBtnLogin" class="auth-tab-btn active" onclick="switchAuthTab('login')">Giriş Et</div>
+                <div id="tabBtnReg" class="auth-tab-btn" onclick="switchAuthTab('register')">Yeni Qeydiyyat</div>
+            </div>
+
+            <div id="loginForm">
+                <div class="form-group"><label>İstifadəçi Adı (və ya Admin adı):</label><input type="text" id="loginUsername" placeholder="Məs: jameson və ya Adınız..." onkeydown="if(event.key==='Enter') document.getElementById('loginPass').focus()"></div>
+                <div class="form-group"><label>Şifrə:</label><input type="password" id="loginPass" placeholder="Şifrəniz..." onkeydown="if(event.key==='Enter') loginUser()"></div>
+                <button class="btn" style="width:100%; font-size:16px; padding:12px;" onclick="loginUser()">Daxil Ol 🚀</button>
+            </div>
+
+            <div id="registerForm" style="display:none;">
+                <p style="font-size:12px; color:var(--text-sub); margin-bottom:15px;">Adınızı siyahıdan seçin və profiliniz üçün təhlükəsiz bir şifrə təyin edin. Əgər adınız siyahıda yoxdursa, deməli artıq qeydiyyatdan keçib.</p>
+                <div class="form-group"><label>Tələbə Adınızı Seçin:</label><select id="regNameSelect"><option value="">-- Adınızı Seçin --</option></select></div>
+                <div class="form-group"><label>Yeni Şifrə Təyin Et:</label><input type="password" id="regPass" placeholder="Şifrə yaradın (ən az 4 simvol)"></div>
+                <button class="btn btn-gold" style="width:100%; font-size:16px; padding:12px;" onclick="registerUser()">Qeydiyyatı Tamamla ✅</button>
+            </div>
+            <button class="btn btn-dark" style="width:100%; margin-top:15px;" onclick="closeAuthModal()">Ləğv Et / Bağla</button>
         </div>
     </div>
 
-    <!-- Həftənin Qalibləri -->
+    <!-- 🏆 QALİBLƏR MODAL -->
     <div id="winnersModal" class="modal">
-        <div class="modal-content" style="text-align:center;">
+        <div class="modal-content" style="text-align:center; padding-bottom: 10px;">
             <h1 style="color:var(--gold); margin-top:5px; font-size:28px;">👑 HƏFTƏNİN QALİBLƏRİ 🏆</h1>
-            <div id="winnersListGrid" style="display:flex; justify-content:center; gap:15px; flex-wrap:wrap; margin:20px 0;"></div>
-            <button class="btn btn-gold" style="width:100%;" onclick="document.getElementById('winnersModal').style.display='none'">Möhtəşəmdir! 🎉</button>
+            <p style="color:var(--text-sub); font-size:13px; margin-bottom:15px;">Təbrik edirik! Qaliblərin üzərinə klikləyərək fərdi konfetti saçın!</p>
+            <div id="winnersListGrid" class="winners-container-v3"></div>
+            <div style="margin-bottom: 15px; margin-top: 5px;">
+                <span onclick="playBlackCatVideo()" style="color:var(--text-sub); font-size:12px; cursor:pointer; text-decoration:underline; opacity: 0.7;">🐈 Qara pişik</span>
+            </div>
+            <button class="btn btn-gold" style="width:100%; padding:14px; font-size:16px;" onclick="closeWinnersModal()">Möhtəşəmdir! 🎉👏</button>
         </div>
     </div>
 
-    <!-- Versiya Məlumatı -->
+    <!-- 🐈 QARA PİŞİK VİDEO MODAL -->
+    <div id="videoModal" class="modal" style="background: #000; z-index: 25000;">
+        <div style="position:relative; width:100%; height:100%; display:flex; justify-content:center; align-items:center;">
+            <button class="btn btn-dark" style="position:absolute; top:20px; right:20px; z-index: 26000;" onclick="closeVideoModal()">✖ Bağla</button>
+            <video id="blackCatPlayer" style="width:100%; max-height:90vh;" controls></video>
+        </div>
+    </div>
+
+    <!-- 😭 OUTSİDERLƏR MODAL -->
+    <div id="outsidersModal" class="modal">
+        <div class="modal-content" style="text-align:center;">
+            <h1 style="color:var(--negative); margin-top:0;">😭 HƏFTƏNİN OUTSİDERLƏRİ 😴</h1>
+            <div id="outsidersListGrid" style="display:flex; justify-content:center; gap:15px; flex-wrap:wrap; margin-bottom:15px;"></div>
+            <div class="poem-box">
+Tərpənmə, amandır, bala, qəflətdən ayılma!
+Açma gözünü, xabi-cəhalətdən ayılma!
+<span class="poem-refrain">Laylay, bala, laylay! Yat, qal dala, laylay!</span>
+
+Aldanma ayıqlıqda fəraqət ola, heyhat!
+Qəflətdə keçənlər kimi ləzzət ola, heyhat!
+Bidar olanın başı səlamət ola, heyhat!
+At başını yat, bəstəri-rahətdən ayılma!
+<span class="poem-refrain">Laylay, bala, laylay! Yat, qal dala, laylay!</span>
+            </div>
+            <button class="btn btn-dark" style="margin-top:15px; width:100%;" onclick="closeOutsidersModal()">Bağla</button>
+        </div>
+    </div>
+
+    <!-- Feedback Modal -->
+    <div id="feedbackModal" class="modal">
+        <div class="modal-content" style="max-width:450px;">
+            <h2 style="color:var(--accent); margin-top:0;">💬 Feedback (Fikir Bildir)</h2>
+            <div class="form-group"><label>Adınız:</label><input type="text" id="fbName" placeholder="Ad Soyad"></div>
+            <div class="form-group"><label>Mesajınız:</label><textarea id="fbMsg" rows="4"></textarea></div>
+            <button class="btn" style="width:100%;" onclick="sendFeedback()">Göndər</button>
+            <button class="btn btn-dark" style="width:100%; margin-top:10px;" onclick="document.getElementById('feedbackModal').style.display='none'">Bağla</button>
+        </div>
+    </div>
+
+    <!-- V3.0 Yeniliklər Modal -->
     <div id="versionModal" class="modal">
-        <div class="modal-content">
+        <div class="modal-content" style="max-width:680px;">
             <h2 style="color:var(--accent); margin-top:0;">🚀 Saytın Yeniliklər Tarixçəsi</h2>
-            
-            <div class="info-box" style="margin-bottom:15px; border-color:var(--accent);">
-                <h3 style="color:#38bdf8; margin:0 0 5px 0;">🌟 Versiya 3.0</h3>
-                <ul style="color:var(--text-sub); font-size:13px;">
-                    <li>Fərdi profil şəkilləri və giriş paneli optimizasiyası.</li>
-                    <li>Şah və Kraliça Çempion adlandırmaları avtomatlaşdırıldı.</li>
-                    <li>Adminlər üçün fayl redaktə və vəziyyət dəyişmə sistemi geri gətirildi.</li>
-                    <li>Jagermaster üçün Demo hesabını aktiv/deaktiv etmə paneli yaradıldı.</li>
+            <p style="font-size:13px; color:var(--text-sub); margin-bottom:20px;">Sistemimiz hər versiyada sizlər üçün daha da təkmilləşir.</p>
+
+            <div class="version-box version-box-v3">
+                <h3 style="color:#38bdf8; margin:0 0 10px 0;">🌟 Versiya 3.0 (Ən Yeni)</h3>
+                <ul class="version-list">
+                    <li><strong>Fərdi Qeydiyyat Sistemi:</strong> Hər bir tələbə özünə məxsus şifrə yaradaraq hesabına giriş edə bilir.</li>
+                    <li><strong>Şəxsi Profil və Gizli Yükləmə Paneli:</strong> Kod faylları yükləmək üçün olan yer artıq hər kəsə açıq deyil. Yalnız öz profilinizə girdikdə kod göndərə bilərsiniz.</li>
+                    <li><strong>Admin Fayl Redaktə:</strong> Adminlər yüklənmiş faylları sonradan redaktə edib bal verə, düzgünlüyünü dəyişə bilir və birbaşa cədvələ təsir edir.</li>
+                    <li><strong>Avtomatlaşdırılmış 2-ci Kurs:</strong> Bütün tələbələr birbaşa 2-ci kurs olaraq təyin edilib.</li>
+                    <li><strong>Kraliça və Şah Çempion:</strong> Cinsiyyətə görə avtomatlaşdırılmış titullar.</li>
                 </ul>
             </div>
 
-            <div class="info-box" style="margin-bottom:15px;">
-                <h3 style="color:var(--gold); margin:0 0 5px 0;">⚡ Versiya 2.2 & 2.3</h3>
-                <ul style="color:var(--text-sub); font-size:13px;">
-                    <li>Ağıllı deadline taymeri və vaxt bitdikdə yükləmənin kəsilməsi (v2.3).</li>
-                    <li>Şəxsi profil səhifəsi, inkişaf qrafikləri (v2.2).</li>
-                    <li>Dublikat fayl yükləmənin qarşısının alınması alqoritmi (v2.3).</li>
+            <div class="version-box">
+                <h3 style="color:var(--gold); margin:0 0 10px 0;">⚡ Versiya 2.2 & 2.3</h3>
+                <ul class="version-list">
+                    <li><strong>Ağıllı Deadline Taymeri:</strong> Canlı geri sayım taymeri əlavə edildi və vaxt bitdikdə yükləmə sisteminin avtomatik bağlanması quruldu (v2.3).</li>
+                    <li><strong>Dublikat Nəzarəti:</strong> Eyni faylı səhvən iki dəfə yükləmənin qarşısı alındı (v2.3).</li>
+                    <li><strong>Şəxsi İnkişaf Qrafiki:</strong> Profildə tələbələrin həftəlik bal artımını göstərən interaktiv diaqram yaradıldı (v2.2).</li>
+                    <li><strong>Konfetti və Kutlamalar:</strong> Xüsusi səsli konfettilər və "Qara pişik" gizli sürprizi əlavə edildi.</li>
                 </ul>
             </div>
-            
-            <button class="btn btn-dark" style="width:100%;" onclick="document.getElementById('versionModal').style.display='none'">Bağla</button>
+
+            <div class="version-box">
+                <h3 style="color:var(--text-sub); margin:0 0 10px 0;">🛠️ Versiya 2.0 - 2.1</h3>
+                <ul class="version-list">
+                    <li><strong>Təməl Sistem:</strong> C++, Python və Common reytinq cədvəllərinin ilkin qurulması.</li>
+                    <li><strong>Çoxdilli İnterfeys:</strong> AZ, EN, RU, TR dillərinin əlavə olunması.</li>
+                </ul>
+            </div>
+            <button class="btn" style="width:100%; margin-top:15px; padding:12px; font-size:15px;" onclick="closeVersionModal()">Möhtəşəm! Təşəkkürlər 🎉</button>
         </div>
     </div>
 
     <script>
+        // FIREBASE INIT
         const firebaseConfig = {
             apiKey: "AIzaSyAug3XL0WtYr6a-_9qcLMjiE16oEA-y5XU",
             authDomain: "phyton-and-cplus.firebaseapp.com",
             databaseURL: "https://phyton-and-cplus-default-rtdb.firebaseio.com",
-            projectId: "phyton-and-cplus"
+            projectId: "phyton-and-cplus",
+            storageBucket: "phyton-and-cplus.firebasestorage.app",
+            messagingSenderId: "717355992977",
+            appId: "1:717355992977:web:90a1dd87e1de84e4a8fc30"
         };
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
-        // Admin və İstifadəçi Məlumatları
-        const ADMIN_CREDENTIALS = { "jagermaster": "1002", "chivas": "Turan2008", "jameson": "Kenan2007", "demo": "demo123" };
-        const ADMIN_ROLES = { "jagermaster": "master", "chivas": "admin", "jameson": "admin", "demo": "demo" };
+        // ---------------- DATAS ----------------
+        const ADMIN_CREDENTIALS = { "jagermaster": "1002", "chivas": "Turan2008", "jameson": "Kenan2007", "rəho": "poni1813", "reho": "poni1813", "demo": "demo123" };
+        const ADMIN_ROLES = { "jagermaster": "master", "chivas": "admin", "jameson": "admin", "rəho": "restricted", "reho": "restricted", "demo": "demo" };
         const ADMIN_TO_STUDENT_MAP = { "jagermaster": "Süleymanzadə Aqşin", "chivas": "Məmmədli Turan", "jameson": "Gülverdiyev Kənan" };
         
         const STUDENT_GENDERS = {
-            "Süleymanzadə Aqşin": "Kişi", "Məmmədli Turan": "Kişi", "Gülverdiyev Kənan": "Kişi",
-            "Abıyeva Aysun": "Qadın", "Əliyeva Mehriban": "Qadın", "Əlizadə Rəhimə": "Qadın",
-            "Təhməzova Leyla": "Qadın", "Əsgərova Çinarə": "Qadın", "Həşimova Fatimə": "Qadın"
-            // Digər adlar buraya avtomatik daxil edilə bilər (Kişi/Qadın olaraq).
+            "Abbasov Rüfət": "Kişi", "Abıyeva Aysun": "Qadın", "Ağazadə Poladxan": "Kişi", "Allahverdiyev Amid": "Kişi", "Bəbirov Soltan": "Kişi", "Cavadzadə Mirzə": "Kişi",
+            "Əhmədli Bahar": "Qadın", "Əliyeva Əsmər": "Qadın", "Əliyeva Hüsna": "Qadın", "Əliyeva Mehriban": "Qadın", "Əlizadə Rəhimə": "Qadın", "Əsgərova Çinarə": "Qadın",
+            "Fərzalı Səma": "Qadın", "Gülverdiyev Kənan": "Kişi", "Həşimova Fatimə": "Qadın", "Hüseyinova Səbinə": "Qadın", "Hüseyinzadə Aygün": "Qadın", "İbrahimova Rəşqəndə": "Qadın",
+            "Məmmədli Əhməd": "Kişi", "Məmmədli Turan": "Kişi", "Məmmədova Sabrina": "Qadın", "Musazadə Rəşad": "Kişi", "Süleymanzadə Aqşin": "Kişi", "Şəmsiyev Xosu": "Kişi", "Təhməzova Leyla": "Qadın"
         };
+        const STUDENT_NAMES = Object.keys(STUDENT_GENDERS);
         const DEFAULT_AVATAR_URL = "https://svgsilh.com/svg/1300331.svg";
+        const FOUNDERS = ["Süleymanzadə Aqşin", "Məmmədli Turan", "Gülverdiyev Kənan"];
 
         let globalData = { cpp: [], python: [], common: [] };
         let currentTab = 'cpp';
+        let activeProfileStudent = null;
+        let chartInstance = null;
+        let deadlineTimestamp = null;
+        let deadlineInterval = null;
+
         let currentUser = null; 
         let currentUserRole = null; 
-        let activeProfileStudent = null;
         let demoIsActive = false;
+        let activeAudioObject = null;
+        let blackCatVideoData = null;
 
+        // ---------------- INIT & AUTH ----------------
         window.onload = () => {
+            setInterval(updateLiveDateTime, 1000);
             checkSession();
-            database.ref('students_data').on('value', snap => { if(snap.val()) globalData = snap.val(); renderTable(); });
-            database.ref('settings/demo_active').on('value', snap => { demoIsActive = snap.val() === true; updateDemoUI(); });
+            
+            database.ref('settings/demo_active').on('value', snap => { demoIsActive = snap.val() === true; updateDemoAdminUI(); });
+            database.ref('students_data').on('value', snap => { 
+                if(snap.val()) globalData = snap.val(); 
+                renderTable(); 
+                if(currentUserRole && currentUserRole !== 'student') renderAdminBody(); 
+                updateAuthWidget(); // Şəkli yeniləmək üçün
+            });
+            database.ref('deadline_time').on('value', snap => {
+                const val = snap.val(); deadlineTimestamp = val ? new Date(val).getTime() : null;
+                const dt = document.getElementById('deadlineTargetText'); if(dt) dt.innerText = val ? new Date(val).toLocaleString('az-AZ') : "Təyin edilməyib";
+                startDeadlineTimer();
+            });
+            database.ref('group_photo').on('value', snap => { if(snap.val()) document.getElementById('mainGroupImg').src = snap.val(); });
+            database.ref('video_black_cat').on('value', snap => { blackCatVideoData = snap.val(); });
         };
 
         function checkSession() {
@@ -290,187 +530,268 @@
             if (savedUser && savedRole) { currentUser = savedUser; currentUserRole = savedRole; updateAuthWidget(); }
         }
 
-        // FİX 1: Sağ Üstdəki Profil Şəklini Gətirmək
+        // FİX: Profil şəklinin sağ üstdə düzgün tapılıb gətirilməsi
         function updateAuthWidget() {
             const outDiv = document.getElementById('authLoggedOut'); 
             const inDiv = document.getElementById('authLoggedIn');
             
             if (currentUser) {
-                outDiv.style.display = 'none'; 
-                inDiv.style.display = 'flex';
+                outDiv.style.display = 'none'; inDiv.style.display = 'flex';
                 
-                let displayName = currentUser;
-                let displayRole = currentUserRole === 'student' ? "Tələbə" : `Admin (${currentUserRole})`;
-                let targetName = currentUserRole === 'student' ? currentUser : ADMIN_TO_STUDENT_MAP[currentUser];
-
-                document.getElementById('topUsername').innerText = displayName;
+                let displayName = currentUser; 
+                let displayRole = "Tələbə";
+                
+                if (currentUserRole !== 'student') {
+                    displayRole = "Admin (" + currentUserRole + ")";
+                    if (ADMIN_TO_STUDENT_MAP[currentUser]) displayName = ADMIN_TO_STUDENT_MAP[currentUser];
+                }
+                
+                document.getElementById('topUsername').innerText = displayName; 
                 document.getElementById('topRoleBadge').innerText = displayRole;
                 
-                // Şəkli tapmaq
-                let profileImgUrl = DEFAULT_AVATAR_URL;
+                // Sağ üstdəki şəkli tapmaq (C++ və ya Python siyahısından)
+                let targetName = currentUserRole === 'student' ? currentUser : ADMIN_TO_STUDENT_MAP[currentUser];
+                let avatarUrl = DEFAULT_AVATAR_URL;
                 if (targetName && globalData.cpp && globalData.cpp.length > 0) {
-                    let st = globalData.cpp.find(s => s.ad === targetName) || globalData.common.find(s => s.ad === targetName);
-                    if (st && st.foto) profileImgUrl = st.foto;
+                    let st = globalData.cpp.find(s => s.ad === targetName) || globalData.python.find(s => s.ad === targetName);
+                    if(st && st.foto) avatarUrl = st.foto;
                 }
-                document.getElementById('topAvatar').src = profileImgUrl;
+                document.getElementById('topAvatar').src = avatarUrl;
                 document.getElementById('btnAdminPanel').style.display = currentUserRole !== 'student' ? 'inline-block' : 'none';
             } else {
-                outDiv.style.display = 'block'; 
-                inDiv.style.display = 'none'; 
+                outDiv.style.display = 'block'; inDiv.style.display = 'none'; 
                 document.getElementById('btnAdminPanel').style.display = 'none';
             }
         }
 
-        function openAuthModal() { document.getElementById('authModal').style.display = 'flex'; }
-        async function loginUser() {
-            const userStr = document.getElementById('loginUsername').value.trim().toLowerCase(); 
-            const passStr = document.getElementById('loginPass').value.trim();
-            
-            if (ADMIN_CREDENTIALS[userStr] && ADMIN_CREDENTIALS[userStr] === passStr) {
-                if (userStr === 'demo' && !demoIsActive) return alert("Demo hesab Jagermaster tərəfindən deaktiv edilib.");
-                currentUser = userStr; currentUserRole = ADMIN_ROLES[userStr];
-                finalizeLogin();
-                return;
+        function openAuthModal() { document.getElementById('authModal').style.display = 'flex'; switchAuthTab('login'); }
+        function closeAuthModal() { document.getElementById('authModal').style.display = 'none'; }
+        
+        function switchAuthTab(tab) {
+            if (tab === 'login') {
+                document.getElementById('tabBtnLogin').classList.add('active'); document.getElementById('tabBtnReg').classList.remove('active');
+                document.getElementById('loginForm').style.display = 'block'; document.getElementById('registerForm').style.display = 'none';
+            } else {
+                document.getElementById('tabBtnReg').classList.add('active'); document.getElementById('tabBtnLogin').classList.remove('active');
+                document.getElementById('loginForm').style.display = 'none'; document.getElementById('registerForm').style.display = 'block'; populateRegNames();
             }
-            // Tələbə yoxlanışı (Əgər Firebase-də user_accounts varsa)
-            const snap = await database.ref('user_accounts/' + document.getElementById('loginUsername').value).once('value');
-            const data = snap.val();
-            if (data && data.password === passStr) {
-                currentUser = document.getElementById('loginUsername').value; currentUserRole = 'student';
-                finalizeLogin();
-            } else alert("İstifadəçi adı və ya şifrə səhvdir!");
+        }
+
+        async function populateRegNames() {
+            const sel = document.getElementById('regNameSelect'); sel.innerHTML = '<option value="">-- Adınızı Seçin --</option>';
+            const snap = await database.ref('user_accounts').once('value');
+            const registeredUsers = snap.val() || {}; const adminNames = Object.values(ADMIN_TO_STUDENT_MAP);
+            STUDENT_NAMES.forEach(name => {
+                if (!Object.keys(registeredUsers).includes(name) && !adminNames.includes(name)) sel.innerHTML += `<option value="${name}">${name}</option>`;
+            });
+        }
+
+        function registerUser() {
+            const name = document.getElementById('regNameSelect').value; const pass = document.getElementById('regPass').value.trim();
+            if (!name) return alert("Zəhmət olmasa siyahıdan adınızı seçin!"); if (pass.length < 4) return alert("Şifrə ən az 4 simvol olmalıdır!");
+            database.ref('user_accounts/' + name).set({ password: pass, gender: STUDENT_GENDERS[name], created_at: new Date().toISOString() }).then(() => {
+                alert("Qeydiyyat uğurla tamamlandı! İndi giriş edə bilərsiniz. ✅"); switchAuthTab('login'); document.getElementById('loginUsername').value = name;
+            });
+        }
+
+        async function loginUser() {
+            const userStr = document.getElementById('loginUsername').value.trim(); const passStr = document.getElementById('loginPass').value.trim();
+            if (!userStr || !passStr) return alert("Bütün xanaları doldurun!");
+            const lowerUser = userStr.toLowerCase();
+            if (ADMIN_CREDENTIALS[lowerUser]) {
+                if (ADMIN_CREDENTIALS[lowerUser] === passStr) {
+                    if (lowerUser === 'demo' && !demoIsActive) return alert("🚫 Təəssüf ki, Demo hesabı Baş Admin tərəfindən hal-hazırda deaktiv edilib.");
+                    currentUser = lowerUser; currentUserRole = ADMIN_ROLES[lowerUser]; finalizeLogin(); return;
+                }
+            }
+            const snap = await database.ref('user_accounts/' + userStr).once('value'); const data = snap.val();
+            if (data && data.password === passStr) { currentUser = userStr; currentUserRole = 'student'; finalizeLogin(); } 
+            else alert("İstifadəçi adı və ya şifrə yanlışdır!");
         }
 
         function finalizeLogin() {
             localStorage.setItem('auth_user', currentUser); localStorage.setItem('auth_role', currentUserRole);
-            document.getElementById('authModal').style.display = 'none'; updateAuthWidget();
-            alert(`Xoş gəldiniz, ${currentUser}!`);
+            alert(`Xoş gəldiniz, ${currentUser}! 🎉`); closeAuthModal(); updateAuthWidget(); renderTable();
         }
 
         function logoutUser() {
+            if (!confirm("Hesabdan çıxmaq istədiyinizə əminsiniz?")) return;
             localStorage.removeItem('auth_user'); localStorage.removeItem('auth_role');
-            currentUser = null; currentUserRole = null; updateAuthWidget();
+            currentUser = null; currentUserRole = null; updateAuthWidget(); closeAdminPanel(); closeProfilePage();
         }
 
-        function switchTab(tab) { currentTab = tab; document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active')); document.getElementById('btn-'+tab).classList.add('active'); renderTable(); }
+        function goToMyProfile() {
+            if (!currentUser) return;
+            const targetName = currentUserRole === 'student' ? currentUser : ADMIN_TO_STUDENT_MAP[currentUser];
+            if (targetName) openProfileByName(targetName); else alert("Sizin bu hesabla əlaqəli tələbə profiliniz yoxdur.");
+        }
+
+        // ---------------- RENDERING ----------------
+        function updateLiveDateTime() {
+            const options = { day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+            const dtEl = document.getElementById('liveDateTime'); if(dtEl) dtEl.innerText = "📅 " + new Date().toLocaleDateString('az-AZ', options);
+        }
+
+        function switchTab(tabName) { currentTab = tabName; document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active')); document.getElementById('btn-' + tabName).classList.add('active'); renderTable(); if(currentUserRole && currentUserRole!=='student') renderAdminBody(); }
 
         function calculateTotals(student) {
-            let cari = Number(student.fm || 0) + Number(student.stepping || 0) + Number(student.e_olimp || 0) + Number(student.codesources || 0) + Number(student.hackerrank || 0);
-            return { ...student, cari_reyting: cari };
+            if (!student) return { cari_reyting: 0, artim: 0 };
+            if (currentTab === 'common') {
+                const cppS = globalData.cpp ? globalData.cpp.find(s => s.ad === student.ad) : null; const pyS = globalData.python ? globalData.python.find(s => s.ad === student.ad) : null;
+                const cppCari = cppS ? (Number(cppS.fm)||0)+(Number(cppS.stepping)||0)+(Number(cppS.e_olimp)||0)+(Number(cppS.codesources)||0)+(Number(cppS.hackerrank)||0) : 0;
+                const pyCari = pyS ? (Number(pyS.fm)||0)+(Number(pyS.stepping)||0)+(Number(pyS.e_olimp)||0)+(Number(pyS.codesources)||0)+(Number(pyS.hackerrank)||0) : 0;
+                const cari = cppCari + pyCari; return { ...student, cari_reyting: cari, artim: cari - Number(student.kecmis_reyting || 0) };
+            } else {
+                const cari = Number(student.fm || 0) + Number(student.stepping || 0) + Number(student.e_olimp || 0) + Number(student.codesources || 0) + Number(student.hackerrank || 0);
+                return { ...student, cari_reyting: cari, artim: cari - Number(student.kecmis_reyting || 0) };
+            }
         }
 
         function renderTable() {
-            const tbody = document.getElementById('tableBody'); tbody.innerHTML = '';
+            const tableBody = document.querySelector('#tableBody'); if (!tableBody) return;
+            const tableHead = document.querySelector('#ratingTable thead');
+            if (currentTab === 'common') tableHead.innerHTML = `<tr><th>#</th><th>Tələbə (Siyahı)</th><th>Cari Reytinq</th><th>Keçmiş Reytinq</th><th>Artım</th></tr>`;
+            else tableHead.innerHTML = `<tr><th>#</th><th>Tələbə</th><th>FM</th><th>stepik</th><th>eolymp</th><th>codesource</th><th>hackerrank</th><th>Cari</th><th>Keçmiş</th><th>Artım</th></tr>`;
+
             const list = (globalData[currentTab] || []).map(s => calculateTotals(s)).sort((a,b) => b.cari_reyting - a.cari_reyting);
-            
-            list.forEach((item, idx) => {
-                let rank = idx === 0 ? '🥇' : (idx === 1 ? '🥈' : (idx === 2 ? '🥉' : idx + 1));
-                tbody.innerHTML += `<tr>
-                    <td style="color:var(--accent); font-weight:bold;">${rank}</td>
-                    <td>
-                        <div class="student-info">
-                            <div class="avatar"><img src="${item.foto || DEFAULT_AVATAR_URL}"></div>
-                            <span class="clickable-name" onclick="openProfile('${item.ad}')">${item.ad}</span>
-                        </div>
-                    </td>
-                    <td><strong style="color:var(--accent);">${item.cari_reyting} pt</strong></td>
-                </tr>`;
+            tableBody.innerHTML = '';
+            list.forEach((item, index) => {
+                const row = document.createElement('tr');
+                if (index === 0) row.classList.add('rank-1-row'); else if (index === 1) row.classList.add('rank-2-row'); else if (index === 2) row.classList.add('rank-3-row');
+                const isFounder = FOUNDERS.includes(item.ad); if (isFounder) row.classList.add('founder-row');
+
+                const artimClass = item.artim >= 0 ? 'badge-positive' : 'badge-negative'; const artimSign = item.artim >= 0 ? `+${item.artim}` : item.artim;
+                const founderBadge = isFounder ? `<span class="founder-badge">👑 JÜRİ</span>` : '';
+                const rankIcon = index === 0 ? '🥇' : (index === 1 ? '🥈' : (index === 2 ? '🥉' : `${index + 1}`));
+                const nameHTML = `<div class="student-info"><div class="avatar"><img src="${item.foto || DEFAULT_AVATAR_URL}"></div><span class="clickable-name" onclick="openProfileByName('${item.ad}')">${item.ad}</span>${founderBadge}</div>`;
+
+                if (currentTab === 'common') row.innerHTML = `<td class="rank-col">${rankIcon}</td><td>${nameHTML}</td><td><strong style="color:var(--accent); font-size:15px;">${item.cari_reyting} pt</strong></td><td>${item.kecmis_reyting} pt</td><td class="${artimClass}">${artimSign}</td>`;
+                else row.innerHTML = `<td class="rank-col">${rankIcon}</td><td>${nameHTML}</td><td>${item.fm}</td><td>${item.stepping}</td><td>${item.e_olimp}</td><td>${item.codesources}</td><td>${item.hackerrank}</td><td><strong style="color:var(--accent); font-size:15px;">${item.cari_reyting} pt</strong></td><td>${item.kecmis_reyting} pt</td><td class="${artimClass}">${artimSign}</td>`;
+                tableBody.appendChild(row);
             });
-            // Login olduqdan sonra datalar gəldikdə şəkli təzələmək üçün
-            if(currentUser) updateAuthWidget(); 
         }
+        function sortAndRender() { renderTable(); }
 
-        // FİX 4 & FİX 2: Profil səhifəsində 2-ci Kurs və Admin Görünüşü
-        function openProfile(name) {
-            const student = (globalData[currentTab] || []).find(s => s.ad === name); if (!student) return;
-            activeProfileStudent = name;
+        // ---------------- PROFILE VIEW ----------------
+        function openProfileByName(studentName) {
+            const student = (globalData[currentTab]||[]).find(s => s.ad === studentName); if (!student) return;
+            activeProfileStudent = student.ad; const computed = calculateTotals(student);
             
-            document.getElementById('pAvatar').src = student.foto || DEFAULT_AVATAR_URL;
+            document.getElementById('pAvatar').src = student.foto || DEFAULT_AVATAR_URL; 
             document.getElementById('pName').innerText = student.ad;
-            // FİX 2: Hər kəsdə 2-ci Kurs göstərilir
+            document.getElementById('pBadge').innerHTML = FOUNDERS.includes(student.ad) ? `<span class="founder-badge">👑 JÜRİ</span>` : '';
+
+            // FİX: Hər kəs üçün "2-ci Kurs"
             document.getElementById('pKurs').innerText = "2-ci Kurs";
-            
-            let gender = STUDENT_GENDERS[name] || "Kişi"; // Default
-            document.getElementById('pGender').innerText = gender;
-            document.getElementById('pCari').innerText = calculateTotals(student).cari_reyting + " pt";
 
-            // FİX 4: Fayl Yükləmə Bölməsi (Ancaq özünə görünür)
-            let isOwnProfile = (currentUserRole === 'student' && currentUser === name) || (currentUserRole !== 'student' && ADMIN_TO_STUDENT_MAP[currentUser] === name);
-            document.getElementById('uploadFormDiv').style.display = isOwnProfile ? 'block' : 'none';
+            let gender = STUDENT_GENDERS[student.ad] || "Məlum deyil";
+            document.getElementById('pGender').innerText = gender; document.getElementById('pGender').style.color = gender === 'Kişi' ? '#60a5fa' : '#f472b6';
+            document.getElementById('pYer').innerText = student.yer || "Bakı şəhəri"; 
+            document.getElementById('pCari').innerText = computed.cari_reyting + " pt";
 
-            // Fayl vəziyyətləri bölməsi (Özünə VƏ Adminlərə görünür)
+            const weeklyGained = computed.cari_reyting - Number(student.kecmis_reyting || 0);
+            document.getElementById('pArtim').innerText = (weeklyGained >= 0 ? `+${weeklyGained}` : weeklyGained) + " pt";
+            document.getElementById('pArtim').style.color = weeklyGained >= 0 ? 'var(--positive)' : 'var(--negative)';
+
+            const uploadSection = document.getElementById('privateUploadSection'); 
+            const publicMsg = document.getElementById('publicViewMsg');
+            const statusContainer = document.getElementById('studentTaskStatusContainer');
+
+            let isOwnProfile = (currentUserRole === 'student' && currentUser === student.ad) || (currentUserRole !== 'student' && ADMIN_TO_STUDENT_MAP[currentUser] === student.ad);
             let isAdmin = (currentUserRole && currentUserRole !== 'student');
-            if (isOwnProfile || isAdmin) {
-                loadProfileTasks(name);
-            } else {
-                document.getElementById('studentTaskStatus').innerHTML = "<span style='color:var(--text-sub);'>Bu bölmə yalnız profil sahibinə və adminlərə açıqdır.</span>";
+
+            // Əgər öz profilidirsə Yükləmə yeri göstər
+            if (isOwnProfile) { 
+                uploadSection.style.display = 'block'; 
+            } else { 
+                uploadSection.style.display = 'none'; 
             }
 
-            document.getElementById('mainDashboard').style.display = 'none';
-            document.getElementById('profilePage').style.display = 'block';
+            // FİX: Faylların vəziyyəti həm özünə, həm də adminlərə göstərilir
+            if (isOwnProfile || isAdmin) {
+                publicMsg.style.display = 'none';
+                statusContainer.style.display = 'block';
+                loadStudentUploadedTasksList(student.ad);
+            } else {
+                publicMsg.style.display = 'block';
+                statusContainer.style.display = 'none';
+            }
+
+            renderStudentChart(weeklyGained); 
+            document.getElementById('mainDashboard').style.display = 'none'; 
+            document.getElementById('profilePage').style.display = 'block'; 
+            window.scrollTo(0, 0);
         }
 
         function closeProfilePage() { document.getElementById('profilePage').style.display = 'none'; document.getElementById('mainDashboard').style.display = 'block'; }
 
-        function loadProfileTasks(studentName) {
-            database.ref('student_tasks').orderByChild('studentName').equalTo(studentName).on('value', snap => {
-                const tasks = snap.val() || {};
-                const div = document.getElementById('studentTaskStatus'); div.innerHTML = '';
+        function loadStudentUploadedTasksList(targetStudent) {
+            database.ref('student_tasks').orderByChild('studentName').equalTo(targetStudent).on('value', snap => {
+                const tasks = snap.val(); 
+                const statusDiv = document.getElementById('studentTaskStatus'); 
+                if(!statusDiv) return; 
+                statusDiv.innerHTML = ''; 
                 let count = 0;
-                Object.keys(tasks).forEach(key => {
-                    let t = tasks[key]; count++;
-                    let color = t.status === 'correct' ? 'var(--positive)' : (t.status === 'wrong' ? 'var(--negative)' : 'var(--gold)');
-                    let text = t.status === 'correct' ? `✅ Düzgün (+${t.addedPoints || 0} Bal)` : (t.status === 'wrong' ? '❌ Səhv' : '⏳ Yoxlanılır');
-                    div.innerHTML += `<div style="padding:8px; border:1px solid ${color}; margin-top:5px; border-radius:6px;">${t.subject.toUpperCase()} - ${t.fileName} <strong style="color:${color}; float:right;">${text}</strong></div>`;
-                });
-                if(count === 0) div.innerHTML = 'Hələ heç bir fayl yüklənməyib.';
-            });
-        }
-
-        // FİX 3: Şah / Kraliça Çempion
-        function showWinnersCelebration() {
-            const list = (globalData[currentTab] || []).map(s => calculateTotals(s)).sort((a,b) => b.cari_reyting - a.cari_reyting).slice(0, 3);
-            const grid = document.getElementById('winnersListGrid'); grid.innerHTML = '';
-            
-            list.forEach((s, idx) => {
-                let gender = STUDENT_GENDERS[s.ad] || 'Kişi';
-                let title = "";
-                if(idx === 0) {
-                    title = gender === 'Qadın' ? '👑 KRALİÇA ÇEMPİON' : '👑 ŞAH ÇEMPİON';
-                } else if(idx === 1) {
-                    title = '🥈 GÜMÜŞ QALİB';
-                } else {
-                    title = '🥉 BÜRÜNC QALİB';
+                if (tasks) {
+                    Object.keys(tasks).forEach(key => {
+                        const t = tasks[key]; count++; 
+                        let subjTag = t.subject === 'python' ? '🟡' : '🔵';
+                        let stText = t.status === 'correct' ? `✅ Düzgün (+${t.addedPoints || 0} Bal)` : (t.status === 'wrong' ? '❌ Səhv' : '⏳ Yoxlanılır');
+                        let stColor = t.status === 'correct' ? 'var(--positive)' : (t.status === 'wrong' ? 'var(--negative)' : 'var(--gold)');
+                        statusDiv.innerHTML += `<div style="margin-top:6px; background:#0b1329; padding:10px; border-radius:6px; border:1px solid ${stColor};"><span style="color:${stColor}">${subjTag} ${t.fileName} - (${stText})</span></div>`;
+                    });
                 }
-
-                grid.innerHTML += `
-                <div style="background:var(--card-inner); padding:15px; border-radius:15px; text-align:center; border:2px solid ${idx===0?'var(--gold)':'var(--border)'};">
-                    <span style="font-size:12px; font-weight:bold; color:${idx===0?'var(--gold)':'#fff'};">${title}</span>
-                    <img src="${s.foto || DEFAULT_AVATAR_URL}" style="width:80px; height:80px; border-radius:50%; margin:10px 0; border:2px solid #fff;">
-                    <strong style="display:block; color:#fff;">${s.ad}</strong>
-                    <span style="color:var(--accent); font-weight:bold;">${s.cari_reyting} pt</span>
-                </div>`;
+                if (count === 0) statusDiv.innerHTML = 'Hələ heç bir fayl yüklənməyib.';
             });
-            document.getElementById('winnersModal').style.display = 'flex';
-            try { confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } }); } catch(e){}
         }
 
-        // ADMIN PANEL FİXES (FİX 6, FİX 8)
+        async function uploadStudentTasks() {
+            if (deadlineTimestamp && new Date().getTime() >= deadlineTimestamp) return alert("🚨 Deadline vaxtı bitdiyi üçün fayl yükləyə bilməzsiniz!");
+            const files = document.getElementById('studentTaskFiles').files; const subject = document.getElementById('studentSubjectSelect').value || 'cpp';
+            if (!files || files.length === 0) return alert("Zəhmət olmasa fayl seçin!");
+
+            const snap = await database.ref('student_tasks').orderByChild('studentName').equalTo(activeProfileStudent).once('value');
+            const existingTasks = snap.val() || {}; let uploadedCount = 0;
+            for (let file of Array.from(files)) {
+                let existingKey = null; let existingStatus = null;
+                Object.keys(existingTasks).forEach(k => { if (existingTasks[k].fileName === file.name && existingTasks[k].subject === subject) { existingKey = k; existingStatus = existingTasks[k].status; } });
+                if (existingKey && existingStatus !== 'wrong') continue; 
+                if (existingKey && existingStatus === 'wrong') await database.ref('student_tasks/' + existingKey).remove();
+                await new Promise(resolve => {
+                    const reader = new FileReader(); reader.onload = e => { database.ref('student_tasks').push({ studentName: activeProfileStudent, fileName: file.name, fileData: e.target.result, subject: subject, status: 'pending', timestamp: new Date().toISOString() }).then(() => { uploadedCount++; resolve(); }); }; reader.readAsDataURL(file);
+                });
+            }
+            alert(`${uploadedCount} fayl uğurla göndərildi! ✅`); document.getElementById('studentTaskFiles').value = '';
+        }
+
+        function renderStudentChart(wg) {
+            const ctx = document.getElementById('studentChart').getContext('2d'); if (chartInstance) chartInstance.destroy();
+            chartInstance = new Chart(ctx, { type: 'line', data: { labels: ['Start', 'M1', 'M2', 'M3', 'Cari Nəticə'], datasets: [{ label: 'Artım qrafiki', data: [0, Math.round(wg*0.2), Math.round(wg*0.55), Math.round(wg*0.8), wg], borderColor: '#38bdf8', backgroundColor: 'rgba(56, 189, 248, 0.2)', fill: true, tension: 0.4 }] }, options: { responsive: true, scales: { x: { ticks: { color: '#94a3b8' } }, y: { ticks: { color: '#94a3b8' } } } } });
+        }
+
+        // ---------------- ADMIN PANEL ----------------
         function openAdminPanel() {
+            if (!currentUserRole || currentUserRole === 'student') return alert("Siz Admin deyilsiniz!");
             document.getElementById('mainDashboard').style.display = 'none'; document.getElementById('fullAdminPage').style.display = 'block';
-            if (currentUserRole === 'master') document.getElementById('demoControlBox').style.display = 'block';
-            switchAdminSubTab('files'); // Varsayılan olaraq fayl yoxlamanı açaq
-            loadAdminTasks();
-        }
-        function closeAdminPanel() { document.getElementById('fullAdminPage').style.display = 'none'; document.getElementById('mainDashboard').style.display = 'block'; }
-        function switchAdminSubTab(tab) {
-            document.querySelectorAll('.admin-nav-btn').forEach(b => b.classList.remove('active'));
-            if(event) event.target.classList.add('active');
-            ['students', 'files', 'settings'].forEach(t => document.getElementById('adminTab'+t.charAt(0).toUpperCase()+t.slice(1)).style.display = (tab === t) ? 'block' : 'none');
+
+            const isRestricted = (currentUserRole === 'restricted' || currentUserRole === 'demo');
+            document.querySelectorAll('.restricted-hide').forEach(el => el.style.display = isRestricted ? 'none' : 'inline-block');
+            document.getElementById('demoControlBox').style.display = (currentUserRole === 'master') ? 'block' : 'none';
+
+            renderAdminBody(); loadAdminTasksAndLogs();
+            loadAllFilesForAdmin(); // Bütün faylları yükləyən funksiyanı çağırırıq
         }
 
-        // FİX 8: Bütün Faylları Geri Gətirmək və FİX 6: Redaktə (Yenidən yoxlama)
-        function loadAdminTasks() {
+        function closeAdminPanel() { document.getElementById('fullAdminPage').style.display = 'none'; document.getElementById('mainDashboard').style.display = 'block'; }
+
+        function switchAdminSubTab(tab) {
+            if ((currentUserRole === 'restricted' || currentUserRole === 'demo') && (tab === 'media' || tab === 'logs' || tab === 'accounts')) return;
+            document.querySelectorAll('.admin-nav-btn').forEach(b => b.classList.remove('active')); if(event && event.target) event.target.classList.add('active');
+            ['students', 'files', 'accounts', 'media', 'logs'].forEach(t => document.getElementById('adminTab' + t.charAt(0).toUpperCase() + t.slice(1)).style.display = (tab === t) ? 'block' : 'none');
+        }
+
+        // FİX: Admin üçün BÜTÜN faylların "Yoxlama / Redaktə" bölməsi
+        function loadAllFilesForAdmin() {
             database.ref('student_tasks').on('value', snap => {
                 const tasks = snap.val() || {};
                 const pendingDiv = document.getElementById('adminPendingTasks'); pendingDiv.innerHTML = '';
@@ -479,20 +800,21 @@
                 Object.keys(tasks).forEach(key => {
                     let t = tasks[key];
                     let uiHtml = `
-                    <div class="task-card">
+                    <div style="background:#070a12; padding:12px; border-radius:10px; border:1px solid var(--border); margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
                         <div>
-                            <strong style="color:var(--accent);">${t.studentName}</strong> - <span>${t.subject.toUpperCase()} (${t.fileName})</span>
-                            <div style="font-size:11px; color:var(--text-sub);">Tarix: ${new Date(t.timestamp).toLocaleString('az-AZ')}</div>
+                            <strong style="color:var(--accent); cursor:pointer;" onclick="openProfileByName('${t.studentName}')">${t.studentName}</strong> 
+                            - <span>${t.subject.toUpperCase()} (<a href="${t.fileData}" download="${t.fileName}" style="color:var(--gold); text-decoration:underline;">${t.fileName}</a>)</span>
+                            <div style="font-size:11px; color:var(--text-sub); margin-top:4px;">Tarix: ${new Date(t.timestamp).toLocaleString('az-AZ')}</div>
                         </div>
-                        <div class="task-actions">
+                        <div style="display:flex; gap:5px; align-items:center;">
                             ${t.status === 'pending' ? 
-                                `<button class="btn" style="background:var(--positive);" onclick="evaluateTask('${key}', '${t.studentName}', '${t.subject}', true, 0)">✅ Düzgün</button>
-                                 <button class="btn" style="background:var(--negative);" onclick="evaluateTask('${key}', '${t.studentName}', '${t.subject}', false, 0)">❌ Səhv</button>` 
+                                `<button class="btn" style="background:var(--positive); padding:8px;" onclick="evaluateTask('${key}', '${t.studentName}', '${t.subject}', true, 0)">✅ Düzgün</button>
+                                 <button class="btn" style="background:var(--negative); padding:8px;" onclick="evaluateTask('${key}', '${t.studentName}', '${t.subject}', false, 0)">❌ Səhv</button>` 
                             : 
                                 `<span style="margin-right:10px; font-weight:bold; color:${t.status==='correct'?'var(--positive)':'var(--negative)'};">
                                     ${t.status === 'correct' ? `✅ (+${t.addedPoints} pt)` : '❌ Səhv'}
                                 </span>
-                                <button class="btn btn-dark" style="font-size:12px; padding:5px 10px;" onclick="reEvaluateTask('${key}', '${t.studentName}', '${t.subject}', '${t.status}',${t.addedPoints||0})">✏️ Redaktə Et</button>`
+                                <button class="btn btn-dark" style="font-size:12px; padding:6px 12px;" onclick="reEvaluateTask('${key}', '${t.studentName}', '${t.subject}', '${t.status}',${t.addedPoints||0})">✏️ Redaktə</button>`
                             }
                         </div>
                     </div>`;
@@ -503,15 +825,15 @@
             });
         }
 
+        // Fayla ilk dəfə bal verəndə
         async function evaluateTask(taskKey, studentName, subject, isCorrect, prevPoints = 0) {
             let points = 0;
             if(isCorrect) {
                 let p = prompt(`Tələbəyə (${studentName}) bu tapşırıq üçün neçə bal verilsin?`, "10");
-                if(p === null) return; // İmtina etdi
+                if(p === null) return;
                 points = parseInt(p) || 0;
             }
 
-            // Balı hesablamaq
             let pointDiff = points - prevPoints;
             if (pointDiff !== 0) {
                 let stList = globalData[subject];
@@ -529,43 +851,154 @@
                 status: isCorrect ? 'correct' : 'wrong',
                 addedPoints: points
             });
-            alert("Vəziyyət yeniləndi və reytinqə təsir etdi!");
+            alert("Vəziyyət dəyişdirildi və cədvələ təsir etdi!");
         }
 
+        // Yoxlanılmış faylı REDAKTƏ EDƏNDƏ
         function reEvaluateTask(taskKey, studentName, subject, currentStatus, currentPoints) {
-            let action = prompt("Vəziyyəti dəyişmək üçün yazın:\n'D' - Düzgün olaraq dəyişdir\n'S' - Səhv olaraq dəyişdir (Puan silinəcək)");
+            let msg = "Vəziyyəti dəyişmək üçün aşağıdakı hərflərdən birini yazıb OK vurun:\n\n'D' - Düzgün olaraq dəyişdir (və ya balı yenilə)\n'S' - Səhv olaraq dəyişdir (Öncəki bal reytinqdən silinəcək)";
+            let action = prompt(msg);
             if(!action) return;
-            action = action.toUpperCase();
+            action = action.trim().toUpperCase();
             if(action === 'D') {
                 evaluateTask(taskKey, studentName, subject, true, currentPoints);
             } else if (action === 'S') {
                 evaluateTask(taskKey, studentName, subject, false, currentPoints);
             } else {
-                alert("Yanlış komanda!");
+                alert("Yanlış komanda daxil etdiniz!");
             }
         }
 
-        // FİX 7: Demo Status Toggle
-        function updateDemoUI() {
-            const st = document.getElementById('demoStatusText');
-            const btn = document.getElementById('btnToggleDemo');
-            if(st && btn) {
-                if(demoIsActive) {
-                    st.innerText = "Status: AKTİV 🟢"; st.style.color = "var(--positive)";
-                    btn.innerText = "Deaktiv Et"; btn.style.background = "var(--negative)";
-                } else {
-                    st.innerText = "Status: DEAKTİV 🔴"; st.style.color = "var(--negative)";
-                    btn.innerText = "Aktivləşdir"; btn.style.background = "var(--positive)";
+        function renderAdminBody() {
+            const adminBody = document.getElementById('adminBody'); if(!adminBody) return; adminBody.innerHTML = '';
+            const REHO_RESTRICTED = ["Əlizadə Rəhimə", "Abıyeva Aysun", "Təhməzova Leyla", "Süleymanzadə Aqşin", "Məmmədli Turan", "Gülverdiyev Kənan"];
+            const CHIVAS_RESTRICTED = ["Süleymanzadə Aqşin", "Gülverdiyev Kənan"]; const JAMESON_RESTRICTED = ["Süleymanzadə Aqşin", "Məmmədli Turan"];
+
+            (globalData[currentTab] || []).forEach((student, index) => {
+                let blockEdit = false;
+                if (currentUser === 'rəho' || currentUser === 'reho') { if (REHO_RESTRICTED.includes(student.ad)) blockEdit = true; }
+                if (currentUser === 'chivas') { if (CHIVAS_RESTRICTED.includes(student.ad)) blockEdit = true; }
+                if (currentUser === 'jameson') { if (JAMESON_RESTRICTED.includes(student.ad)) blockEdit = true; }
+
+                let fieldsHTML = '';
+                if (currentTab === 'common') fieldsHTML = `<div><label>Doğulduğu Yer</label><input type="text" id="inp_${index}_yer" value="${student.yer || 'Bakı şəhəri'}" ${blockEdit?'disabled':''}></div>`;
+                else fieldsHTML = `<div><label>FM</label><input type="number" id="inp_${index}_fm" value="${student.fm||0}" ${blockEdit?'disabled':''}></div><div><label>Stepping</label><input type="number" id="inp_${index}_stepping" value="${student.stepping||0}" ${blockEdit?'disabled':''}></div><div><label>e-Olimp</label><input type="number" id="inp_${index}_e_olimp" value="${student.e_olimp||0}" ${blockEdit?'disabled':''}></div><div><label>CodeSources</label><input type="number" id="inp_${index}_codesources" value="${student.codesources||0}" ${blockEdit?'disabled':''}></div><div><label>HackerRank</label><input type="number" id="inp_${index}_hackerrank" value="${student.hackerrank||0}" ${blockEdit?'disabled':''}></div>`;
+
+                adminBody.innerHTML += `<div class="admin-student-card"><div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;"><img src="${student.foto || DEFAULT_AVATAR_URL}" style="width:36px; height:36px; border-radius:50%; border:2px solid var(--accent);"><strong style="color:#fff;">${student.ad}</strong>${blockEdit ? '<span style="color:var(--negative); font-size:11px; margin-left:auto;">🔒 Bloklanıb</span>' : ''}</div><div class="grid-inputs">${fieldsHTML}</div></div>`;
+            });
+        }
+
+        function saveAdminChanges() {
+            (globalData[currentTab] || []).forEach((student, index) => {
+                const yerInp = document.getElementById(`inp_${index}_yer`);
+                if (yerInp && !yerInp.disabled) { ['cpp', 'python', 'common'].forEach(tab => { let st = globalData[tab].find(s => s.ad === student.ad); if (st) st.yer = yerInp.value.trim(); }); }
+                if (currentTab !== 'common') {
+                    if (document.getElementById(`inp_${index}_fm`) && !document.getElementById(`inp_${index}_fm`).disabled) {
+                        student.fm = Number(document.getElementById(`inp_${index}_fm`).value); student.stepping = Number(document.getElementById(`inp_${index}_stepping`).value);
+                        student.e_olimp = Number(document.getElementById(`inp_${index}_e_olimp`).value); student.codesources = Number(document.getElementById(`inp_${index}_codesources`).value); student.hackerrank = Number(document.getElementById(`inp_${index}_hackerrank`).value);
+                    }
                 }
-            }
-        }
-        function toggleDemoStatus() {
-            if(currentUserRole !== 'master') return;
-            database.ref('settings/demo_active').set(!demoIsActive).then(() => alert("Demo statusu dəyişdirildi!"));
+            });
+            database.ref('students_data').set(globalData).then(() => { alert(`Məlumatlar yadda saxlanıldı! 🚀`); renderTable(); });
         }
 
-        function goToMyProfile() { if(currentUser) openProfile(currentUserRole === 'student' ? currentUser : ADMIN_TO_STUDENT_MAP[currentUser]); }
-        function showVersionModal() { document.getElementById('versionModal').style.display='flex'; }
+        function loadAdminTasksAndLogs() {
+            database.ref('user_accounts').on('value', snap => {
+                const accounts = snap.val(); const listDiv = document.getElementById('adminAccountsList'); if(!listDiv) return; listDiv.innerHTML = '';
+                if(!accounts) { listDiv.innerHTML = 'Heç bir tələbə qeydiyyatdan keçməyib.'; return; }
+                Object.keys(accounts).forEach(uname => {
+                    listDiv.innerHTML += `<div style="background:#070a12; padding:12px; border-radius:10px; border:1px solid var(--border); display:flex; justify-content:space-between; align-items:center;"><div><strong style="color:var(--gold); display:block; margin-bottom:4px;">${uname}</strong><span style="color:var(--text-sub); font-size:12px;">Şifrə: <span style="color:#fff; font-family:monospace; font-size:14px;">${accounts[uname].password}</span></span></div></div>`;
+                });
+            });
+        }
+
+        // ---------------- MEDIA & MEDIA MODALS ----------------
+        function triggerCardConfetti() { try { confetti({ particleCount: 70, spread: 85, origin: { y: 0.6 }, zIndex: 99999 }); } catch(e){} }
+        
+        // FİX: Cinsiyyətə görə KRALİÇA və ŞAH
+        function showWinnersCelebration() {
+            const list = (globalData[currentTab] || []).map(s => calculateTotals(s)).sort((a,b) => b.cari_reyting - a.cari_reyting).slice(0, 5);
+            const grid = document.getElementById('winnersListGrid'); if(!grid) return; grid.innerHTML = '';
+            
+            list.forEach((s, idx) => {
+                let rankClass = idx === 0 ? 'rank-1' : (idx === 1 ? 'rank-2' : (idx === 2 ? 'rank-3' : 'rank-other'));
+                let titleText = '';
+                if (idx === 0) {
+                    let gender = STUDENT_GENDERS[s.ad] || 'Kişi';
+                    titleText = gender === 'Qadın' ? '👑 KRALİÇA ÇEMPİON' : '👑 ŞAH ÇEMPİON';
+                } else if (idx === 1) {
+                    titleText = '🥈 GÜMÜŞ QALİB';
+                } else if (idx === 2) {
+                    titleText = '🥉 BÜRÜNC QALİB';
+                } else {
+                    titleText = `${idx+1}-ci YER`;
+                }
+                
+                grid.innerHTML += `<div class="winner-card-v3 ${rankClass}" onclick="triggerCardConfetti()"><span class="rank-badge-title">${titleText}</span><div class="winner-avatar-box">${idx===0?'<div class="crown-icon">👑</div>':''}<img src="${s.foto || DEFAULT_AVATAR_URL}"></div><strong style="display:block; font-size:16px; color:#fff;">${s.ad}</strong><span style="color:var(--accent); font-weight:800; font-size:15px; margin-top:4px; display:block;">${s.cari_reyting} pt</span></div>`;
+            });
+            
+            document.getElementById('winnersModal').style.display = 'flex';
+            const end = Date.now() + 4000;
+            const interval = setInterval(() => { if (Date.now() > end) return clearInterval(interval); try { confetti({ particleCount: 45, startVelocity: 35, spread: 360, ticks: 75, zIndex: 99999, origin: { x: Math.random(), y: Math.random() - 0.2 } }); } catch(e){} }, 250);
+            for (let i = 0; i < 25; i++) { setTimeout(() => { const emoji = document.createElement('div'); emoji.className = 'flying-emoji'; emoji.innerText = ['👑', '🏆', '🌹', '💐', '⭐', '🎉', '🥇'][Math.floor(Math.random() * 7)]; emoji.style.left = Math.random() * 92 + 'vw'; document.body.appendChild(emoji); setTimeout(() => emoji.remove(), 3200); }, i * 120); }
+            database.ref('audio_winner').once('value', snap => { if(snap.val()) { if(activeAudioObject) activeAudioObject.pause(); activeAudioObject = new Audio(snap.val()); activeAudioObject.play().catch(()=>{}); } });
+        }
+        function closeWinnersModal() { if (activeAudioObject) activeAudioObject.pause(); document.getElementById('winnersModal').style.display = 'none'; }
+        
+        function showOutsidersModal() {
+            const list = (globalData[currentTab] || []).map(s => calculateTotals(s)).sort((a,b) => a.cari_reyting - b.cari_reyting).slice(0, 3);
+            const grid = document.getElementById('outsidersListGrid'); if(!grid) return; grid.innerHTML = '';
+            list.forEach(s => { grid.innerHTML += `<div style="background:var(--card-inner); padding:12px 18px; border-radius:12px; border:1px solid var(--negative); text-align:center;"><img src="${s.foto || DEFAULT_AVATAR_URL}" style="width:60px; height:60px; border-radius:50%; border:2px solid var(--negative); object-fit:cover;"><strong style="display:block; font-size:13px; margin-top:5px; color:#fff;">😭 ${s.ad}</strong><span style="color:var(--negative); font-weight:bold; font-size:12px;">${s.cari_reyting} pt</span></div>`; });
+            document.getElementById('outsidersModal').style.display = 'flex';
+            for (let i = 0; i < 20; i++) { setTimeout(() => { const d = document.createElement('div'); d.className = 'dislike-particle'; d.innerText = ['👎', '💔', '😴', '💩'][Math.floor(Math.random() * 4)]; d.style.left = Math.random() * 95 + 'vw'; document.body.appendChild(d); setTimeout(() => d.remove(), 3500); }, i * 150); }
+            database.ref('audio_outsider').once('value', snap => { if(snap.val()) { if(activeAudioObject) activeAudioObject.pause(); activeAudioObject = new Audio(snap.val()); activeAudioObject.play().catch(()=>{}); } });
+        }
+        function closeOutsidersModal() { if (activeAudioObject) activeAudioObject.pause(); document.getElementById('outsidersModal').style.display = 'none'; }
+
+        function playBlackCatVideo() {
+            if (!blackCatVideoData) return alert("Hələ admin tərəfindən qara pişik videosu yüklənməyib!");
+            if (activeAudioObject) activeAudioObject.pause();
+            document.getElementById('winnersModal').style.display = 'none'; document.getElementById('videoModal').style.display = 'flex';
+            const player = document.getElementById('blackCatPlayer'); player.src = blackCatVideoData; player.play().catch(e=>{});
+            player.onended = () => closeVideoModal();
+        }
+        function closeVideoModal() { const player = document.getElementById('blackCatPlayer'); player.pause(); player.src = ""; document.getElementById('videoModal').style.display = 'none'; document.getElementById('winnersModal').style.display = 'flex'; }
+
+        function uploadBlackCatVideo() {
+            const file = document.getElementById('blackCatVideoFile').files[0]; if (!file) return alert("Zəhmət olmasa video seçin!");
+            if (file.size > 10 * 1024 * 1024) return alert("Video çox böyükdür (Maksimum 10MB)!");
+            const reader = new FileReader(); reader.onload = e => { database.ref('video_black_cat').set(e.target.result).then(() => alert("Qara pişik videosu yükləndi! 🐈")); }; reader.readAsDataURL(file);
+        }
+        function uploadWinnerAudio() { const file = document.getElementById('winnerAudioFile').files[0]; if(!file) return alert("Audio seçin"); const reader = new FileReader(); reader.onload = e => { database.ref('audio_winner').set(e.target.result).then(()=>alert("Qaliblər musiqisi yükləndi!")); }; reader.readAsDataURL(file); }
+        function uploadOutsiderAudio() { const file = document.getElementById('outsiderAudioFile').files[0]; if(!file) return alert("Audio seçin"); const reader = new FileReader(); reader.onload = e => { database.ref('audio_outsider').set(e.target.result).then(()=>alert("Outsiderlər musiqisi yükləndi!")); }; reader.readAsDataURL(file); }
+
+        function saveDeadline() { const val = document.getElementById('deadlineInput').value; if (!val) return alert("Lütfən vaxt seçin!"); database.ref('deadline_time').set(val).then(() => alert("⏳ Deadline yadda saxlanıldı!")); }
+        function clearDeadline() { if(!confirm("Deadline sıfırlansın?")) return; database.ref('deadline_time').remove().then(() => alert("Deadline ləğv edildi!")); }
+        function startDeadlineTimer() {
+            if (deadlineInterval) clearInterval(deadlineInterval); const countEl = document.getElementById('deadlineTimerCount');
+            deadlineInterval = setInterval(() => {
+                if (!deadlineTimestamp) { countEl.innerText = "Limitsiz ♾️"; countEl.style.color = "var(--positive)"; return; }
+                const diff = deadlineTimestamp - new Date().getTime();
+                if (diff <= 0) { countEl.innerText = "🚨 VAХT BİTDİ!"; countEl.style.color = "var(--negative)"; } 
+                else { const d = Math.floor(diff/(1000*60*60*24)); const h = Math.floor((diff%(1000*60*60*24))/(1000*60*60)); const m = Math.floor((diff%(1000*60*60))/(1000*60)); countEl.innerText = `${d}gün ${h}saat ${m}dəq`; }
+            }, 1000);
+        }
+
+        // FİX: Demo İdarəetmə Funksiyası
+        function updateDemoAdminUI() {
+            const statusText = document.getElementById('demoStatusText'); const toggleBtn = document.getElementById('btnToggleDemo');
+            if (statusText && toggleBtn) {
+                if (demoIsActive) { statusText.innerText = "Status: AKTİV 🟢"; statusText.style.color = "var(--positive)"; toggleBtn.innerText = "Deaktiv Et"; toggleBtn.style.background = "var(--negative)"; toggleBtn.style.color = "#fff"; } 
+                else { statusText.innerText = "Status: DEAKTİV 🔴"; statusText.style.color = "var(--negative)"; toggleBtn.innerText = "Aktivləşdir"; toggleBtn.style.background = "var(--positive)"; toggleBtn.style.color = "#000"; }
+            }
+        }
+        function toggleDemoStatus() { if (currentUserRole !== 'master') return; const newStatus = !demoIsActive; database.ref('settings/demo_active').set(newStatus).then(() => alert(`Demo hesab ${newStatus ? 'Aktivləşdirildi' : 'Deaktiv edildi'}!`)); }
+
+        function openFeedbackModal() { document.getElementById('feedbackModal').style.display = 'flex'; }
+        function sendFeedback() { database.ref('feedbacks').push({ name: document.getElementById('fbName').value, msg: document.getElementById('fbMsg').value, timestamp: new Date().toISOString() }).then(() => { alert("Göndərildi! 💬"); document.getElementById('feedbackModal').style.display='none'; }); }
+        function filterAdminStudents() { const query = document.getElementById('adminSearchInput').value.toLowerCase(); document.querySelectorAll('.admin-student-card').forEach(card => card.style.display = card.querySelector('strong').innerText.toLowerCase().includes(query) ? 'block' : 'none'); }
+        function showVersionModal() { document.getElementById('versionModal').style.display = 'flex'; }
+        function closeVersionModal() { document.getElementById('versionModal').style.display = 'none'; }
     </script>
 </body>
 </html>
