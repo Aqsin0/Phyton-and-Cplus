@@ -10,176 +10,191 @@
     <!-- Chart.js & Canvas Confetti -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <!-- Google Fonts: Plus Jakarta Sans for Modern UI -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
+        /* DARK MODE (Default) */
         :root {
-            --bg-color: #050b14; --card-bg: rgba(15, 23, 42, 0.5); --card-inner: rgba(30, 41, 59, 0.6);
+            --bg-color: #0f172a; --card-bg: #1e293b; --card-hover: #334155;
             --text-main: #f8fafc; --text-sub: #94a3b8;
-            --accent: #38bdf8; --accent-glow: rgba(56, 189, 248, 0.4);
-            --positive: #10b981; --negative: #ef4444; --border: rgba(255, 255, 255, 0.1);
-            --gold: #f59e0b; --gold-glow: rgba(245, 158, 11, 0.6);
-            --silver: #cbd5e1; --bronze: #d97706;
+            --accent: #38bdf8; --accent-hover: #0284c7;
+            --positive: #10b981; --negative: #ef4444; 
+            --border: #334155; --border-focus: #38bdf8;
+            --gold: #f59e0b; --silver: #cbd5e1; --bronze: #d97706;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+            --modal-bg: rgba(15, 23, 42, 0.95);
         }
 
+        /* LIGHT MODE */
+        [data-theme="light"] {
+            --bg-color: #f1f5f9; --card-bg: #ffffff; --card-hover: #f8fafc;
+            --text-main: #0f172a; --text-sub: #475569;
+            --accent: #2563eb; --accent-hover: #1d4ed8;
+            --positive: #059669; --negative: #dc2626; 
+            --border: #e2e8f0; --border-focus: #2563eb;
+            --gold: #d97706; --silver: #64748b; --bronze: #b45309;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --modal-bg: rgba(255, 255, 255, 0.95);
+        }
+
+        * { box-sizing: border-box; }
         body { 
-            font-family: 'Plus Jakarta Sans', system-ui, sans-serif; 
+            font-family: 'Inter', system-ui, sans-serif; 
             background-color: var(--bg-color); color: var(--text-main); 
             margin: 0; padding: 15px; 
-            background-image: radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.12), transparent 60%); 
-            background-attachment: fixed;
+            transition: background-color 0.3s, color 0.3s;
             -webkit-tap-highlight-color: transparent;
         }
         .container { max-width: 1250px; margin: 0 auto; }
         
-        /* MÜASİR GLASSMORPHISM (ŞÜŞƏ) EFFEKTLƏRİ */
-        .glass-panel {
-            background: var(--card-bg);
-            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+        .card {
+            background-color: var(--card-bg);
             border: 1px solid var(--border);
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            transition: background-color 0.3s, border-color 0.3s;
         }
 
-        /* AUTH WIDGET */
-        .auth-widget { background: rgba(30, 41, 59, 0.7); border: 1px solid var(--border); padding: 8px 15px; border-radius: 16px; display: flex; align-items: center; gap: 12px; backdrop-filter: blur(10px); }
-        .auth-btn { background: linear-gradient(135deg, var(--accent), #2563eb); color: #fff; font-weight: bold; border: none; padding: 10px 18px; border-radius: 12px; cursor: pointer; transition: 0.3s; box-shadow: 0 0 15px var(--accent-glow); }
-        .auth-btn:hover { transform: translateY(-2px); box-shadow: 0 0 25px var(--accent-glow); }
-        .user-avatar-small { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--accent); object-fit: cover; cursor: pointer; transition: 0.3s; }
-        .user-avatar-small:hover { transform: scale(1.1); box-shadow: 0 0 10px var(--accent-glow); }
-        .user-name-small { font-weight: bold; color: #fff; font-size: 14px; cursor: pointer; }
-        .user-name-small:hover { color: var(--accent); }
-        .logout-btn { background: rgba(239, 68, 68, 0.2); color: #fca5a5; border: 1px solid rgba(239,68,68,0.4); padding: 6px 12px; border-radius: 8px; font-size: 11px; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        .logout-btn:hover { background: #ef4444; color: #fff; }
-
-        .header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; margin-bottom: 25px; padding: 20px 25px; }
-        .header-title-box h1 { margin: 0; font-size: 24px; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 12px; }
-        .header-title-box h1 span.icon { filter: drop-shadow(0 0 10px var(--gold)); }
-        .version-badge { background: linear-gradient(135deg, #38bdf8, #2563eb); color: #fff; font-size: 12px; padding: 4px 10px; border-radius: 10px; cursor: pointer; box-shadow: 0 0 15px var(--accent-glow); font-weight: 800; border: 1px solid rgba(255,255,255,0.2); }
-
-        .deadline-banner { background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(15, 23, 42, 0.6)); border: 1px solid rgba(239,68,68,0.3); border-radius: 16px; padding: 14px 20px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
-        .deadline-timer { font-size: 20px; font-weight: 800; color: #fca5a5; font-family: monospace; text-shadow: 0 0 10px rgba(239,68,68,0.5); }
+        /* HEADER & AUTH */
+        .header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; padding: 20px; margin-bottom: 25px; }
+        .header-title-box h1 { margin: 0; font-size: 22px; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 10px; }
+        .version-badge { background-color: var(--accent); color: #fff; font-size: 11px; padding: 4px 10px; border-radius: 12px; cursor: pointer; font-weight: 800; border: none; }
         
-        .group-photo-card { padding: 20px; margin-bottom: 25px; text-align: center; }
-        .group-photo-card img { max-width: 100%; height: auto; max-height: 450px; border-radius: 16px; border: 2px solid var(--border); object-fit: cover; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .theme-toggle { background: transparent; border: 1px solid var(--border); color: var(--text-main); font-size: 18px; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
+        .theme-toggle:hover { background: var(--card-hover); }
 
-        /* MÜASİR TABLAR */
-        .tabs { display: flex; gap: 10px; flex-wrap: wrap; background: rgba(0,0,0,0.3); padding: 6px; border-radius: 16px; border: 1px solid var(--border); }
-        .tab-btn { background: transparent; color: var(--text-sub); border: none; padding: 10px 22px; border-radius: 12px; cursor: pointer; font-weight: 600; font-size: 14px; transition: all 0.3s ease; }
-        .tab-btn.active, .tab-btn:hover { background: var(--accent); color: #000; box-shadow: 0 4px 15px var(--accent-glow); }
+        .auth-widget { display: flex; align-items: center; gap: 12px; padding: 6px 14px; border-radius: 14px; border: 1px solid var(--border); background: var(--card-bg); }
+        .auth-btn { background: var(--accent); color: #fff; font-weight: bold; border: none; padding: 10px 18px; border-radius: 10px; cursor: pointer; transition: 0.2s; }
+        .auth-btn:hover { background: var(--accent-hover); }
+        .user-avatar-small { width: 38px; height: 38px; border-radius: 50%; border: 2px solid var(--accent); object-fit: cover; cursor: pointer; }
+        .user-name-small { font-weight: 700; color: var(--text-main); font-size: 14px; cursor: pointer; }
+        .logout-btn { background: rgba(239, 68, 68, 0.1); color: var(--negative); border: 1px solid rgba(239,68,68,0.2); padding: 5px 12px; border-radius: 8px; font-size: 11px; font-weight: bold; cursor: pointer; }
 
-        .action-bar { display: flex; justify-content: space-between; margin-bottom: 20px; gap: 12px; flex-wrap: wrap; }
-        .btn { background-color: #2563eb; color: white; border: 1px solid rgba(255,255,255,0.1); padding: 12px 20px; border-radius: 12px; cursor: pointer; font-weight: 600; font-size: 14px; transition: all 0.3s ease; font-family: 'Plus Jakarta Sans', sans-serif; }
-        .btn:hover { transform: translateY(-3px); filter: brightness(1.15); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
-        .btn-admin { background: linear-gradient(135deg, #e11d48, #be123c); }
-        .btn-gold { background: linear-gradient(135deg, #f59e0b, #d97706); color: #000; box-shadow: 0 0 15px var(--gold-glow); }
-        .btn-dark { background: rgba(255,255,255,0.05); color: #fff; }
-        .btn-dark:hover { background: rgba(255,255,255,0.1); }
+        /* TABS & BUTTONS */
+        .tabs { display: flex; gap: 8px; flex-wrap: wrap; background: var(--card-bg); padding: 8px; border-radius: 14px; border: 1px solid var(--border); }
+        .tab-btn { background: transparent; color: var(--text-sub); border: none; padding: 10px 20px; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 14px; transition: 0.2s; }
+        .tab-btn.active, .tab-btn:hover { background: var(--accent); color: #fff; }
 
-        /* MÜASİR CƏDVƏL */
-        .table-wrapper { overflow-x: auto; margin-bottom:25px; }
-        table { width: 100%; border-collapse: separate; border-spacing: 0; text-align: left; min-width: 850px; }
-        th, td { padding: 16px 18px; border-bottom: 1px solid rgba(255,255,255,0.03); }
-        th { background: rgba(0,0,0,0.4); color: var(--accent); font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
-        th:first-child { border-top-left-radius: 16px; } th:last-child { border-top-right-radius: 16px; }
-        tr { transition: 0.2s; }
-        tr:hover td { background-color: rgba(56, 189, 248, 0.05); }
+        .action-bar { display: flex; justify-content: space-between; margin-bottom: 20px; gap: 10px; flex-wrap: wrap; }
+        .btn { background-color: var(--accent); color: #fff; border: none; padding: 12px 20px; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 14px; transition: 0.2s; }
+        .btn:hover { background-color: var(--accent-hover); transform: translateY(-2px); }
+        .btn-admin { background-color: var(--negative); }
+        .btn-gold { background-color: var(--gold); color: #fff; }
+        .btn-dark { background-color: var(--card-hover); color: var(--text-main); border: 1px solid var(--border); }
 
-        .rank-1-row td { background: linear-gradient(90deg, rgba(245, 158, 11, 0.1), transparent); border-bottom: 1px solid rgba(245,158,11,0.2); }
-        .rank-2-row td { background: linear-gradient(90deg, rgba(203, 213, 225, 0.08), transparent); }
-        .rank-3-row td { background: linear-gradient(90deg, rgba(217, 119, 6, 0.08), transparent); }
+        /* DEADLINE & BANNER */
+        .deadline-banner { background: rgba(239, 68, 68, 0.05); border: 1px solid rgba(239, 68, 68, 0.2); border-radius: 16px; padding: 15px 20px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+        .deadline-timer { font-size: 18px; font-weight: 800; color: var(--negative); font-family: monospace; }
+        .group-photo-card { padding: 15px; margin-bottom: 25px; text-align: center; }
+        .group-photo-card img { max-width: 100%; height: auto; max-height: 400px; border-radius: 12px; object-fit: cover; }
 
-        .clickable-name { cursor: pointer; color: #fff; font-weight: 800; font-size: 15px; transition: 0.2s; }
+        /* TABLE */
+        .table-wrapper { overflow-x: auto; margin-bottom: 25px; }
+        table { width: 100%; border-collapse: collapse; text-align: left; min-width: 850px; }
+        th, td { padding: 15px 18px; border-bottom: 1px solid var(--border); }
+        th { background: var(--card-hover); color: var(--text-sub); font-size: 12px; font-weight: 700; text-transform: uppercase; }
+        tr:hover td { background-color: var(--card-hover); }
+        
+        .clickable-name { cursor: pointer; color: var(--text-main); font-weight: 700; font-size: 14px; }
         .clickable-name:hover { color: var(--accent); }
-        .student-info { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
-        .avatar { width: 46px; height: 46px; border-radius: 50%; border: 2px solid var(--border); overflow: hidden; flex-shrink: 0; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        .student-info { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+        .avatar { width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--border); overflow: hidden; flex-shrink: 0; }
         .avatar img { width: 100%; height: 100%; object-fit: cover; }
-        .founder-badge { background: linear-gradient(135deg, #f59e0b, #d97706); color: #000; font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 8px; box-shadow: 0 0 10px var(--gold-glow); }
-        .rank-col { font-weight: 800; color: var(--accent); width: 40px; font-size: 18px; text-align: center; }
+        .founder-badge { background: var(--gold); color: #fff; font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 6px; }
+        .rank-col { font-weight: 800; color: var(--accent); width: 40px; font-size: 16px; text-align: center; }
 
-        /* SƏHİFƏLƏR ARASI KEÇİD ÜÇÜN HİDDEN KLAS */
-        .page-view { display: none; animation: fadeIn 0.4s ease forwards; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .rank-1-row td { background-color: rgba(245, 158, 11, 0.05); }
+        .rank-2-row td { background-color: rgba(203, 213, 225, 0.05); }
+        .rank-3-row td { background-color: rgba(217, 119, 6, 0.05); }
 
-        .back-btn { background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.1); padding: 12px 24px; border-radius: 12px; cursor: pointer; font-weight: 600; margin-bottom: 25px; transition: 0.3s; display: inline-flex; align-items: center; gap: 8px; }
-        .back-btn:hover { background: rgba(255,255,255,0.1); transform: translateX(-4px); }
+        /* PAGE VIEWS */
+        .page-view { display: none; animation: fadeIn 0.3s ease forwards; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        
+        .back-btn { background: var(--card-hover); color: var(--text-main); border: 1px solid var(--border); padding: 10px 20px; border-radius: 10px; cursor: pointer; font-weight: 600; margin-bottom: 25px; transition: 0.2s; }
+        .back-btn:hover { background: var(--border); }
 
-        /* PROFİL EKRANI */
-        .profile-header-card { display: flex; align-items: center; gap: 25px; flex-wrap: wrap; padding-bottom: 25px; border-bottom: 1px solid var(--border); margin-bottom: 25px; }
-        .profile-avatar-large { width: 130px; height: 130px; border-radius: 50%; border: 4px solid var(--accent); box-shadow: 0 0 30px var(--accent-glow); object-fit: cover; }
-        .profile-grid-info { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 25px; }
-        .info-box { background: rgba(0,0,0,0.2); padding: 18px 22px; border-radius: 16px; border: 1px solid var(--border); transition: 0.3s; }
-        .info-box:hover { background: rgba(0,0,0,0.4); border-color: rgba(255,255,255,0.2); transform: translateY(-2px); }
-        .info-box span { font-size: 12px; color: var(--text-sub); display: block; text-transform: uppercase; font-weight: 800; letter-spacing: 0.5px; }
-        .info-box strong { font-size: 18px; color: #fff; margin-top: 6px; display: block; font-weight: 800; }
+        /* PROFILE */
+        .profile-header-card { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; padding-bottom: 25px; border-bottom: 1px solid var(--border); margin-bottom: 25px; }
+        .profile-avatar-large { width: 120px; height: 120px; border-radius: 50%; border: 4px solid var(--accent); object-fit: cover; }
+        .profile-grid-info { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 25px; }
+        .info-box { background: var(--card-bg); padding: 18px 20px; border-radius: 14px; border: 1px solid var(--border); }
+        .info-box span { font-size: 11px; color: var(--text-sub); display: block; text-transform: uppercase; font-weight: 700; }
+        .info-box strong { font-size: 16px; color: var(--text-main); margin-top: 5px; display: block; font-weight: 800; }
+
+        /* FORM ELEMENTS */
+        .form-group { margin-bottom: 15px; text-align: left; }
+        .form-group label { display: block; margin-bottom: 6px; color: var(--text-sub); font-size:13px; font-weight:700; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px 15px; border-radius: 10px; border: 1px solid var(--border); background: var(--bg-color); color: var(--text-main); font-weight: 600; font-family: inherit; transition: 0.2s; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--border-focus); outline: none; background: var(--card-bg); }
+
+        /* ADMIN PANEL & SPLIT TABS */
+        .admin-dashboard-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; margin-bottom: 25px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
+        .admin-nav { display: flex; gap: 10px; margin-bottom: 25px; flex-wrap: wrap; background: var(--card-bg); padding: 8px; border-radius: 14px; border: 1px solid var(--border); }
+        .admin-nav-btn { background: transparent; border: none; color: var(--text-sub); padding: 10px 18px; border-radius: 10px; cursor: pointer; font-weight: 600; transition: 0.2s; }
+        .admin-nav-btn.active { background: var(--accent); color: #fff; }
+        
+        .admin-student-card { background: var(--card-bg); border-radius: 14px; padding: 20px; margin-bottom: 15px; border: 1px solid var(--border); }
+        .grid-inputs { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 15px; }
+        .grid-inputs > div { flex: 1 1 80px; min-width: 80px; }
+        
+        .file-section-title { font-size: 15px; color: var(--text-main); font-weight: 700; border-bottom: 1px solid var(--border); padding-bottom: 8px; margin-top: 20px; margin-bottom: 15px; }
+        .file-item { background: var(--bg-color); padding: 15px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
 
         /* MODALS */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(3, 7, 18, 0.85); backdrop-filter: blur(8px); justify-content: center; align-items: center; z-index: 20000; }
-        .modal-content { background: var(--card-bg); padding: 30px; border-radius: 24px; max-width: 600px; width: 90%; max-height: 85vh; overflow-y: auto; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 20px 50px rgba(0,0,0,0.5); backdrop-filter: blur(20px); animation: modalPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        @keyframes modalPop { from { opacity: 0; transform: scale(0.9) translateY(20px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--modal-bg); justify-content: center; align-items: center; z-index: 20000; }
+        .modal-content { background: var(--card-bg); padding: 30px; border-radius: 20px; max-width: 500px; width: 90%; max-height: 85vh; overflow-y: auto; border: 1px solid var(--border); box-shadow: var(--shadow); }
         
-        .auth-tabs { display:flex; gap:10px; margin-bottom:20px; background: rgba(0,0,0,0.2); padding: 5px; border-radius: 12px; }
-        .auth-tab-btn { flex:1; padding:12px; background: transparent; color:var(--text-sub); border-radius:10px; cursor:pointer; font-weight:800; text-align:center; transition: 0.3s; }
-        .auth-tab-btn.active { background: var(--accent); color:#000; box-shadow: 0 4px 10px var(--accent-glow); }
-        
-        .form-group { margin-bottom: 18px; text-align: left; }
-        .form-group label { display: block; margin-bottom: 8px; color: var(--text-sub); font-size:13px; font-weight:800; }
-        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 14px; border-radius: 12px; border: 1px solid var(--border); background: rgba(0,0,0,0.3); color: white; box-sizing: border-box; font-weight:600; font-family: 'Plus Jakarta Sans', sans-serif; transition: 0.3s; }
-        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--accent); outline: none; box-shadow: 0 0 10px var(--accent-glow); background: rgba(0,0,0,0.5); }
+        .auth-tabs { display:flex; gap:10px; margin-bottom:20px; background: var(--bg-color); padding: 6px; border-radius: 12px; border: 1px solid var(--border); }
+        .auth-tab-btn { flex:1; padding:10px; background: transparent; color:var(--text-sub); border-radius:8px; cursor:pointer; font-weight:700; text-align:center; transition: 0.2s; }
+        .auth-tab-btn.active { background: var(--accent); color:#fff; }
 
-        /* ADMIN */
-        .admin-dashboard-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; margin-bottom: 25px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
-        .admin-nav { display: flex; gap: 10px; margin-bottom: 25px; flex-wrap: wrap; }
-        .admin-nav-btn { background: rgba(255,255,255,0.05); border: 1px solid transparent; color: var(--text-sub); padding: 12px 20px; border-radius: 12px; cursor: pointer; font-weight: 600; transition: 0.3s; }
-        .admin-nav-btn.active { background: rgba(56, 189, 248, 0.1); color: var(--accent); border-color: var(--accent); box-shadow: 0 0 15px var(--accent-glow); }
-        .admin-nav-btn:hover:not(.active) { background: rgba(255,255,255,0.1); color: #fff; }
+        /* WINNERS UI */
+        .winners-container-v3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; margin: 25px 0; }
+        .winner-card-v3 { background: var(--card-bg); border-radius: 16px; padding: 15px 10px; text-align: center; border: 1px solid var(--border); }
+        .winner-card-v3.rank-1 { grid-column: span 2; border-color: var(--gold); background: rgba(245, 158, 11, 0.05); }
+        .winner-avatar-box { position: relative; width: 80px; height: 80px; margin: 0 auto 12px auto; }
+        .rank-1 .winner-avatar-box { width: 100px; height: 100px; }
+        .winner-avatar-box img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid var(--border); }
+        .crown-icon { position: absolute; top: -20px; left: 50%; transform: translateX(-50%); font-size: 28px; }
+        .rank-badge-title { font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 8px; display: inline-block; margin-bottom: 8px; }
+        .rank-1 .rank-badge-title { background: var(--gold); color: #fff; }
+        .rank-2 .rank-badge-title { background: var(--silver); color: #fff; }
+        .rank-3 .rank-badge-title { background: var(--bronze); color: #fff; }
         
-        .admin-student-card { background: rgba(0,0,0,0.2); border-radius: 16px; padding: 20px; margin-bottom: 15px; border: 1px solid var(--border); transition: 0.3s; }
-        .admin-student-card:hover { border-color: rgba(255,255,255,0.2); background: rgba(0,0,0,0.4); }
-        
-        .grid-inputs { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 12px; margin-top: 12px; }
-        
-        /* VERSİYA KUTULARI */
-        .version-box { background:rgba(0,0,0,0.2); padding:20px; border-radius:16px; border:1px solid var(--border); margin-bottom:15px; transition: 0.3s; }
-        .version-box:hover { transform: translateY(-3px); border-color: rgba(255,255,255,0.2); }
-        .version-box-v3 { background:linear-gradient(135deg, rgba(56, 189, 248, 0.1), transparent); border-color:rgba(56,189,248,0.3); box-shadow: 0 5px 20px var(--accent-glow); }
-        .version-list { font-size:14px; color:var(--text-sub); margin:0; padding-left:20px; line-height:1.7; }
-        .version-list li { margin-bottom: 8px; }
-        .version-list strong { color: #fff; }
-
-        /* FAYL BÖLMƏSİ (C++ və Python ayırması) */
-        .file-section-title { font-size: 16px; color: #fff; border-bottom: 1px solid var(--border); padding-bottom: 8px; margin-top: 20px; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
-        .file-item { background: rgba(0,0,0,0.3); padding: 15px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; transition: 0.3s; }
-        .file-item:hover { border-color: var(--accent); background: rgba(0,0,0,0.5); }
+        .version-box { padding:20px; border-radius:14px; border:1px solid var(--border); margin-bottom:15px; background: var(--bg-color); }
+        .version-list { font-size:14px; color:var(--text-sub); margin:0; padding-left:20px; line-height:1.6; }
+        .version-list strong { color: var(--text-main); }
     </style>
 </head>
 <body>
 
     <div class="container">
         <!-- 🏠 HEADER & AUTH WIDGET -->
-        <div class="header glass-panel">
+        <div class="header card">
             <div class="header-title-box">
-                <h1><span class="icon">🏆</span> TT-08 Proqram Saytı <span class="version-badge" onclick="showVersionModal()">V3.0</span></h1>
-                <div class="live-datetime" id="liveDateTime" style="font-size:13px; color:var(--text-sub); margin-top:6px; font-weight:600;">📅 Yüklənir...</div>
+                <h1>🏆 TT-08 Proqram Saytı <span class="version-badge" onclick="showVersionModal()">V3.0</span></h1>
+                <div id="liveDateTime" style="font-size:12px; color:var(--text-sub); margin-top:6px; font-weight:600;">📅 Yüklənir...</div>
             </div>
 
-            <div style="display:flex; gap:20px; align-items:center; flex-wrap:wrap;">
+            <div style="display:flex; gap:15px; align-items:center; flex-wrap:wrap;">
+                <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">🌞</button>
+
                 <div class="tabs">
                     <button class="tab-btn active" id="btn-cpp" onclick="switchTab('cpp')">C++</button>
                     <button class="tab-btn" id="btn-python" onclick="switchTab('python')">Python</button>
                     <button class="tab-btn" id="btn-common" onclick="switchTab('common')">Common</button>
                 </div>
 
-                <!-- AUTENTİKASİYA BLOKU -->
                 <div id="authWidget" class="auth-widget">
                     <div id="authLoggedOut">
-                        <button class="auth-btn" onclick="openAuthModal()">🔐 Giriş / Qeydiyyat</button>
+                        <button class="auth-btn" onclick="openAuthModal()">🔐 Giriş</button>
                     </div>
-                    <div id="authLoggedIn" style="display:none; align-items:center; gap:14px;">
+                    <div id="authLoggedIn" style="display:none; align-items:center; gap:12px;">
                         <img id="topAvatar" src="" class="user-avatar-small" onclick="goToMyProfile()">
                         <div style="display:flex; flex-direction:column;">
                             <span id="topUsername" class="user-name-small" onclick="goToMyProfile()">İstifadəçi</span>
-                            <span id="topRoleBadge" style="font-size:11px; color:var(--gold); font-weight:800; letter-spacing: 0.5px;">TƏLƏBƏ</span>
+                            <span id="topRoleBadge" style="font-size:10px; color:var(--text-sub); font-weight:700;">TƏLƏBƏ</span>
                         </div>
                         <button class="logout-btn" onclick="logoutUser()">Çıxış</button>
                     </div>
@@ -187,38 +202,34 @@
             </div>
         </div>
 
-        <!-- 📄 ƏSAS DASHBOARD EKRANI -->
+        <!-- 📄 ƏSAS DASHBOARD -->
         <div id="mainDashboard" class="page-view" style="display: block;">
-            <!-- ⏳ DEADLINE -->
-            <div class="deadline-banner glass-panel" id="deadlineBanner">
+            <div class="deadline-banner card" id="deadlineBanner">
                 <div>
-                    <strong style="color:#ef4444; font-size:16px;">⏳ TAPŞIRIQ QƏBULU ÜÇÜN DEADLİNE:</strong>
-                    <span id="deadlineTargetText" style="color:#f8fafc; font-size:14px; margin-left:8px; font-weight:600;">Təyin edilməyib</span>
+                    <strong style="color:var(--negative); font-size:15px;">⏳ TAPŞIRIQ QƏBULU DEADLİNE:</strong>
+                    <span id="deadlineTargetText" style="color:var(--text-main); font-size:14px; margin-left:8px; font-weight:600;">Təyin edilməyib</span>
                 </div>
                 <div class="deadline-timer" id="deadlineTimerCount">--d --s --d --s</div>
             </div>
 
-            <!-- 📸 Qrup Foto -->
-            <div class="group-photo-card glass-panel">
-                <h3 style="margin:0 0 15px 0; color:var(--accent); font-weight:800;">📸 Bizim Qrupumuz</h3>
+            <div class="group-photo-card card">
+                <h3 style="margin:0 0 15px 0; color:var(--accent); font-weight:700;">📸 Bizim Qrupumuz</h3>
                 <img id="mainGroupImg" src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1200&q=80">
             </div>
 
-            <!-- ACTION BAR -->
             <div class="action-bar">
                 <div style="display:flex; gap:10px; flex-wrap:wrap;">
-                    <button class="btn btn-gold" onclick="showWinnersCelebration()">🎉 Həftənin Qalibləri</button>
-                    <button class="btn" style="background:rgba(239,68,68,0.2); color:#fca5a5; border-color:rgba(239,68,68,0.4);" onclick="showOutsidersModal()">😭 Həftənin Outsiderləri</button>
+                    <button class="btn btn-gold" onclick="showWinnersCelebration()">🎉 Qaliblər</button>
+                    <button class="btn btn-admin" onclick="showOutsidersModal()">😭 Outsiderlər</button>
                     <button class="btn btn-dark" onclick="openFeedbackModal()">💬 Feedback</button>
                 </div>
                 <div style="display:flex; gap:10px;">
-                    <button id="btnAdminPanel" class="btn btn-admin" style="display:none;" onclick="openPage('fullAdminPage')">⚙️ Admin Paneli</button>
+                    <button id="btnAdminPanel" class="btn btn-dark" style="display:none; color:var(--accent); border-color:var(--accent);" onclick="openPage('fullAdminPage')">⚙️ Admin Panel</button>
                     <button class="btn btn-dark" onclick="sortAndRender()">🔄 Yenilə</button>
                 </div>
             </div>
 
-            <!-- TABLE -->
-            <div class="table-wrapper glass-panel">
+            <div class="table-wrapper card">
                 <table id="ratingTable">
                     <thead></thead>
                     <tbody id="tableBody"></tbody>
@@ -227,13 +238,13 @@
         </div>
 
         <!-- 📄 ŞƏXSİ PROFiL EKRANI -->
-        <div id="profilePage" class="page-view glass-panel" style="padding: 30px;">
+        <div id="profilePage" class="page-view card" style="padding: 25px;">
             <button class="back-btn" onclick="goBackToMain()">⬅️ Geri Qayıt</button>
             
             <div class="profile-header-card">
-                <img id="pAvatar" class="profile-avatar-large" src="" alt="Avatar">
+                <img id="pAvatar" class="profile-avatar-large" src="">
                 <div>
-                    <h2 id="pName" style="margin:0; font-size:28px; color:var(--accent); font-weight:800;"></h2>
+                    <h2 id="pName" style="margin:0; font-size:24px; color:var(--accent); font-weight:800;"></h2>
                     <div id="pBadge" style="margin-top:10px;"></div>
                 </div>
             </div>
@@ -241,201 +252,168 @@
             <div class="profile-grid-info">
                 <div class="info-box"><span>🎓 İxtisası</span><strong style="color:var(--accent);">İnformasiya Təhlükəsizliyi</strong></div>
                 <div class="info-box"><span>📚 Kursu</span><strong id="pKurs">2-ci Kurs</strong></div>
-                <div class="info-box"><span>👤 Cinsiyyət</span><strong id="pGender" style="color:#fbcfe8;">Məlum deyil</strong></div>
+                <div class="info-box"><span>👤 Cinsiyyət</span><strong id="pGender">Məlum deyil</strong></div>
                 <div class="info-box"><span>📍 Doğulduğu Yer</span><strong id="pYer">Gəncə şəhəri</strong></div>
                 <div class="info-box"><span>⭐ Cari Reytinq (Ümumi)</span><strong id="pCari" style="color:var(--accent);">0 pt</strong></div>
                 <div class="info-box"><span>📊 Həftəlik Artım</span><strong id="pArtim">0</strong></div>
             </div>
 
-            <div id="privateUploadSection" class="info-box" style="margin-bottom:25px; display:none; border-color:rgba(16, 185, 129, 0.4); background:rgba(16, 185, 129, 0.05);">
-                <h4 style="margin:0 0 15px 0; color:var(--positive); font-size:18px;">📁 Şəxsi Panelin: Tapşırıq / Kod Fayllarını Yüklə</h4>
+            <div id="privateUploadSection" class="info-box" style="margin-bottom:20px; display:none; border: 1px solid var(--positive);">
+                <h4 style="margin:0 0 15px 0; color:var(--positive); font-size:16px;">📁 Tapşırıq / Kod Yüklə</h4>
                 <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
-                    <select id="studentSubjectSelect" style="background:rgba(0,0,0,0.5); padding:12px; border-radius:12px; border:1px solid var(--border); color:#fff; font-weight:bold; cursor:pointer;">
+                    <select id="studentSubjectSelect" class="form-group" style="margin:0; width:auto; padding:10px;">
                         <option value="cpp">🔵 C++ Tapşırığı</option>
                         <option value="python">🟡 Python Tapşırığı</option>
                     </select>
-                    <input type="file" id="studentTaskFiles" multiple style="background:rgba(0,0,0,0.5); padding:10px; border-radius:12px; border:1px solid var(--border); color:#fff; cursor:pointer;">
-                    <button class="btn" style="background:var(--positive); color:#000; font-weight:800; border:none;" onclick="uploadStudentTasks()">🚀 Adminə Göndər</button>
+                    <input type="file" id="studentTaskFiles" multiple class="form-group" style="margin:0; width:auto; padding:8px;">
+                    <button class="btn" style="background:var(--positive); color:#fff;" onclick="uploadStudentTasks()">🚀 Göndər</button>
                 </div>
             </div>
             
-            <div id="publicViewMsg" style="font-size:13px; color:var(--text-sub); text-align:center; margin-bottom:25px; font-style:italic;">
+            <div id="publicViewMsg" style="font-size:13px; color:var(--text-sub); text-align:center; margin-bottom:20px; font-style:italic;">
                 (Fayl yükləmə bölməsi yalnız bu hesabın sahibinə göstərilir)
             </div>
 
-            <div class="info-box" style="margin-bottom:25px;" id="studentTaskStatusContainer">
-                <h4 style="margin:0 0 15px 0; color:var(--accent); font-size:18px;">📄 Yüklənilmiş Faylların Vəziyyəti</h4>
-                <div id="studentTaskStatus" style="font-size:14px; font-weight:600;">Yüklənir...</div>
+            <div class="info-box" style="margin-bottom:20px;" id="studentTaskStatusContainer">
+                <h4 style="margin:0 0 15px 0; color:var(--accent); font-size:16px;">📄 Yüklənilmiş Faylların Vəziyyəti</h4>
+                <div id="studentTaskStatus" style="font-size:13px; font-weight:600;">Yüklənir...</div>
             </div>
 
             <div class="chart-container info-box">
-                <h3 style="margin:0 0 15px 0; font-size:18px; color:var(--accent);">📈 Həftəlik Qazanılan Bal Diaqramı</h3>
+                <h3 style="margin:0 0 15px 0; font-size:16px; color:var(--text-main);">📈 Həftəlik Qazanılan Bal Diaqramı</h3>
                 <canvas id="studentChart" height="100"></canvas>
             </div>
         </div>
 
         <!-- 📄 ADMİN EKRANI -->
-        <div id="fullAdminPage" class="page-view glass-panel" style="padding: 30px;">
+        <div id="fullAdminPage" class="page-view card" style="padding: 25px;">
             <div class="admin-dashboard-header">
-                <div>
-                    <h2 id="welcomeAdmin" style="margin:0; color:var(--accent); font-size:28px; font-weight:800;">⚙️ Admin Control Panel</h2>
-                </div>
-                <button class="back-btn" style="margin:0;" onclick="goBackToMain()">⬅️ Ana Səhifəyə Qayıt</button>
+                <h2 id="welcomeAdmin" style="margin:0; color:var(--accent); font-size:24px; font-weight:800;">⚙️ Admin Control Panel</h2>
+                <button class="back-btn" style="margin:0;" onclick="goBackToMain()">⬅️ Ana Səhifəyə</button>
             </div>
 
             <div class="admin-nav" id="adminNavTabs">
-                <button class="admin-nav-btn active" onclick="switchAdminSubTab('students')">👥 Reytinq İdarəsi</button>
-                <button class="admin-nav-btn" onclick="switchAdminSubTab('files')">📁 Faylları Yoxla/Redaktə</button>
-                <button class="admin-nav-btn restricted-hide" onclick="switchAdminSubTab('accounts')">🔐 Hesablar</button>
-                <button class="admin-nav-btn restricted-hide" onclick="switchAdminSubTab('media')">🎵 Media & Deadline</button>
-                <button class="admin-nav-btn restricted-hide" onclick="switchAdminSubTab('feedback')">💬 Feedback</button>
-                <button class="admin-nav-btn restricted-hide" onclick="switchAdminSubTab('logs')">📲 Loglar</button>
+                <button class="admin-nav-btn active tab-students" onclick="switchAdminSubTab('students')">👥 Reytinq İdarəsi</button>
+                <button class="admin-nav-btn tab-pending" onclick="switchAdminSubTab('pendingFiles')">⏳ Yeni Faylları Yoxla</button>
+                <button class="admin-nav-btn tab-checked" onclick="switchAdminSubTab('checkedFiles')">✏️ Fayl Redaktə</button>
+                <button class="admin-nav-btn tab-accounts" onclick="switchAdminSubTab('accounts')">🔐 Hesablar</button>
+                <button class="admin-nav-btn tab-media" onclick="switchAdminSubTab('media')">🎵 Media & Deadline</button>
+                <button class="admin-nav-btn tab-feedback" onclick="switchAdminSubTab('feedback')">💬 Feedback</button>
+                <button class="admin-nav-btn tab-logs" onclick="switchAdminSubTab('logs')">📲 Loglar</button>
             </div>
 
             <!-- SUB TAB 1: Reytinq -->
-            <div id="adminTabStudents">
-                <div style="display:flex; justify-content:space-between; margin-bottom:20px;">
-                    <input type="text" id="adminSearchInput" onkeyup="filterAdminStudents()" placeholder="🔍 Tələbə axtar..." class="form-group" style="width:300px; margin:0; padding:12px;">
+            <div id="adminTabStudents" class="admin-sub-tab">
+                <div style="margin-bottom:20px;">
+                    <input type="text" id="adminSearchInput" onkeyup="filterAdminStudents()" placeholder="🔍 Tələbə axtar..." class="form-group" style="max-width:300px; margin:0;">
                 </div>
                 <div id="adminBody"></div>
-                <button class="btn" style="width:100%; margin-top:20px; padding:16px; font-size:16px; background:linear-gradient(135deg, var(--positive), #059669); color:#fff; border:none;" onclick="saveAdminChanges()">💾 Yadda Saxla və Yayımla</button>
+                <button class="btn" style="width:100%; margin-top:20px; background:var(--positive);" onclick="saveAdminChanges()">💾 Yadda Saxla və Yayımla</button>
             </div>
 
-            <!-- SUB TAB 2: Fayl Yoxlama və Redaktə (C++ və Python Ayrıldı) -->
-            <div id="adminTabFiles" style="display:none;">
-                <div class="info-box" style="margin-bottom:25px; border-color:rgba(245, 158, 11, 0.4); background:rgba(245, 158, 11, 0.05);">
-                    <h3 style="color:var(--gold); margin-top:0; font-size:20px;">⏳ Gözləyən Fayllar (Yoxlanılmamış)</h3>
+            <!-- SUB TAB 2: Yeni Fayllar (Yoxlama) -->
+            <div id="adminTabPendingFiles" class="admin-sub-tab" style="display:none;">
+                <div class="info-box" style="border-color:var(--gold);">
+                    <h3 style="color:var(--gold); margin-top:0; font-size:18px;">⏳ Gözləyən Fayllar (Yoxlanılmamış)</h3>
                     
                     <div class="file-section-title">🔵 C++ Tapşırıqları</div>
-                    <div id="adminPendingTasksCpp">Məlumat yüklənir...</div>
+                    <div id="adminPendingTasksCpp">Yüklənir...</div>
                     
                     <div class="file-section-title">🟡 Python Tapşırıqları</div>
-                    <div id="adminPendingTasksPython">Məlumat yüklənir...</div>
-                </div>
-                
-                <div class="info-box" style="border-color:rgba(16, 185, 129, 0.4); background:rgba(16, 185, 129, 0.05);">
-                    <h3 style="color:var(--positive); margin-top:0; font-size:20px;">✅ Yoxlanılmış Fayllar (Redaktə Bölməsi)</h3>
-                    
-                    <div class="file-section-title">🔵 C++ Tapşırıqları</div>
-                    <div id="adminCheckedTasksCpp">Məlumat yüklənir...</div>
-
-                    <div class="file-section-title">🟡 Python Tapşırıqları</div>
-                    <div id="adminCheckedTasksPython">Məlumat yüklənir...</div>
+                    <div id="adminPendingTasksPython">Yüklənir...</div>
                 </div>
             </div>
 
-            <!-- QALAN TABLAR EYNİ QALIR -->
-            <div id="adminTabAccounts" style="display:none;">
-                <div class="info-box"><h3 style="color:var(--accent); margin-top:0;">🔐 Tələbələrin Hesabları Və Şifrələri</h3><div id="adminAccountsList" style="display:grid; gap:15px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">Yüklənir...</div></div>
+            <!-- SUB TAB 3: Yoxlanılmış Fayllar (Redaktə) -->
+            <div id="adminTabCheckedFiles" class="admin-sub-tab" style="display:none;">
+                <div class="info-box" style="border-color:var(--accent);">
+                    <h3 style="color:var(--accent); margin-top:0; font-size:18px;">✅ Yoxlanılmış Fayllar (Nəticəni Dəyişdir)</h3>
+                    
+                    <div class="file-section-title">🔵 C++ Tapşırıqları</div>
+                    <div id="adminCheckedTasksCpp">Yüklənir...</div>
+
+                    <div class="file-section-title">🟡 Python Tapşırıqları</div>
+                    <div id="adminCheckedTasksPython">Yüklənir...</div>
+                </div>
             </div>
 
-            <div id="adminTabMedia" style="display:none;">
+            <!-- SUB TAB 4: Hesablar -->
+            <div id="adminTabAccounts" class="admin-sub-tab" style="display:none;">
+                <div class="info-box"><h3 style="color:var(--text-main); margin-top:0;">🔐 Tələbə Hesabları</h3><div id="adminAccountsList" style="display:grid; gap:12px; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));"></div></div>
+            </div>
+
+            <!-- SUB TAB 5: Media -->
+            <div id="adminTabMedia" class="admin-sub-tab" style="display:none;">
                 <div class="info-box" style="margin-bottom:20px;">
                     <h3 style="color:var(--negative); margin-top:0;">⏳ Deadline Təyin Et</h3>
-                    <input type="datetime-local" id="deadlineInput" class="form-group" style="margin-bottom:10px; padding:12px; width:auto; display:block;">
-                    <button class="btn btn-gold" onclick="saveDeadline()">Yadda Saxla</button> <button class="btn" style="background:rgba(239,68,68,0.2); color:#fca5a5; border-color:rgba(239,68,68,0.5);" onclick="clearDeadline()">Sıfırla</button>
+                    <input type="datetime-local" id="deadlineInput" class="form-group" style="margin-bottom:10px; width:auto; display:block;">
+                    <button class="btn btn-gold" onclick="saveDeadline()">Yadda Saxla</button> <button class="btn btn-admin" onclick="clearDeadline()">Sıfırla</button>
                 </div>
-                <!-- Səs/Video Yükləmə qismləri bura daxildir -->
-                <div class="info-box" style="margin-bottom:20px;"><h3 style="margin:0 0 10px 0; color:var(--gold);">🎉 Qaliblər Musiqisini Yüklə</h3><input type="file" id="winnerAudioFile" accept="audio/*" class="form-group"><button class="btn btn-gold" onclick="uploadWinnerAudio()">Yüklə</button></div>
-                <div class="info-box" style="margin-bottom:20px;"><h3 style="margin:0 0 10px 0; color:var(--negative);">😭 Outsiderlər Musiqisini Yüklə</h3><input type="file" id="outsiderAudioFile" accept="audio/*" class="form-group"><button class="btn" style="background:var(--negative);" onclick="uploadOutsiderAudio()">Yüklə</button></div>
-                <div class="info-box" style="margin-bottom:20px;"><h3 style="margin:0 0 10px 0; color:#fff;">🐈 Qara Pişik Videosunu Yüklə</h3><input type="file" id="blackCatVideoFile" accept="video/*" class="form-group"><button class="btn btn-dark" onclick="uploadBlackCatVideo()">Yüklə</button></div>
+                <div class="info-box" style="margin-bottom:20px;"><h3 style="margin:0 0 10px 0; color:var(--gold);">🎉 Qaliblər Musiqisi</h3><input type="file" id="winnerAudioFile" accept="audio/*" class="form-group"><button class="btn btn-gold" onclick="uploadWinnerAudio()">Yüklə</button></div>
+                <div class="info-box" style="margin-bottom:20px;"><h3 style="margin:0 0 10px 0; color:var(--negative);">😭 Outsiderlər Musiqisi</h3><input type="file" id="outsiderAudioFile" accept="audio/*" class="form-group"><button class="btn btn-admin" onclick="uploadOutsiderAudio()">Yüklə</button></div>
+                <div class="info-box"><h3 style="margin:0 0 10px 0;">🐈 Qara Pişik Videosu</h3><input type="file" id="blackCatVideoFile" accept="video/*" class="form-group"><button class="btn btn-dark" onclick="uploadBlackCatVideo()">Yüklə</button></div>
             </div>
 
-            <div id="adminTabFeedback" style="display:none;">
-                <div class="info-box"><h3 style="color:var(--gold); margin-top:0;">💬 Feedback Mesajları</h3><div id="adminFeedbackList">Yüklənir...</div></div>
+            <!-- SUB TAB 6: Feedback -->
+            <div id="adminTabFeedback" class="admin-sub-tab" style="display:none;">
+                <div class="info-box"><h3 style="color:var(--gold); margin-top:0;">💬 Feedback Mesajları</h3><div id="adminFeedbackList"></div></div>
             </div>
             
-            <div id="adminTabLogs" style="display:none;">
-                <div class="info-box"><h3 style="color:var(--accent); margin-top:0;">📲 İstifadəçi Fəaliyyətləri (Loglar)</h3>
-                    <p style="font-size:13px; color:var(--text-sub); margin-bottom:15px;">İstifadəçilərin saytda etdiyi əməliyyatlar cihaz və məkan məlumatı ilə birlikdə göstərilir.</p>
-                    <div id="adminLogsList">Yüklənir...</div>
+            <!-- SUB TAB 7: Logs (Only Jagermaster) -->
+            <div id="adminTabLogs" class="admin-sub-tab" style="display:none;">
+                <div class="info-box"><h3 style="color:var(--accent); margin-top:0;">📲 Sistem Logları (Giriş/Çıxış/Fəaliyyət)</h3>
+                    <div id="adminLogsList"></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- 🔑 QEYDİYYAT VƏ GİRİŞ MODALI -->
+    <!-- MODALLAR -->
     <div id="authModal" class="modal">
-        <div class="modal-content" style="max-width:400px; text-align:center;">
-            <h2 style="color:var(--accent); margin-top:0; font-weight:800;">Sistemə Giriş</h2>
+        <div class="modal-content" style="text-align:center;">
+            <h2 style="color:var(--accent); margin-top:0;">Giriş / Qeydiyyat</h2>
             <div class="auth-tabs">
                 <div id="tabBtnLogin" class="auth-tab-btn active" onclick="switchAuthTab('login')">Giriş Et</div>
-                <div id="tabBtnReg" class="auth-tab-btn" onclick="switchAuthTab('register')">Yeni Qeydiyyat</div>
+                <div id="tabBtnReg" class="auth-tab-btn" onclick="switchAuthTab('register')">Qeydiyyat</div>
             </div>
             <div id="loginForm">
-                <div class="form-group"><label>İstifadəçi Adı (və ya Admin adı):</label><input type="text" id="loginUsername" placeholder="Məs: jameson və ya Adınız..." onkeydown="if(event.key==='Enter') document.getElementById('loginPass').focus()"></div>
+                <div class="form-group"><label>İstifadəçi / Admin adı:</label><input type="text" id="loginUsername" placeholder="Adınız..." onkeydown="if(event.key==='Enter') document.getElementById('loginPass').focus()"></div>
                 <div class="form-group"><label>Şifrə:</label><input type="password" id="loginPass" placeholder="Şifrəniz..." onkeydown="if(event.key==='Enter') loginUser()"></div>
-                <button class="btn" style="width:100%; font-size:16px; padding:14px; margin-top:10px;" onclick="loginUser()">Daxil Ol 🚀</button>
+                <button class="btn" style="width:100%;" onclick="loginUser()">Daxil Ol 🚀</button>
             </div>
             <div id="registerForm" style="display:none;">
-                <p style="font-size:12px; color:var(--text-sub); margin-bottom:15px; line-height:1.5;">Adınızı siyahıdan seçin və profiliniz üçün təhlükəsiz bir şifrə təyin edin.</p>
-                <div class="form-group"><label>Tələbə Adınızı Seçin:</label><select id="regNameSelect"><option value="">-- Adınızı Seçin --</option></select></div>
-                <div class="form-group"><label>Yeni Şifrə Təyin Et:</label><input type="password" id="regPass" placeholder="Şifrə yaradın (ən az 4 simvol)"></div>
-                <button class="btn btn-gold" style="width:100%; font-size:16px; padding:14px; margin-top:10px;" onclick="registerUser()">Qeydiyyatı Tamamla ✅</button>
+                <div class="form-group"><label>Siyahıdan Adınızı Seçin:</label><select id="regNameSelect"><option value="">-- Seçin --</option></select></div>
+                <div class="form-group"><label>Yeni Şifrə Yaradın:</label><input type="password" id="regPass" placeholder="Ən az 4 simvol"></div>
+                <button class="btn btn-gold" style="width:100%;" onclick="registerUser()">Qeydiyyatdan Keç ✅</button>
             </div>
-            <button class="btn btn-dark" style="width:100%; margin-top:15px;" onclick="closeModal('authModal')">Ləğv Et / Bağla</button>
+            <button class="btn btn-dark" style="width:100%; margin-top:15px;" onclick="closeModal('authModal')">Bağla</button>
         </div>
     </div>
 
-    <!-- 🏆 QALİBLƏR & OUTSİDERLƏR MODAL (Qısaldılıb eyni qalır) -->
-    <div id="winnersModal" class="modal"><div class="modal-content" style="text-align:center;"><h1 style="color:var(--gold); font-size:28px;">👑 HƏFTƏNİN QALİBLƏRİ 🏆</h1><div id="winnersListGrid" style="display:flex; justify-content:center; gap:15px; flex-wrap:wrap; margin:20px 0;"></div><span onclick="playBlackCatVideo()" style="color:var(--text-sub); font-size:12px; cursor:pointer; text-decoration:underline;">🐈 Qara pişik</span><br><button class="btn btn-gold" style="width:100%; padding:14px; margin-top:15px;" onclick="closeModal('winnersModal')">Bağla</button></div></div>
-    <div id="outsidersModal" class="modal"><div class="modal-content" style="text-align:center;"><h1 style="color:var(--negative);">😭 OUTSİDERLƏR 😴</h1><div id="outsidersListGrid" style="display:flex; justify-content:center; gap:15px; flex-wrap:wrap; margin:20px 0;"></div><button class="btn btn-dark" style="width:100%;" onclick="closeModal('outsidersModal')">Bağla</button></div></div>
+    <div id="winnersModal" class="modal"><div class="modal-content" style="text-align:center;"><h1 style="color:var(--gold);">👑 QALİBLƏR 🏆</h1><div id="winnersListGrid" class="winners-container-v3"></div><span onclick="playBlackCatVideo()" style="color:var(--text-sub); font-size:11px; cursor:pointer;">🐈 Sürpriz</span><br><button class="btn btn-gold" style="width:100%; margin-top:15px;" onclick="closeModal('winnersModal')">Möhtəşəm!</button></div></div>
+    <div id="outsidersModal" class="modal"><div class="modal-content" style="text-align:center;"><h1 style="color:var(--negative);">😭 OUTSİDERLƏR 😴</h1><div id="outsidersListGrid" style="display:flex; justify-content:center; gap:15px; flex-wrap:wrap; margin:20px 0;"></div><button class="btn btn-admin" style="width:100%;" onclick="closeModal('outsidersModal')">Bağla</button></div></div>
     <div id="videoModal" class="modal" style="background:#000; z-index:25000;"><div style="position:relative; width:100%; height:100%; display:flex; justify-content:center; align-items:center;"><button class="btn btn-dark" style="position:absolute; top:20px; right:20px; z-index:26000;" onclick="closeVideoModal()">✖ Bağla</button><video id="blackCatPlayer" style="width:100%; max-height:90vh;" controls></video></div></div>
-    <div id="feedbackModal" class="modal"><div class="modal-content" style="max-width:400px;"><h2 style="color:var(--accent);">💬 Feedback</h2><div class="form-group"><label>Adınız:</label><input type="text" id="fbName"></div><div class="form-group"><label>Mesajınız:</label><textarea id="fbMsg" rows="4"></textarea></div><button class="btn" style="width:100%;" onclick="sendFeedback()">Göndər</button><button class="btn btn-dark" style="width:100%; margin-top:10px;" onclick="closeModal('feedbackModal')">Bağla</button></div></div>
+    <div id="feedbackModal" class="modal"><div class="modal-content"><h2 style="color:var(--accent); margin-top:0;">💬 Feedback</h2><div class="form-group"><label>Adınız:</label><input type="text" id="fbName"></div><div class="form-group"><label>Mesajınız:</label><textarea id="fbMsg" rows="4"></textarea></div><button class="btn" style="width:100%;" onclick="sendFeedback()">Göndər</button><button class="btn btn-dark" style="width:100%; margin-top:10px;" onclick="closeModal('feedbackModal')">Bağla</button></div></div>
 
-    <!-- VERSİYA TARİXÇƏSİ MODAL (Genişləndirilmiş və Təmizlənmiş) -->
+    <!-- VERSİYA TARİXÇƏSİ (Təmiz, sadə, admin məlumatı yoxdur) -->
     <div id="versionModal" class="modal">
-        <div class="modal-content" style="max-width:680px;">
-            <h2 style="color:var(--accent); margin-top:0; font-weight:800;">🚀 Saytın Yeniliklər Tarixçəsi</h2>
-            <p style="font-size:14px; color:var(--text-sub); margin-bottom:25px; line-height:1.6;">Sistemimiz hər yeni versiyada tələbələrimiz üçün daha da təkmilləşir və istifadəsini rahatlaşdırır.</p>
-
-            <div class="version-box version-box-v3">
-                <h3 style="color:#38bdf8; margin:0 0 12px 0;">🌟 Versiya 3.0 (Ən Yeni)</h3>
-                <ul class="version-list">
-                    <li><strong>Tamamilə Yeni və Müasir Dizayn:</strong> Saytın vizual görünüşü yeniləndi. Yeni şüşə (glassmorphism) effektləri, daha aydın rənglər və rahat interfeys əlavə olundu. Həm telefonlarda, həm də kompyuterlərdə istifadə çox daha sürətli və vizual olaraq gözəl formaya gətirildi.</li>
-                    <li><strong>Fərdi Qeydiyyat Sistemi:</strong> Hər bir tələbə özünə məxsus şifrə yaradaraq profilinə baxa bilir. Sistem təhlükəsizliyi maksimum səviyyəyə qaldırıldı.</li>
-                    <li><strong>Şəxsi Yükləmə Paneli:</strong> Kod fayllarınızı kənar şəxslər görə bilməz, tapşırıqlar yalnız öz profilinizə girdikdə göndərilə bilir. Yüklədiyiniz faylların vəziyyətini birbaşa profilinizdən izləyə bilərsiniz.</li>
-                    <li><strong>Kraliça və Şah Çempion:</strong> 1-ci yeri tutanlar üçün xüsusi avtomatlaşdırılmış titullar yaradıldı. Bu titullar hər həftə birinci olan şəxsin profilində parlayacaq.</li>
-                </ul>
-            </div>
-
+        <div class="modal-content" style="max-width:600px;">
+            <h2 style="color:var(--accent); margin-top:0;">🚀 Yeniliklər Tarixçəsi</h2>
             <div class="version-box">
-                <h3 style="color:var(--gold); margin:0 0 12px 0;">⚡ Versiya 2.4</h3>
+                <h3 style="color:var(--accent); margin:0 0 10px 0;">🌟 Versiya 3.0 (Ən Yeni)</h3>
                 <ul class="version-list">
-                    <li><strong>Yeni Animasiyalar və Effektlər:</strong> Saytda qaliblər üçün daha zəngin konfetti və vizual interaktiv effektlər əlavə olundu. Uğurlarınızı qeyd etmək artıq daha əyləncəlidir.</li>
+                    <li><strong>Yeni Dizayn:</strong> Sayt həm telefonlar, həm də kompyuterlər üçün daha gözəl, normal və sürətli formata gətirildi.</li>
+                    <li><strong>Dark/Light Mod:</strong> İstəyə uyğun olaraq saytı ağ və ya qara rejimdə istifadə edə bilərsiniz.</li>
+                    <li><strong>Tam Şəxsi Hesablar:</strong> Hər tələbənin şəxsi şifrəsi var. Tapşırıqlar gizli olaraq yalnız öz profilinizdən yüklənir.</li>
+                    <li><strong>Çempion Titulları:</strong> Hər həftənin birincisi olan Qızlar üçün "Kraliça", Oğlanlar üçün "Şah" avtomatik təyin olunur.</li>
                 </ul>
             </div>
-
-            <div class="version-box">
-                <h3 style="color:var(--gold); margin:0 0 12px 0;">⚡ Versiya 2.3</h3>
-                <ul class="version-list">
-                    <li><strong>Ağıllı Deadline Taymeri:</strong> Canlı geri sayım taymeri yaradıldı. Vaxt bitdikdə yükləmə sistemi avtomatik qapanır və ədalətli rəqabət mühiti yaranır.</li>
-                    <li><strong>Dublikat Nəzarəti:</strong> Eyni tapşırığı səhvən 2 dəfə yükləməyin qarşısı alındı, yalnız ən son yüklədiyiniz fayl sistemdə qalır.</li>
-                </ul>
-            </div>
-
-            <div class="version-box">
-                <h3 style="color:var(--gold); margin:0 0 12px 0;">⚡ Versiya 2.2</h3>
-                <ul class="version-list">
-                    <li><strong>Şəxsi İnkişaf Qrafiki:</strong> Profildə tələbələrin həftəlik bal artımını göstərən interaktiv diaqram təqdim edildi. Keçmiş nəticələrinizlə indiki nəticənizi asanlıqla müqayisə edə bilərsiniz.</li>
-                </ul>
-            </div>
-
-            <div class="version-box">
-                <h3 style="color:var(--text-sub); margin:0 0 12px 0;">🛠️ Versiya 2.1</h3>
-                <ul class="version-list">
-                    <li><strong>Çoxdilli İnterfeys Təməli:</strong> AZ, EN, RU, TR dillərinə dəstək platformasının təməli quruldu və mətnlər standartlaşdırıldı.</li>
-                </ul>
-            </div>
-
-            <div class="version-box">
-                <h3 style="color:var(--text-sub); margin:0 0 12px 0;">🛠️ Versiya 2.0</h3>
-                <ul class="version-list">
-                    <li><strong>Təməl Sistem:</strong> C++, Python və Common reytinq cədvəllərinin canlı idarəetmə sistemi istifadəyə verildi. Bütün hesablamalar tam avtomatlaşdırıldı.</li>
-                </ul>
-            </div>
-            
-            <button class="btn" style="width:100%; margin-top:20px; padding:16px; font-size:16px;" onclick="closeModal('versionModal')">Möhtəşəm! Təşəkkürlər 🎉</button>
+            <div class="version-box"><h3 style="color:var(--gold); margin:0 0 10px 0;">⚡ Versiya 2.4</h3><ul class="version-list"><li>Konfettilər və nailiyyət qeyd etmə effektləri əlavə edildi.</li></ul></div>
+            <div class="version-box"><h3 style="color:var(--gold); margin:0 0 10px 0;">⚡ Versiya 2.3</h3><ul class="version-list"><li>Ağıllı canlı deadline taymeri yaradıldı və fayl yükləmələri avtomatlaşdırıldı.</li></ul></div>
+            <div class="version-box"><h3 style="color:var(--gold); margin:0 0 10px 0;">⚡ Versiya 2.2</h3><ul class="version-list"><li>Hər bir profildə həftəlik inkişafınızı ölçən diaqramlar quraşdırıldı.</li></ul></div>
+            <div class="version-box"><h3 style="color:var(--text-sub); margin:0 0 10px 0;">🛠️ Versiya 2.1</h3><ul class="version-list"><li>Saytın çoxdilli və geniş istifadə altyapısı hazırlandı.</li></ul></div>
+            <div class="version-box"><h3 style="color:var(--text-sub); margin:0 0 10px 0;">🛠️ Versiya 2.0</h3><ul class="version-list"><li>C++, Python və Common olaraq ümumi reytinq cədvəli yaradıldı.</li></ul></div>
+            <button class="btn" style="width:100%; margin-top:10px;" onclick="closeModal('versionModal')">Bağla</button>
         </div>
     </div>
 
@@ -453,10 +431,11 @@
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
-        // ---------------- DATAS (Şifrələr Dəyişdirildi) ----------------
-        const ADMIN_CREDENTIALS = { "jagermaster": "1002", "chivas": "Turan2008", "jameson": "kenan69", "rəho": "poni1813", "reho": "poni1813", "demo": "demo123" };
-        const ADMIN_ROLES = { "jagermaster": "master", "chivas": "admin", "jameson": "admin", "rəho": "restricted", "reho": "restricted", "demo": "demo" };
-        const ADMIN_TO_STUDENT_MAP = { "jagermaster": "Süleymanzadə Aqşin", "chivas": "Məmmədli Turan", "jameson": "Gülverdiyev Kənan" };
+        // ---------------- DATAS & ADMİN HÜQUQLARI ----------------
+        // Rəho'nun profili Rəhiməyə bağlandı. Şifrələr kiçik hərflə yazıldı (yoxlanış da kiçildilib ediləcək)
+        const ADMIN_CREDENTIALS = { "jagermaster": "1002", "chivas": "turan2008", "jameson": "kenan69", "rəho": "poni1813", "reho": "poni1813" };
+        const ADMIN_ROLES = { "jagermaster": "master", "chivas": "admin", "jameson": "admin", "rəho": "restricted", "reho": "restricted" };
+        const ADMIN_TO_STUDENT_MAP = { "jagermaster": "Süleymanzadə Aqşin", "chivas": "Məmmədli Turan", "jameson": "Gülverdiyev Kənan", "rəho": "Əlizadə Rəhimə", "reho": "Əlizadə Rəhimə" };
         
         const STUDENT_GENDERS = {
             "Abbasov Rüfət": "Kişi", "Abıyeva Aysun": "Qadın", "Ağazadə Poladxan": "Kişi", "Allahverdiyev Amid": "Kişi", "Bəbirov Soltan": "Kişi", "Cavadzadə Mirzə": "Kişi",
@@ -477,77 +456,63 @@
 
         let currentUser = null; 
         let currentUserRole = null; 
-        let demoIsActive = false;
         let activeAudioObject = null;
         let blackCatVideoData = null;
 
-        // ---------------- XÜSUSİ NAVİQASİYA (History API - Sürüşdürmə Problemi Üçün) ----------------
+        // ---------------- THEME (Dark/Light) ----------------
+        function toggleTheme() {
+            const isLight = document.body.getAttribute('data-theme') === 'light';
+            if(isLight) { document.body.removeAttribute('data-theme'); localStorage.setItem('theme', 'dark'); document.getElementById('themeBtn').innerText = '🌞'; }
+            else { document.body.setAttribute('data-theme', 'light'); localStorage.setItem('theme', 'light'); document.getElementById('themeBtn').innerText = '🌙'; }
+            if(chartInstance && activeProfileStudent) { openProfileByName(activeProfileStudent); } // Chart rənglərini yeniləmək üçün
+        }
+        function initTheme() {
+            if(localStorage.getItem('theme') === 'light') { document.body.setAttribute('data-theme', 'light'); document.getElementById('themeBtn').innerText = '🌙'; }
+        }
+
+        // ---------------- NAVİQASİYA (History API - Sürüşdürmə) ----------------
         function openPage(pageId) {
             document.querySelectorAll('.page-view').forEach(p => p.style.display = 'none');
             document.getElementById(pageId).style.display = 'block';
             window.scrollTo(0,0);
-            if(pageId !== 'mainDashboard') {
-                history.pushState({page: pageId}, "", "#" + pageId);
-            } else {
-                history.pushState({page: 'mainDashboard'}, "", window.location.pathname);
-            }
+            if(pageId !== 'mainDashboard') history.pushState({page: pageId}, "", "#" + pageId);
+            else history.pushState({page: 'mainDashboard'}, "", window.location.pathname);
         }
-        function goBackToMain() {
-            if(history.state && history.state.page !== 'mainDashboard') { history.back(); } 
-            else { openPage('mainDashboard'); }
-        }
+        function goBackToMain() { if(history.state && history.state.page !== 'mainDashboard') history.back(); else openPage('mainDashboard'); }
         window.addEventListener('popstate', (e) => {
             document.querySelectorAll('.page-view').forEach(p => p.style.display = 'none');
-            document.querySelectorAll('.modal').forEach(m => m.style.display = 'none'); // Modalları bağla
-            
-            if (e.state && e.state.page) {
-                document.getElementById(e.state.page).style.display = 'block';
-            } else {
-                document.getElementById('mainDashboard').style.display = 'block';
-            }
+            document.querySelectorAll('.modal').forEach(m => m.style.display = 'none');
+            if (e.state && e.state.page) document.getElementById(e.state.page).style.display = 'block';
+            else document.getElementById('mainDashboard').style.display = 'block';
         });
-
-        // Modallar üçün sadə funksiyalar
         function openModal(id) { document.getElementById(id).style.display = 'flex'; }
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
         function showVersionModal() { openModal('versionModal'); }
         function openFeedbackModal() { openModal('feedbackModal'); }
 
-        // --- Düzəldilmiş Log Sistemi (Hər halda işləyəcək) ---
+        // ---------------- LOGLAR (Yalnız Jagermaster üçün 100% işləyən log) ----------------
         async function logActivity(actionMsg) {
-            if(!currentUser) return; // Kimsə girməyibsə loglama
-            let loc = "Bilinmir (və ya bloka düşüb)";
-            let device = /Mobile|Android|iP(hone|od)|IEMobile|BlackBerry|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/.test(navigator.userAgent) ? "📱 Mobil Cihaz" : "💻 Kompüter";
-            
+            if(!currentUser) return;
+            let loc = "Bilinmir";
+            let device = /Mobile|Android|iPhone/i.test(navigator.userAgent) ? "📱 Mobil" : "💻 PC";
             try {
-                // Əgər Adblocker varsa bura xəta verə bilər, ona görə try-catch içindədir
                 const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 2000); // 2 saniyəyə cavab gəlməsə keç
+                const timeoutId = setTimeout(() => controller.abort(), 2000); 
                 let res = await fetch('https://ipapi.co/json/', { signal: controller.signal }).catch(()=>null);
-                if (res) {
-                    let data = await res.json();
-                    if (data.city) loc = `${data.city}, ${data.country_name}`;
-                }
+                if (res) { let data = await res.json(); if (data.city) loc = `${data.city}, ${data.country_name}`; }
                 clearTimeout(timeoutId);
             } catch(e) { }
 
-            // Log mütləq verilənlər bazasına yazılır
-            database.ref('activity_logs').push({
-                user: currentUser,
-                action: actionMsg,
-                location: loc,
-                device: device,
-                timestamp: new Date().toISOString()
-            }).catch(e => console.log("Log error:", e));
+            database.ref('activity_logs').push({ user: currentUser, action: actionMsg, location: loc, device: device, timestamp: new Date().toISOString() }).catch(()=>{});
         }
 
         // ---------------- INIT & AUTH ----------------
         window.onload = () => {
-            history.replaceState({page: 'mainDashboard'}, "", window.location.pathname); // İlk history
+            initTheme();
+            history.replaceState({page: 'mainDashboard'}, "", window.location.pathname);
             setInterval(updateLiveDateTime, 1000);
             checkSession();
             
-            database.ref('settings/demo_active').on('value', snap => { demoIsActive = snap.val() === true; });
             database.ref('students_data').on('value', snap => { 
                 if(snap.val()) globalData = snap.val(); 
                 renderTable(); 
@@ -564,40 +529,42 @@
         };
 
         function checkSession() {
-            const savedUser = localStorage.getItem('auth_user');
-            const savedRole = localStorage.getItem('auth_role');
+            const savedUser = localStorage.getItem('auth_user'); const savedRole = localStorage.getItem('auth_role');
             if (savedUser && savedRole) { currentUser = savedUser; currentUserRole = savedRole; updateAuthWidget(); }
         }
 
         function updateAuthWidget() {
-            const outDiv = document.getElementById('authLoggedOut'); 
-            const inDiv = document.getElementById('authLoggedIn');
-            
+            const outDiv = document.getElementById('authLoggedOut'); const inDiv = document.getElementById('authLoggedIn');
             if (currentUser) {
                 outDiv.style.display = 'none'; inDiv.style.display = 'flex';
-                
-                let displayName = currentUser; 
-                let displayRole = "Tələbə";
-                
-                if (currentUserRole !== 'student') {
-                    displayRole = "Admin (" + currentUserRole + ")";
-                    if (ADMIN_TO_STUDENT_MAP[currentUser]) displayName = ADMIN_TO_STUDENT_MAP[currentUser];
-                }
+                let displayName = ADMIN_TO_STUDENT_MAP[currentUser] || currentUser;
+                let displayRole = currentUserRole !== 'student' ? `Admin (${currentUserRole})` : "Tələbə";
                 
                 document.getElementById('topUsername').innerText = displayName; 
                 document.getElementById('topRoleBadge').innerText = displayRole;
                 
-                let targetName = currentUserRole === 'student' ? currentUser : ADMIN_TO_STUDENT_MAP[currentUser];
                 let avatarUrl = DEFAULT_AVATAR_URL;
-                if (targetName && globalData.cpp && globalData.cpp.length > 0) {
-                    let st = globalData.cpp.find(s => s.ad === targetName) || globalData.python.find(s => s.ad === targetName);
+                if (globalData.cpp && globalData.cpp.length > 0) {
+                    let st = globalData.cpp.find(s => s.ad === displayName) || globalData.python.find(s => s.ad === displayName);
                     if(st && st.foto) avatarUrl = st.foto;
                 }
                 document.getElementById('topAvatar').src = avatarUrl;
                 document.getElementById('btnAdminPanel').style.display = currentUserRole !== 'student' ? 'inline-block' : 'none';
+                
+                // Rəho Limit Tənzimləməsi (Tabları Gizlət/Aç)
+                if (currentUserRole !== 'student') {
+                    const tabsToHide = ['.tab-accounts', '.tab-media', '.tab-feedback', '.tab-logs'];
+                    tabsToHide.forEach(cls => {
+                        let el = document.querySelector(cls);
+                        if(el) {
+                            if (currentUserRole === 'restricted') el.style.display = 'none'; // rəho ancaq reytinq, fayl yoxlama, redaktə görər
+                            else if (currentUserRole === 'admin' && cls === '.tab-logs') el.style.display = 'none'; // normal admin log görməz
+                            else el.style.display = 'inline-block';
+                        }
+                    });
+                }
             } else {
-                outDiv.style.display = 'block'; inDiv.style.display = 'none'; 
-                document.getElementById('btnAdminPanel').style.display = 'none';
+                outDiv.style.display = 'block'; inDiv.style.display = 'none'; document.getElementById('btnAdminPanel').style.display = 'none';
             }
         }
 
@@ -624,45 +591,47 @@
 
         function registerUser() {
             const name = document.getElementById('regNameSelect').value; const pass = document.getElementById('regPass').value.trim();
-            if (!name) return alert("Zəhmət olmasa siyahıdan adınızı seçin!"); if (pass.length < 4) return alert("Şifrə ən az 4 simvol olmalıdır!");
+            if (!name) return alert("Seçim edin!"); if (pass.length < 4) return alert("Şifrə min. 4 simvol.");
             database.ref('user_accounts/' + name).set({ password: pass, gender: STUDENT_GENDERS[name], created_at: new Date().toISOString() }).then(() => {
-                alert("Qeydiyyat uğurla tamamlandı! İndi giriş edə bilərsiniz. ✅"); switchAuthTab('login'); document.getElementById('loginUsername').value = name;
+                alert("Uğurlu! Giriş edin."); switchAuthTab('login'); document.getElementById('loginUsername').value = name;
             });
         }
 
         async function loginUser() {
-            const userStr = document.getElementById('loginUsername').value.trim(); const passStr = document.getElementById('loginPass').value.trim();
+            const userStr = document.getElementById('loginUsername').value.trim(); 
+            const passStr = document.getElementById('loginPass').value.trim();
             if (!userStr || !passStr) return alert("Bütün xanaları doldurun!");
+            
             const lowerUser = userStr.toLowerCase();
+            const lowerPass = passStr.toLowerCase(); // BÖYÜK/KİÇİK HƏRF FƏRQİ QALDIRILDI
+
             if (ADMIN_CREDENTIALS[lowerUser]) {
-                if (ADMIN_CREDENTIALS[lowerUser] === passStr) {
-                    if (lowerUser === 'demo' && !demoIsActive) return alert("🚫 Təəssüf ki, Demo hesabı Baş Admin tərəfindən hal-hazırda deaktiv edilib.");
+                if (ADMIN_CREDENTIALS[lowerUser].toLowerCase() === lowerPass) {
                     currentUser = lowerUser; currentUserRole = ADMIN_ROLES[lowerUser]; finalizeLogin(); return;
                 }
             }
             const snap = await database.ref('user_accounts/' + userStr).once('value'); const data = snap.val();
-            if (data && data.password === passStr) { currentUser = userStr; currentUserRole = 'student'; finalizeLogin(); } 
-            else alert("İstifadəçi adı və ya şifrə yanlışdır!");
+            if (data && data.password.toLowerCase() === lowerPass) { currentUser = userStr; currentUserRole = 'student'; finalizeLogin(); } 
+            else alert("Məlumat yanlışdır!");
         }
 
         function finalizeLogin() {
             localStorage.setItem('auth_user', currentUser); localStorage.setItem('auth_role', currentUserRole);
-            alert(`Xoş gəldiniz, ${currentUser}! 🎉`); closeModal('authModal'); updateAuthWidget(); renderTable();
-            logActivity("Sistemə uğurla daxil oldu.");
+            alert(`Xoş gəldiniz! 🎉`); closeModal('authModal'); updateAuthWidget(); renderTable();
+            logActivity("Sistemə daxil oldu.");
         }
 
         function logoutUser() {
-            if (!confirm("Hesabdan çıxmaq istədiyinizə əminsiniz?")) return;
-            logActivity("Sistemdən çıxış etdi.");
+            if (!confirm("Çıxış edilsin?")) return;
+            logActivity("Çıxış etdi.");
             localStorage.removeItem('auth_user'); localStorage.removeItem('auth_role');
-            currentUser = null; currentUserRole = null; updateAuthWidget(); 
-            openPage('mainDashboard'); // Çıxış edəndə mütləq ana səhifəyə qaytar
+            currentUser = null; currentUserRole = null; updateAuthWidget(); openPage('mainDashboard');
         }
 
         function goToMyProfile() {
             if (!currentUser) return;
-            const targetName = currentUserRole === 'student' ? currentUser : ADMIN_TO_STUDENT_MAP[currentUser];
-            if (targetName) openProfileByName(targetName); else alert("Sizin bu hesabla əlaqəli tələbə profiliniz yoxdur.");
+            const targetName = ADMIN_TO_STUDENT_MAP[currentUser] || currentUser;
+            if (targetName) openProfileByName(targetName); else alert("Sizin profiliniz yoxdur.");
         }
 
         // ---------------- RENDERING ----------------
@@ -689,7 +658,7 @@
         function renderTable() {
             const tableBody = document.querySelector('#tableBody'); if (!tableBody) return;
             const tableHead = document.querySelector('#ratingTable thead');
-            if (currentTab === 'common') tableHead.innerHTML = `<tr><th>#</th><th>Tələbə (Siyahı)</th><th>Cari Reytinq</th><th>Keçmiş Reytinq</th><th>Artım</th></tr>`;
+            if (currentTab === 'common') tableHead.innerHTML = `<tr><th>#</th><th>Tələbə (Siyahı)</th><th>Cari Reytinq</th><th>Keçmiş</th><th>Artım</th></tr>`;
             else tableHead.innerHTML = `<tr><th>#</th><th>Tələbə</th><th>FM</th><th>stepik</th><th>eolymp</th><th>codesrc</th><th>hackrank</th><th>Cari</th><th>Keçmiş</th><th>Artım</th></tr>`;
 
             const list = (globalData[currentTab] || []).map(s => calculateTotals(s)).sort((a,b) => b.cari_reyting - a.cari_reyting);
@@ -697,15 +666,14 @@
             list.forEach((item, index) => {
                 const row = document.createElement('tr');
                 if (index === 0) row.classList.add('rank-1-row'); else if (index === 1) row.classList.add('rank-2-row'); else if (index === 2) row.classList.add('rank-3-row');
-                const isFounder = FOUNDERS.includes(item.ad); if (isFounder) row.classList.add('founder-row');
 
-                const artimClass = item.artim >= 0 ? 'badge-positive' : 'badge-negative'; const artimSign = item.artim >= 0 ? `+${item.artim}` : item.artim;
-                const founderBadge = isFounder ? `<span class="founder-badge">👑 JÜRİ</span>` : '';
+                const artimSign = item.artim >= 0 ? `+${item.artim}` : item.artim;
+                const founderBadge = FOUNDERS.includes(item.ad) ? `<span class="founder-badge">👑 JÜRİ</span>` : '';
                 const rankIcon = index === 0 ? '🥇' : (index === 1 ? '🥈' : (index === 2 ? '🥉' : `${index + 1}`));
                 const nameHTML = `<div class="student-info"><div class="avatar"><img src="${item.foto || DEFAULT_AVATAR_URL}"></div><span class="clickable-name" onclick="openProfileByName('${item.ad}')">${item.ad}</span>${founderBadge}</div>`;
 
-                if (currentTab === 'common') row.innerHTML = `<td class="rank-col">${rankIcon}</td><td>${nameHTML}</td><td><strong style="color:var(--accent); font-size:16px;">${item.cari_reyting} pt</strong></td><td>${item.kecmis_reyting} pt</td><td style="color:${item.artim>=0?'var(--positive)':'var(--negative)'}; font-weight:bold;">${artimSign}</td>`;
-                else row.innerHTML = `<td class="rank-col">${rankIcon}</td><td>${nameHTML}</td><td>${item.fm}</td><td>${item.stepping}</td><td>${item.e_olimp}</td><td>${item.codesources}</td><td>${item.hackerrank}</td><td><strong style="color:var(--accent); font-size:16px;">${item.cari_reyting} pt</strong></td><td>${item.kecmis_reyting} pt</td><td style="color:${item.artim>=0?'var(--positive)':'var(--negative)'}; font-weight:bold;">${artimSign}</td>`;
+                if (currentTab === 'common') row.innerHTML = `<td class="rank-col">${rankIcon}</td><td>${nameHTML}</td><td><strong style="color:var(--accent);">${item.cari_reyting} pt</strong></td><td>${item.kecmis_reyting} pt</td><td style="color:${item.artim>=0?'var(--positive)':'var(--negative)'}; font-weight:bold;">${artimSign}</td>`;
+                else row.innerHTML = `<td class="rank-col">${rankIcon}</td><td>${nameHTML}</td><td>${item.fm}</td><td>${item.stepping}</td><td>${item.e_olimp}</td><td>${item.codesources}</td><td>${item.hackerrank}</td><td><strong style="color:var(--accent);">${item.cari_reyting} pt</strong></td><td>${item.kecmis_reyting} pt</td><td style="color:${item.artim>=0?'var(--positive)':'var(--negative)'}; font-weight:bold;">${artimSign}</td>`;
                 tableBody.appendChild(row);
             });
         }
@@ -718,12 +686,11 @@
             
             document.getElementById('pAvatar').src = student.foto || DEFAULT_AVATAR_URL; 
             document.getElementById('pName').innerText = student.ad;
-            document.getElementById('pBadge').innerHTML = FOUNDERS.includes(student.ad) ? `<span class="founder-badge" style="font-size:12px; padding:5px 12px;">👑 JÜRİ HEYƏTİ</span>` : '';
+            document.getElementById('pBadge').innerHTML = FOUNDERS.includes(student.ad) ? `<span class="founder-badge" style="font-size:12px; padding:4px 10px;">👑 JÜRİ HEYƏTİ</span>` : '';
 
             document.getElementById('pKurs').innerText = "2-ci Kurs";
-
             let gender = STUDENT_GENDERS[student.ad] || "Məlum deyil";
-            document.getElementById('pGender').innerText = gender; document.getElementById('pGender').style.color = gender === 'Kişi' ? '#60a5fa' : '#f472b6';
+            document.getElementById('pGender').innerText = gender; 
             document.getElementById('pYer').innerText = student.yer || "Bakı şəhəri"; 
             document.getElementById('pCari').innerText = computed.cari_reyting + " pt";
 
@@ -738,39 +705,35 @@
             let isOwnProfile = (currentUserRole === 'student' && currentUser === student.ad) || (currentUserRole !== 'student' && ADMIN_TO_STUDENT_MAP[currentUser] === student.ad);
             let isAdmin = (currentUserRole && currentUserRole !== 'student');
 
-            if (isOwnProfile) { uploadSection.style.display = 'block'; } else { uploadSection.style.display = 'none'; }
-            if (isOwnProfile || isAdmin) { publicMsg.style.display = 'none'; statusContainer.style.display = 'block'; loadStudentUploadedTasksList(student.ad); } else { publicMsg.style.display = 'block'; statusContainer.style.display = 'none'; }
+            if (isOwnProfile) uploadSection.style.display = 'block'; else uploadSection.style.display = 'none';
+            if (isOwnProfile || isAdmin) { publicMsg.style.display = 'none'; statusContainer.style.display = 'block'; loadStudentUploadedTasksList(student.ad); } 
+            else { publicMsg.style.display = 'block'; statusContainer.style.display = 'none'; }
 
-            renderStudentChart(weeklyGained); 
-            openPage('profilePage'); // Xüsusi Naviqasiya Funksiyası ilə aç
+            renderStudentChart(weeklyGained); openPage('profilePage'); 
         }
 
         function loadStudentUploadedTasksList(targetStudent) {
             database.ref('student_tasks').orderByChild('studentName').equalTo(targetStudent).on('value', snap => {
-                const tasks = snap.val(); 
-                const statusDiv = document.getElementById('studentTaskStatus'); 
-                if(!statusDiv) return; 
-                statusDiv.innerHTML = ''; 
-                let count = 0;
+                const tasks = snap.val(); const statusDiv = document.getElementById('studentTaskStatus'); 
+                if(!statusDiv) return; statusDiv.innerHTML = ''; let count = 0;
                 if (tasks) {
                     Object.keys(tasks).forEach(key => {
                         const t = tasks[key]; count++; 
                         let subjTag = (t.subject || 'cpp') === 'python' ? '🟡' : '🔵';
                         let fileSt = t.status || 'pending';
-                        
-                        let stText = fileSt === 'correct' ? `✅ Düzgün (+${t.addedPoints || 0} pt)` : (fileSt === 'wrong' ? '❌ Səhv' : '⏳ Yoxlanılır');
+                        let stText = fileSt === 'correct' ? `✅ (+${t.addedPoints || 0} pt)` : (fileSt === 'wrong' ? '❌' : '⏳ Yoxlanılır');
                         let stColor = fileSt === 'correct' ? 'var(--positive)' : (fileSt === 'wrong' ? 'var(--negative)' : 'var(--gold)');
-                        statusDiv.innerHTML += `<div style="margin-top:8px; background:rgba(0,0,0,0.3); padding:12px; border-radius:10px; border:1px solid ${stColor}; display:flex; gap:10px; align-items:center;"><span style="font-size:18px;">${subjTag}</span><span style="color:#fff; font-weight:600;">${t.fileName}</span> <span style="margin-left:auto; color:${stColor};">${stText}</span></div>`;
+                        statusDiv.innerHTML += `<div style="margin-top:8px; padding:10px; border-radius:10px; border:1px solid ${stColor}; display:flex; justify-content:space-between;"><span style="color:var(--text-main); font-weight:600;">${subjTag} ${t.fileName}</span><span style="color:${stColor};">${stText}</span></div>`;
                     });
                 }
-                if (count === 0) statusDiv.innerHTML = '<span style="color:var(--text-sub);">Hələ heç bir fayl yüklənməyib.</span>';
+                if (count === 0) statusDiv.innerHTML = '<span style="color:var(--text-sub);">Fayl yoxdur.</span>';
             });
         }
 
         async function uploadStudentTasks() {
-            if (deadlineTimestamp && new Date().getTime() >= deadlineTimestamp) return alert("🚨 Deadline vaxtı bitdiyi üçün fayl yükləyə bilməzsiniz!");
+            if (deadlineTimestamp && new Date().getTime() >= deadlineTimestamp) return alert("🚨 Deadline bitib!");
             const files = document.getElementById('studentTaskFiles').files; const subject = document.getElementById('studentSubjectSelect').value || 'cpp';
-            if (!files || files.length === 0) return alert("Zəhmət olmasa fayl seçin!");
+            if (!files || files.length === 0) return alert("Fayl seçin!");
 
             const snap = await database.ref('student_tasks').orderByChild('studentName').equalTo(activeProfileStudent).once('value');
             const existingTasks = snap.val() || {}; let uploadedCount = 0;
@@ -782,29 +745,34 @@
                 await new Promise(resolve => {
                     const reader = new FileReader(); reader.onload = e => { database.ref('student_tasks').push({ studentName: activeProfileStudent, fileName: file.name, fileData: e.target.result, subject: subject, status: 'pending', timestamp: new Date().toISOString() }).then(() => { uploadedCount++; resolve(); }); }; reader.readAsDataURL(file);
                 });
-                logActivity(`${subject.toUpperCase()} tapşırığı göndərdi: ${file.name}`);
+                logActivity(`Fayl yükləndi: ${file.name}`);
             }
-            alert(`${uploadedCount} fayl uğurla göndərildi! ✅`); document.getElementById('studentTaskFiles').value = '';
+            alert(`${uploadedCount} fayl göndərildi! ✅`); document.getElementById('studentTaskFiles').value = '';
         }
 
         function renderStudentChart(wg) {
             const ctx = document.getElementById('studentChart').getContext('2d'); if (chartInstance) chartInstance.destroy();
-            chartInstance = new Chart(ctx, { type: 'line', data: { labels: ['Start', 'M1', 'M2', 'M3', 'Cari Nəticə'], datasets: [{ label: 'Artım qrafiki', data: [0, Math.round(wg*0.2), Math.round(wg*0.55), Math.round(wg*0.8), wg], borderColor: '#38bdf8', backgroundColor: 'rgba(56, 189, 248, 0.1)', fill: true, tension: 0.4, pointBackgroundColor: '#f59e0b', pointRadius: 5 }] }, options: { responsive: true, scales: { x: { ticks: { color: '#94a3b8' }, grid: {color:'rgba(255,255,255,0.05)'} }, y: { ticks: { color: '#94a3b8' }, grid: {color:'rgba(255,255,255,0.05)'} } }, plugins: { legend: { labels: { color: '#fff' } } } } });
+            const color = document.body.getAttribute('data-theme') === 'light' ? '#2563eb' : '#38bdf8';
+            const gridColor = document.body.getAttribute('data-theme') === 'light' ? 'rgba(0,0,0,0.05)' : 'rgba(255,255,255,0.05)';
+            const textColor = document.body.getAttribute('data-theme') === 'light' ? '#475569' : '#94a3b8';
+            chartInstance = new Chart(ctx, { type: 'line', data: { labels: ['Start', 'M1', 'M2', 'M3', 'Cari Nəticə'], datasets: [{ label: 'Artım qrafiki', data: [0, Math.round(wg*0.2), Math.round(wg*0.55), Math.round(wg*0.8), wg], borderColor: color, backgroundColor: 'rgba(56, 189, 248, 0.1)', fill: true, tension: 0.4, pointBackgroundColor: '#f59e0b', pointRadius: 4 }] }, options: { responsive: true, scales: { x: { ticks: { color: textColor }, grid: {color: gridColor} }, y: { ticks: { color: textColor }, grid: {color: gridColor} } }, plugins: { legend: { display: false } } } });
         }
 
         // ---------------- ADMIN PANEL ----------------
         function switchAdminSubTab(tab) {
-            if ((currentUserRole === 'restricted' || currentUserRole === 'demo') && (tab === 'media' || tab === 'logs' || tab === 'accounts' || tab === 'feedback')) return;
-            document.querySelectorAll('.admin-nav-btn').forEach(b => b.classList.remove('active')); if(event && event.target) event.target.classList.add('active');
-            ['students', 'files', 'accounts', 'media', 'feedback', 'logs'].forEach(t => document.getElementById('adminTab' + t.charAt(0).toUpperCase() + t.slice(1)).style.display = (tab === t) ? 'block' : 'none');
+            document.querySelectorAll('.admin-nav-btn').forEach(b => b.classList.remove('active')); 
+            if(event && event.target) event.target.classList.add('active');
+            
+            document.querySelectorAll('.admin-sub-tab').forEach(t => t.style.display = 'none');
+            const targetId = 'adminTab' + tab.charAt(0).toUpperCase() + tab.slice(1);
+            if(document.getElementById(targetId)) document.getElementById(targetId).style.display = 'block';
         }
 
-        // FAYLLAR VƏ REDAKTƏ SİSTEMİ (C++ və Python Tamamilə Ayrıldı)
+        // AYRILMIŞ FAYL SİSTEMİ (Yeni Yoxlama və Köhnə Redaktə)
         function loadAllFilesForAdmin() {
             database.ref('student_tasks').on('value', snap => {
                 const tasks = snap.val() || {};
                 
-                // 4 Qutunun içini sıfırlayırıq
                 const pCpp = document.getElementById('adminPendingTasksCpp'); pCpp.innerHTML = '';
                 const pPy = document.getElementById('adminPendingTasksPython'); pPy.innerHTML = '';
                 const cCpp = document.getElementById('adminCheckedTasksCpp'); cCpp.innerHTML = '';
@@ -813,52 +781,43 @@
                 let countPCpp = 0; let countPPy = 0; let countCCpp = 0; let countCPy = 0;
                 
                 Object.keys(tasks).forEach(key => {
-                    let t = tasks[key];
-                    let status = t.status || 'pending';
-                    let addedPts = t.addedPoints || 0;
-                    let timeStr = t.timestamp ? new Date(t.timestamp).toLocaleString('az-AZ') : 'Köhnə fayl (Tarix yoxdur)';
+                    let t = tasks[key]; let status = t.status || 'pending'; let addedPts = t.addedPoints || 0;
+                    let timeStr = t.timestamp ? new Date(t.timestamp).toLocaleString('az-AZ') : 'Tarixsiz';
                     let sub = t.subject || 'cpp';
                     
                     let uiHtml = `
                     <div class="file-item">
                         <div>
-                            <strong style="color:var(--accent); cursor:pointer; font-size:16px;" onclick="openProfileByName('${t.studentName}')">${t.studentName}</strong> 
-                            <span style="font-weight:bold; color:#fff; margin-left:5px;">(<a href="${t.fileData}" download="${t.fileName}" style="color:var(--gold); text-decoration:none; border-bottom:1px dashed var(--gold); padding-bottom:2px;">${t.fileName}</a>)</span>
-                            <div style="font-size:12px; color:var(--text-sub); margin-top:6px;">🕒 ${timeStr}</div>
+                            <strong style="color:var(--accent); cursor:pointer;" onclick="openProfileByName('${t.studentName}')">${t.studentName}</strong> 
+                            <span style="font-weight:700; margin-left:5px;">(<a href="${t.fileData}" download="${t.fileName}" style="color:var(--gold); text-decoration:none;">${t.fileName}</a>)</span>
+                            <div style="font-size:12px; color:var(--text-sub); margin-top:4px;">🕒 ${timeStr}</div>
                         </div>
-                        <div style="display:flex; gap:10px; align-items:center;">
+                        <div style="display:flex; gap:8px; align-items:center;">
                             ${status === 'pending' ? 
-                                `<button class="btn" style="background:var(--positive); color:#000; padding:10px 18px; border:none;" onclick="evaluateTask('${key}', '${t.studentName}', '${sub}', true, 0)">✅ Düzgün</button>
-                                 <button class="btn" style="background:var(--negative); padding:10px 18px; border:none;" onclick="evaluateTask('${key}', '${t.studentName}', '${sub}', false, 0)">❌ Səhv</button>` 
+                                `<button class="btn" style="background:var(--positive); padding:8px 12px; font-size:13px;" onclick="evaluateTask('${key}', '${t.studentName}', '${sub}', true, 0)">✅ Düz</button>
+                                 <button class="btn btn-admin" style="padding:8px 12px; font-size:13px;" onclick="evaluateTask('${key}', '${t.studentName}', '${sub}', false, 0)">❌ Səhv</button>` 
                             : 
-                                `<span style="margin-right:15px; font-weight:900; font-size:16px; color:${status==='correct'?'var(--positive)':'var(--negative)'};">
-                                    ${status === 'correct' ? `✅ (+${addedPts} pt)` : '❌ Səhv'}
-                                </span>
-                                <button class="btn btn-dark" style="font-size:13px; padding:10px 16px;" onclick="reEvaluateTask('${key}', '${t.studentName}', '${sub}', '${status}',${addedPts})">✏️ Redaktə</button>`
+                                `<span style="margin-right:10px; font-weight:800; color:${status==='correct'?'var(--positive)':'var(--negative)'};">${status === 'correct' ? `✅ (+${addedPts})` : '❌'}</span>
+                                <button class="btn btn-dark" style="font-size:12px; padding:6px 12px;" onclick="reEvaluateTask('${key}', '${t.studentName}', '${sub}', '${status}',${addedPts})">✏️ Dəyiş</button>`
                             }
                         </div>
                     </div>`;
 
-                    if (status === 'pending') {
-                        if (sub === 'python') { pPy.innerHTML += uiHtml; countPPy++; }
-                        else { pCpp.innerHTML += uiHtml; countPCpp++; }
-                    } else {
-                        if (sub === 'python') { cPy.innerHTML += uiHtml; countCPy++; }
-                        else { cCpp.innerHTML += uiHtml; countCCpp++; }
-                    }
+                    if (status === 'pending') { if (sub === 'python') { pPy.innerHTML += uiHtml; countPPy++; } else { pCpp.innerHTML += uiHtml; countPCpp++; } } 
+                    else { if (sub === 'python') { cPy.innerHTML += uiHtml; countCPy++; } else { cCpp.innerHTML += uiHtml; countCCpp++; } }
                 });
                 
-                if(countPCpp === 0) pCpp.innerHTML = '<div style="color:var(--text-sub); font-style:italic;">Gözləyən C++ faylı yoxdur.</div>';
-                if(countPPy === 0) pPy.innerHTML = '<div style="color:var(--text-sub); font-style:italic;">Gözləyən Python faylı yoxdur.</div>';
-                if(countCCpp === 0) cCpp.innerHTML = '<div style="color:var(--text-sub); font-style:italic;">Yoxlanılmış C++ faylı yoxdur.</div>';
-                if(countCPy === 0) cPy.innerHTML = '<div style="color:var(--text-sub); font-style:italic;">Yoxlanılmış Python faylı yoxdur.</div>';
+                if(countPCpp === 0) pCpp.innerHTML = '<div style="color:var(--text-sub);">Yeni fayl yoxdur.</div>';
+                if(countPPy === 0) pPy.innerHTML = '<div style="color:var(--text-sub);">Yeni fayl yoxdur.</div>';
+                if(countCCpp === 0) cCpp.innerHTML = '<div style="color:var(--text-sub);">Redaktə üçün fayl yoxdur.</div>';
+                if(countCPy === 0) cPy.innerHTML = '<div style="color:var(--text-sub);">Redaktə üçün fayl yoxdur.</div>';
             });
         }
 
         async function evaluateTask(taskKey, studentName, subject, isCorrect, prevPoints = 0) {
             let points = 0;
             if(isCorrect) {
-                let p = prompt(`Tələbəyə (${studentName}) bu tapşırıq üçün neçə bal verilsin?`, "10");
+                let p = prompt(`Tələbəyə (${studentName}) neçə bal verilsin?`, "10");
                 if(p === null) return;
                 points = parseInt(p) || 0;
             }
@@ -875,40 +834,36 @@
                     }
                 }
             }
-            
             await database.ref('student_tasks/' + taskKey).update({ status: isCorrect ? 'correct' : 'wrong', addedPoints: points });
-            logActivity(`Faylı ${isCorrect ? 'düzgün' : 'səhv'} olaraq yoxladı: ${studentName} (${points} pt)`);
+            logActivity(`Faylı ${isCorrect ? 'düz' : 'səhv'} yoxladı: ${studentName}`);
         }
 
         function reEvaluateTask(taskKey, studentName, subject, currentStatus, currentPoints) {
-            let msg = "Vəziyyəti dəyişmək üçün aşağıdakı hərflərdən birini yazıb OK vurun:\n\n'D' - Düzgün olaraq dəyişdir (və ya balı yenilə)\n'S' - Səhv olaraq dəyişdir (Öncəki bal reytinqdən silinəcək)";
+            let msg = "'D' yaz - Düzgün olaraq dəyiş / balı yenilə\n'S' yaz - Səhv olaraq dəyiş";
             let action = prompt(msg);
             if(!action) return;
             action = action.trim().toUpperCase();
             if(action === 'D') evaluateTask(taskKey, studentName, subject, true, currentPoints);
             else if (action === 'S') evaluateTask(taskKey, studentName, subject, false, currentPoints);
-            else alert("Yanlış komanda daxil etdiniz!");
+            else alert("Yanlış komanda!");
         }
 
         function renderAdminBody() {
             const adminBody = document.getElementById('adminBody'); if(!adminBody) return; adminBody.innerHTML = '';
+            // Əgər specific məhdudiyyət varsa qoruyuruq:
             const REHO_RESTRICTED = ["Əlizadə Rəhimə", "Abıyeva Aysun", "Təhməzova Leyla", "Süleymanzadə Aqşin", "Məmmədli Turan", "Gülverdiyev Kənan"];
-            const CHIVAS_RESTRICTED = ["Süleymanzadə Aqşin", "Gülverdiyev Kənan"]; const JAMESON_RESTRICTED = ["Süleymanzadə Aqşin", "Məmmədli Turan"];
 
             (globalData[currentTab] || []).forEach((student, index) => {
                 let blockEdit = false;
-                if (currentUser === 'rəho' || currentUser === 'reho') { if (REHO_RESTRICTED.includes(student.ad)) blockEdit = true; }
-                if (currentUser === 'chivas') { if (CHIVAS_RESTRICTED.includes(student.ad)) blockEdit = true; }
-                if (currentUser === 'jameson') { if (JAMESON_RESTRICTED.includes(student.ad)) blockEdit = true; }
+                if ((currentUser === 'rəho' || currentUser === 'reho') && REHO_RESTRICTED.includes(student.ad)) blockEdit = true;
 
                 let fieldsHTML = '';
-                if (currentTab === 'common') fieldsHTML = `<div><label>Doğulduğu Yer</label><input type="text" id="inp_${index}_yer" value="${student.yer || 'Bakı şəhəri'}" ${blockEdit?'disabled':''}></div>`;
-                else fieldsHTML = `<div><label>FM</label><input type="number" id="inp_${index}_fm" value="${student.fm||0}" ${blockEdit?'disabled':''}></div><div><label>Stepping</label><input type="number" id="inp_${index}_stepping" value="${student.stepping||0}" ${blockEdit?'disabled':''}></div><div><label>e-Olimp</label><input type="number" id="inp_${index}_e_olimp" value="${student.e_olimp||0}" ${blockEdit?'disabled':''}></div><div><label>CodeSources</label><input type="number" id="inp_${index}_codesources" value="${student.codesources||0}" ${blockEdit?'disabled':''}></div><div><label>HackerRank</label><input type="number" id="inp_${index}_hackerrank" value="${student.hackerrank||0}" ${blockEdit?'disabled':''}></div>`;
+                if (currentTab === 'common') fieldsHTML = `<div><label>Şəhər</label><input type="text" id="inp_${index}_yer" value="${student.yer || 'Bakı şəhəri'}" ${blockEdit?'disabled':''}></div>`;
+                else fieldsHTML = `<div><label>FM</label><input type="number" id="inp_${index}_fm" value="${student.fm||0}" ${blockEdit?'disabled':''}></div><div><label>Stepping</label><input type="number" id="inp_${index}_stepping" value="${student.stepping||0}" ${blockEdit?'disabled':''}></div><div><label>eOlimp</label><input type="number" id="inp_${index}_e_olimp" value="${student.e_olimp||0}" ${blockEdit?'disabled':''}></div><div><label>CodeSrc</label><input type="number" id="inp_${index}_codesources" value="${student.codesources||0}" ${blockEdit?'disabled':''}></div><div><label>HackRnk</label><input type="number" id="inp_${index}_hackerrank" value="${student.hackerrank||0}" ${blockEdit?'disabled':''}></div>`;
 
-                adminBody.innerHTML += `<div class="admin-student-card"><div style="display:flex; align-items:center; gap:12px; margin-bottom:15px;"><img src="${student.foto || DEFAULT_AVATAR_URL}" style="width:42px; height:42px; border-radius:50%; border:2px solid var(--accent);"><strong style="color:#fff; font-size:16px;">${student.ad}</strong>${blockEdit ? '<span style="color:var(--negative); font-size:12px; margin-left:auto; background:rgba(239,68,68,0.2); padding:4px 8px; border-radius:6px;">🔒 Bloklanıb</span>' : ''}</div><div class="grid-inputs">${fieldsHTML}</div></div>`;
+                adminBody.innerHTML += `<div class="admin-student-card"><div style="display:flex; align-items:center; gap:12px; margin-bottom:10px;"><img src="${student.foto || DEFAULT_AVATAR_URL}" style="width:36px; height:36px; border-radius:50%; border:2px solid var(--accent);"><strong style="color:var(--text-main); font-size:15px;">${student.ad}</strong>${blockEdit ? '<span style="color:var(--negative); font-size:11px; margin-left:auto; border:1px solid var(--negative); padding:3px 6px; border-radius:6px;">🔒 Məhdud</span>' : ''}</div><div class="grid-inputs">${fieldsHTML}</div></div>`;
             });
             
-            // Log yükləmələri bura daxil edək
             loadAdminTasksAndLogs(); loadAllFilesForAdmin(); loadAdminFeedback(); loadAdminLogs();
         }
 
@@ -923,15 +878,15 @@
                     }
                 }
             });
-            database.ref('students_data').set(globalData).then(() => { alert(`Məlumatlar yadda saxlanıldı! 🚀`); renderTable(); logActivity("Reytinq cədvəlində əl ilə dəyişiklik etdi."); });
+            database.ref('students_data').set(globalData).then(() => { alert(`Saxlanıldı! 🚀`); renderTable(); logActivity("Cədvəl balını əl ilə yenilədi."); });
         }
 
         function loadAdminTasksAndLogs() {
             database.ref('user_accounts').on('value', snap => {
                 const accounts = snap.val(); const listDiv = document.getElementById('adminAccountsList'); if(!listDiv) return; listDiv.innerHTML = '';
-                if(!accounts) { listDiv.innerHTML = 'Heç bir tələbə qeydiyyatdan keçməyib.'; return; }
+                if(!accounts) { listDiv.innerHTML = 'Hesab yoxdur.'; return; }
                 Object.keys(accounts).forEach(uname => {
-                    listDiv.innerHTML += `<div style="background:rgba(0,0,0,0.3); padding:16px; border-radius:12px; border:1px solid var(--border); display:flex; justify-content:space-between; align-items:center;"><div><strong style="color:var(--gold); display:block; margin-bottom:6px; font-size:16px;">${uname}</strong><span style="color:var(--text-sub); font-size:13px;">Şifrə: <span style="color:#fff; font-family:monospace; font-size:16px; background:rgba(255,255,255,0.1); padding:2px 6px; border-radius:4px;">${accounts[uname].password}</span></span></div></div>`;
+                    listDiv.innerHTML += `<div style="background:var(--bg-color); padding:15px; border-radius:12px; border:1px solid var(--border); display:flex; justify-content:space-between; align-items:center;"><div><strong style="color:var(--gold); display:block; margin-bottom:5px; font-size:15px;">${uname}</strong><span style="color:var(--text-sub); font-size:12px;">Şifrə: <span style="color:var(--text-main); font-weight:700;">${accounts[uname].password}</span></span></div></div>`;
                 });
             });
         }
@@ -940,30 +895,31 @@
             database.ref('feedbacks').on('value', snap => {
                 const fbs = snap.val() || {}; const listDiv = document.getElementById('adminFeedbackList'); if(!listDiv) return; listDiv.innerHTML = '';
                 const fbArray = Object.values(fbs).reverse();
-                if(fbArray.length === 0) { listDiv.innerHTML = '<div style="color:var(--text-sub);">Hələ heç bir rəy/feedback yoxdur.</div>'; return; }
+                if(fbArray.length === 0) return listDiv.innerHTML = '<div style="color:var(--text-sub);">Feedback yoxdur.</div>';
                 fbArray.forEach(fb => {
-                    listDiv.innerHTML += `<div style="background:rgba(0,0,0,0.3); padding:16px; border-radius:12px; border:1px solid var(--border); margin-bottom:12px;"><strong style="color:var(--gold); font-size:16px;">${fb.name}</strong><br><span style="color:#fff; font-size:15px; margin-top:8px; display:inline-block;">${fb.msg}</span><div style="color:var(--text-sub); font-size:12px; margin-top:10px;">🕒 ${new Date(fb.timestamp).toLocaleString('az-AZ')}</div></div>`;
+                    listDiv.innerHTML += `<div style="background:var(--bg-color); padding:15px; border-radius:12px; border:1px solid var(--border); margin-bottom:10px;"><strong style="color:var(--gold); font-size:15px;">${fb.name}</strong><br><span style="color:var(--text-main); font-size:14px; margin-top:8px; display:inline-block;">${fb.msg}</span><div style="color:var(--text-sub); font-size:11px; margin-top:10px;">🕒 ${new Date(fb.timestamp).toLocaleString('az-AZ')}</div></div>`;
                 });
             });
         }
         
         function loadAdminLogs() {
+            if (currentUserRole !== 'master') return; // Yalnız jagermaster üçün məlumatlar çəkilir
             database.ref('activity_logs').limitToLast(50).on('value', snap => {
                 const logs = snap.val() || {}; const listDiv = document.getElementById('adminLogsList'); if(!listDiv) return; listDiv.innerHTML = '';
                 const logArray = Object.values(logs).reverse();
-                if(logArray.length === 0) { listDiv.innerHTML = '<div style="color:var(--text-sub);">Heç bir fəaliyyət qeydə alınmayıb.</div>'; return; }
+                if(logArray.length === 0) return listDiv.innerHTML = '<div style="color:var(--text-sub);">Fəaliyyət yoxdur.</div>';
                 logArray.forEach(lg => {
-                    let locHtml = lg.location ? `<div style="margin-top:6px; padding-top:6px; border-top:1px dashed rgba(255,255,255,0.1);"><span style="color:var(--gold); font-size:13px; font-weight:600;">📍 ${lg.location} | ${lg.device||'Kompüter'}</span></div>` : '';
-                    listDiv.innerHTML += `<div style="background:rgba(0,0,0,0.3); padding:15px; border-radius:12px; border:1px solid var(--border); margin-bottom:12px; font-size:15px; transition:0.3s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
-                        <strong style="color:var(--accent); font-size:16px;">${lg.user}:</strong> <span style="color:#f8fafc;">${lg.action}</span>
+                    let locHtml = lg.location ? `<div style="margin-top:6px; padding-top:6px; border-top:1px dashed var(--border);"><span style="color:var(--gold); font-size:12px; font-weight:700;">📍 ${lg.location} | ${lg.device||'PC'}</span></div>` : '';
+                    listDiv.innerHTML += `<div style="background:var(--bg-color); padding:12px; border-radius:10px; border:1px solid var(--border); margin-bottom:10px; font-size:14px;">
+                        <strong style="color:var(--accent);">${lg.user}:</strong> <span style="color:var(--text-main);">${lg.action}</span>
                         ${locHtml}
-                        <div style="color:var(--text-sub); font-size:12px; margin-top:8px;">🕒 ${new Date(lg.timestamp).toLocaleString('az-AZ')}</div>
+                        <div style="color:var(--text-sub); font-size:11px; margin-top:6px;">🕒 ${new Date(lg.timestamp).toLocaleString('az-AZ')}</div>
                     </div>`;
                 });
             });
         }
 
-        // MEDIA & MEDIA MODALS
+        // MEDIA & MODALS
         function triggerCardConfetti() { try { confetti({ particleCount: 70, spread: 85, origin: { y: 0.6 }, zIndex: 99999 }); } catch(e){} }
         
         function showWinnersCelebration() {
@@ -976,27 +932,25 @@
                 if (idx === 0) { let gender = STUDENT_GENDERS[s.ad] || 'Kişi'; titleText = gender === 'Qadın' ? '👑 KRALİÇA ÇEMPİON' : '👑 ŞAH ÇEMPİON'; } 
                 else if (idx === 1) titleText = '🥈 GÜMÜŞ QALİB'; else if (idx === 2) titleText = '🥉 BÜRÜNC QALİB'; else titleText = `${idx+1}-ci YER`;
                 
-                grid.innerHTML += `<div class="winner-card-v3 ${rankClass}" onclick="triggerCardConfetti()"><span class="rank-badge-title">${titleText}</span><div class="winner-avatar-box">${idx===0?'<div class="crown-icon">👑</div>':''}<img src="${s.foto || DEFAULT_AVATAR_URL}"></div><strong style="display:block; font-size:16px; color:#fff;">${s.ad}</strong><span style="color:var(--accent); font-weight:800; font-size:15px; margin-top:4px; display:block;">${s.cari_reyting} pt</span></div>`;
+                grid.innerHTML += `<div class="winner-card-v3 ${rankClass}" onclick="triggerCardConfetti()"><span class="rank-badge-title">${titleText}</span><div class="winner-avatar-box">${idx===0?'<div class="crown-icon">👑</div>':''}<img src="${s.foto || DEFAULT_AVATAR_URL}"></div><strong style="display:block; font-size:15px; color:var(--text-main);">${s.ad}</strong><span style="color:var(--accent); font-weight:800; font-size:14px; margin-top:4px; display:block;">${s.cari_reyting} pt</span></div>`;
             });
             
             openModal('winnersModal');
             const end = Date.now() + 4000;
             const interval = setInterval(() => { if (Date.now() > end) return clearInterval(interval); try { confetti({ particleCount: 45, startVelocity: 35, spread: 360, ticks: 75, zIndex: 99999, origin: { x: Math.random(), y: Math.random() - 0.2 } }); } catch(e){} }, 250);
-            for (let i = 0; i < 25; i++) { setTimeout(() => { const emoji = document.createElement('div'); emoji.className = 'flying-emoji'; emoji.innerText = ['👑', '🏆', '🌹', '💐', '⭐', '🎉', '🥇'][Math.floor(Math.random() * 7)]; emoji.style.left = Math.random() * 92 + 'vw'; document.body.appendChild(emoji); setTimeout(() => emoji.remove(), 3200); }, i * 120); }
             database.ref('audio_winner').once('value', snap => { if(snap.val()) { if(activeAudioObject) activeAudioObject.pause(); activeAudioObject = new Audio(snap.val()); activeAudioObject.play().catch(()=>{}); } });
         }
         
         function showOutsidersModal() {
             const list = (globalData[currentTab] || []).map(s => calculateTotals(s)).sort((a,b) => a.cari_reyting - b.cari_reyting).slice(0, 3);
             const grid = document.getElementById('outsidersListGrid'); if(!grid) return; grid.innerHTML = '';
-            list.forEach(s => { grid.innerHTML += `<div style="background:rgba(0,0,0,0.3); padding:16px 20px; border-radius:16px; border:1px solid var(--negative); text-align:center;"><img src="${s.foto || DEFAULT_AVATAR_URL}" style="width:70px; height:70px; border-radius:50%; border:3px solid var(--negative); object-fit:cover; margin-bottom:10px;"><strong style="display:block; font-size:15px; color:#fff;">😭 ${s.ad}</strong><span style="color:var(--negative); font-weight:800; font-size:14px; margin-top:5px; display:block;">${s.cari_reyting} pt</span></div>`; });
+            list.forEach(s => { grid.innerHTML += `<div style="background:var(--bg-color); padding:16px 20px; border-radius:14px; border:1px solid var(--negative); text-align:center;"><img src="${s.foto || DEFAULT_AVATAR_URL}" style="width:65px; height:65px; border-radius:50%; border:3px solid var(--negative); object-fit:cover; margin-bottom:10px;"><strong style="display:block; font-size:14px; color:var(--text-main);">😭 ${s.ad}</strong><span style="color:var(--negative); font-weight:800; font-size:13px; margin-top:5px; display:block;">${s.cari_reyting} pt</span></div>`; });
             openModal('outsidersModal');
-            for (let i = 0; i < 20; i++) { setTimeout(() => { const d = document.createElement('div'); d.className = 'dislike-particle'; d.innerText = ['👎', '💔', '😴', '💩'][Math.floor(Math.random() * 4)]; d.style.left = Math.random() * 95 + 'vw'; document.body.appendChild(d); setTimeout(() => d.remove(), 3500); }, i * 150); }
             database.ref('audio_outsider').once('value', snap => { if(snap.val()) { if(activeAudioObject) activeAudioObject.pause(); activeAudioObject = new Audio(snap.val()); activeAudioObject.play().catch(()=>{}); } });
         }
         
         function playBlackCatVideo() {
-            if (!blackCatVideoData) return alert("Hələ admin tərəfindən qara pişik videosu yüklənməyib!");
+            if (!blackCatVideoData) return alert("Sürpriz video yoxdur!");
             if (activeAudioObject) activeAudioObject.pause();
             closeModal('winnersModal'); openModal('videoModal');
             const player = document.getElementById('blackCatPlayer'); player.src = blackCatVideoData; player.play().catch(e=>{});
