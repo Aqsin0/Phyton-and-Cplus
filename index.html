@@ -284,7 +284,8 @@
             <!-- SUB TAB 2: Fayl Yoxlama və Redaktə -->
             <div id="adminTabFiles" style="display:none;">
                 <div class="info-box" style="margin-bottom:20px; border-color:var(--gold);">
-                    <h3 style="color:var(--gold); margin-top:0;">⏳ Yoxlanılmamış (Gözləyən) Fayllar</h3>
+                    <h3 style="color:var(--gold); margin-top:0;">⏳ Yoxlanılmamış (Gözləyən və Köhnə) Fayllar</h3>
+                    <p style="font-size:12px; color:var(--text-sub); margin-bottom:15px;">Tələbələrin yüklədiyi həm yeni, həm də köhnə tarixi bilinməyən fayllar burada toplanır.</p>
                     <div id="adminPendingTasks">Məlumat yüklənir...</div>
                 </div>
                 
@@ -334,7 +335,6 @@
 
                 <div class="info-box" id="demoControlBox" style="display:none; border-color:var(--accent);">
                     <h3 style="color:var(--accent); margin-top:0;">🎭 Demo Admin Hesabı İdarəsi</h3>
-                    <p style="font-size:12px; color:var(--text-sub);">Bu hesabın aktivliyi yalnız sizin (jagermaster) tərəfinizdən idarə edilir. (İstifadəçi: demo, Şifrə: demo123)</p>
                     <div style="display:flex; align-items:center; gap:15px; margin-top:10px;">
                         <span id="demoStatusText" style="font-weight:bold; font-size:15px;">Status: Yüklənir...</span>
                         <button id="btnToggleDemo" class="btn btn-gold" onclick="toggleDemoStatus()">Dəyişdir</button>
@@ -354,7 +354,7 @@
             <div id="adminTabLogs" style="display:none;">
                 <div class="info-box" style="margin-bottom:20px;">
                     <h3 style="color:var(--accent); margin-top:0;">📲 İstifadəçi Fəaliyyətləri (Loglar)</h3>
-                    <p style="font-size:12px; color:var(--text-sub); margin-bottom:15px;">İstifadəçilərin saytda etdiyi əməliyyatlar (giriş, çıxış, fayl yükləmə) burada avtomatik qeyd olunur.</p>
+                    <p style="font-size:12px; color:var(--text-sub); margin-bottom:15px;">İstifadəçilərin saytda etdiyi əməliyyatlar cihaz və məkan məlumatı ilə birlikdə göstərilir.</p>
                     <div id="adminLogsList">Yüklənir...</div>
                 </div>
             </div>
@@ -378,7 +378,7 @@
             </div>
 
             <div id="registerForm" style="display:none;">
-                <p style="font-size:12px; color:var(--text-sub); margin-bottom:15px;">Adınızı siyahıdan seçin və profiliniz üçün təhlükəsiz bir şifrə təyin edin. Əgər adınız siyahıda yoxdursa, deməli artıq qeydiyyatdan keçib.</p>
+                <p style="font-size:12px; color:var(--text-sub); margin-bottom:15px;">Adınızı siyahıdan seçin və profiliniz üçün təhlükəsiz bir şifrə təyin edin.</p>
                 <div class="form-group"><label>Tələbə Adınızı Seçin:</label><select id="regNameSelect"><option value="">-- Adınızı Seçin --</option></select></div>
                 <div class="form-group"><label>Yeni Şifrə Təyin Et:</label><input type="password" id="regPass" placeholder="Şifrə yaradın (ən az 4 simvol)"></div>
                 <button class="btn btn-gold" style="width:100%; font-size:16px; padding:12px;" onclick="registerUser()">Qeydiyyatı Tamamla ✅</button>
@@ -433,20 +433,58 @@ Açma gözünü, xabi-cəhalətdən ayılma!
         </div>
     </div>
 
-    <!-- V3.0 Yeniliklər Modal -->
+    <!-- VERSİYA TARİXÇƏSİ MODAL (TƏLƏBƏLƏR ÜÇÜN) -->
     <div id="versionModal" class="modal">
         <div class="modal-content" style="max-width:680px;">
             <h2 style="color:var(--accent); margin-top:0;">🚀 Saytın Yeniliklər Tarixçəsi</h2>
-            <p style="font-size:13px; color:var(--text-sub); margin-bottom:20px;">Sistemimiz hər versiyada sizlər üçün daha da təkmilləşir.</p>
+            <p style="font-size:13px; color:var(--text-sub); margin-bottom:20px;">Sistemimiz hər versiyada tələbələrimiz üçün daha da təkmilləşir.</p>
+
             <div class="version-box version-box-v3">
                 <h3 style="color:#38bdf8; margin:0 0 10px 0;">🌟 Versiya 3.0 (Ən Yeni)</h3>
                 <ul class="version-list">
-                    <li><strong>Aktiv Log Sistemi:</strong> Kimin nə vaxt girib-çıxdığı, yüklədiyi fayllar Adminlər tərəfindən görünür.</li>
-                    <li><strong>Admin Fayl Redaktə:</strong> Adminlər yüklənmiş köhnə/yeni faylları tam fərqli qutularda görür və düzəliş/redaktə edə bilir.</li>
-                    <li><strong>Kraliça və Şah Çempion:</strong> Cinsiyyətə görə avtomatlaşdırılmış titullar.</li>
-                    <li><strong>Gizli Yükləmə Paneli:</strong> Kod faylları yükləmək yalnız öz profilinizə girdikdə aktivləşir.</li>
+                    <li><strong>Fərdi Qeydiyyat Sistemi:</strong> Hər bir tələbə özünə məxsus şifrə yaradaraq profilinə baxa bilir.</li>
+                    <li><strong>Şəxsi Yükləmə Paneli:</strong> Kod fayllarınızı kənar şəxslər görə bilməz, tapşırıqlar yalnız öz profilinizə girdikdə göndərilə bilir.</li>
+                    <li><strong>Kraliça və Şah Çempion:</strong> 1-ci yeri tutanlar üçün xüsusi avtomatlaşdırılmış titullar yaradıldı.</li>
+                    <li><strong>2-ci Kurs Yeniliyi:</strong> Bütün qrup üzvləri uğurla 2-ci kurs olaraq proqrama daxil edildi.</li>
                 </ul>
             </div>
+
+            <div class="version-box">
+                <h3 style="color:var(--gold); margin:0 0 10px 0;">⚡ Versiya 2.4</h3>
+                <ul class="version-list">
+                    <li><strong>Yeni Animasiyalar:</strong> Saytda qaliblər üçün daha zəngin konfetti və vizual interaktiv effektlər əlavə olundu.</li>
+                </ul>
+            </div>
+
+            <div class="version-box">
+                <h3 style="color:var(--gold); margin:0 0 10px 0;">⚡ Versiya 2.3</h3>
+                <ul class="version-list">
+                    <li><strong>Ağıllı Deadline Taymeri:</strong> Canlı geri sayım taymeri yaradıldı, vaxt bitdikdə yükləmə sistemi avtomatik qapanır.</li>
+                    <li><strong>Dublikat Nəzarəti:</strong> Eyni tapşırığı səhvən 2 dəfə yükləməyin qarşısı alındı.</li>
+                </ul>
+            </div>
+
+            <div class="version-box">
+                <h3 style="color:var(--gold); margin:0 0 10px 0;">⚡ Versiya 2.2</h3>
+                <ul class="version-list">
+                    <li><strong>Şəxsi İnkişaf Qrafiki:</strong> Profildə tələbələrin həftəlik bal artımını göstərən interaktiv diaqram təqdim edildi.</li>
+                </ul>
+            </div>
+
+            <div class="version-box">
+                <h3 style="color:var(--text-sub); margin:0 0 10px 0;">🛠️ Versiya 2.1</h3>
+                <ul class="version-list">
+                    <li><strong>Çoxdilli İnterfeys Təməli:</strong> AZ, EN, RU, TR dillərinə dəstək platforması quruldu.</li>
+                </ul>
+            </div>
+
+            <div class="version-box">
+                <h3 style="color:var(--text-sub); margin:0 0 10px 0;">🛠️ Versiya 2.0</h3>
+                <ul class="version-list">
+                    <li><strong>Təməl Sistem:</strong> C++, Python və Common reytinq cədvəllərinin canlı idarəetmə sistemi istifadəyə verildi.</li>
+                </ul>
+            </div>
+            
             <button class="btn" style="width:100%; margin-top:15px; padding:12px; font-size:15px;" onclick="closeVersionModal()">Möhtəşəm! Təşəkkürlər 🎉</button>
         </div>
     </div>
@@ -493,12 +531,24 @@ Açma gözünü, xabi-cəhalətdən ayılma!
         let activeAudioObject = null;
         let blackCatVideoData = null;
 
-        // --- Log Fəaliyyət Funksiyası ---
-        function logActivity(actionMsg) {
+        // --- Log Fəaliyyət Funksiyası (MƏKAN + CİHAZ) ---
+        async function logActivity(actionMsg) {
             const userName = currentUser ? currentUser : 'Anonim';
+            let loc = "Məkan təyin edilmədi";
+            let device = navigator.userAgent.includes("Mobile") ? "📱 Mobil Cihaz" : "💻 Kompüter";
+            
+            try {
+                // Pulsuz və limitsiz IP API xidmətindən məkanı çəkirik
+                let res = await fetch('https://ipapi.co/json/');
+                let data = await res.json();
+                if (data.city) loc = `${data.city}, ${data.country_name} (IP: ${data.ip})`;
+            } catch(e) { }
+
             database.ref('activity_logs').push({
                 user: userName,
                 action: actionMsg,
+                location: loc,
+                device: device,
                 timestamp: new Date().toISOString()
             });
         }
@@ -610,12 +660,12 @@ Açma gözünü, xabi-cəhalətdən ayılma!
         function finalizeLogin() {
             localStorage.setItem('auth_user', currentUser); localStorage.setItem('auth_role', currentUserRole);
             alert(`Xoş gəldiniz, ${currentUser}! 🎉`); closeAuthModal(); updateAuthWidget(); renderTable();
-            logActivity("Sistemə daxil oldu.");
+            logActivity("Sistemə uğurla daxil oldu.");
         }
 
         function logoutUser() {
             if (!confirm("Hesabdan çıxmaq istədiyinizə əminsiniz?")) return;
-            logActivity("Sistemdən çıxdı.");
+            logActivity("Sistemdən çıxış etdi.");
             localStorage.removeItem('auth_user'); localStorage.removeItem('auth_role');
             currentUser = null; currentUserRole = null; updateAuthWidget(); closeAdminPanel(); closeProfilePage();
         }
@@ -732,9 +782,13 @@ Açma gözünü, xabi-cəhalətdən ayılma!
                 if (tasks) {
                     Object.keys(tasks).forEach(key => {
                         const t = tasks[key]; count++; 
-                        let subjTag = t.subject === 'python' ? '🟡' : '🔵';
-                        let stText = t.status === 'correct' ? `✅ Düzgün (+${t.addedPoints || 0} pt)` : (t.status === 'wrong' ? '❌ Səhv' : '⏳ Yoxlanılır');
-                        let stColor = t.status === 'correct' ? 'var(--positive)' : (t.status === 'wrong' ? 'var(--negative)' : 'var(--gold)');
+                        
+                        // Köhnə fayllar üçün qoruyucu yoxlama
+                        let subjTag = (t.subject || 'cpp') === 'python' ? '🟡' : '🔵';
+                        let fileSt = t.status || 'pending';
+                        
+                        let stText = fileSt === 'correct' ? `✅ Düzgün (+${t.addedPoints || 0} pt)` : (fileSt === 'wrong' ? '❌ Səhv' : '⏳ Yoxlanılır');
+                        let stColor = fileSt === 'correct' ? 'var(--positive)' : (fileSt === 'wrong' ? 'var(--negative)' : 'var(--gold)');
                         statusDiv.innerHTML += `<div style="margin-top:6px; background:#0b1329; padding:10px; border-radius:6px; border:1px solid ${stColor};"><span style="color:${stColor}">${subjTag} ${t.fileName} - (${stText})</span></div>`;
                     });
                 }
@@ -751,13 +805,13 @@ Açma gözünü, xabi-cəhalətdən ayılma!
             const existingTasks = snap.val() || {}; let uploadedCount = 0;
             for (let file of Array.from(files)) {
                 let existingKey = null; let existingStatus = null;
-                Object.keys(existingTasks).forEach(k => { if (existingTasks[k].fileName === file.name && existingTasks[k].subject === subject) { existingKey = k; existingStatus = existingTasks[k].status; } });
+                Object.keys(existingTasks).forEach(k => { if (existingTasks[k].fileName === file.name && (existingTasks[k].subject||'cpp') === subject) { existingKey = k; existingStatus = existingTasks[k].status||'pending'; } });
                 if (existingKey && existingStatus !== 'wrong') continue; 
                 if (existingKey && existingStatus === 'wrong') await database.ref('student_tasks/' + existingKey).remove();
                 await new Promise(resolve => {
                     const reader = new FileReader(); reader.onload = e => { database.ref('student_tasks').push({ studentName: activeProfileStudent, fileName: file.name, fileData: e.target.result, subject: subject, status: 'pending', timestamp: new Date().toISOString() }).then(() => { uploadedCount++; resolve(); }); }; reader.readAsDataURL(file);
                 });
-                logActivity(`${subject.toUpperCase()} fənnindən fayl yüklədi: ${file.name}`);
+                logActivity(`${subject.toUpperCase()} tapşırığı göndərdi: ${file.name}`);
             }
             alert(`${uploadedCount} fayl uğurla göndərildi! ✅`); document.getElementById('studentTaskFiles').value = '';
         }
@@ -791,7 +845,7 @@ Açma gözünü, xabi-cəhalətdən ayılma!
             ['students', 'files', 'accounts', 'media', 'feedback', 'logs'].forEach(t => document.getElementById('adminTab' + t.charAt(0).toUpperCase() + t.slice(1)).style.display = (tab === t) ? 'block' : 'none');
         }
 
-        // FAYLLAR VƏ REDAKTƏ SİSTEMİ
+        // FAYLLAR VƏ REDAKTƏ SİSTEMİ (KÖHNƏ FAYLLAR GƏLDİ)
         function loadAllFilesForAdmin() {
             database.ref('student_tasks').on('value', snap => {
                 const tasks = snap.val() || {};
@@ -802,27 +856,34 @@ Açma gözünü, xabi-cəhalətdən ayılma!
                 
                 Object.keys(tasks).forEach(key => {
                     let t = tasks[key];
+                    
+                    // KÖHNƏ FAYLLAR ÜÇÜN DƏSTƏK
+                    let status = t.status || 'pending';
+                    let addedPts = t.addedPoints || 0;
+                    let timeStr = t.timestamp ? new Date(t.timestamp).toLocaleString('az-AZ') : 'Köhnə fayl (Tarix yoxdur)';
+                    let sub = t.subject || 'cpp';
+                    
                     let uiHtml = `
                     <div style="background:#070a12; padding:14px; border-radius:10px; border:1px solid var(--border); margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
                         <div>
                             <strong style="color:var(--accent); cursor:pointer; font-size:15px;" onclick="openProfileByName('${t.studentName}')">${t.studentName}</strong> 
-                            - <span style="font-weight:bold;">${t.subject.toUpperCase()} (<a href="${t.fileData}" download="${t.fileName}" style="color:var(--gold); text-decoration:underline;">${t.fileName}</a>)</span>
-                            <div style="font-size:11px; color:var(--text-sub); margin-top:5px;">Yükləmə Tarixi: ${new Date(t.timestamp).toLocaleString('az-AZ')}</div>
+                            - <span style="font-weight:bold;">${sub.toUpperCase()} (<a href="${t.fileData}" download="${t.fileName}" style="color:var(--gold); text-decoration:underline;">${t.fileName}</a>)</span>
+                            <div style="font-size:11px; color:var(--text-sub); margin-top:5px;">${timeStr}</div>
                         </div>
                         <div style="display:flex; gap:8px; align-items:center;">
-                            ${t.status === 'pending' ? 
-                                `<button class="btn" style="background:var(--positive); padding:8px 15px;" onclick="evaluateTask('${key}', '${t.studentName}', '${t.subject}', true, 0)">✅ Düzgün</button>
-                                 <button class="btn" style="background:var(--negative); padding:8px 15px;" onclick="evaluateTask('${key}', '${t.studentName}', '${t.subject}', false, 0)">❌ Səhv</button>` 
+                            ${status === 'pending' ? 
+                                `<button class="btn" style="background:var(--positive); padding:8px 15px;" onclick="evaluateTask('${key}', '${t.studentName}', '${sub}', true, 0)">✅ Düzgün</button>
+                                 <button class="btn" style="background:var(--negative); padding:8px 15px;" onclick="evaluateTask('${key}', '${t.studentName}', '${sub}', false, 0)">❌ Səhv</button>` 
                             : 
-                                `<span style="margin-right:15px; font-weight:bold; font-size:15px; color:${t.status==='correct'?'var(--positive)':'var(--negative)'};">
-                                    ${t.status === 'correct' ? `✅ (+${t.addedPoints} pt)` : '❌ Səhv'}
+                                `<span style="margin-right:15px; font-weight:bold; font-size:15px; color:${status==='correct'?'var(--positive)':'var(--negative)'};">
+                                    ${status === 'correct' ? `✅ (+${addedPts} pt)` : '❌ Səhv'}
                                 </span>
-                                <button class="btn btn-dark" style="font-size:13px; padding:8px 14px;" onclick="reEvaluateTask('${key}', '${t.studentName}', '${t.subject}', '${t.status}',${t.addedPoints||0})">✏️ Redaktə</button>`
+                                <button class="btn btn-dark" style="font-size:13px; padding:8px 14px;" onclick="reEvaluateTask('${key}', '${t.studentName}', '${sub}', '${status}',${addedPts})">✏️ Redaktə</button>`
                             }
                         </div>
                     </div>`;
 
-                    if (t.status === 'pending') { pendingDiv.innerHTML += uiHtml; pendingCount++; }
+                    if (status === 'pending') { pendingDiv.innerHTML += uiHtml; pendingCount++; }
                     else { checkedDiv.innerHTML += uiHtml; checkedCount++; }
                 });
                 
@@ -910,7 +971,6 @@ Açma gözünü, xabi-cəhalətdən ayılma!
             });
         }
         
-        // FEEDBACK VƏ LOGLAR YÜKLƏNMƏSİ
         function loadAdminFeedback() {
             database.ref('feedbacks').on('value', snap => {
                 const fbs = snap.val() || {}; const listDiv = document.getElementById('adminFeedbackList'); if(!listDiv) return; listDiv.innerHTML = '';
@@ -922,13 +982,19 @@ Açma gözünü, xabi-cəhalətdən ayılma!
             });
         }
         
+        // CİHAZ VƏ MƏKAN BİLGİSİ İLƏ LOG YÜKLƏNMƏSİ
         function loadAdminLogs() {
             database.ref('activity_logs').limitToLast(50).on('value', snap => {
                 const logs = snap.val() || {}; const listDiv = document.getElementById('adminLogsList'); if(!listDiv) return; listDiv.innerHTML = '';
                 const logArray = Object.values(logs).reverse();
                 if(logArray.length === 0) { listDiv.innerHTML = '<div style="color:var(--text-sub);">Heç bir fəaliyyət qeydə alınmayıb.</div>'; return; }
                 logArray.forEach(lg => {
-                    listDiv.innerHTML += `<div style="background:#070a12; padding:10px; border-radius:8px; border:1px solid var(--border); margin-bottom:8px; font-size:14px;"><strong style="color:var(--accent);">${lg.user}:</strong> <span style="color:#f8fafc;">${lg.action}</span><div style="color:var(--text-sub); font-size:11px; margin-top:5px;">${new Date(lg.timestamp).toLocaleString('az-AZ')}</div></div>`;
+                    let locHtml = lg.location ? `<br><span style="color:var(--gold); font-size:12px;">📍 ${lg.location} | ${lg.device||'Kompüter'}</span>` : '';
+                    listDiv.innerHTML += `<div style="background:#070a12; padding:12px; border-radius:8px; border:1px solid var(--border); margin-bottom:10px; font-size:14px;">
+                        <strong style="color:var(--accent);">${lg.user}:</strong> <span style="color:#f8fafc;">${lg.action}</span>
+                        ${locHtml}
+                        <div style="color:var(--text-sub); font-size:11px; margin-top:6px;">🕒 ${new Date(lg.timestamp).toLocaleString('az-AZ')}</div>
+                    </div>`;
                 });
             });
         }
