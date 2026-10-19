@@ -479,7 +479,7 @@
     </div>
 
     <div id="winnersModal" class="modal">
-        <div class="modal-content" style="text-align:center; overflow:hidden;">
+        <div class="modal-content" style="text-align:center;">
             <div class="abartili-stickers">🎊 🥳 🍾 🎉 🏆 👑</div>
             <h1 style="color:var(--gold); font-weight:900; margin-top:0;">👑 QALİBLƏR 🏆</h1>
             <div id="winnersListGrid" class="winners-container-v3"></div>
@@ -489,11 +489,11 @@
     </div>
     
     <div id="outsidersModal" class="modal">
-        <div class="modal-content" style="text-align:center; overflow:hidden;">
+        <div class="modal-content" style="text-align:center;">
             <div class="abartili-stickers">😭 📉 🤦‍♂️ 💔 😴 🗑️</div>
             <h1 style="color:var(--negative); font-weight:900; margin-top:0;">😭 OUTSİDERLƏR 😴</h1>
             
-            <div style="font-size:14px; font-style:italic; color:var(--text-main); margin:15px 0; text-align:center; white-space:pre-line; max-height:150px; overflow-y:auto; padding:15px; background:var(--bg-color); border-radius:10px; border:1px solid var(--border);">Tərpənmə, amandır, bala, qəflətdən ayılma!
+            <div style="font-size:14px; font-style:italic; color:var(--text-main); margin:15px 0; text-align:center; white-space:pre-line; padding:15px; background:var(--bg-color); border-radius:10px; border:1px solid var(--border);">Tərpənmə, amandır, bala, qəflətdən ayılma!
             Açma gözünü, xabi-cəhalətdən ayılma!
             Laylay, bala, laylay!
             Yat, qal dala, laylay!
@@ -607,6 +607,9 @@
         let hasAlertedFeedback = false;
         let emojiInterval = null;
 
+        let mainDataTimer;
+        let tasksDataTimer;
+
         // ---------------- THEME (Dark/Light) ----------------
         function toggleTheme() {
             const isLight = document.body.getAttribute('data-theme') === 'light';
@@ -691,13 +694,18 @@
                 }
             });
 
+            // OPTIMIZATION: Debounce the rendering of the main table to stop the site from lagging during heavy rapid payloads.
             database.ref('students_data').on('value', snap => { 
                 if(snap.val()) globalData = snap.val(); 
-                renderTable(); 
-                updateJuryAvatars();
-                if(currentUserRole && currentUserRole !== 'student') renderAdminBody(); 
-                updateAuthWidget();
+                clearTimeout(mainDataTimer);
+                mainDataTimer = setTimeout(() => {
+                    renderTable(); 
+                    updateJuryAvatars();
+                    if(currentUserRole && currentUserRole !== 'student') renderAdminBody(); 
+                    updateAuthWidget();
+                }, 150);
             });
+            
             database.ref('deadline_time').on('value', snap => {
                 const val = snap.val(); deadlineTimestamp = val ? new Date(val).getTime() : null;
                 const dt = document.getElementById('deadlineTargetText'); if(dt) dt.innerText = val ? new Date(val).toLocaleString('az-AZ') : "Təyin edilməyib";
@@ -1101,83 +1109,87 @@
         }
 
         function loadAllFilesForAdmin() {
+            // OPTIMIZATION: Debounce tasks to prevent heavy load if multiple tasks update
             database.ref('student_tasks').on('value', snap => {
-                const tasks = snap.val() || {};
-                
-                const pCpp = document.getElementById('adminPendingTasksCpp'); 
-                const pPy = document.getElementById('adminPendingTasksPython'); 
-                const cCpp = document.getElementById('adminCheckedTasksCpp'); 
-                const cPy = document.getElementById('adminCheckedTasksPython'); 
-                
-                let countPCpp = 0; let countPPy = 0; let countCCpp = 0; let countCPy = 0;
-                
-                let pCppHTML = ''; let pPyHTML = '';
-                let checkedGroups = { cpp: {}, python: {} };
-                
-                Object.keys(tasks).forEach(key => {
-                    let t = tasks[key]; let status = t.status || 'pending'; let addedPts = t.addedPoints || 0;
-                    let timeStr = t.timestamp ? new Date(t.timestamp).toLocaleString('az-AZ') : 'Tarixsiz';
-                    let sub = t.subject || 'cpp';
+                clearTimeout(tasksDataTimer);
+                tasksDataTimer = setTimeout(() => {
+                    const tasks = snap.val() || {};
                     
-                    let uiHtml = `
-                    <div class="file-item">
-                        <div>
-                            <strong style="color:var(--text-main); cursor:pointer; font-size:15px;" onclick="openProfileByName('${t.studentName}')">${t.studentName}</strong> 
-                            <span style="font-weight:900; margin-left:5px;">(<a href="${t.fileData}" download="${t.fileName}" style="color:var(--text-main); text-decoration:underline;">${t.fileName}</a>)</span>
-                            <div style="font-size:12px; color:var(--text-sub); margin-top:4px;">🕒 ${timeStr}</div>
-                        </div>
-                        <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
-                            ${status === 'pending' ? 
-                                `<button class="btn" style="background:var(--positive); padding:8px 12px; font-size:13px;" onclick="evaluateTask('${key}', '${t.studentName}', '${sub}', true, 0)">✅ Düz</button>
-                                 <button class="btn btn-admin" style="padding:8px 12px; font-size:13px;" onclick="evaluateTask('${key}', '${t.studentName}', '${sub}', false, 0)">❌ Səhv</button>` 
-                            : 
-                                `<span style="margin-right:10px; font-weight:900; color:${status==='correct'?'var(--positive)':'var(--negative)'};">${status === 'correct' ? `✅ (+${addedPts})` : '❌'}</span>
-                                <button class="btn btn-dark" style="font-size:12px; padding:6px 12px;" onclick="reEvaluateTask('${key}', '${t.studentName}', '${sub}', '${status}',${addedPts})">✏️ Dəyiş</button>`
-                            }
-                            <button class="btn btn-dark" style="font-size:11px; padding:4px 8px;" onclick="switchTaskSubject('${key}', '${sub}')">🔄 ${sub === 'cpp' ? 'Python' : 'C++'}</button>
-                        </div>
-                    </div>`;
+                    const pCpp = document.getElementById('adminPendingTasksCpp'); 
+                    const pPy = document.getElementById('adminPendingTasksPython'); 
+                    const cCpp = document.getElementById('adminCheckedTasksCpp'); 
+                    const cPy = document.getElementById('adminCheckedTasksPython'); 
+                    
+                    let countPCpp = 0; let countPPy = 0; let countCCpp = 0; let countCPy = 0;
+                    
+                    let pCppHTML = ''; let pPyHTML = '';
+                    let checkedGroups = { cpp: {}, python: {} };
+                    
+                    Object.keys(tasks).forEach(key => {
+                        let t = tasks[key]; let status = t.status || 'pending'; let addedPts = t.addedPoints || 0;
+                        let timeStr = t.timestamp ? new Date(t.timestamp).toLocaleString('az-AZ') : 'Tarixsiz';
+                        let sub = t.subject || 'cpp';
+                        
+                        let uiHtml = `
+                        <div class="file-item">
+                            <div>
+                                <strong style="color:var(--text-main); cursor:pointer; font-size:15px;" onclick="openProfileByName('${t.studentName}')">${t.studentName}</strong> 
+                                <span style="font-weight:900; margin-left:5px;">(<a href="${t.fileData}" download="${t.fileName}" style="color:var(--text-main); text-decoration:underline;">${t.fileName}</a>)</span>
+                                <div style="font-size:12px; color:var(--text-sub); margin-top:4px;">🕒 ${timeStr}</div>
+                            </div>
+                            <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+                                ${status === 'pending' ? 
+                                    `<button class="btn" style="background:var(--positive); padding:8px 12px; font-size:13px;" onclick="evaluateTask('${key}', '${t.studentName}', '${sub}', true, 0)">✅ Düz</button>
+                                     <button class="btn btn-admin" style="padding:8px 12px; font-size:13px;" onclick="evaluateTask('${key}', '${t.studentName}', '${sub}', false, 0)">❌ Səhv</button>` 
+                                : 
+                                    `<span style="margin-right:10px; font-weight:900; color:${status==='correct'?'var(--positive)':'var(--negative)'};">${status === 'correct' ? `✅ (+${addedPts})` : '❌'}</span>
+                                    <button class="btn btn-dark" style="font-size:12px; padding:6px 12px;" onclick="reEvaluateTask('${key}', '${t.studentName}', '${sub}', '${status}',${addedPts})">✏️ Dəyiş</button>`
+                                }
+                                <button class="btn btn-dark" style="font-size:11px; padding:4px 8px;" onclick="switchTaskSubject('${key}', '${sub}')">🔄 ${sub === 'cpp' ? 'Python' : 'C++'}</button>
+                            </div>
+                        </div>`;
 
-                    if (status === 'pending') { 
-                        if (sub === 'python') { pPyHTML += uiHtml; countPPy++; } else { pCppHTML += uiHtml; countPCpp++; } 
-                    } else { 
-                        if (!checkedGroups[sub][t.studentName]) checkedGroups[sub][t.studentName] = [];
-                        checkedGroups[sub][t.studentName].push(uiHtml);
-                        if (sub === 'python') countCPy++; else countCCpp++; 
+                        if (status === 'pending') { 
+                            if (sub === 'python') { pPyHTML += uiHtml; countPPy++; } else { pCppHTML += uiHtml; countPCpp++; } 
+                        } else { 
+                            if (!checkedGroups[sub][t.studentName]) checkedGroups[sub][t.studentName] = [];
+                            checkedGroups[sub][t.studentName].push(uiHtml);
+                            if (sub === 'python') countCPy++; else countCCpp++; 
+                        }
+                    });
+                    
+                    pCpp.innerHTML = countPCpp ? pCppHTML : '<div style="color:var(--text-sub); padding:10px;">Yeni fayl yoxdur.</div>';
+                    pPy.innerHTML = countPPy ? pPyHTML : '<div style="color:var(--text-sub); padding:10px;">Yeni fayl yoxdur.</div>';
+                    
+                    let cCppHTML = ''; let cPyHTML = '';
+                    for(let uname in checkedGroups.cpp) {
+                        let safeId = 'chkcpp_' + uname.replace(/[^a-zA-Z0-9]/g, '');
+                        cCppHTML += `
+                        <div class="file-item" style="cursor:pointer; background:var(--card-hover); padding:12px;" onclick="toggleGroup('${safeId}')">
+                            👤 <strong style="color:var(--accent); font-size:16px;">${uname}</strong> <span style="font-size:13px; font-weight:800; color:var(--text-sub); margin-left:auto;">(${checkedGroups.cpp[uname].length} fayl) ⬇️</span>
+                        </div>
+                        <div id="${safeId}" style="display:none; padding-left:15px; border-left:3px solid var(--accent); margin-bottom:15px;">
+                            ${checkedGroups.cpp[uname].join('')}
+                        </div>`;
                     }
-                });
-                
-                pCpp.innerHTML = countPCpp ? pCppHTML : '<div style="color:var(--text-sub); padding:10px;">Yeni fayl yoxdur.</div>';
-                pPy.innerHTML = countPPy ? pPyHTML : '<div style="color:var(--text-sub); padding:10px;">Yeni fayl yoxdur.</div>';
-                
-                let cCppHTML = ''; let cPyHTML = '';
-                for(let uname in checkedGroups.cpp) {
-                    let safeId = 'chkcpp_' + uname.replace(/[^a-zA-Z0-9]/g, '');
-                    cCppHTML += `
-                    <div class="file-item" style="cursor:pointer; background:var(--card-hover); padding:12px;" onclick="toggleGroup('${safeId}')">
-                        👤 <strong style="color:var(--accent); font-size:16px;">${uname}</strong> <span style="font-size:13px; font-weight:800; color:var(--text-sub); margin-left:auto;">(${checkedGroups.cpp[uname].length} fayl) ⬇️</span>
-                    </div>
-                    <div id="${safeId}" style="display:none; padding-left:15px; border-left:3px solid var(--accent); margin-bottom:15px;">
-                        ${checkedGroups.cpp[uname].join('')}
-                    </div>`;
-                }
-                for(let uname in checkedGroups.python) {
-                    let safeId = 'chkpy_' + uname.replace(/[^a-zA-Z0-9]/g, '');
-                    cPyHTML += `
-                    <div class="file-item" style="cursor:pointer; background:var(--card-hover); padding:12px;" onclick="toggleGroup('${safeId}')">
-                        👤 <strong style="color:var(--gold); font-size:16px;">${uname}</strong> <span style="font-size:13px; font-weight:800; color:var(--text-sub); margin-left:auto;">(${checkedGroups.python[uname].length} fayl) ⬇️</span>
-                    </div>
-                    <div id="${safeId}" style="display:none; padding-left:15px; border-left:3px solid var(--gold); margin-bottom:15px;">
-                        ${checkedGroups.python[uname].join('')}
-                    </div>`;
-                }
+                    for(let uname in checkedGroups.python) {
+                        let safeId = 'chkpy_' + uname.replace(/[^a-zA-Z0-9]/g, '');
+                        cPyHTML += `
+                        <div class="file-item" style="cursor:pointer; background:var(--card-hover); padding:12px;" onclick="toggleGroup('${safeId}')">
+                            👤 <strong style="color:var(--gold); font-size:16px;">${uname}</strong> <span style="font-size:13px; font-weight:800; color:var(--text-sub); margin-left:auto;">(${checkedGroups.python[uname].length} fayl) ⬇️</span>
+                        </div>
+                        <div id="${safeId}" style="display:none; padding-left:15px; border-left:3px solid var(--gold); margin-bottom:15px;">
+                            ${checkedGroups.python[uname].join('')}
+                        </div>`;
+                    }
 
-                cCpp.innerHTML = countCCpp ? cCppHTML : '<div style="color:var(--text-sub); padding:10px;">Redaktə üçün fayl yoxdur.</div>';
-                cPy.innerHTML = countCPy ? cPyHTML : '<div style="color:var(--text-sub); padding:10px;">Redaktə üçün fayl yoxdur.</div>';
-                
-                const bTotal = document.getElementById('totalPendingBadge'); if(bTotal) bTotal.innerText = countPCpp + countPPy;
-                const bCpp = document.getElementById('cppPendingBadge'); if(bCpp) bCpp.innerText = countPCpp;
-                const bPy = document.getElementById('pyPendingBadge'); if(bPy) bPy.innerText = countPPy;
+                    cCpp.innerHTML = countCCpp ? cCppHTML : '<div style="color:var(--text-sub); padding:10px;">Redaktə üçün fayl yoxdur.</div>';
+                    cPy.innerHTML = countCPy ? cPyHTML : '<div style="color:var(--text-sub); padding:10px;">Redaktə üçün fayl yoxdur.</div>';
+                    
+                    const bTotal = document.getElementById('totalPendingBadge'); if(bTotal) bTotal.innerText = countPCpp + countPPy;
+                    const bCpp = document.getElementById('cppPendingBadge'); if(bCpp) bCpp.innerText = countPCpp;
+                    const bPy = document.getElementById('pyPendingBadge'); if(bPy) bPy.innerText = countPPy;
+                }, 150);
             });
         }
 
@@ -1318,7 +1330,7 @@
             });
         }
 
-        // ANIMATED EMOJI RAIN
+        // ANIMATED EMOJI RAIN - OPTIMIZED WITH GPU ACCELERATION
         function startEmojiRain(type) {
             clearInterval(emojiInterval);
             const emojis = type === 'winner' ? ['🎉', '🏆', '👑', '🥳', '🎊', '🥇'] : ['😭', '📉', '🤦‍♂️', '💔', '😴', '🗑️'];
@@ -1334,6 +1346,8 @@
                 el.style.fontSize = (Math.random() * 20 + 20) + 'px';
                 el.style.zIndex = '999999';
                 el.style.pointerEvents = 'none';
+                el.style.willChange = 'top, opacity'; // OPTIMIZATION
+                el.style.transform = 'translateZ(0)'; // OPTIMIZATION
                 el.style.transition = 'top 3s linear, opacity 3s linear';
                 container.appendChild(el);
                 setTimeout(() => { el.style.top = '120vh'; el.style.opacity = '0'; }, 50);
