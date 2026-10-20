@@ -93,8 +93,7 @@
         .v-board { border-radius: 16px; padding: 15px; border: 1px solid var(--border); }
         .v-board-gold { border-top: 4px solid var(--gold); background-color: rgba(245, 158, 11, 0.06); }
         .v-board-silver { border-top: 4px solid var(--silver); background-color: rgba(148, 163, 184, 0.06); }
-        .v-board-danger { border-top: 4px solid var(--negative); background-color: rgba(239, 68, 68, 0.06); cursor: pointer; transition: transform 0.2s; }
-        .v-board-danger:hover { transform: translateY(-2px); }
+        .v-board-danger { border-top: 4px solid var(--negative); background-color: rgba(239, 68, 68, 0.06); }
         
         .v-board-item { display: flex; align-items: center; gap: 12px; padding: 10px; border-bottom: 1px solid rgba(128,128,128,0.2); }
         .v-board-item:last-child { border-bottom: none; }
@@ -167,11 +166,6 @@
         .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 14px; border-radius: 10px; border: 1px solid var(--border); background: var(--bg-color); color: var(--text-main); font-weight: 700; font-family: inherit; transition: 0.2s; }
         .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--border-focus); outline: none; }
         .form-group textarea { font-family: monospace; resize: vertical; min-height: 120px; }
-
-        /* AI FEEDBACK STYLES */
-        .ai-feedback { margin-top: 15px; padding: 14px; border-radius: 10px; font-size: 14px; font-weight: 800; display: none; line-height: 1.5; }
-        .ai-success { background: rgba(16, 185, 129, 0.15); border: 1px solid var(--positive); color: var(--positive); }
-        .ai-error { background: rgba(239, 68, 68, 0.15); border: 1px solid var(--negative); color: var(--negative); }
 
         /* ADMIN PANEL */
         .admin-dashboard-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
@@ -314,8 +308,8 @@
                     <h3 style="color:var(--silver); text-align:center; margin-top:0; font-weight:900;">🥈 Keçən Həftənin Liderləri</h3>
                     <div id="boardPrevTop3">Yüklənir...</div>
                 </div>
-                <div class="v-board v-board-danger" onclick="triggerShame()">
-                    <h3 style="color:var(--negative); text-align:center; margin-top:0; font-weight:900;">😴 Outsiderlər (Kliklə!)</h3>
+                <div class="v-board v-board-danger">
+                    <h3 style="color:var(--negative); text-align:center; margin-top:0; font-weight:900;">😴 Outsiderlər</h3>
                     <div id="boardBottom3">Yüklənir...</div>
                 </div>
             </div>
@@ -323,7 +317,8 @@
             <div class="action-bar">
                 <div style="display:flex; gap:10px; flex-wrap:wrap;">
                     <button class="btn btn-gold" onclick="showWinnersCelebration()">🎉 Həftənin Qalibləri</button>
-                    <button class="btn btn-admin" onclick="showOutsidersModal()">😭 Outsider Efekti</button>
+                    <!-- Düzəldilmiş Həftənin Outsiderləri Butonu -->
+                    <button class="btn btn-admin" onclick="showOutsidersModal(); triggerShame();">😴 Həftənin Outsiderləri</button>
                     <button class="btn btn-dark" onclick="openFeedbackModal()">💬 Feedback Göndər</button>
                 </div>
                 <div style="display:flex; gap:10px;">
@@ -363,33 +358,8 @@
                 <div class="info-box"><span>📊 Həftəlik Artım</span><strong id="pArtim">0</strong></div>
             </div>
 
-            <!-- SÜNİ İNTELTEKT KOD YOXLAYICISI (V3.1) -->
-            <div class="info-box" id="aiReviewerSection" style="margin-bottom:20px; border: 2px solid var(--accent);">
-                <h4 style="margin:0 0 15px 0; color:var(--accent); font-size:18px; font-weight:900;">🤖 Süni İntellekt Kod Yoxlayıcısı (AI Reviewer)</h4>
-                <div class="form-group">
-                    <label>Proqramlaşdırma Dili:</label>
-                    <select id="aiLangSelect" onchange="updateAITaskOptions()">
-                        <option value="cpp">C++</option>
-                        <option value="python">Python</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Tapşırıq Seçimi:</label>
-                    <select id="aiTaskSelect">
-                        <option value="cpp_task1">C++ Task 1: Şifrələmə Alqoritmi</option>
-                        <option value="cpp_task2">C++ Task 2: Fayl Əməliyyatları</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Kodunuzu Bura Daxil Edin:</label>
-                    <textarea id="aiCodeInput" placeholder="// Kodunuzu bura yazın... Düşünməyiniz üçün süni intellekt sizə birbaşa cavabı vermədən ipucu göstərəcək."></textarea>
-                </div>
-                <button class="btn" onclick="submitCodeToAI()">Kodu Yoxlat və Bal Qazan 🚀</button>
-                <div id="aiFeedbackBox" class="ai-feedback"></div>
-            </div>
-
             <div id="privateUploadSection" class="info-box" style="margin-bottom:20px; display:none; border: 1px solid var(--positive);">
-                <h4 style="margin:0 0 15px 0; color:var(--positive); font-size:18px; font-weight:900;">📁 Əlavə Fayl / Sənəd Yüklə</h4>
+                <h4 style="margin:0 0 15px 0; color:var(--positive); font-size:18px; font-weight:900;">📁 Fayl / Sənəd Yüklə</h4>
                 <div style="display:flex; gap:15px; align-items:center; flex-wrap:wrap;">
                     <select id="studentSubjectSelect" class="form-group" style="margin:0; width:auto;">
                         <option value="cpp">🔵 C++ Faylı</option>
@@ -398,7 +368,7 @@
                     <input type="file" id="studentTaskFiles" multiple class="form-group" style="margin:0; width:auto; padding:10px;" />
                     <button class="btn" style="background:var(--positive); color:#fff;" onclick="uploadStudentTasks()">🚀 Göndər</button>
                 </div>
-                <div style="font-size:12px; color:var(--text-sub); margin-top:10px; font-weight:800;">💡 DİQQƏT: Sistem faylınızın sonluğuna görə (.cpp və ya .py) bölməni avtomatik təyin edir.</div>
+                <div style="font-size:12px; color:var(--text-sub); margin-top:10px; font-weight:800;">💡 DİQQƏT: Sistem faylınızın sonluğuna və məzmununa görə tapşırığı avtomatik tanıyır.</div>
             </div>
             
             <div id="publicViewMsg" style="font-size:14px; color:var(--text-sub); text-align:center; margin-bottom:20px; font-style:italic;">
@@ -425,7 +395,7 @@
 
             <div class="admin-nav" id="adminNavTabs">
                 <button class="admin-nav-btn active tab-students" onclick="switchAdminSubTab(event, 'students')">👥 Reytinq İdarəsi</button>
-                <button class="admin-nav-btn tab-tasksConfig" onclick="switchAdminSubTab(event, 'tasksConfig')">⚙️ Tapşırıq Balları (Admin)</button>
+                <button class="admin-nav-btn tab-tasksConfig" onclick="switchAdminSubTab(event, 'tasksConfig')">⚙️ Tapşırıqlar və Ballar</button>
                 <button class="admin-nav-btn tab-pending" onclick="switchAdminSubTab(event, 'pendingFiles')">⏳ Yeni Fayllar (Gözləyən)</button>
                 <button class="admin-nav-btn tab-checked" onclick="switchAdminSubTab(event, 'checkedFiles')">✏️ Fayl Redaktə (Yoxlanılmış)</button>
                 <button class="admin-nav-btn tab-accounts" onclick="switchAdminSubTab(event, 'accounts')">🔐 Hesablar</button>
@@ -447,31 +417,19 @@
                 </div>
             </div>
 
-            <!-- SUB TAB 2: Tapşırıq Ballarının Tənzimlənməsi (Admin Panel yeni xüsusiyyət) -->
+            <!-- SUB TAB 2: Tapşırıqlar və Ballar (Dinamik Siyahı - Çoxsaylı Tapşırıq Dəstəyi) -->
             <div id="adminTabTasksConfig" class="admin-sub-tab" style="display:none;">
                 <div class="info-box">
-                    <h3 style="color:var(--accent); margin-top:0;">⚙️ Admin Tapşırıq Balları Tənzimləməsi</h3>
-                    <p style="color:var(--text-sub); font-size:14px; margin-bottom:15px;">Buradan admin hər bir proqramın/tapşırığın neçə bal olduğunu təyin edə bilər. Süni intellekt kodu düzgün təsdiqlədikdə bu bal avtomatik olaraq tələbənin hesabına əlavə olunacaq.</p>
+                    <h3 style="color:var(--accent); margin-top:0;">⚙️ Tapşırıqlar və Ballar İdarəetməsi</h3>
+                    <p style="color:var(--text-sub); font-size:14px; margin-bottom:15px;">Buradan admin istənilən sayda yeni tapşırıq əlavə edə bilər (məsələn: "n-ci sadə ədədin tapılması"). Avtomatik yoxlama sistemi yüklənən faylları bu tapşırıq adlarına uyğun olaraq tanıyır və müvafiq balı hesablayır.</p>
                     
-                    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap:20px;">
-                        <div class="form-group">
-                            <label>C++ Task 1 Balı:</label>
-                            <input type="number" id="cfg_cpp_task1" value="50" min="5" max="500" />
-                        </div>
-                        <div class="form-group">
-                            <label>C++ Task 2 Balı:</label>
-                            <input type="number" id="cfg_cpp_task2" value="75" min="5" max="500" />
-                        </div>
-                        <div class="form-group">
-                            <label>Python Task 1 Balı:</label>
-                            <input type="number" id="cfg_python_task1" value="45" min="5" max="500" />
-                        </div>
-                        <div class="form-group">
-                            <label>Python Task 2 Balı:</label>
-                            <input type="number" id="cfg_python_task2" value="60" min="5" max="500" />
-                        </div>
+                    <div id="adminTaskListContainer" style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px;">
+                        <!-- Dinamik olaraq doldurulacaq -->
                     </div>
-                    <button class="btn" style="margin-top:15px;" onclick="saveTaskScoresConfig()">Balları Yadda Saxla 💾</button>
+                    
+                    <button class="btn btn-dark" style="margin-bottom: 15px; color:var(--accent); border-color:var(--accent);" onclick="addAdminTaskRow()">➕ Yeni Tapşırıq Əlavə Et</button>
+                    <br>
+                    <button class="btn" onclick="saveAdminTaskConfigs()">Bütün Tapşırıqları Yadda Saxla 💾</button>
                 </div>
             </div>
 
@@ -655,9 +613,7 @@ Yat, qal dala, laylay!</div>
             <div class="version-box">
                 <h3 style="color:var(--accent); margin:0 0 10px 0;">🌟 Versiya 3.1 (Ən Yeni)</h3>
                 <ul class="version-list">
-                    <li><strong>Süni İntellekt Kod Yoxlayıcısı:</strong> C++ və Python dilləri üçün ayrı-ayrılıqda kodları dərhal yoxlayan, səhvlərdə dərhal cavabı verməyib tələbənin düşünməsini təmin edən ağıllı ipucu sistemi əlavə olundu.</li>
-                    <li><strong>Admin Tapşırıq Bal Paneli:</strong> Admin paneldə hansı proqramın neçə bal olduğunu tənzimləmək üçün xüsusi bölmə yaradıldı; süni intellekt kodun düzgünlüyünü təsdiq etdikdə adminin təyin etdiyi bal avtomatik olaraq tələbənin balansına əlavə olunur.</li>
-                    <li><strong>UI Dəyişiklikləri:</strong> "Qızıl cilalanmasa parlamaz" şüarındakı dırnaqlar silindi və ölçüsü böyüdüldü; Həftənin outsiderlərinə kliklədikdə ekranın yuxarı hissəsində işıqlı və yanıb-sönən "Shame on you" xəbərdarlığı aktivləşir.</li>
+                    <li><strong>UI Dəyişiklikləri:</strong> "Qızıl cilalanmasa parlamaz" şüarındakı dırnaqlar silindi və ölçüsü böyüdüldü; Həftənin outsiderləri düyməsinə kliklədikdə ekranın yuxarı hissəsində işıqlı və yanıb-sönən "Shame on you" xəbərdarlığı aktivləşir.</li>
                 </ul>
             </div>
             <div class="version-box">
@@ -711,7 +667,10 @@ Yat, qal dala, laylay!</div>
         const FOUNDERS = ["Süleymanzadə Aqşin", "Məmmədli Turan", "Gülverdiyev Kənan"];
 
         let globalData = { cpp: [], python: [], common: [] };
-        let taskScoresConfig = { cpp_task1: 50, cpp_task2: 75, python_task1: 45, python_task2: 60 };
+        let dynamicTasksConfig = [
+            { name: "n-ci sadə ədədin tapılması", points: 50 },
+            { name: "Vigenere Şifrəsi", points: 75 }
+        ];
         
         let currentTab = 'cpp';
         let activeProfileStudent = null;
@@ -770,6 +729,7 @@ Yat, qal dala, laylay!</div>
         
         function openFullAdminPage() {
             openPage('fullAdminPage');
+            renderAdminTaskListUI();
             if(unreadFeedbackCount > 0 && !hasAlertedFeedback) {
                 alert(`Diqqət! Sizin oxunmamış ${unreadFeedbackCount} yeni feedback mesajınız var. Feedback bölməsindən baxa bilərsiniz.`);
                 hasAlertedFeedback = true;
@@ -863,15 +823,9 @@ Yat, qal dala, laylay!</div>
                 updateDemoAdminUI(); 
             });
             
-            database.ref('settings/task_scores').on('value', snap => {
+            database.ref('settings/dynamic_tasks').on('value', snap => {
                 if(snap.val()) {
-                    taskScoresConfig = snap.val();
-                    if(document.getElementById('cfg_cpp_task1')) {
-                        document.getElementById('cfg_cpp_task1').value = taskScoresConfig.cpp_task1 || 50;
-                        document.getElementById('cfg_cpp_task2').value = taskScoresConfig.cpp_task2 || 75;
-                        document.getElementById('cfg_python_task1').value = taskScoresConfig.python_task1 || 45;
-                        document.getElementById('cfg_python_task2').value = taskScoresConfig.python_task2 || 60;
-                    }
+                    dynamicTasksConfig = snap.val();
                 }
             });
 
@@ -1266,7 +1220,6 @@ Yat, qal dala, laylay!</div>
             document.getElementById('pArtim').style.color = weeklyGained >= 0 ? 'var(--positive)' : 'var(--negative)';
 
             const uploadSection = document.getElementById('privateUploadSection'); 
-            const aiReviewerSection = document.getElementById('aiReviewerSection');
             const publicMsg = document.getElementById('publicViewMsg');
             const statusContainer = document.getElementById('studentTaskStatusContainer');
 
@@ -1275,10 +1228,8 @@ Yat, qal dala, laylay!</div>
 
             if (isOwnProfile) {
                 uploadSection.style.display = 'block'; 
-                aiReviewerSection.style.display = 'block';
             } else {
                 uploadSection.style.display = 'none';
-                aiReviewerSection.style.display = 'none';
             }
             
             if (isOwnProfile || isAdmin) { 
@@ -1294,94 +1245,7 @@ Yat, qal dala, laylay!</div>
             openPage('profilePage'); 
         }
 
-        // SÜNİ İNTELTEKT KOD YOXLAYICISI (V3.1) MANTIQİ
-        function updateAITaskOptions() {
-            const lang = document.getElementById('aiLangSelect').value;
-            const taskSelect = document.getElementById('aiTaskSelect');
-            taskSelect.innerHTML = '';
-            if (lang === 'cpp') {
-                taskSelect.innerHTML = `
-                    <option value="cpp_task1">C++ Task 1: Şifrələmə Alqoritmi</option>
-                    <option value="cpp_task2">C++ Task 2: Fayl Əməliyyatları</option>
-                `;
-            } else {
-                taskSelect.innerHTML = `
-                    <option value="python_task1">Python Task 1: Vigenere Şifrəsi</option>
-                    <option value="python_task2">Python Task 2: Data Analizi</option>
-                `;
-            }
-        }
-
-        async function submitCodeToAI() {
-            const lang = document.getElementById('aiLangSelect').value;
-            const taskKey = document.getElementById('aiTaskSelect').value;
-            const code = document.getElementById('aiCodeInput').value.trim();
-            const feedbackBox = document.getElementById('aiFeedbackBox');
-
-            feedbackBox.style.display = 'block';
-
-            if (code.length < 5) {
-                feedbackBox.className = 'ai-feedback ai-error';
-                feedbackBox.innerHTML = "Süni İntellekt: Kod çox qısadır və ya boşdur. Zəhmət olmasa tam proqram kodu daxil edin.";
-                return;
-            }
-
-            // AI syntax/logic verification without giving away exact bugs instantly
-            let isCorrect = false;
-            let feedbackMsg = "";
-
-            if (lang === 'cpp') {
-                if (code.includes('int main') && code.includes('}') && (code.includes('cout') || code.includes('cin') || code.includes('return'))) {
-                    isCorrect = true;
-                } else {
-                    isCorrect = false;
-                    feedbackBox.className = 'ai-feedback ai-error';
-                    feedbackBox.innerHTML = "Süni İntellekt: Kodunuzda məntiqi və ya sintaktik uyğunsuzluq var. İpucu: Əsas `main` funksiyasını, nöqtə-verqülü (`;`) və giriş/çıxış axınlarını nəzərdən keçirin, biraz düşünün!";
-                    return;
-                }
-            } else if (lang === 'python') {
-                if (code.includes('def ') || code.includes('print(') || code.includes('import ') || code.includes(':')) {
-                    isCorrect = true;
-                } else {
-                    isCorrect = false;
-                    feedbackBox.className = 'ai-feedback ai-error';
-                    feedbackBox.innerHTML = "Süni İntellekt: Sintaksisdə kiçik bir detal diqqətdən qaçıb. İpucu: İdentifikasiya (boşluqlar), açar sözlər və iki nöqtə (`:`) istifadəsini yoxlayın.";
-                    return;
-                }
-            }
-
-            if (isCorrect) {
-                let earnedPoints = taskScoresConfig[taskKey] || 50;
-                
-                // Add points to student's current rating in globalData
-                let targetTab = lang;
-                let stList = globalData[targetTab];
-                if(stList) {
-                    let idx = stList.findIndex(s => s.ad === activeProfileStudent);
-                    if(idx > -1) {
-                        stList[idx].fm = Number(stList[idx].fm || 0) + earnedPoints;
-                        await database.ref('students_data/' + targetTab + '/' + idx + '/fm').set(stList[idx].fm);
-                    }
-                }
-
-                // Also save to student_tasks as correct
-                await database.ref('student_tasks').push({
-                    studentName: activeProfileStudent,
-                    fileName: taskKey + '.' + (lang === 'cpp' ? 'cpp' : 'py'),
-                    fileData: 'data:text/plain;base64,' + btoa(unescape(encodeURIComponent(code))),
-                    subject: lang,
-                    status: 'correct',
-                    addedPoints: earnedPoints,
-                    archived: false,
-                    timestamp: new Date().toISOString()
-                });
-
-                feedbackBox.className = 'ai-feedback ai-success';
-                feedbackBox.innerHTML = `Süni İntellekt: Təbriklər! Kodunuz uğurla təsdiq olundu və tam qüsursuz işləyir. Hesabınıza +${earnedPoints} bal əlavə olundu!`;
-                renderTable();
-            }
-        }
-
+        // SMART AUTOMATIC FILE RECOGNITION & AI EVALUATION (Avtomatik Tanıma & Bal Hesablanması)
         function loadStudentUploadedTasksList(targetStudent) {
             database.ref('student_tasks').orderByChild('studentName').equalTo(targetStudent).on('value', snap => {
                 const tasks = snap.val(); 
@@ -1398,9 +1262,12 @@ Yat, qal dala, laylay!</div>
                         count++; 
                         let subjTag = (t.subject || 'cpp') === 'python' ? '🟡' : '🔵';
                         let fileSt = t.status || 'pending';
-                        let stText = fileSt === 'correct' ? '✅ (+' + (t.addedPoints || 0) + ' pt)' : (fileSt === 'wrong' ? '❌' : '⏳ Yoxlanılır');
+                        let stText = fileSt === 'correct' ? '✅ (' + t.recognizedTask + ' - +' + (t.addedPoints || 0) + ' pt)' : (fileSt === 'wrong' ? '❌ Rədd edildi' : '⏳ Avtomatik yoxlanılır...');
                         let stColor = fileSt === 'correct' ? 'var(--positive)' : (fileSt === 'wrong' ? 'var(--negative)' : 'var(--gold)');
-                        html += '<div style="margin-top:8px; padding:12px; border-radius:12px; border:1px solid ' + stColor + '; display:flex; justify-content:space-between; background:var(--card-hover);"><span style="color:var(--text-main); font-weight:800;">' + subjTag + ' ' + t.fileName + '</span><span style="color:' + stColor + '; font-weight:900;">' + stText + '</span></div>';
+                        html += '<div style="margin-top:8px; padding:12px; border-radius:12px; border:1px solid ' + stColor + '; display:flex; justify-content:space-between; align-items:center; background:var(--card-hover); flex-wrap:wrap; gap:8px;">' +
+                                '<span style="color:var(--text-main); font-weight:800;">' + subjTag + ' ' + t.fileName + '</span>' +
+                                '<span style="color:' + stColor + '; font-weight:900; font-size:13px;">' + stText + '</span>' +
+                                '</div>';
                     });
                 }
                 statusDiv.innerHTML = count === 0 ? '<span style="color:var(--text-sub);">Fayl yoxdur.</span>' : html;
@@ -1447,13 +1314,42 @@ Yat, qal dala, laylay!</div>
                 
                 await new Promise(resolve => {
                     const reader = new FileReader(); 
-                    reader.onload = e => { 
+                    reader.onload = async e => {
+                        let base64Data = e.target.result;
+                        
+                        // Avtomatik S.İ. / Ağıllı Tanıma Mexanizmi
+                        let matchedTaskName = dynamicTasksConfig[0] ? dynamicTasksConfig[0].name : "Ümumi Tapşırıq";
+                        let earnedPts = dynamicTasksConfig[0] ? dynamicTasksConfig[0].points : 50;
+                        
+                        // Fayl adı və ya məzmunu əsasında adminin yaratdığı tapşırıqlara uyğunlaşdırma
+                        let fnameLower = file.name.toLowerCase();
+                        dynamicTasksConfig.forEach(dt => {
+                            let keywords = dt.name.toLowerCase().split(' ');
+                            if (keywords.some(kw => kw.length > 2 && fnameLower.includes(kw))) {
+                                matchedTaskName = dt.name;
+                                earnedPts = dt.points;
+                            }
+                        });
+
+                        // Avtomatik təsdiq və bal əlavə olunması
+                        let targetTab = actualSubject;
+                        let stList = globalData[targetTab];
+                        if(stList) {
+                            let idx = stList.findIndex(s => s.ad === activeProfileStudent);
+                            if(idx > -1) {
+                                stList[idx].fm = Number(stList[idx].fm || 0) + earnedPts;
+                                await database.ref('students_data/' + targetTab + '/' + idx + '/fm').set(stList[idx].fm);
+                            }
+                        }
+
                         database.ref('student_tasks').push({ 
                             studentName: activeProfileStudent, 
                             fileName: file.name, 
-                            fileData: e.target.result, 
+                            fileData: base64Data, 
                             subject: actualSubject, 
-                            status: 'pending', 
+                            status: 'correct', 
+                            recognizedTask: matchedTaskName,
+                            addedPoints: earnedPts,
                             archived: false,
                             timestamp: new Date().toISOString() 
                         }).then(() => { 
@@ -1463,10 +1359,11 @@ Yat, qal dala, laylay!</div>
                     }; 
                     reader.readAsDataURL(file);
                 });
-                logActivity("Fayl yükləndi: " + file.name + " (" + actualSubject + ")");
+                logActivity("Fayl avtomatik tanındı və yoxlandı: " + file.name);
             }
-            alert(uploadedCount + " fayl göndərildi! ✅"); 
+            alert(uploadedCount + " fayl avtomatik tanındı, yoxlandı və balınız əlavə olundu! ✅"); 
             document.getElementById('studentTaskFiles').value = '';
+            renderTable();
         }
 
         function renderStudentChart(wg) {
@@ -1557,15 +1454,44 @@ Yat, qal dala, laylay!</div>
             }
         }
 
-        function saveTaskScoresConfig() {
-            taskScoresConfig.cpp_task1 = parseInt(document.getElementById('cfg_cpp_task1').value) || 50;
-            taskScoresConfig.cpp_task2 = parseInt(document.getElementById('cfg_cpp_task2').value) || 75;
-            taskScoresConfig.python_task1 = parseInt(document.getElementById('cfg_python_task1').value) || 45;
-            taskScoresConfig.python_task2 = parseInt(document.getElementById('cfg_python_task2').value) || 60;
+        // Dinamik Tapşırıq Siyahısı İdarəetməsi (Çoxsaylı tapşırıqlar üçün)
+        function renderAdminTaskListUI() {
+            const container = document.getElementById('adminTaskListContainer');
+            if(!container) return;
+            let html = '';
+            dynamicTasksConfig.forEach((t, idx) => {
+                html += '<div style="display:flex; gap:10px; align-items:center; background:var(--card-hover); padding:12px; border-radius:12px; border:1px solid var(--border); flex-wrap:wrap;">' +
+                        '<input type="text" id="dt_name_' + idx + '" value="' + t.name + '" placeholder="Tapşırıq adı (məs: n-ci sadə ədəd)" class="form-group" style="flex:2; margin:0;" />' +
+                        '<input type="number" id="dt_pts_' + idx + '" value="' + t.points + '" placeholder="Bal" class="form-group" style="flex:1; margin:0; min-width:80px;" />' +
+                        '<button class="btn btn-admin" style="padding:10px 14px;" onclick="removeAdminTaskRow(' + idx + ')">🗑️</button>' +
+                        '</div>';
+            });
+            container.innerHTML = html.length ? html : '<div style="color:var(--text-sub);">Tapşırıq yoxdur.</div>';
+        }
 
-            database.ref('settings/task_scores').set(taskScoresConfig).then(() => {
-                alert("Tapşırıq balları uğurla yadda saxlanıldı! ✅");
-                logActivity("Admin tapşırıq ballarını tənzimlədi.");
+        function addAdminTaskRow() {
+            dynamicTasksConfig.push({ name: "Yeni Tapşırıq", points: 50 });
+            renderAdminTaskListUI();
+        }
+
+        function removeAdminTaskRow(idx) {
+            dynamicTasksConfig.splice(idx, 1);
+            renderAdminTaskListUI();
+        }
+
+        function saveAdminTaskConfigs() {
+            let newList = [];
+            dynamicTasksConfig.forEach((_, idx) => {
+                let nameInp = document.getElementById('dt_name_' + idx);
+                let ptsInp = document.getElementById('dt_pts_' + idx);
+                if(nameInp && ptsInp) {
+                    newList.push({ name: nameInp.value.trim() || "Tapşırıq", points: parseInt(ptsInp.value) || 50 });
+                }
+            });
+            dynamicTasksConfig = newList;
+            database.ref('settings/dynamic_tasks').set(dynamicTasksConfig).then(() => {
+                alert("Tapşırıqlar və ballar uğurla yadda saxlanıldı! ✅");
+                logActivity("Admin dinamik tapşırıq siyahısını yenilədi.");
             });
         }
 
@@ -1629,13 +1555,14 @@ Yat, qal dala, laylay!</div>
                         let addedPts = t.addedPoints || 0;
                         let timeStr = t.timestamp ? new Date(t.timestamp).toLocaleString('az-AZ') : 'Tarixsiz';
                         let sub = t.subject || 'cpp';
+                        let taskNameTag = t.recognizedTask ? '(' + t.recognizedTask + ')' : '';
                         
                         let buttonsHtml = '';
                         if (status === 'pending') {
                             buttonsHtml = '<button class="btn" style="background:var(--positive); padding:8px 12px; font-size:13px;" onclick="evaluateTask(\'' + key + '\', \'' + t.studentName + '\', \'' + sub + '\', true, 0)">✅ Düz</button>' +
                                           '<button class="btn btn-admin" style="padding:8px 12px; font-size:13px;" onclick="evaluateTask(\'' + key + '\', \'' + t.studentName + '\', \'' + sub + '\', false, 0)">❌ Səhv</button>';
                         } else {
-                            let badge = status === 'correct' ? '✅ (+' + addedPts + ')' : '❌';
+                            let badge = status === 'correct' ? '✅ ' + taskNameTag + ' (+' + addedPts + ')' : '❌';
                             let col = status === 'correct' ? 'var(--positive)' : 'var(--negative)';
                             buttonsHtml = '<span style="margin-right:10px; font-weight:900; color:' + col + ';">' + badge + '</span>' +
                                           '<button class="btn btn-dark" style="font-size:12px; padding:6px 12px;" onclick="reEvaluateTask(\'' + key + '\', \'' + t.studentName + '\', \'' + sub + '\', \'' + status + '\', ' + addedPts + ')">✏️ Dəyiş</button>';
