@@ -56,6 +56,10 @@
         .theme-toggle { background: transparent; border: 1px solid var(--border); color: var(--text-main); font-size: 18px; width: 42px; height: 42px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
         .theme-toggle:hover { background: var(--card-hover); }
 
+        /* LANGUAGE SELECTOR */
+        .lang-select { background: var(--card-bg); border: 1px solid var(--border); color: var(--text-main); font-size: 14px; font-weight: 800; padding: 8px 12px; border-radius: 10px; cursor: pointer; outline: none; transition: 0.2s; font-family: inherit; }
+        .lang-select:hover { border-color: var(--accent); }
+
         .auth-widget { display: flex; align-items: center; gap: 12px; padding: 8px 16px; border-radius: 14px; border: 1px solid var(--border); background: var(--card-bg); }
         .auth-btn { background: var(--accent); color: #fff; font-weight: 800; border: none; padding: 10px 20px; border-radius: 10px; cursor: pointer; transition: 0.2s; }
         .auth-btn:hover { background: var(--accent-hover); }
@@ -100,30 +104,32 @@
         .v-board-item img { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--border); object-fit: cover; }
         .v-board-rank { font-size: 18px; font-weight: 900; width: 30px; text-align: center; }
 
-        /* SHAME ON YOU GLOWING BANNER (Fixed positioning/display to not break layout or hide content) */
+        /* SHAME ON YOU GLOWING BANNER (Fixed at the very top of the screen) */
         #shameBanner {
             display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
             text-align: center;
-            margin-bottom: 20px;
-            padding: 12px 20px;
-            border-radius: 14px;
-            background: rgba(239, 68, 68, 0.25);
-            border: 2px solid var(--negative);
-            font-size: 1.5rem;
+            padding: 16px;
+            background: rgba(239, 68, 68, 0.95);
+            border-bottom: 3px solid var(--negative);
+            font-size: 1.8rem;
             font-weight: 900;
-            color: var(--negative);
+            color: #fff;
             animation: glowBlink 0.8s infinite alternate;
-            position: relative;
-            z-index: 10;
+            z-index: 30000;
+            box-shadow: 0 4px 20px rgba(239, 68, 68, 0.6);
         }
 
         @keyframes glowBlink {
             from {
-                text-shadow: 0 0 5px var(--negative), 0 0 10px var(--negative);
-                opacity: 0.6;
+                text-shadow: 0 0 5px #fff, 0 0 10px var(--negative);
+                opacity: 0.8;
             }
             to {
-                text-shadow: 0 0 20px var(--negative), 0 0 30px var(--negative);
+                text-shadow: 0 0 20px #fff, 0 0 30px var(--negative);
                 opacity: 1;
             }
         }
@@ -217,15 +223,26 @@
 </head>
 <body>
 
+    <!-- Shame on You Glowing Warning Banner (Fixed at the very top of the screen) -->
+    <div id="shameBanner">⚠️ SHAME ON YOU! ⚠️</div>
+
     <div class="container">
         <!-- 🏠 HEADER -->
         <div class="header card">
             <div class="header-title-box">
-                <h1>🏆 TT-08 Proqram Saytı <span class="version-badge" onclick="showVersionModal()">V3.1</span></h1>
+                <h1 id="txtTitle">🏆 TT-08 Proqram Saytı <span class="version-badge" onclick="showVersionModal()">V3.1</span></h1>
                 <div id="liveDateTime" style="font-size:13px; color:var(--text-sub); margin-top:6px; font-weight:800;">📅 Yüklənir...</div>
             </div>
 
             <div style="display:flex; gap:15px; align-items:center; flex-wrap:wrap;">
+                <!-- Language Selector -->
+                <select id="langSelect" class="lang-select" onchange="changeLanguage(this.value)">
+                    <option value="az">AZ</option>
+                    <option value="ru">RU</option>
+                    <option value="en">EN</option>
+                    <option value="tr">TR</option>
+                </select>
+
                 <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">🌞</button>
 
                 <div class="tabs">
@@ -236,7 +253,7 @@
 
                 <div id="authWidget" class="auth-widget">
                     <div id="authLoggedOut">
-                        <button class="auth-btn" onclick="openAuthModal()">🔐 Giriş</button>
+                        <button class="auth-btn" onclick="openAuthModal()" id="txtLoginBtn">🔐 Giriş</button>
                     </div>
                     <div id="authLoggedIn" style="display:none; align-items:center; gap:12px;">
                         <img id="topAvatar" src="" class="user-avatar-small" onclick="goToMyProfile()" alt="Avatar" />
@@ -244,43 +261,40 @@
                             <span id="topUsername" class="user-name-small" onclick="goToMyProfile()">İstifadəçi</span>
                             <span id="topRoleBadge" style="font-size:11px; color:var(--text-sub); font-weight:900;">TƏLƏBƏ</span>
                         </div>
-                        <button class="logout-btn" onclick="logoutUser()">Çıxış</button>
+                        <button class="logout-btn" onclick="logoutUser()" id="txtLogoutBtn">Çıxış</button>
                     </div>
                 </div>
             </div>
         </div>
         
-        <!-- Qızılı Yazı (Böyüdüldü və dırnaqlar silindi) -->
-        <div style="text-align: center; color: var(--gold); font-weight: 900; font-style: italic; font-size: 20px; margin-bottom: 25px; text-shadow: 0px 0px 8px rgba(245,158,11,0.4);">
+        <!-- Qızılı Yazı -->
+        <div id="txtGoldenSlogan" style="text-align: center; color: var(--gold); font-weight: 900; font-style: italic; font-size: 20px; margin-bottom: 25px; text-shadow: 0px 0px 8px rgba(245,158,11,0.4);">
             Qızıl cilalanmasa parlamaz
         </div>
-
-        <!-- Shame on You Glowing Warning Banner -->
-        <div id="shameBanner">⚠️ SHAME ON YOU! ⚠️</div>
 
         <!-- 📄 ƏSAS DASHBOARD -->
         <div id="mainDashboard" class="page-view" style="display: block;">
             
             <!-- MÜNSİFLƏR HEYƏTİ -->
             <div class="jury-board card">
-                <h3 style="color:var(--gold); margin-top:0; font-size:20px; font-weight:900;">👑 Münsiflər Heyəti (Jüri)</h3>
+                <h3 id="txtJuryTitle" style="color:var(--gold); margin-top:0; font-size:20px; font-weight:900;">👑 Münsiflər Heyəti (Jüri)</h3>
                 <div class="jury-grid">
                     <div class="jury-card">
                         <img id="juryAvatarAqsin" src="https://svgsilh.com/svg/1300331.svg" style="width:65px; height:65px; border-radius:50%; margin-bottom:10px; border:2px solid var(--gold); object-fit:cover;" alt="Aqşin" />
                         <br><strong>Süleymanzadə Aqşin</strong><br>
-                        <span style="font-size:13px; color:var(--text-sub);">Baş Admin (Master)</span><br>
+                        <span id="txtMasterRole" style="font-size:13px; color:var(--text-sub);">Baş Admin (Master)</span><br>
                         <a href="tel:+994772172623" class="phone-link">📞 077-217-26-23</a>
                     </div>
                     <div class="jury-card">
                         <img id="juryAvatarTuran" src="https://svgsilh.com/svg/1300331.svg" style="width:65px; height:65px; border-radius:50%; margin-bottom:10px; border:2px solid var(--accent); object-fit:cover;" alt="Turan" />
                         <br><strong>Məmmədli Turan</strong><br>
-                        <span style="font-size:13px; color:var(--text-sub);">Admin</span><br>
+                        <span id="txtAdminRole" style="font-size:13px; color:var(--text-sub);">Admin</span><br>
                         <a href="tel:+994775214166" class="phone-link">📞 077 521 41 66</a>
                     </div>
                     <div class="jury-card">
                         <img id="juryAvatarKenan" src="https://svgsilh.com/svg/1300331.svg" style="width:65px; height:65px; border-radius:50%; margin-bottom:10px; border:2px solid var(--accent); object-fit:cover;" alt="Kənan" />
                         <br><strong>Gülverdiyev Kənan</strong><br>
-                        <span style="font-size:13px; color:var(--text-sub);">Admin</span><br>
+                        <span id="txtAdminRole2" style="font-size:13px; color:var(--text-sub);">Admin</span><br>
                         <a href="tel:+994707383756" class="phone-link">📞 070 738 37 56</a>
                     </div>
                 </div>
@@ -289,43 +303,43 @@
             <!-- DEADLİNE VƏ QRUP FOTO -->
             <div class="deadline-banner card" id="deadlineBanner">
                 <div>
-                    <strong style="color:var(--negative); font-size:16px;">⏳ TAPŞIRIQ QƏBULU DEADLİNE:</strong>
+                    <strong id="txtDeadlineTitle" style="color:var(--negative); font-size:16px;">⏳ TAPŞIRIQ QƏBULU DEADLİNE:</strong>
                     <span id="deadlineTargetText" style="color:var(--text-main); font-size:15px; margin-left:8px; font-weight:800;">Təyin edilməyib</span>
                 </div>
                 <div class="deadline-timer" id="deadlineTimerCount">--d --s --d --s</div>
             </div>
 
             <div class="card" style="text-align:center;">
-                <h3 style="margin:0 0 15px 0; color:var(--accent); font-weight:900;">📸 Bizim Qrupumuz</h3>
+                <h3 id="txtGroupPhotoTitle" style="margin:0 0 15px 0; color:var(--accent); font-weight:900;">📸 Bizim Qrupumuz</h3>
                 <img id="mainGroupImg" src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1200&q=80" style="max-width:100%; max-height:400px; border-radius:12px; object-fit:cover;" alt="Group Image" />
             </div>
 
             <!-- VİZUAL LİDERLƏR VƏ OUTSİDERLƏR TABLOSU -->
             <div class="visual-boards">
                 <div class="v-board v-board-gold">
-                    <h3 style="color:var(--gold); text-align:center; margin-top:0; font-weight:900;">🏆 Həftənin Liderləri</h3>
+                    <h3 id="txtTopLeaders" style="color:var(--gold); text-align:center; margin-top:0; font-weight:900;">🏆 Həftənin Liderləri</h3>
                     <div id="boardTop3">Yüklənir...</div>
                 </div>
                 <div class="v-board v-board-silver">
-                    <h3 style="color:var(--silver); text-align:center; margin-top:0; font-weight:900;">🥈 Keçən Həftənin Liderləri</h3>
+                    <h3 id="txtPrevLeaders" style="color:var(--silver); text-align:center; margin-top:0; font-weight:900;">🥈 Keçən Həftənin Liderləri</h3>
                     <div id="boardPrevTop3">Yüklənir...</div>
                 </div>
                 <div class="v-board v-board-danger">
-                    <h3 style="color:var(--negative); text-align:center; margin-top:0; font-weight:900;">😴 Outsiderlər</h3>
+                    <h3 id="txtOutsidersBoard" style="color:var(--negative); text-align:center; margin-top:0; font-weight:900;">😴 Outsiderlər</h3>
                     <div id="boardBottom3">Yüklənir...</div>
                 </div>
             </div>
 
             <div class="action-bar">
                 <div style="display:flex; gap:10px; flex-wrap:wrap;">
-                    <button class="btn btn-gold" onclick="showWinnersCelebration()">🎉 Həftənin Qalibləri</button>
+                    <button class="btn btn-gold" onclick="showWinnersCelebration()" id="txtBtnWinners">🎉 Həftənin Qalibləri</button>
                     <!-- Həftənin Outsiderləri Butonu -->
-                    <button class="btn btn-admin" onclick="showOutsidersModal(); triggerShame();">😴 Həftənin Outsiderləri</button>
-                    <button class="btn btn-dark" onclick="openFeedbackModal()">💬 Feedback Göndər</button>
+                    <button class="btn btn-admin" onclick="showOutsidersModal(); triggerShame();" id="txtBtnOutsiders">😴 Həftənin Outsiderləri</button>
+                    <button class="btn btn-dark" onclick="openFeedbackModal()" id="txtBtnFeedback">💬 Feedback Göndər</button>
                 </div>
                 <div style="display:flex; gap:10px;">
                     <button id="btnAdminPanel" class="btn btn-dark" style="display:none; color:var(--accent); border-color:var(--accent);" onclick="openFullAdminPage()">⚙️ Admin Panel</button>
-                    <button class="btn btn-dark" onclick="sortAndRender()">🔄 Yenilə</button>
+                    <button class="btn btn-dark" onclick="sortAndRender()" id="txtBtnRefresh">🔄 Yenilə</button>
                 </div>
             </div>
 
@@ -339,7 +353,7 @@
 
         <!-- 📄 ŞƏXSİ PROFiL EKRANI -->
         <div id="profilePage" class="page-view card">
-            <button class="back-btn" onclick="goBackToMain()">⬅️ Geri Qayıt</button>
+            <button class="back-btn" onclick="goBackToMain()" id="txtBackBtn">⬅️ Geri Qayıt</button>
             
             <div class="profile-header-card">
                 <img id="pAvatar" class="profile-avatar-large" src="" alt="Profile Image" />
@@ -350,27 +364,27 @@
             </div>
 
             <div class="profile-grid-info">
-                <div class="info-box"><span>🎓 İxtisası</span><strong style="color:var(--accent);">İnformasiya Təhlükəsizliyi</strong></div>
-                <div class="info-box"><span>📚 Kursu</span><strong id="pKurs">2-ci Kurs</strong></div>
-                <div class="info-box"><span>🎂 Təvəllüd</span><strong id="pTevellud">Məlum deyil</strong></div>
-                <div class="info-box"><span>⏳ Yaş</span><strong id="pAge">Məlum deyil</strong></div>
-                <div class="info-box"><span>👤 Cinsiyyət</span><strong id="pGender">Məlum deyil</strong></div>
-                <div class="info-box"><span>📍 Doğulduğu Yer</span><strong id="pYer">Gəncə şəhəri</strong></div>
-                <div class="info-box"><span>⭐ Cari Reytinq (Ümumi)</span><strong id="pCari" style="color:var(--accent);">0 pt</strong></div>
-                <div class="info-box"><span>📊 Həftəlik Artım</span><strong id="pArtim">0</strong></div>
+                <div class="info-box"><span id="txtInfoMajor">🎓 İxtisası</span><strong style="color:var(--accent);">İnformasiya Təhlükəsizliyi</strong></div>
+                <div class="info-box"><span id="txtInfoCourse">📚 Kursu</span><strong id="pKurs">2-ci Kurs</strong></div>
+                <div class="info-box"><span id="txtInfoDob">🎂 Təvəllüd</span><strong id="pTevellud">Məlum deyil</strong></div>
+                <div class="info-box"><span id="txtInfoAge">⏳ Yaş</span><strong id="pAge">Məlum deyil</strong></div>
+                <div class="info-box"><span id="txtInfoGender">👤 Cinsiyyət</span><strong id="pGender">Məlum deyil</strong></div>
+                <div class="info-box"><span id="txtInfoBirthPlace">📍 Doğulduğu Yer</span><strong id="pYer">Gəncə şəhəri</strong></div>
+                <div class="info-box"><span id="txtInfoRating">⭐ Cari Reytinq (Ümumi)</span><strong id="pCari" style="color:var(--accent);">0 pt</strong></div>
+                <div class="info-box"><span id="txtInfoGrowth">📊 Həftəlik Artım</span><strong id="pArtim">0</strong></div>
             </div>
 
             <div id="privateUploadSection" class="info-box" style="margin-bottom:20px; display:none; border: 1px solid var(--positive);">
-                <h4 style="margin:0 0 15px 0; color:var(--positive); font-size:18px; font-weight:900;">📁 Fayl / Sənəd Yüklə</h4>
+                <h4 id="txtUploadTitle" style="margin:0 0 15px 0; color:var(--positive); font-size:18px; font-weight:900;">📁 Fayl / Sənəd Yüklə</h4>
                 <div style="display:flex; gap:15px; align-items:center; flex-wrap:wrap;">
                     <select id="studentSubjectSelect" class="form-group" style="margin:0; width:auto;">
                         <option value="cpp">🔵 C++ Faylı</option>
                         <option value="python">🟡 Python Faylı</option>
                     </select>
                     <input type="file" id="studentTaskFiles" multiple class="form-group" style="margin:0; width:auto; padding:10px;" />
-                    <button class="btn" style="background:var(--positive); color:#fff;" onclick="uploadStudentTasks()">🚀 Göndər</button>
+                    <button class="btn" style="background:var(--positive); color:#fff;" onclick="uploadStudentTasks()" id="txtUploadBtn">🚀 Göndər</button>
                 </div>
-                <div style="font-size:12px; color:var(--text-sub); margin-top:10px; font-weight:800;">💡 DİQQƏT: Sistem faylınızın sonluğuna və məzmununa görə tapşırığı avtomatik tanıyır.</div>
+                <div id="txtUploadNotice" style="font-size:12px; color:var(--text-sub); margin-top:10px; font-weight:800;">💡 DİQQƏT: Sistem faylınızın sonluğuna və məzmununa görə tapşırığı avtomatik tanıyır.</div>
             </div>
             
             <div id="publicViewMsg" style="font-size:14px; color:var(--text-sub); text-align:center; margin-bottom:20px; font-style:italic;">
@@ -378,12 +392,12 @@
             </div>
 
             <div class="info-box" style="margin-bottom:20px;" id="studentTaskStatusContainer">
-                <h4 style="margin:0 0 15px 0; color:var(--accent); font-size:18px; font-weight:900;">📄 Yüklənilmiş Faylların Vəziyyəti</h4>
+                <h4 id="txtUploadedFilesStatus" style="margin:0 0 15px 0; color:var(--accent); font-size:18px; font-weight:900;">📄 Yüklənilmiş Faylların Vəziyyəti</h4>
                 <div id="studentTaskStatus" style="font-size:14px; font-weight:800;">Yüklənir...</div>
             </div>
 
             <div class="info-box">
-                <h3 style="margin:0 0 15px 0; font-size:18px; color:var(--text-main); font-weight:900;">📈 Həftəlik Qazanılan Bal Diaqramı</h3>
+                <h3 id="txtChartTitle" style="margin:0 0 15px 0; font-size:18px; color:var(--text-main); font-weight:900;">📈 Həftəlik Qazanılan Bal Diaqramı</h3>
                 <canvas id="studentChart" height="100"></canvas>
             </div>
         </div>
@@ -392,7 +406,7 @@
         <div id="fullAdminPage" class="page-view card">
             <div class="admin-dashboard-header">
                 <h2 id="welcomeAdmin" style="margin:0; color:var(--accent); font-size:26px; font-weight:900;">⚙️ Admin Control Panel</h2>
-                <button class="back-btn" style="margin:0;" onclick="goBackToMain()">⬅️ Ana Səhifəyə</button>
+                <button class="back-btn" style="margin:0;" onclick="goBackToMain()" id="txtAdminBack">⬅️ Ana Səhifəyə</button>
             </div>
 
             <div class="admin-nav" id="adminNavTabs">
@@ -518,39 +532,39 @@
     <!-- MODALLAR -->
     <div id="authModal" class="modal">
         <div class="modal-content" style="text-align:center;">
-            <h2 style="color:var(--accent); margin-top:0; font-weight:900;">Giriş / Qeydiyyat</h2>
+            <h2 id="txtAuthModalTitle" style="color:var(--accent); margin-top:0; font-weight:900;">Giriş / Qeydiyyat</h2>
             <div class="auth-tabs">
                 <div id="tabBtnLogin" class="auth-tab-btn active" onclick="switchAuthTab('login')">Giriş Et</div>
                 <div id="tabBtnReg" class="auth-tab-btn" onclick="switchAuthTab('register')">Qeydiyyat</div>
             </div>
             <div id="loginForm">
-                <div class="form-group"><label>İstifadəçi / Admin adı:</label><input type="text" id="loginUsername" placeholder="Adınız..." onkeydown="if(event.key==='Enter') document.getElementById('loginPass').focus()" /></div>
-                <div class="form-group"><label>Şifrə:</label><input type="password" id="loginPass" placeholder="Şifrəniz..." onkeydown="if(event.key==='Enter') loginUser()" /></div>
-                <button class="btn" style="width:100%; margin-top:10px;" onclick="loginUser()">Daxil Ol 🚀</button>
+                <div class="form-group"><label id="txtLoginUserLabel">İstifadəçi / Admin adı:</label><input type="text" id="loginUsername" placeholder="Adınız..." onkeydown="if(event.key==='Enter') document.getElementById('loginPass').focus()" /></div>
+                <div class="form-group"><label id="txtLoginPassLabel">Şifrə:</label><input type="password" id="loginPass" placeholder="Şifrəniz..." onkeydown="if(event.key==='Enter') loginUser()" /></div>
+                <button class="btn" style="width:100%; margin-top:10px;" onclick="loginUser()" id="txtLoginSubmit">Daxil Ol 🚀</button>
             </div>
             <div id="registerForm" style="display:none;">
-                <div class="form-group"><label>Siyahıdan Adınızı Seçin:</label><select id="regNameSelect"><option value="">-- Seçin --</option></select></div>
-                <div class="form-group"><label>Yeni Şifrə Yaradın:</label><input type="password" id="regPass" placeholder="Ən az 4 simvol" /></div>
-                <button class="btn btn-gold" style="width:100%; margin-top:10px;" onclick="registerUser()">Qeydiyyatdan Keç ✅</button>
+                <div class="form-group"><label id="txtRegSelectLabel">Siyahıdan Adınızı Seçin:</label><select id="regNameSelect"><option value="">-- Seçin --</option></select></div>
+                <div class="form-group"><label id="txtRegPassLabel">Yeni Şifrə Yaradın:</label><input type="password" id="regPass" placeholder="Ən az 4 simvol" /></div>
+                <button class="btn btn-gold" style="width:100%; margin-top:10px;" onclick="registerUser()" id="txtRegSubmit">Qeydiyyatdan Keç ✅</button>
             </div>
-            <button class="btn btn-dark" style="width:100%; margin-top:15px;" onclick="closeModal('authModal')">Bağla</button>
+            <button class="btn btn-dark" style="width:100%; margin-top:15px;" onclick="closeModal('authModal')" id="txtCloseAuth">Bağla</button>
         </div>
     </div>
 
     <div id="winnersModal" class="modal">
         <div class="modal-content" style="text-align:center;">
             <div class="abartili-stickers">🎊 🥳 🍾 🎉 🏆 👑</div>
-            <h1 style="color:var(--gold); font-weight:900; margin-top:0;">👑 QALİBLƏR 🏆</h1>
+            <h1 id="txtWinnersModalTitle" style="color:var(--gold); font-weight:900; margin-top:0;">👑 QALİBLƏR 🏆</h1>
             <div id="winnersListGrid" class="winners-container-v3"></div>
-            <span onclick="playBlackCatVideo()" style="color:var(--text-sub); font-size:12px; font-weight:800; cursor:pointer;">🐈 Sürpriz Video</span><br>
-            <button class="btn btn-gold" style="width:100%; margin-top:15px;" onclick="closeModalCustom('winnersModal')">Möhtəşəm!</button>
+            <span onclick="playBlackCatVideo()" style="color:var(--text-sub); font-size:12px; font-weight:800; cursor:pointer;" id="txtCatVideo">🐈 Sürpriz Video</span><br>
+            <button class="btn btn-gold" style="width:100%; margin-top:15px;" onclick="closeModalCustom('winnersModal')" id="txtWinnersClose">Möhtəşəm!</button>
         </div>
     </div>
     
     <div id="outsidersModal" class="modal">
         <div class="modal-content" style="text-align:center;">
             <div class="abartili-stickers">😭 📉 🤦‍♂️ 💔 😴 🗑️</div>
-            <h1 style="color:var(--negative); font-weight:900; margin-top:0;">😭 OUTSİDERLƏR 😴</h1>
+            <h1 id="txtOutsidersModalTitle" style="color:var(--negative); font-weight:900; margin-top:0;">😭 OUTSİDERLƏR 😴</h1>
             
             <div id="outsidersListGrid" style="display:flex; justify-content:center; gap:15px; flex-wrap:wrap; margin:20px 0;"></div>
 
@@ -587,7 +601,7 @@ Afaqı tutan şurü qiyamətdən ayılma!
 Laylay, bala, laylay!
 Yat, qal dala, laylay!</div>
 
-            <button class="btn btn-admin" style="width:100%;" onclick="closeModalCustom('outsidersModal')">Bağla</button>
+            <button class="btn btn-admin" style="width:100%;" onclick="closeModalCustom('outsidersModal')" id="txtOutsidersClose">Bağla</button>
         </div>
     </div>
     
@@ -600,22 +614,23 @@ Yat, qal dala, laylay!</div>
 
     <div id="feedbackModal" class="modal">
         <div class="modal-content">
-            <h2 style="color:var(--accent); margin-top:0; font-weight:900;">💬 Feedback</h2>
-            <div class="form-group"><label>Adınız:</label><input type="text" id="fbName" /></div>
-            <div class="form-group"><label>Mesajınız:</label><textarea id="fbMsg" rows="4"></textarea></div>
-            <button class="btn" style="width:100%;" onclick="sendFeedback()">Göndər</button>
-            <button class="btn btn-dark" style="width:100%; margin-top:10px;" onclick="closeModal('feedbackModal')">Bağla</button>
+            <h2 id="txtFbModalTitle" style="color:var(--accent); margin-top:0; font-weight:900;">💬 Feedback</h2>
+            <div class="form-group"><label id="txtFbNameLabel">Adınız:</label><input type="text" id="fbName" /></div>
+            <div class="form-group"><label id="txtFbMsgLabel">Mesajınız:</label><textarea id="fbMsg" rows="4"></textarea></div>
+            <button class="btn" style="width:100%;" onclick="sendFeedback()" id="txtFbSend">Göndər</button>
+            <button class="btn btn-dark" style="width:100%; margin-top:10px;" onclick="closeModal('feedbackModal')" id="txtFbClose">Bağla</button>
         </div>
     </div>
 
     <!-- VERSİYA TARİXÇƏSİ -->
     <div id="versionModal" class="modal">
         <div class="modal-content" style="max-width:600px;">
-            <h2 style="color:var(--accent); margin-top:0; font-weight:900;">🚀 Yeniliklər Tarixçəsi</h2>
+            <h2 id="txtVersionModalTitle" style="color:var(--accent); margin-top:0; font-weight:900;">🚀 Yeniliklər Tarixçəsi</h2>
             <div class="version-box">
                 <h3 style="color:var(--accent); margin:0 0 10px 0;">🌟 Versiya 3.1 (Ən Yeni)</h3>
                 <ul class="version-list">
-                    <li><strong>UI Dəyişiklikləri:</strong> "Qızıl cilalanmasa parlamaz" şüarındakı dırnaqlar silindi və ölçüsü böyüdüldü; Həftənin outsiderləri düyməsinə kliklədikdə ekranın yuxarı hissəsində işıqlı və yanıb-sönən "Shame on you" xəbərdarlığı aktivləşir.</li>
+                    <li id="txtVerNote1"><strong>UI Dəyişiklikləri:</strong> "Qızıl cilalanmasa parlamaz" şüarındakı dırnaqlar silindi və ölçüsü böyüdüldü; Həftənin outsiderləri düyməsinə kliklədikdə ekranın yuxarı hissəsində işıqlı və yanıb-sönən "Shame on you" xəbərdarlığı aktivləşir.</li>
+                    <li id="txtVerNote2"><strong>Çoxdilli Dəstək:</strong> Sayta Azərbaycan (AZ), Rus (RU), İngilis (EN) və Türk (TR) olmaqla 4 dil dəyişmə funksiyası əlavə edildi.</li>
                 </ul>
             </div>
             <div class="version-box">
@@ -630,11 +645,369 @@ Yat, qal dala, laylay!</div>
             <div class="version-box"><h3 style="color:var(--gold); margin:0 0 10px 0;">⚡ Versiya 2.4</h3><ul class="version-list"><li>Konfettilər və nailiyyət qeyd etmə effektləri əlavə edildi.</li></ul></div>
             <div class="version-box"><h3 style="color:var(--gold); margin:0 0 10px 0;">⚡ Versiya 2.3</h3><ul class="version-list"><li>Ağıllı canlı deadline taymeri yaradıldı və fayl yükləmələri avtomatlaşdırıldı.</li></ul></div>
             <div class="version-box"><h3 style="color:var(--gold); margin:0 0 10px 0;">⚡ Versiya 2.2</h3><ul class="version-list"><li>Hər bir profildə həftəlik inkişafınızı ölçən diaqramlar quraşdırıldı.</li></ul></div>
-            <button class="btn" style="width:100%; margin-top:10px;" onclick="closeModal('versionModal')">Bağla</button>
+            <button class="btn" style="width:100%; margin-top:10px;" onclick="closeModal('versionModal')" id="txtVersionClose">Bağla</button>
         </div>
     </div>
 
     <script>
+        // ---------------- DIL TƏRCÜMƏLƏRİ (4 Dil: AZ, RU, EN, TR) ----------------
+        const translations = {
+            az: {
+                title: "🏆 TT-08 Proqram Saytı",
+                goldenSlogan: "Qızıl cilalanmasa parlamaz",
+                shameBannerText: "⚠️ SHAME ON YOU! ⚠️",
+                loginBtn: "🔐 Giriş",
+                logoutBtn: "Çıxış",
+                roleStudent: "TƏLƏBƏ",
+                juryTitle: "👑 Münsiflər Heyəti (Jüri)",
+                masterRole: "Baş Admin (Master)",
+                adminRole: "Admin",
+                deadlineTitle: "⏳ TAPŞIRIQ QƏBULU DEADLİNE:",
+                noDeadline: "Təyin edilməyib",
+                groupPhotoTitle: "📸 Bizim Qrupumuz",
+                topLeaders: "🏆 Həftənin Liderləri",
+                prevLeaders: "🥈 Keçən Həftənin Liderləri",
+                outsidersBoard: "😴 Outsiderlər",
+                btnWinners: "🎉 Həftənin Qalibləri",
+                btnOutsiders: "😴 Həftənin Outsiderləri",
+                btnFeedback: "💬 Feedback Göndər",
+                btnRefresh: "🔄 Yenilə",
+                backBtn: "⬅️ Geri Qayıt",
+                infoMajor: "🎓 İxtisası",
+                infoCourse: "📚 Kursu",
+                infoDob: "🎂 Təvəllüd",
+                infoAge: "⏳ Yaş",
+                infoGender: "👤 Cinsiyyət",
+                infoBirthPlace: "📍 Doğulduğu Yer",
+                infoRating: "⭐ Cari Reytinq (Ümumi)",
+                infoGrowth: "📊 Həftəlik Artım",
+                uploadTitle: "📁 Fayl / Sənəd Yüklə",
+                uploadBtn: "🚀 Göndər",
+                uploadNotice: "💡 DİQQƏT: Sistem faylınızın sonluğuna və məzmununa görə tapşırığı avtomatik tanıyır.",
+                publicMsg: "(Fayl yükləmə bölməsi yalnız bu hesabın sahibinə göstərilir)",
+                uploadedFilesStatus: "📄 Yüklənilmiş Faylların Vəziyyəti",
+                chartTitle: "📈 Həftəlik Qazanılan Bal Diaqramı",
+                adminHeader: "⚙️ Admin Control Panel",
+                authModalTitle: "Giriş / Qeydiyyat",
+                tabLogin: "Giriş Et",
+                tabReg: "Qeydiyyat",
+                loginUserLabel: "İstifadəçi / Admin adı:",
+                loginPassLabel: "Şifrə:",
+                loginSubmit: "Daxil Ol 🚀",
+                regSelectLabel: "Siyahıdan Adınızı Seçin:",
+                regPassLabel: "Yeni Şifrə Yaradın:",
+                regSubmit: "Qeydiyyatdan Keç ✅",
+                closeAuth: "Bağla",
+                winnersModalTitle: "👑 QALİBLƏR 🏆",
+                catVideo: "🐈 Sürpriz Video",
+                winnersClose: "Möhtəşəm!",
+                outsidersModalTitle: "😭 OUTSİDERLƏR 😴",
+                outsidersClose: "Bağla",
+                fbModalTitle: "💬 Feedback",
+                fbNameLabel: "Adınız:",
+                fbMsgLabel: "Mesajınız:",
+                fbSend: "Göndər",
+                fbClose: "Bağla",
+                versionModalTitle: "🚀 Yeniliklər Tarixçəsi",
+                versionClose: "Bağla",
+                verNote1: "<strong>UI Dəyişiklikləri:</strong> \"Qızıl cilalanmasa parlamaz\" şüarındakı dırnaqlar silindi və ölçüsü böyüdüldü; Həftənin outsiderləri düyməsinə kliklədikdə ekranın yuxarı hissəsində işıqlı və yanıb-sönən \"Shame on you\" xəbərdarlığı aktivləşir.",
+                verNote2: "<strong>Çoxdilli Dəstək:</strong> Sayta Azərbaycan (AZ), Rus (RU), İngilis (EN) və Türk (TR) olmaqla 4 dil dəyişmə funksiyası əlavə edildi."
+            },
+            ru: {
+                title: "🏆 Программный сайт TT-08",
+                goldenSlogan: "Золото не блестит без полировки",
+                shameBannerText: "⚠️ SHAME ON YOU! ⚠️",
+                loginBtn: "🔐 Войти",
+                logoutBtn: "Выйти",
+                roleStudent: "СТУДЕНТ",
+                juryTitle: "👑 Жюри (Коллегия)",
+                masterRole: "Главный админ (Мастер)",
+                adminRole: "Админ",
+                deadlineTitle: "⏳ ДЕДЛАЙН ПРИЕМА ЗАДАНИЙ:",
+                noDeadline: "Не установлено",
+                groupPhotoTitle: "📸 Наша Группа",
+                topLeaders: "🏆 Лидеры Недели",
+                prevLeaders: "🥈 Лидеры Прошлой Недели",
+                outsidersBoard: "😴 Аутсайдеры",
+                btnWinners: "🎉 Победители Недели",
+                btnOutsiders: "😴 Аутсайдеры Недели",
+                btnFeedback: "💬 Отправить отзыв",
+                btnRefresh: "🔄 Обновить",
+                backBtn: "⬅️ Назад",
+                infoMajor: "🎓 Специальность",
+                infoCourse: "📚 Курс",
+                infoDob: "🎂 Дата рождения",
+                infoAge: "⏳ Возраст",
+                infoGender: "👤 Пол",
+                infoBirthPlace: "📍 Место рождения",
+                infoRating: "⭐ Текущий Рейтинг (Общий)",
+                infoGrowth: "📊 Недельный Рост",
+                uploadTitle: "📁 Загрузить файл / документ",
+                uploadBtn: "🚀 Отправить",
+                uploadNotice: "💡 ВНИМАНИЕ: Система автоматически распознает задание по расширению и содержимому файла.",
+                publicMsg: "(Раздел загрузки файлов виден только владельцу этого аккаунта)",
+                uploadedFilesStatus: "📄 Статус Загруженных Файлов",
+                chartTitle: "📈 График Заработанных Балов за Неделю",
+                adminHeader: "⚙️ Панель Управления Админа",
+                authModalTitle: "Вход / Регистрация",
+                tabLogin: "Войти",
+                tabReg: "Регистрация",
+                loginUserLabel: "Имя пользователя / Админ:",
+                loginPassLabel: "Пароль:",
+                loginSubmit: "Войти 🚀",
+                regSelectLabel: "Выберите свое имя из списка:",
+                regPassLabel: "Создайте новый пароль:",
+                regSubmit: "Зарегистрироваться ✅",
+                closeAuth: "Закрыть",
+                winnersModalTitle: "👑 ПОБЕДИТЕЛИ 🏆",
+                catVideo: "🐈 Сюрприз Видео",
+                winnersClose: "Великолепно!",
+                outsidersModalTitle: "😭 АУТСАЙДЕРЫ 😴",
+                outsidersClose: "Закрыть",
+                fbModalTitle: "💬 Обратная связь",
+                fbNameLabel: "Ваше имя:",
+                fbMsgLabel: "Ваше сообщение:",
+                fbSend: "Отправить",
+                fbClose: "Закрыть",
+                versionModalTitle: "🚀 История Обновлений",
+                versionClose: "Закрыть",
+                verNote1: "<strong>Изменения UI:</strong> Кавычки в девизе убраны, размер увеличен; при нажатии на кнопку аутсайдеров в верхней части экрана появляется мигающее предупреждение \"Shame on you\".",
+                verNote2: "<strong>Многоязычная поддержка:</strong> На сайт добавлена функция переключения на 4 языка: Азербайджанский (AZ), Русский (RU), Английский (EN) и Турецкий (TR)."
+            },
+            en: {
+                title: "🏆 TT-08 Program Site",
+                goldenSlogan: "Gold does not shine without polishing",
+                shameBannerText: "⚠️ SHAME ON YOU! ⚠️",
+                loginBtn: "🔐 Login",
+                logoutBtn: "Logout",
+                roleStudent: "STUDENT",
+                juryTitle: "👑 Jury Board",
+                masterRole: "Head Admin (Master)",
+                adminRole: "Admin",
+                deadlineTitle: "⏳ TASK SUBMISSION DEADLINE:",
+                noDeadline: "Not set",
+                groupPhotoTitle: "📸 Our Group",
+                topLeaders: "🏆 Leaders of the Week",
+                prevLeaders: "🥈 Previous Week Leaders",
+                outsidersBoard: "😴 Outsiders",
+                btnWinners: "🎉 Week Winners",
+                btnOutsiders: "😴 Week Outsiders",
+                btnFeedback: "💬 Send Feedback",
+                btnRefresh: "🔄 Refresh",
+                backBtn: "⬅️ Go Back",
+                infoMajor: "🎓 Major",
+                infoCourse: "📚 Course",
+                infoDob: "🎂 Birthdate",
+                infoAge: "⏳ Age",
+                infoGender: "👤 Gender",
+                infoBirthPlace: "📍 Birth Place",
+                infoRating: "⭐ Current Rating (Total)",
+                infoGrowth: "📊 Weekly Growth",
+                uploadTitle: "📁 Upload File / Document",
+                uploadBtn: "🚀 Submit",
+                uploadNotice: "💡 NOTE: The system automatically recognizes tasks based on your file extension and content.",
+                publicMsg: "(File upload section is only visible to the owner of this account)",
+                uploadedFilesStatus: "📄 Uploaded Files Status",
+                chartTitle: "📈 Weekly Earned Points Chart",
+                adminHeader: "⚙️ Admin Control Panel",
+                authModalTitle: "Login / Register",
+                tabLogin: "Login",
+                tabReg: "Register",
+                loginUserLabel: "Username / Admin name:",
+                loginPassLabel: "Password:",
+                loginSubmit: "Login 🚀",
+                regSelectLabel: "Select your name from list:",
+                regPassLabel: "Create new password:",
+                regSubmit: "Register ✅",
+                closeAuth: "Close",
+                winnersModalTitle: "👑 WINNERS 🏆",
+                catVideo: "🐈 Surprise Video",
+                winnersClose: "Awesome!",
+                outsidersModalTitle: "😭 OUTSIDERS 😴",
+                outsidersClose: "Close",
+                fbModalTitle: "💬 Feedback",
+                fbNameLabel: "Your Name:",
+                fbMsgLabel: "Your Message:",
+                fbSend: "Send",
+                fbClose: "Close",
+                versionModalTitle: "🚀 Version History",
+                versionClose: "Close",
+                verNote1: "<strong>UI Changes:</strong> Quotes removed from slogan and size increased; clicking outsiders triggers a glowing \"Shame on you\" warning banner at the top of the screen.",
+                verNote2: "<strong>Multilingual Support:</strong> Added 4-language switching functionality (AZ, RU, EN, TR) to the site."
+            },
+            tr: {
+                title: "🏆 TT-08 Program Sitesi",
+                goldenSlogan: "Altın cilalanmasa parlamaz",
+                shameBannerText: "⚠️ SHAME ON YOU! ⚠️",
+                loginBtn: "🔐 Giriş",
+                logoutBtn: "Çıkış",
+                roleStudent: "ÖĞRENCİ",
+                juryTitle: "👑 Jüri Heyeti",
+                masterRole: "Baş Admin (Master)",
+                adminRole: "Admin",
+                deadlineTitle: "⏳ ÖDEV TESLİM SON TARİHİ:",
+                noDeadline: "Belirlenmedi",
+                groupPhotoTitle: "📸 Grubumuz",
+                topLeaders: "🏆 Haftanın Liderleri",
+                prevLeaders: "🥈 Geçen Haftanın Liderleri",
+                outsidersBoard: "😴 Düşük Performans",
+                btnWinners: "🎉 Haftanın Kazananları",
+                btnOutsiders: "😴 Haftanın Düşükleri",
+                btnFeedback: "💬 Geri Bildirim Gönder",
+                btnRefresh: "🔄 Yenile",
+                backBtn: "⬅️ Geri Dön",
+                infoMajor: "🎓 Bölümü",
+                infoCourse: "📚 Sınıfı",
+                infoDob: "🎂 Doğum Tarihi",
+                infoAge: "⏳ Yaş",
+                infoGender: "👤 Cinsiyet",
+                infoBirthPlace: "📍 Doğum Yeri",
+                infoRating: "⭐ Mevcut Puan (Toplam)",
+                infoGrowth: "📊 Haftalık Artış",
+                uploadTitle: "📁 Dosya / Belge Yükle",
+                uploadBtn: "🚀 Gönder",
+                uploadNotice: "💡 DİKKAT: Sistem dosyanızın uzantısına ve içeriğine göre görevi otomatik tanır.",
+                publicMsg: "(Dosya yükleme bölümü yalnızca bu hesabın sahibine gösterilir)",
+                uploadedFilesStatus: "📄 Yüklenen Dosyaların Durumu",
+                chartTitle: "📈 Haftalık Kazanılan Puan Grafiği",
+                adminHeader: "⚙️ Yönetici Kontrol Paneli",
+                authModalTitle: "Giriş / Kayıt",
+                tabLogin: "Giriş Yap",
+                tabReg: "Kayıt Ol",
+                loginUserLabel: "Kullanıcı / Admin adı:",
+                loginPassLabel: "Şifre:",
+                loginSubmit: "Giriş Yap 🚀",
+                regSelectLabel: "Listeden Adınızı Seçin:",
+                regPassLabel: "Yeni Şifre Oluşturun:",
+                regSubmit: "Kayıt Ol ✅",
+                closeAuth: "Kapat",
+                winnersModalTitle: "👑 KAZANANLAR 🏆",
+                catVideo: "🐈 Sürpriz Video",
+                winnersClose: "Muhteşem!",
+                outsidersModalTitle: "😭 DÜŞÜK PERFORMANS 😴",
+                outsidersClose: "Kapat",
+                fbModalTitle: "💬 Geri Bildirim",
+                fbNameLabel: "Adınız:",
+                fbMsgLabel: "Mesajınız:",
+                fbSend: "Gönder",
+                fbClose: "Kapat",
+                versionModalTitle: "🚀 Sürüm Geçmişi",
+                versionClose: "Kapat",
+                verNote1: "<strong>Arayüz Değişiklikleri:</strong> Slogan tırnakları kaldırıldı ve boyutu büyütüldü; haftanın düşükleri butonuna tıklandığında ekranın üst kısmında yanıp sönen \"Shame on you\" uyarısı belirir.",
+                verNote2: "<strong>Çok Dilli Destek:</strong> Siteye Azerbaycanca (AZ), Rusça (RU), İngilizce (EN) və Türkçe (TR) olmak üzere 4 dil değiştirme özelliği eklendi."
+            }
+        };
+
+        let currentLang = localStorage.getItem('site_lang') || 'az';
+
+        function changeLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('site_lang', lang);
+            document.getElementById('langSelect').value = lang;
+            applyTranslations();
+        }
+
+        function applyTranslations() {
+            const t = translations[currentLang] || translations['az'];
+            
+            // Title & Header
+            const h1 = document.querySelector('.header-title-box h1');
+            if(h1) {
+                h1.innerHTML = t.title + ' <span class="version-badge" onclick="showVersionModal()">V3.1</span>';
+            }
+            
+            const golden = document.getElementById('txtGoldenSlogan');
+            if(golden) golden.innerText = t.goldenSlogan;
+
+            const shameB = document.getElementById('shameBanner');
+            if(shameB) shameB.innerText = t.shameBannerText;
+
+            // Auth buttons & roles
+            const loginBtn = document.getElementById('txtLoginBtn');
+            if(loginBtn) loginBtn.innerText = t.loginBtn;
+
+            const logoutBtn = document.getElementById('txtLogoutBtn');
+            if(logoutBtn) logoutBtn.innerText = t.logoutBtn;
+
+            const roleBadge = document.getElementById('topRoleBadge');
+            if(roleBadge && roleBadge.innerText !== 'Admin (master)' && roleBadge.innerText !== 'Admin (admin)') {
+                if(currentUserRole === 'student') roleBadge.innerText = t.roleStudent;
+            }
+
+            // Jury
+            const jt = document.getElementById('txtJuryTitle'); if(jt) jt.innerText = t.juryTitle;
+            const jm = document.getElementById('txtMasterRole'); if(jm) jm.innerText = t.masterRole;
+            const ja1 = document.getElementById('txtAdminRole'); if(ja1) ja1.innerText = t.adminRole;
+            const ja2 = document.getElementById('txtAdminRole2'); if(ja2) ja2.innerText = t.adminRole;
+
+            // Deadline & Group Photo
+            const dTitle = document.getElementById('txtDeadlineTitle'); if(dTitle) dTitle.innerText = t.deadlineTitle;
+            const gpTitle = document.getElementById('txtGroupPhotoTitle'); if(gpTitle) gpTitle.innerText = t.groupPhotoTitle;
+
+            // Visual boards
+            const tl = document.getElementById('txtTopLeaders'); if(tl) tl.innerText = t.topLeaders;
+            const pl = document.getElementById('txtPrevLeaders'); if(pl) pl.innerText = t.prevLeaders;
+            const ob = document.getElementById('txtOutsidersBoard'); if(ob) ob.innerText = t.outsidersBoard;
+
+            // Action bar buttons
+            const bWin = document.getElementById('txtBtnWinners'); if(bWin) bWin.innerText = t.btnWinners;
+            const bOut = document.getElementById('txtBtnOutsiders'); if(bOut) bOut.innerText = t.btnOutsiders;
+            const bFb = document.getElementById('txtBtnFeedback'); if(bFb) bFb.innerText = t.btnFeedback;
+            const bRef = document.getElementById('txtBtnRefresh'); if(bRef) bRef.innerText = t.btnRefresh;
+
+            // Profile page
+            const bBack = document.getElementById('txtBackBtn'); if(bBack) bBack.innerText = t.backBtn;
+            const iMaj = document.getElementById('txtInfoMajor'); if(iMaj) iMaj.innerText = t.infoMajor;
+            const iCou = document.getElementById('txtInfoCourse'); if(iCou) iCou.innerText = t.infoCourse;
+            const iDob = document.getElementById('txtInfoDob'); if(iDob) iDob.innerText = t.infoDob;
+            const iAge = document.getElementById('txtInfoAge'); if(iAge) iAge.innerText = t.infoAge;
+            const iGen = document.getElementById('txtInfoGender'); if(iGen) iGen.innerText = t.infoGender;
+            const iBp = document.getElementById('txtInfoBirthPlace'); if(iBp) iBp.innerText = t.infoBirthPlace;
+            const iRat = document.getElementById('txtInfoRating'); if(iRat) iRat.innerText = t.infoRating;
+            const iGro = document.getElementById('txtInfoGrowth'); if(iGro) iGro.innerText = t.infoGrowth;
+
+            const uTitle = document.getElementById('txtUploadTitle'); if(uTitle) uTitle.innerText = t.uploadTitle;
+            const uBtn = document.getElementById('txtUploadBtn'); if(uBtn) uBtn.innerText = t.uploadBtn;
+            const uNotice = document.getElementById('txtUploadNotice'); if(uNotice) uNotice.innerText = t.uploadNotice;
+            const pMsg = document.getElementById('publicViewMsg'); if(pMsg) pMsg.innerText = t.publicMsg;
+            const upStat = document.getElementById('txtUploadedFilesStatus'); if(upStat) upStat.innerText = t.uploadedFilesStatus;
+            const cTitle = document.getElementById('txtChartTitle'); if(cTitle) cTitle.innerText = t.chartTitle;
+
+            // Admin panel header
+            const adHead = document.getElementById('welcomeAdmin'); if(adHead) adHead.innerText = t.adminHeader;
+            const adBack = document.getElementById('txtAdminBack'); if(adBack) adBack.innerText = t.backBtn;
+
+            // Modals
+            const amTitle = document.getElementById('txtAuthModalTitle'); if(amTitle) amTitle.innerText = t.authModalTitle;
+            const tLog = document.getElementById('tabBtnLogin'); if(tLog) tLog.innerText = t.tabLogin;
+            const tReg = document.getElementById('tabBtnReg'); if(tReg) tReg.innerText = t.tabReg;
+            const lUserL = document.getElementById('txtLoginUserLabel'); if(lUserL) lUserL.innerText = t.loginUserLabel;
+            const lPassL = document.getElementById('txtLoginPassLabel'); if(lPassL) lPassL.innerText = t.loginPassLabel;
+            const lSub = document.getElementById('txtLoginSubmit'); if(lSub) lSub.innerText = t.loginSubmit;
+            const rSelL = document.getElementById('txtRegSelectLabel'); if(rSelL) rSelL.innerText = t.regSelectLabel;
+            const rPassL = document.getElementById('txtRegPassLabel'); if(rPassL) rPassL.innerText = t.regPassLabel;
+            const rSub = document.getElementById('txtRegSubmit'); if(rSub) rSub.innerText = t.regSubmit;
+            const cAuth = document.getElementById('txtCloseAuth'); if(cAuth) cAuth.innerText = t.closeAuth;
+
+            const wModT = document.getElementById('txtWinnersModalTitle'); if(wModT) wModT.innerText = t.winnersModalTitle;
+            const cVid = document.getElementById('txtCatVideo'); if(cVid) cVid.innerText = t.catVideo;
+            const wCl = document.getElementById('txtWinnersClose'); if(wCl) wCl.innerText = t.winnersClose;
+
+            const oModT = document.getElementById('txtOutsidersModalTitle'); if(oModT) oModT.innerText = t.outsidersModalTitle;
+            const oCl = document.getElementById('txtOutsidersClose'); if(oCl) oCl.innerText = t.outsidersClose;
+
+            const fbModT = document.getElementById('txtFbModalTitle'); if(fbModT) fbModT.innerText = t.fbModalTitle;
+            const fbNL = document.getElementById('txtFbNameLabel'); if(fbNL) fbNL.innerText = t.fbNameLabel;
+            const fbML = document.getElementById('txtFbMsgLabel'); if(fbML) fbML.innerText = t.fbMsgLabel;
+            const fbS = document.getElementById('txtFbSend'); if(fbS) fbS.innerText = t.fbSend;
+            const fbC = document.getElementById('txtFbClose'); if(fbC) fbC.innerText = t.fbClose;
+
+            const vModT = document.getElementById('txtVersionModalTitle'); if(vModT) vModT.innerText = t.versionModalTitle;
+            const vCl = document.getElementById('txtVersionClose'); if(vCl) vCl.innerText = t.versionClose;
+            const vN1 = document.getElementById('txtVerNote1'); if(vN1) vN1.innerHTML = t.verNote1;
+            const vN2 = document.getElementById('txtVerNote2'); if(vN2) vN2.innerHTML = t.verNote2;
+        }
+
         // FIREBASE INIT
         const firebaseConfig = {
             apiKey: "AIzaSyAug3XL0WtYr6a-_9qcLMjiE16oEA-y5XU",
@@ -775,7 +1148,7 @@ Yat, qal dala, laylay!</div>
             }
         }
 
-        // SHAME ON YOU TRIGGER (Fixed to not block visibility, auto hides after 3.5s)
+        // SHAME ON YOU TRIGGER (Appears right at the top of the screen as requested)
         function triggerShame() {
             const banner = document.getElementById('shameBanner');
             if(banner) {
@@ -815,6 +1188,8 @@ Yat, qal dala, laylay!</div>
         // ---------------- INIT & AUTH ----------------
         window.onload = () => {
             initTheme();
+            document.getElementById('langSelect').value = currentLang;
+            applyTranslations();
             history.replaceState({page: 'mainDashboard'}, "", window.location.pathname);
             setInterval(updateLiveDateTime, 1000);
             checkSession();
@@ -850,7 +1225,7 @@ Yat, qal dala, laylay!</div>
                 deadlineTimestamp = val ? new Date(val).getTime() : null;
                 const dt = document.getElementById('deadlineTargetText'); 
                 if(dt) {
-                    dt.innerText = val ? new Date(val).toLocaleString('az-AZ') : "Təyin edilməyib";
+                    dt.innerText = val ? new Date(val).toLocaleString('az-AZ') : (translations[currentLang].noDeadline || "Təyin edilməyib");
                 }
                 startDeadlineTimer();
             });
@@ -886,7 +1261,7 @@ Yat, qal dala, laylay!</div>
                 inDiv.style.display = 'flex';
                 
                 let displayName = ADMIN_TO_STUDENT_MAP[currentUser] || currentUser;
-                let displayRole = currentUserRole !== 'student' ? `Admin (${currentUserRole})` : "Tələbə";
+                let displayRole = currentUserRole !== 'student' ? `Admin (${currentUserRole})` : (translations[currentLang].roleStudent || "TƏLƏBƏ");
                 
                 document.getElementById('topUsername').innerText = displayName; 
                 document.getElementById('topRoleBadge').innerText = displayRole;
@@ -958,7 +1333,7 @@ Yat, qal dala, laylay!</div>
 
         async function populateRegNames() {
             const sel = document.getElementById('regNameSelect'); 
-            sel.innerHTML = '<option value="">-- Adınızı Seçin --</option>';
+            sel.innerHTML = '<option value="">-- Seçin --</option>';
             const snap = await database.ref('user_accounts').once('value');
             const registeredUsers = snap.val() || {}; 
             const adminNames = Object.values(ADMIN_TO_STUDENT_MAP);
@@ -1064,7 +1439,7 @@ Yat, qal dala, laylay!</div>
         function updateLiveDateTime() {
             const options = { day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
             const dtEl = document.getElementById('liveDateTime'); 
-            if(dtEl) dtEl.innerText = "📅 " + new Date().toLocaleDateString('az-AZ', options);
+            if(dtEl) dtEl.innerText = "📅 " + new Date().toLocaleDateString(currentLang === 'az' ? 'az-AZ' : (currentLang === 'ru' ? 'ru-RU' : (currentLang === 'tr' ? 'tr-TR' : 'en-US')), options);
         }
 
         function switchTab(tabName) { 
