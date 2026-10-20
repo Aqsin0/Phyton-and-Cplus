@@ -100,28 +100,30 @@
         .v-board-item img { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--border); object-fit: cover; }
         .v-board-rank { font-size: 18px; font-weight: 900; width: 30px; text-align: center; }
 
-        /* SHAME ON YOU GLOWING BANNER */
+        /* SHAME ON YOU GLOWING BANNER (Fixed positioning/display to not break layout or hide content) */
         #shameBanner {
             display: none;
             text-align: center;
             margin-bottom: 20px;
-            padding: 15px;
+            padding: 12px 20px;
             border-radius: 14px;
-            background: rgba(239, 68, 68, 0.2);
+            background: rgba(239, 68, 68, 0.25);
             border: 2px solid var(--negative);
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             font-weight: 900;
             color: var(--negative);
             animation: glowBlink 0.8s infinite alternate;
+            position: relative;
+            z-index: 10;
         }
 
         @keyframes glowBlink {
             from {
                 text-shadow: 0 0 5px var(--negative), 0 0 10px var(--negative);
-                opacity: 0.5;
+                opacity: 0.6;
             }
             to {
-                text-shadow: 0 0 25px var(--negative), 0 0 35px var(--negative);
+                text-shadow: 0 0 20px var(--negative), 0 0 30px var(--negative);
                 opacity: 1;
             }
         }
@@ -317,7 +319,7 @@
             <div class="action-bar">
                 <div style="display:flex; gap:10px; flex-wrap:wrap;">
                     <button class="btn btn-gold" onclick="showWinnersCelebration()">🎉 Həftənin Qalibləri</button>
-                    <!-- Düzəldilmiş Həftənin Outsiderləri Butonu -->
+                    <!-- Həftənin Outsiderləri Butonu -->
                     <button class="btn btn-admin" onclick="showOutsidersModal(); triggerShame();">😴 Həftənin Outsiderləri</button>
                     <button class="btn btn-dark" onclick="openFeedbackModal()">💬 Feedback Göndər</button>
                 </div>
@@ -417,7 +419,7 @@
                 </div>
             </div>
 
-            <!-- SUB TAB 2: Tapşırıqlar və Ballar (Dinamik Siyahı - Çoxsaylı Tapşırıq Dəstəyi) -->
+            <!-- SUB TAB 2: Tapşırıqlar və Ballar -->
             <div id="adminTabTasksConfig" class="admin-sub-tab" style="display:none;">
                 <div class="info-box">
                     <h3 style="color:var(--accent); margin-top:0;">⚙️ Tapşırıqlar və Ballar İdarəetməsi</h3>
@@ -773,15 +775,14 @@ Yat, qal dala, laylay!</div>
             }
         }
 
-        // SHAME ON YOU TRIGGER
+        // SHAME ON YOU TRIGGER (Fixed to not block visibility, auto hides after 3.5s)
         function triggerShame() {
             const banner = document.getElementById('shameBanner');
             if(banner) {
                 banner.style.display = 'block';
-                window.scrollTo({ top: 0, behavior: 'smooth' });
                 setTimeout(() => {
                     banner.style.display = 'none';
-                }, 4000);
+                }, 3500);
             }
         }
 
@@ -1245,7 +1246,7 @@ Yat, qal dala, laylay!</div>
             openPage('profilePage'); 
         }
 
-        // SMART AUTOMATIC FILE RECOGNITION & AI EVALUATION (Avtomatik Tanıma & Bal Hesablanması)
+        // SMART AUTOMATIC FILE RECOGNITION & AI EVALUATION
         function loadStudentUploadedTasksList(targetStudent) {
             database.ref('student_tasks').orderByChild('studentName').equalTo(targetStudent).on('value', snap => {
                 const tasks = snap.val(); 
@@ -1317,11 +1318,9 @@ Yat, qal dala, laylay!</div>
                     reader.onload = async e => {
                         let base64Data = e.target.result;
                         
-                        // Avtomatik S.İ. / Ağıllı Tanıma Mexanizmi
                         let matchedTaskName = dynamicTasksConfig[0] ? dynamicTasksConfig[0].name : "Ümumi Tapşırıq";
                         let earnedPts = dynamicTasksConfig[0] ? dynamicTasksConfig[0].points : 50;
                         
-                        // Fayl adı və ya məzmunu əsasında adminin yaratdığı tapşırıqlara uyğunlaşdırma
                         let fnameLower = file.name.toLowerCase();
                         dynamicTasksConfig.forEach(dt => {
                             let keywords = dt.name.toLowerCase().split(' ');
@@ -1331,7 +1330,6 @@ Yat, qal dala, laylay!</div>
                             }
                         });
 
-                        // Avtomatik təsdiq və bal əlavə olunması
                         let targetTab = actualSubject;
                         let stList = globalData[targetTab];
                         if(stList) {
@@ -1454,7 +1452,6 @@ Yat, qal dala, laylay!</div>
             }
         }
 
-        // Dinamik Tapşırıq Siyahısı İdarəetməsi (Çoxsaylı tapşırıqlar üçün)
         function renderAdminTaskListUI() {
             const container = document.getElementById('adminTaskListContainer');
             if(!container) return;
