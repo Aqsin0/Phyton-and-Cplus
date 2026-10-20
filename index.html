@@ -493,6 +493,8 @@
             <div class="abartili-stickers">😭 📉 🤦‍♂️ 💔 😴 🗑️</div>
             <h1 style="color:var(--negative); font-weight:900; margin-top:0;">😭 OUTSİDERLƏR 😴</h1>
             
+            <div id="outsidersListGrid" style="display:flex; justify-content:center; gap:15px; flex-wrap:wrap; margin:20px 0;"></div>
+
             <div style="font-size:14px; font-style:italic; color:var(--text-main); margin:15px 0; text-align:center; white-space:pre-line; padding:15px; background:var(--bg-color); border-radius:10px; border:1px solid var(--border);">Tərpənmə, amandır, bala, qəflətdən ayılma!
 Açma gözünü, xabi-cəhalətdən ayılma!
 Laylay, bala, laylay!
@@ -526,7 +528,6 @@ Afaqı tutan şurü qiyamətdən ayılma!
 Laylay, bala, laylay!
 Yat, qal dala, laylay!</div>
 
-            <div id="outsidersListGrid" style="display:flex; justify-content:center; gap:15px; flex-wrap:wrap; margin:20px 0;"></div>
             <button class="btn btn-admin" style="width:100%;" onclick="closeModalCustom('outsidersModal')">Bağla</button>
         </div>
     </div>
@@ -841,10 +842,12 @@ Yat, qal dala, laylay!</div>
                     tabsToHide.forEach(cls => {
                         let el = document.querySelector(cls);
                         if(el) {
-                            if (currentUserRole === 'restricted' || currentUserRole === 'demo') {
-                                el.style.display = 'none'; 
+                            if (currentUserRole === 'restricted') {
+                                el.style.display = 'none';
+                            } else if (currentUserRole === 'demo' && (cls === '.tab-accounts' || cls === '.tab-logs')) {
+                                el.style.display = 'none';
                             } else if (currentUserRole === 'admin' && cls === '.tab-logs') {
-                                el.style.display = 'none'; 
+                                el.style.display = 'none';
                             } else {
                                 el.style.display = 'inline-block';
                             }
@@ -1620,6 +1623,12 @@ Yat, qal dala, laylay!</div>
             database.ref('feedbacks/' + key).update({read: true}); 
         }
 
+        function deleteFeedback(key) {
+            if(confirm("Bu feedback-i silmək istədiyinizə əminsiniz?")) {
+                database.ref('feedbacks/' + key).remove();
+            }
+        }
+
         function loadAdminFeedback() {
             database.ref('feedbacks').on('value', snap => {
                 const fbs = snap.val() || {}; 
@@ -1644,13 +1653,16 @@ Yat, qal dala, laylay!</div>
                 
                 let html = '';
                 fbItems.forEach(fb => {
-                    let btnHtml = !fb.read ? '<button class="btn btn-dark" style="font-size:11px; padding:4px 8px;" onclick="markFeedbackRead(\'' + fb.key + '\')">Görüldü ✅</button>' : '';
+                    let btnHtml = !fb.read ? '<button class="btn btn-dark" style="font-size:11px; padding:4px 8px; margin-right:5px;" onclick="markFeedbackRead(\'' + fb.key + '\')">Görüldü ✅</button>' : '';
+                    let delBtnHtml = '<button class="btn btn-admin" style="font-size:11px; padding:4px 8px;" onclick="deleteFeedback(\'' + fb.key + '\')">Sil 🗑️</button>';
+                    
                     let labelHtml = !fb.read ? '<span style="color:var(--negative);font-size:12px;">(Yeni)</span>' : '';
                     let borderCol = fb.read ? 'var(--border)' : 'var(--accent)';
                     
                     html += '<div style="background:var(--card-hover); padding:15px; border-radius:12px; border:1px solid ' + borderCol + '; margin-bottom:10px;">' +
                             '<div style="display:flex; justify-content:space-between; align-items:start;">' +
-                            '<strong style="color:var(--gold); font-size:16px;">' + fb.name + ' ' + labelHtml + '</strong>' + btnHtml +
+                            '<strong style="color:var(--gold); font-size:16px;">' + fb.name + ' ' + labelHtml + '</strong>' +
+                            '<div>' + btnHtml + delBtnHtml + '</div>' +
                             '</div>' +
                             '<span style="color:var(--text-main); font-size:15px; margin-top:8px; display:inline-block; font-weight:700;">' + fb.msg + '</span>' +
                             '<div style="color:var(--text-sub); font-size:12px; margin-top:10px; font-weight:800;">🕒 ' + new Date(fb.timestamp).toLocaleString('az-AZ') + '</div>' +
