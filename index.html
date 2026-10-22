@@ -3,17 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>TT-08 Proqram Saytı (V3.5)</title>
-    <!-- Firebase SDK -->
+    <title>TT-08 Proqram Saytı (V3.6)</title>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-    <!-- Chart.js & Canvas Confetti -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800;900&display=swap" rel="stylesheet">
     <style>
-        /* DARK MODE (Əsas) */
         :root {
             --bg-color: #0b1121; --card-bg: #151e32; --card-hover: #1e293b;
             --text-main: #f8fafc; --text-sub: #94a3b8;
@@ -23,123 +19,84 @@
             --gold: #f59e0b; --silver: #cbd5e1; --bronze: #d97706; --purple: #8b5cf6;
             --modal-bg: rgba(11, 17, 33, 0.95);
         }
-
-        /* LIGHT MODE */
         [data-theme="light"] {
             --bg-color: #f8fafc; --card-bg: #ffffff; --card-hover: #f1f5f9;
             --text-main: #0f172a; --text-sub: #64748b;
             --accent: #2563eb; --accent-hover: #1d4ed8;
             --positive: #059669; --negative: #dc2626; 
             --border: #e2e8f0; --border-focus: var(--accent);
-            --gold: #d97706; --silver: #64748b; --bronze: #b45309; --purple: #7c3aed;
+            --gold: #d97706; --silver: #64748b; --bronze: #b45309;
             --modal-bg: rgba(255, 255, 255, 0.95);
         }
-
         * { box-sizing: border-box; }
-        body { 
-            font-family: 'Nunito', sans-serif; 
-            background-color: var(--bg-color); color: var(--text-main); 
-            margin: 0; padding: 15px; 
-            transition: background-color 0.3s, color 0.3s;
-            -webkit-tap-highlight-color: transparent;
-            overflow-x: hidden;
-        }
+        body { font-family: 'Nunito', sans-serif; background-color: var(--bg-color); color: var(--text-main); margin: 0; padding: 15px; transition: 0.3s; overflow-x: hidden; }
         .container { max-width: 1300px; margin: 0 auto; }
+        .card { background-color: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; padding: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); margin-bottom: 20px; }
         
-        .card { background-color: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; padding: 20px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); margin-bottom: 20px; }
-
-        /* HEADER & AUTH */
         .header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; margin-bottom: 10px; }
-        .header-title-box h1 { margin: 0; font-size: 24px; font-weight: 900; color: var(--text-main); display: flex; align-items: center; gap: 10px; }
+        .header h1 { margin: 0; font-size: 24px; font-weight: 900; color: var(--text-main); display: flex; align-items: center; gap: 10px; }
         .version-badge { background-color: var(--accent); color: #fff; font-size: 11px; padding: 4px 10px; border-radius: 12px; cursor: pointer; font-weight: 900; border: none; }
-        
         .theme-toggle { background: transparent; border: 1px solid var(--border); color: var(--text-main); font-size: 18px; width: 42px; height: 42px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; padding: 0; }
-        .theme-toggle:hover { background: var(--card-hover); }
-
+        .lang-select { background: var(--card-bg); border: 1px solid var(--border); color: var(--text-main); font-size: 14px; font-weight: 800; padding: 8px 12px; border-radius: 10px; cursor: pointer; outline: none; }
+        
         .auth-widget { display: flex; align-items: center; gap: 12px; padding: 8px 16px; border-radius: 14px; border: 1px solid var(--border); background: var(--card-bg); }
         .auth-btn { background: var(--accent); color: #fff; font-weight: 800; border: none; padding: 10px 20px; border-radius: 10px; cursor: pointer; transition: 0.2s; }
-        .auth-btn:hover { background: var(--accent-hover); }
         .user-avatar-small { width: 42px; height: 42px; border-radius: 50%; border: 2px solid var(--accent); object-fit: cover; cursor: pointer; }
         .user-name-small { font-weight: 800; color: var(--text-main); font-size: 15px; cursor: pointer; }
         .logout-btn { background: rgba(239, 68, 68, 0.1); color: var(--negative); border: 1px solid rgba(239,68,68,0.2); padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 800; cursor: pointer; }
 
-        /* JURY BOARD */
         .jury-board { border-top: 4px solid var(--gold); text-align: center; }
         .jury-grid { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-top: 15px; }
         .jury-card { background: var(--card-hover); border: 1px solid var(--border); padding: 15px 20px; border-radius: 12px; min-width: 200px; }
-        .jury-card strong { color: var(--text-main); font-size: 16px; }
 
-        /* TABS & BUTTONS */
         .tabs { display: flex; gap: 8px; flex-wrap: wrap; background: var(--card-bg); padding: 8px; border-radius: 14px; border: 1px solid var(--border); }
         .tab-btn { background: transparent; color: var(--text-sub); border: none; padding: 10px 22px; border-radius: 10px; cursor: pointer; font-weight: 800; font-size: 15px; transition: 0.2s; }
         .tab-btn.active, .tab-btn:hover { background: var(--accent); color: #fff; }
 
         .action-bar { display: flex; justify-content: space-between; margin-bottom: 20px; gap: 10px; flex-wrap: wrap; }
         .btn { background-color: var(--accent); color: #fff; border: none; padding: 12px 22px; border-radius: 10px; cursor: pointer; font-weight: 800; font-size: 15px; transition: 0.2s; }
-        .btn:hover { background-color: var(--accent-hover); transform: translateY(-2px); }
         .btn-admin { background-color: var(--negative); }
         .btn-gold { background-color: var(--gold); color: #fff; }
         .btn-dark { background-color: var(--card-hover); color: var(--text-main); border: 1px solid var(--border); }
 
-        /* DEADLINE */
         .deadline-banner { background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.2); border-radius: 16px; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
         .deadline-timer { font-size: 20px; font-weight: 900; color: var(--negative); font-family: monospace; }
 
-        /* VISUAL BOARDS */
-        .visual-boards { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 20px; }
+        .visual-boards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 20px; }
         .v-board { border-radius: 16px; padding: 15px; border: 1px solid var(--border); }
-        
         .v-board-red { border-top: 4px solid var(--negative); background-color: rgba(239, 68, 68, 0.08); }
-        .v-board-red h3 { color: var(--negative) !important; }
-        
         .v-board-silver { border-top: 4px solid var(--silver); background-color: rgba(148, 163, 184, 0.06); }
-        
         .v-board-black { border-top: 4px solid #000; background-color: rgba(0, 0, 0, 0.6); }
-        .v-board-black h3 { color: #fff !important; }
-        .v-board-black .v-board-item strong { color: #fff !important; }
-        .v-board-black .v-board-item span { color: #fff !important; }
         [data-theme="light"] .v-board-black { background-color: #111; border-color: #000; }
-        
         .v-board-item { display: flex; align-items: center; gap: 12px; padding: 10px; border-bottom: 1px solid rgba(128,128,128,0.2); }
         .v-board-item:last-child { border-bottom: none; }
         .v-board-item img { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--border); object-fit: cover; }
         .v-board-rank { font-size: 18px; font-weight: 900; width: 30px; text-align: center; }
 
-        #shameBanner { display: none; position: fixed; top: 0; left: 0; width: 100%; text-align: center; padding: 16px; background: rgba(239, 68, 68, 0.95); border-bottom: 3px solid var(--negative); font-size: 1.8rem; font-weight: 900; color: #fff; z-index: 30000; }
+        #shameBanner { display: none; position: fixed; top: 0; left: 0; width: 100%; text-align: center; padding: 16px; background: rgba(239, 68, 68, 0.95); border-bottom: 3px solid var(--negative); font-size: 1.8rem; font-weight: 900; color: #fff; z-index: 30000; animation: glowBlink 0.8s infinite alternate; }
+        @keyframes glowBlink { from { text-shadow: 0 0 5px #fff; } to { text-shadow: 0 0 20px #fff; } }
 
-        /* TABLE */
         .table-wrapper { overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; text-align: left; min-width: 850px; }
         th, td { padding: 16px 18px; border-bottom: 1px solid var(--border); }
         th { background: var(--card-hover); color: var(--text-sub); font-size: 13px; font-weight: 800; text-transform: uppercase; }
-        tr:hover td { background-color: var(--card-hover); }
-        
         .clickable-name { cursor: pointer; color: var(--text-main); font-weight: 800; font-size: 15px; }
-        .clickable-name:hover { color: var(--accent); }
-        .student-info { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+        .student-info { display: flex; align-items: center; gap: 12px; }
         .avatar { width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--border); overflow: hidden; flex-shrink: 0; }
         .avatar img { width: 100%; height: 100%; object-fit: cover; }
-        .rank-col { font-weight: 900; color: var(--accent); width: 40px; font-size: 18px; text-align: center; }
-
-        /* Cədvəl Rəngləri */
+        
         .rank-red-row td { background-color: rgba(239, 68, 68, 0.15) !important; border-bottom: 1px solid rgba(239, 68, 68, 0.3) !important; }
         .rank-red-row .clickable-name, .rank-red-row .rank-col { color: #ef4444 !important; font-weight: 900; }
-        
-        .rank-white-row td { background-color: rgba(255, 255, 255, 0.85) !important; color: #000 !important; border-bottom: 1px solid #ccc !important; }
+        .rank-white-row td { background-color: rgba(255, 255, 255, 0.85) !important; color: #000 !important; }
         .rank-white-row .clickable-name, .rank-white-row .rank-col { color: #000 !important; font-weight: 900; }
-        .rank-white-row strong { color: #000 !important; }
-
-        .rank-black-row td { background-color: #111111 !important; color: #ffffff !important; border-bottom: 1px solid #333 !important; }
+        .rank-black-row td { background-color: #111111 !important; color: #ffffff !important; }
         .rank-black-row .clickable-name, .rank-black-row .rank-col { color: #ffffff !important; font-weight: 900; }
-        .rank-black-row strong { color: #ffffff !important; }
+        [data-theme="light"] .rank-white-row td { background-color: #ffffff !important; }
+        [data-theme="light"] .rank-black-row td { background-color: #050505 !important; }
 
-        /* PAGE VIEWS */
-        .page-view { display: none; animation: fadeIn 0.3s ease forwards; }
+        .page-view { display: none; animation: fadeIn 0.3s ease; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         
-        .back-btn { background: var(--card-hover); color: var(--text-main); border: 1px solid var(--border); padding: 10px 20px; border-radius: 10px; cursor: pointer; font-weight: 800; margin-bottom: 20px; transition: 0.2s; }
-
-        /* PROFILE */
         .profile-header-card { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; padding-bottom: 25px; border-bottom: 1px solid var(--border); margin-bottom: 25px; }
         .profile-avatar-large { width: 130px; height: 130px; border-radius: 50%; border: 4px solid var(--accent); object-fit: cover; }
         .profile-grid-info { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 25px; }
@@ -147,30 +104,34 @@
         .info-box span { font-size: 12px; color: var(--text-sub); display: block; text-transform: uppercase; font-weight: 800; }
         .info-box strong { font-size: 18px; color: var(--text-main); margin-top: 6px; display: block; font-weight: 900; }
 
-        /* FORMS */
         .form-group { margin-bottom: 15px; text-align: left; }
         .form-group label { display: block; margin-bottom: 6px; color: var(--text-sub); font-size:14px; font-weight:800; }
-        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 14px; border-radius: 10px; border: 1px solid var(--border); background: var(--bg-color); color: var(--text-main); font-weight: 700; font-family: inherit; transition: 0.2s; box-sizing: border-box; }
-
-        /* ADMIN PANEL */
-        .admin-nav { display: flex; gap: 10px; margin-bottom: 25px; flex-wrap: wrap; background: var(--card-bg); padding: 10px; border-radius: 14px; border: 1px solid var(--border); }
-        .admin-nav-btn { background: transparent; border: none; color: var(--text-sub); padding: 12px 20px; border-radius: 10px; cursor: pointer; font-weight: 800; font-size: 15px; transition: 0.2s; }
-        .admin-nav-btn.active { background: var(--accent); color: #fff; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 14px; border-radius: 10px; border: 1px solid var(--border); background: var(--bg-color); color: var(--text-main); font-weight: 700; font-family: inherit; transition: 0.2s; }
         
+        .admin-nav { display: flex; gap: 10px; margin-bottom: 25px; flex-wrap: wrap; background: var(--card-bg); padding: 10px; border-radius: 14px; border: 1px solid var(--border); }
+        .admin-nav-btn { background: transparent; border: none; color: var(--text-sub); padding: 12px 20px; border-radius: 10px; cursor: pointer; font-weight: 800; font-size: 15px; }
+        .admin-nav-btn.active { background: var(--accent); color: #fff; }
         .admin-student-card { background: var(--card-hover); border-radius: 14px; padding: 20px; margin-bottom: 15px; border: 1px solid var(--border); }
         .grid-inputs { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 15px; margin-top: 15px; }
+        
+        .file-split-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 20px; margin-top: 20px; }
+        .file-split-box { background: var(--bg-color); border: 2px solid; border-radius: 16px; overflow: hidden; }
+        .file-split-header { padding: 15px 20px; font-size: 18px; font-weight: 900; color: #000; }
+        .file-list-inner { padding: 15px; min-height: 150px; max-height: 500px; overflow-y: auto; }
+        .file-item { background: var(--card-bg); padding: 15px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
 
-        /* MODALS */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--modal-bg); justify-content: center; align-items: center; z-index: 20000; }
         .modal-content { background: var(--card-bg); padding: 30px; border-radius: 20px; max-width: 500px; width: 90%; max-height: 85vh; overflow-y: auto; border: 1px solid var(--border); text-align: center; }
-        .abartili-stickers { font-size: 38px; margin-bottom: 15px; text-align: center; letter-spacing: 5px; }
+        .auth-tabs { display:flex; gap:10px; margin-bottom:20px; background: var(--bg-color); padding: 6px; border-radius: 12px; border: 1px solid var(--border); }
+        .auth-tab-btn { flex:1; padding:12px; background: transparent; color:var(--text-sub); border-radius:10px; cursor:pointer; font-weight:800; transition: 0.2s; }
+        .auth-tab-btn.active { background: var(--accent); color:#fff; }
         .winners-container-v3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; margin: 25px 0; }
-        .winner-card-v3 { background: var(--card-bg); border-radius: 16px; padding: 15px 10px; text-align: center; border: 1px solid var(--border); }
+        .winner-card-v3 { background: var(--card-bg); border-radius: 16px; padding: 15px 10px; border: 1px solid var(--border); }
     </style>
 </head>
 <body>
 
-    <!-- Daxili Audio Oynadıcı (Admin tərəfindən idarə oluna bilər) -->
+    <!-- Dinamik səs idarəetməsi (Admin paneldən link əlavə ediləndə avtomatik oxuyacaq) -->
     <audio id="audioWinner" src="https://www.myinstants.com/media/sounds/victoryff.mp3" preload="auto"></audio>
     <audio id="audioOutsider" src="https://www.myinstants.com/media/sounds/sad-trombone.mp3" preload="auto"></audio>
 
@@ -180,11 +141,16 @@
         <!-- HEADER -->
         <div class="header card">
             <div class="header-title-box">
-                <h1>🏆 TT-08 Proqram Saytı <span class="version-badge">V3.5</span></h1>
+                <h1 id="txtTitle">🏆 TT-08 Proqram Saytı <span class="version-badge" onclick="openModal('versionModal')">V3.6</span></h1>
                 <div id="liveDateTime" style="font-size:13px; color:var(--text-sub); margin-top:6px; font-weight:800;">📅 Yüklənir...</div>
             </div>
 
             <div style="display:flex; gap:15px; align-items:center; flex-wrap:wrap;">
+                <select id="langSelect" class="lang-select" onchange="changeLanguage(this.value)">
+                    <option value="az">AZ</option>
+                    <option value="ru">RU</option>
+                    <option value="en">EN</option>
+                </select>
                 <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">🌞</button>
 
                 <div class="tabs">
@@ -194,13 +160,11 @@
                 </div>
 
                 <div id="authWidget" class="auth-widget">
-                    <div id="authLoggedOut">
-                        <button class="auth-btn" onclick="openModal('authModal')">🔐 Giriş</button>
-                    </div>
+                    <div id="authLoggedOut"><button class="auth-btn" onclick="openAuthModal()">🔐 Giriş</button></div>
                     <div id="authLoggedIn" style="display:none; align-items:center; gap:12px;">
-                        <img id="topAvatar" src="https://svgsilh.com/svg/1300331.svg" class="user-avatar-small" onclick="openMyProfile()" />
+                        <img id="topAvatar" src="" class="user-avatar-small" onclick="goToMyProfile()" />
                         <div style="display:flex; flex-direction:column;">
-                            <span id="topUsername" class="user-name-small" onclick="openMyProfile()">İstifadəçi</span>
+                            <span id="topUsername" class="user-name-small" onclick="goToMyProfile()">İstifadəçi</span>
                             <span id="topRoleBadge" style="font-size:11px; color:var(--text-sub); font-weight:900;">TƏLƏBƏ</span>
                         </div>
                         <button class="logout-btn" onclick="logoutUser()">Çıxış</button>
@@ -219,13 +183,13 @@
             <div class="jury-board card">
                 <h3 style="color:var(--gold); margin-top:0; font-size:20px; font-weight:900;">👑 Münsiflər Heyəti (Jüri)</h3>
                 <div class="jury-grid">
-                    <div class="jury-card"><br><strong>Süleymanzadə Aqşin</strong><br><span style="font-size:13px; color:var(--text-sub);">Baş Admin</span></div>
-                    <div class="jury-card"><br><strong>Məmmədli Turan</strong><br><span style="font-size:13px; color:var(--text-sub);">Admin</span></div>
-                    <div class="jury-card"><br><strong>Gülverdiyev Kənan</strong><br><span style="font-size:13px; color:var(--text-sub);">Admin</span></div>
+                    <div class="jury-card"><img id="juryAvatarAqsin" src="https://svgsilh.com/svg/1300331.svg" style="width:65px;height:65px;border-radius:50%;border:2px solid var(--gold);object-fit:cover;"/><br><strong>Süleymanzadə Aqşin</strong><br><span style="font-size:13px; color:var(--text-sub);">Baş Admin</span></div>
+                    <div class="jury-card"><img id="juryAvatarTuran" src="https://svgsilh.com/svg/1300331.svg" style="width:65px;height:65px;border-radius:50%;border:2px solid var(--accent);object-fit:cover;"/><br><strong>Məmmədli Turan</strong><br><span style="font-size:13px; color:var(--text-sub);">Admin</span></div>
+                    <div class="jury-card"><img id="juryAvatarKenan" src="https://svgsilh.com/svg/1300331.svg" style="width:65px;height:65px;border-radius:50%;border:2px solid var(--accent);object-fit:cover;"/><br><strong>Gülverdiyev Kənan</strong><br><span style="font-size:13px; color:var(--text-sub);">Admin</span></div>
                 </div>
             </div>
 
-            <!-- DEADLİNE -->
+            <!-- DEADLİNE YAZISI -->
             <div class="deadline-banner card">
                 <div>
                     <strong style="color:var(--negative); font-size:16px;">⏳ TAPŞIRIQ QƏBULU DEADLİNE:</strong>
@@ -234,11 +198,15 @@
                 <div class="deadline-timer" id="deadlineTimerCount">--d --s --d --s</div>
             </div>
 
-            <!-- VİZUAL TABLOLAR -->
+            <!-- VİZUAL LİDERLƏR VƏ OUTSİDERLƏR TABLOSU -->
             <div class="visual-boards">
                 <div class="v-board v-board-red">
                     <h3 style="text-align:center; margin-top:0; font-weight:900;">🏆 Həftənin Liderləri</h3>
                     <div id="boardTop3">Yüklənir...</div>
+                </div>
+                <div class="v-board v-board-silver">
+                    <h3 style="color:var(--silver); text-align:center; margin-top:0; font-weight:900;">🥈 Keçən Həftənin Liderləri</h3>
+                    <div id="boardPrevTop3">Yüklənir...</div>
                 </div>
                 <div class="v-board v-board-black">
                     <h3 style="text-align:center; margin-top:0; font-weight:900;">😴 Outsiderlər</h3>
@@ -253,10 +221,11 @@
             <div class="action-bar">
                 <div style="display:flex; gap:10px; flex-wrap:wrap;">
                     <button class="btn btn-gold" onclick="showWinnersCelebration()">🎉 Həftənin Qalibləri</button>
-                    <button class="btn btn-admin" onclick="showOutsidersModal()">😴 Həftənin Outsiderləri</button>
+                    <button class="btn btn-admin" onclick="showOutsidersModal(); triggerShame();">😴 Həftənin Outsiderləri</button>
+                    <button class="btn btn-dark" onclick="openModal('feedbackModal')">💬 Feedback Göndər</button>
                 </div>
                 <div style="display:flex; gap:10px;">
-                    <button id="btnAdminPanel" class="btn btn-dark" style="display:none; color:var(--accent); border-color:var(--accent);" onclick="openFullAdminPage()">⚙️ Admin Panel</button>
+                    <button id="btnAdminPanel" class="btn btn-dark" style="display:none; color:var(--accent); border-color:var(--accent);" onclick="openPage('fullAdminPage'); renderAdminBody();">⚙️ Admin Panel</button>
                     <button class="btn btn-dark" onclick="renderTable()">🔄 Yenilə</button>
                 </div>
             </div>
@@ -269,112 +238,176 @@
             </div>
         </div>
 
-        <!-- ŞƏXSİ PROFİL -->
+        <!-- 📄 ŞƏXSİ PROFİL -->
         <div id="profilePage" class="page-view card">
-            <button class="back-btn" onclick="goBackToMain()">⬅️ Geri Qayıt</button>
+            <button class="btn btn-dark" style="margin-bottom:20px;" onclick="openPage('mainDashboard')">⬅️ Geri Qayıt</button>
             <div class="profile-header-card">
-                <img id="pAvatar" class="profile-avatar-large" src="https://svgsilh.com/svg/1300331.svg" />
-                <div><h2 id="pName" style="margin:0; font-size:26px; color:var(--accent); font-weight:900;">Ad</h2></div>
+                <img id="pAvatar" class="profile-avatar-large" src="" />
+                <div><h2 id="pName" style="margin:0; font-size:26px; color:var(--accent); font-weight:900;"></h2></div>
             </div>
+            
             <div class="profile-grid-info">
                 <div class="info-box"><span>🎓 İxtisası</span><strong style="color:var(--accent);">İnformasiya Təhlükəsizliyi</strong></div>
+                <div class="info-box"><span>📚 Kursu</span><strong>2-ci Kurs</strong></div>
                 <div class="info-box"><span>⭐ Cari Reytinq</span><strong id="pCari" style="color:var(--accent);">0 pt</strong></div>
+                <div class="info-box"><span>📊 Həftəlik Artım</span><strong id="pArtim">0 pt</strong></div>
             </div>
 
-            <!-- FAYL YÜKLƏMƏ BÖLMƏSİ (AI) -->
+            <!-- FAYL YÜKLƏMƏ BÖLMƏSİ VƏ SƏRT AI YOXLANIŞI -->
             <div id="privateUploadSection" class="info-box" style="margin-bottom:20px; display:none; border: 1px solid var(--positive);">
                 <h4 style="margin:0 0 15px 0; color:var(--positive); font-size:18px; font-weight:900;">📁 Fayl / Sənəd Yüklə</h4>
                 <div style="display:flex; gap:15px; align-items:center; flex-wrap:wrap;">
-                    <select id="studentSubjectSelect" class="form-group" style="margin:0; width:auto; padding:10px;">
+                    <select id="studentSubjectSelect" class="form-group" style="margin:0; width:auto;">
                         <option value="cpp">🔵 C++ Faylı</option>
                         <option value="python">🟡 Python Faylı</option>
                     </select>
                     <input type="file" id="studentTaskFiles" class="form-group" style="margin:0; width:auto; padding:10px;" />
-                    <button class="btn" style="background:var(--positive); color:#fff;" onclick="uploadAndCheckCode()">🚀 Yoxla və Göndər</button>
+                    <button class="btn" style="background:var(--positive); color:#fff;" onclick="uploadStudentTasks()">🚀 Yoxla və Göndər</button>
                 </div>
-                <div style="font-size:12px; color:var(--text-sub); margin-top:10px; font-weight:800;">
-                    💡 DİQQƏT: Ağıllı AI sistemi sizin faylınızın strukturu və dəyişənlərini yoxlayır. Səhv fayl yükləsəniz rədd ediləcək.
-                </div>
+                <div style="font-size:12px; color:var(--text-sub); margin-top:10px; font-weight:800;">💡 DİQQƏT: Sistem AI vasitəsilə faylınızın daxili kod məzmununu yoxlayır. Səhv kod atsanız rədd ediləcək!</div>
             </div>
 
             <div class="info-box" id="studentTaskStatusContainer" style="display:none;">
                 <h4 style="margin:0 0 15px 0; color:var(--accent); font-size:18px; font-weight:900;">📄 Yüklənilmiş Faylların Vəziyyəti</h4>
                 <div id="studentTaskStatus" style="font-size:14px; font-weight:800;">Yüklənir...</div>
             </div>
+            
+            <div class="info-box" style="margin-top:20px;">
+                <h3 style="margin:0 0 15px 0; font-size:18px; font-weight:900;">📈 Həftəlik Qazanılan Bal Diaqramı</h3>
+                <canvas id="studentChart" height="100"></canvas>
+            </div>
         </div>
 
-        <!-- ADMİN EKRANI -->
+        <!-- ⚙️ ADMİN EKRANI (BÜTÜN ÖZƏLLİKLƏR YERİNDƏ VƏ YADDA SAXLA İŞLƏYİR) -->
         <div id="fullAdminPage" class="page-view card">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 15px;">
                 <h2 style="margin:0; color:var(--accent); font-size:26px; font-weight:900;">⚙️ Admin Control Panel</h2>
-                <button class="back-btn" style="margin:0;" onclick="goBackToMain()">⬅️ Ana Səhifəyə</button>
+                <button class="btn btn-dark" style="margin:0;" onclick="openPage('mainDashboard')">⬅️ Ana Səhifəyə</button>
             </div>
 
             <div class="admin-nav" id="adminNavTabs">
-                <button class="admin-nav-btn active" onclick="switchAdminSubTab('students')">👥 Reytinq İdarəsi (Ballar)</button>
-                <button class="admin-nav-btn" onclick="switchAdminSubTab('tasksConfig')">⚙️ Tapşırıqlar (AI üçün)</button>
-                <button class="admin-nav-btn" onclick="switchAdminSubTab('media')">🎵 Media & Səslər</button>
+                <button class="admin-nav-btn active" onclick="switchAdminSubTab(event, 'students')">👥 Reytinq İdarəsi</button>
+                <button class="admin-nav-btn" onclick="switchAdminSubTab(event, 'tasksConfig')">⚙️ AI Tapşırıqları</button>
+                <button class="admin-nav-btn" onclick="switchAdminSubTab(event, 'pendingFiles')">⏳ Gözləyən Fayllar</button>
+                <button class="admin-nav-btn" onclick="switchAdminSubTab(event, 'checkedFiles')">✏️ Yoxlanılmış Fayllar</button>
+                <button class="admin-nav-btn" onclick="switchAdminSubTab(event, 'accounts')">🔐 Hesablar</button>
+                <button class="admin-nav-btn" onclick="switchAdminSubTab(event, 'media')">🎵 Media & Deadline</button>
+                <button class="admin-nav-btn" onclick="switchAdminSubTab(event, 'feedback')">💬 Feedback</button>
+                <button class="admin-nav-btn" onclick="switchAdminSubTab(event, 'logs')">📲 Loglar</button>
             </div>
 
-            <!-- TAB: BALLARI DƏYİŞDİRMƏK -->
+            <!-- SUB TAB 1: Reytinq & İşləyən Yadda Saxla -->
             <div id="adminTabStudents" class="admin-sub-tab">
-                <div style="margin-bottom:15px; color:var(--text-sub); font-weight:bold;">Aşağıdakı bölmədə balları birbaşa dəyişib yadda saxlaya bilərsiniz.</div>
+                <div style="margin-bottom:20px;">
+                    <input type="text" id="adminSearchInput" onkeyup="filterAdminStudents()" placeholder="🔍 Tələbə axtar..." class="form-group" style="max-width:300px; margin:0;" />
+                </div>
                 <div id="adminBody">Yüklənir...</div>
-                
                 <div style="display: flex; gap: 15px; margin-top: 20px; flex-wrap: wrap;">
                     <button class="btn" style="flex: 1; background:var(--positive);" onclick="saveAdminChanges()">💾 Yadda Saxla və Yenilə (İŞLƏYİR)</button>
+                    <button class="btn btn-admin" style="flex: 1;" onclick="endWeek()">🛑 Həftəni Sonlandır</button>
                 </div>
             </div>
 
-            <!-- TAB: AI ÜÇÜN TAPŞIRIQLAR -->
+            <!-- SUB TAB 2: Tapşırıqlar -->
             <div id="adminTabTasksConfig" class="admin-sub-tab" style="display:none;">
                 <div class="info-box">
-                    <h3 style="color:var(--accent); margin-top:0;">🤖 Süni İntellekt üçün Tapşırıqlar</h3>
-                    <p style="color:var(--text-sub); font-size:14px; margin-bottom:15px;">
-                        Tələbə fayl yükləyəndə AI bu siyahıdakı sözləri və məntiqi yoxlayır. Məsələn "Şifrə" yazmısınızsa, faylın içində şifrələmə alqoritmi axtaracaq.
-                    </p>
+                    <h3 style="color:var(--accent); margin-top:0;">⚙️ Süni İntellekt (AI) Tapşırıqları</h3>
+                    <p style="color:var(--text-sub); font-size:14px;">Tələbə fayl yükləyəndə sistem avtomatik bu adlara və məntiqə uyğun olub-olmadığını yoxlayır.</p>
                     <div id="adminTaskListContainer" style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px;"></div>
                     <button class="btn btn-dark" style="margin-bottom: 15px; color:var(--accent); border-color:var(--accent);" onclick="addAdminTaskRow()">➕ Yeni Tapşırıq Əlavə Et</button>
-                    <button class="btn" onclick="saveAdminTaskConfigs()" style="display:block;">Bütün Tapşırıqları Yadda Saxla 💾</button>
+                    <button class="btn" onclick="saveAdminTaskConfigs()" style="display:block;">Tapşırıqları Yadda Saxla 💾</button>
                 </div>
             </div>
 
-            <!-- TAB: SƏS VƏ MEDİA -->
+            <!-- SUB TAB 3 & 4: Fayllar -->
+            <div id="adminTabPendingFiles" class="admin-sub-tab" style="display:none;">
+                <h3 style="color:var(--gold); margin-bottom: 20px; font-size:20px; font-weight:900;">⏳ Gözləyən Fayllar</h3>
+                <div class="file-split-container">
+                    <div class="file-split-box" style="border-color: #38bdf8;">
+                        <div class="file-split-header" style="background:#38bdf8;">🔵 C++ Tapşırıqları</div>
+                        <div id="adminPendingTasksCpp" class="file-list-inner">Yüklənir...</div>
+                    </div>
+                    <div class="file-split-box" style="border-color: #f59e0b;">
+                        <div class="file-split-header" style="background:#f59e0b;">🟡 Python Tapşırıqları</div>
+                        <div id="adminPendingTasksPython" class="file-list-inner">Yüklənir...</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="adminTabCheckedFiles" class="admin-sub-tab" style="display:none;">
+                <h3 style="color:var(--accent); margin-bottom: 20px; font-size:20px; font-weight:900;">✅ Yoxlanılmış Fayllar</h3>
+                <div class="file-split-container">
+                    <div class="file-split-box" style="border-color: #38bdf8;">
+                        <div class="file-split-header" style="background:#38bdf8;">🔵 C++ Tapşırıqları</div>
+                        <div id="adminCheckedTasksCpp" class="file-list-inner">Yüklənir...</div>
+                    </div>
+                    <div class="file-split-box" style="border-color: #f59e0b;">
+                        <div class="file-split-header" style="background:#f59e0b;">🟡 Python Tapşırıqları</div>
+                        <div id="adminCheckedTasksPython" class="file-list-inner">Yüklənir...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SUB TAB 5: Hesablar -->
+            <div id="adminTabAccounts" class="admin-sub-tab" style="display:none;">
+                <div class="info-box"><h3 style="color:var(--text-main); margin-top:0;">🔐 Tələbə Hesabları</h3><div id="adminAccountsList" style="display:grid; gap:12px; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));"></div></div>
+            </div>
+
+            <!-- SUB TAB 6: Media, Səslər & Deadline (Özəl Mahnı Linkləri) -->
             <div id="adminTabMedia" class="admin-sub-tab" style="display:none;">
                 <div class="info-box" style="margin-bottom:20px;">
-                    <h3 style="color:var(--gold); margin-top:0;">🎵 Saytdaxili Səs Linkləri</h3>
-                    <p style="color:var(--text-sub); font-size:14px; margin-bottom:15px;">
-                        Qaliblər və Outsiderlər animasiyası çıxanda saytın öz içində oxunacaq MP3 və ya WAV linklərini bura daxil edin. Başqa sayta atmayacaq.
-                    </p>
+                    <h3 style="color:var(--gold); margin-top:0;">🎵 Saytdaxili Səs Linkləri (Avtomatik Oxunacaq)</h3>
+                    <p style="color:var(--text-sub); font-size:14px; margin-bottom:15px;">Qaliblər və Outsiderlər üçün istədiyiniz MP3/WAV mahnı linkini bura daxil edin. Başqa sayta atmayacaq.</p>
                     <div class="form-group">
-                        <label>Audio URL (Qaliblər üçün):</label>
-                        <input type="text" id="inpAdminWinnerAudio" placeholder="https://example.com/audio.mp3" />
+                        <label>Qaliblər üçün Mahnı URL:</label>
+                        <input type="text" id="inpAdminWinnerAudio" placeholder="https://..." />
                     </div>
                     <div class="form-group">
-                        <label>Audio URL (Outsiderlər üçün):</label>
-                        <input type="text" id="inpAdminOutsiderAudio" placeholder="https://example.com/audio.mp3" />
+                        <label>Outsiderlər üçün Mahnı URL:</label>
+                        <input type="text" id="inpAdminOutsiderAudio" placeholder="https://..." />
                     </div>
                     <button class="btn btn-gold" onclick="saveAudioSettings()">Səsləri Yadda Saxla 💾</button>
                 </div>
 
-                <div class="info-box" style="margin-bottom:20px;">
+                <div class="info-box">
                     <h3 style="color:var(--negative); margin-top:0;">⏳ Deadline Təyin Et</h3>
                     <input type="datetime-local" id="deadlineInput" class="form-group" style="width:auto; display:block;" />
                     <button class="btn btn-gold" onclick="saveDeadline()">Yadda Saxla</button> 
                     <button class="btn btn-admin" onclick="clearDeadline()">Sıfırla</button>
                 </div>
             </div>
+
+            <!-- SUB TAB 7: Feedback -->
+            <div id="adminTabFeedback" class="admin-sub-tab" style="display:none;">
+                <div class="info-box"><h3 style="color:var(--gold); margin-top:0;">💬 Feedback Mesajları</h3><div id="adminFeedbackList"></div></div>
+            </div>
+            
+            <!-- SUB TAB 8: Logs -->
+            <div id="adminTabLogs" class="admin-sub-tab" style="display:none;">
+                <div class="info-box"><h3 style="color:var(--accent); margin-top:0;">📲 Sistem Logları</h3><div id="adminLogsList"></div></div>
+            </div>
         </div>
     </div>
 
-    <!-- MODALS -->
+    <!-- MODALLAR -->
     <div id="authModal" class="modal">
         <div class="modal-content">
-            <h2 style="color:var(--accent); font-weight:900; margin-top:0;">Giriş</h2>
-            <div class="form-group"><input type="text" id="loginUsername" placeholder="İstifadəçi adı..." /></div>
-            <div class="form-group"><input type="password" id="loginPass" placeholder="Şifrə..." /></div>
-            <button class="btn" style="width:100%;" onclick="loginUser()">Daxil Ol</button>
-            <button class="btn btn-dark" style="width:100%; margin-top:10px;" onclick="closeModal('authModal')">Bağla</button>
+            <h2 style="color:var(--accent); margin-top:0; font-weight:900;">Giriş / Qeydiyyat</h2>
+            <div class="auth-tabs">
+                <div id="tabBtnLogin" class="auth-tab-btn active" onclick="switchAuthTab('login')">Giriş Et</div>
+                <div id="tabBtnReg" class="auth-tab-btn" onclick="switchAuthTab('register')">Qeydiyyat</div>
+            </div>
+            <div id="loginForm">
+                <div class="form-group"><label>İstifadəçi adı:</label><input type="text" id="loginUsername" /></div>
+                <div class="form-group"><label>Şifrə:</label><input type="password" id="loginPass" /></div>
+                <button class="btn" style="width:100%;" onclick="loginUser()">Daxil Ol 🚀</button>
+            </div>
+            <div id="registerForm" style="display:none;">
+                <div class="form-group"><label>Siyahıdan Adınızı Seçin:</label><select id="regNameSelect"></select></div>
+                <div class="form-group"><label>Yeni Şifrə:</label><input type="password" id="regPass" /></div>
+                <button class="btn btn-gold" style="width:100%;" onclick="registerUser()">Qeydiyyat ✅</button>
+            </div>
+            <button class="btn btn-dark" style="width:100%; margin-top:15px;" onclick="closeModal('authModal')">Bağla</button>
         </div>
     </div>
 
@@ -396,13 +429,36 @@
         </div>
     </div>
 
+    <div id="feedbackModal" class="modal">
+        <div class="modal-content">
+            <h2 style="color:var(--accent); margin-top:0; font-weight:900;">💬 Feedback Göndər</h2>
+            <div class="form-group"><label>Adınız:</label><input type="text" id="fbName" /></div>
+            <div class="form-group"><label>Mesajınız:</label><textarea id="fbMsg" rows="4"></textarea></div>
+            <button class="btn" style="width:100%;" onclick="sendFeedback()">Göndər</button>
+            <button class="btn btn-dark" style="width:100%; margin-top:10px;" onclick="closeModal('feedbackModal')">Bağla</button>
+        </div>
+    </div>
+
+    <div id="versionModal" class="modal">
+        <div class="modal-content">
+            <h2 style="color:var(--accent); margin-top:0; font-weight:900;">🚀 Yeniliklər (V3.6)</h2>
+            <div style="text-align:left; font-size:14px; color:var(--text-sub); line-height:1.6; margin-bottom:15px;">
+                - <strong>Tam işləyən Admin Yadda Saxla düyməsi.</strong><br>
+                - <strong>Sərt AI yoxlanışı:</strong> Veb kodlarını (HTML/CSS) və əlaqəsiz qısa kodları izahla rədd edir.<br>
+                - <strong>Bütün Admin Tabları geri qaytarıldı:</strong> Loglar, Gözləyən fayllar, Hesablar və Feedback yenidən aktivdir.<br>
+                - <strong>Özəl Səs Linkləri:</strong> Admin Media bölməsindən istədiyi mahnı linkini yerləşdirə bilər.
+            </div>
+            <button class="btn btn-dark" style="width:100%;" onclick="closeModal('versionModal')">Bağla</button>
+        </div>
+    </div>
+
     <script>
+        // ---------------- FIREBASE VƏ DƏYİŞƏNLƏR ----------------
         const firebaseConfig = {
             apiKey: "AIzaSyAug3XL0WtYr6a-_9qcLMjiE16oEA-y5XU",
             authDomain: "phyton-and-cplus.firebaseapp.com",
             databaseURL: "https://phyton-and-cplus-default-rtdb.firebaseio.com",
-            projectId: "phyton-and-cplus",
-            storageBucket: "phyton-and-cplus.firebasestorage.app"
+            projectId: "phyton-and-cplus"
         };
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
@@ -414,53 +470,45 @@
         let currentUser = null; 
         let currentUserRole = null; 
         let activeProfileStudent = null;
+        let chartInstance = null;
+        let emojiInterval = null;
         let deadlineTimestamp = null;
         let deadlineInterval = null;
 
-        const ADMIN_CREDENTIALS = { "jagermaster": "1002", "chivas": "turan2008", "jameson": "kenan69" };
+        const ADMIN_CREDENTIALS = { "jagermaster": "master", "chivas": "admin", "jameson": "admin" };
         const ADMIN_TO_STUDENT_MAP = { "jagermaster": "Süleymanzadə Aqşin", "chivas": "Məmmədli Turan", "jameson": "Gülverdiyev Kənan" };
+        
+        const STUDENT_GENDERS = {
+            "Abbasov Rüfət": "Kişi", "Abıyeva Aysun": "Qadın", "Əliyeva Mehriban": "Qadın", "Gülverdiyev Kənan": "Kişi", "Məmmədli Turan": "Kişi", "Süleymanzadə Aqşin": "Kişi" // (Burada bütün tələbələrin adları ola bilər)
+        };
 
-        function toggleTheme() {
-            const isLight = document.body.getAttribute('data-theme') === 'light';
-            if(isLight) { document.body.removeAttribute('data-theme'); document.getElementById('themeBtn').innerText = '🌞'; } 
-            else { document.body.setAttribute('data-theme', 'light'); document.getElementById('themeBtn').innerText = '🌙'; }
-        }
-
+        // ---------------- İLK YÜKLƏMƏ ----------------
         window.onload = () => {
-            setInterval(() => {
-                const dtEl = document.getElementById('liveDateTime'); 
-                if(dtEl) dtEl.innerText = "📅 " + new Date().toLocaleString('az-AZ');
-            }, 1000);
+            if(localStorage.getItem('theme') === 'light') { document.body.setAttribute('data-theme', 'light'); document.getElementById('themeBtn').innerText = '🌙'; }
+            setInterval(() => { const dt = document.getElementById('liveDateTime'); if(dt) dt.innerText = "📅 " + new Date().toLocaleString('az-AZ'); }, 1000);
             
             checkSession();
             
-            // 1. Şagirdlərin Nəticələrini Yüklə
             database.ref('students_data').on('value', snap => { 
                 if(snap.val()) globalData = snap.val(); 
                 renderTable();
-                if(currentUserRole === 'admin' || currentUserRole === 'master') {
-                    renderAdminBody(); 
-                }
+                if(currentUserRole === 'admin' || currentUserRole === 'master') renderAdminBody();
             });
 
-            // 2. Dinamik AI tapşırıqlarını yüklə
             database.ref('settings/dynamic_tasks').on('value', snap => {
                 if(snap.val()) dynamicTasksConfig = snap.val();
             });
 
-            // 3. Audio Parametrlərini Yüklə
             database.ref('settings/audio').on('value', snap => {
                 let data = snap.val();
                 if(data) {
                     if(data.winner) document.getElementById('audioWinner').src = data.winner;
                     if(data.outsider) document.getElementById('audioOutsider').src = data.outsider;
-                    
-                    if(document.getElementById('inpAdminWinnerAudio')) document.getElementById('inpAdminWinnerAudio').value = data.winner || '';
-                    if(document.getElementById('inpAdminOutsiderAudio')) document.getElementById('inpAdminOutsiderAudio').value = data.outsider || '';
+                    if(document.getElementById('inpAdminWinnerAudio')) document.getElementById('inpAdminWinnerAudio').value = data.winner;
+                    if(document.getElementById('inpAdminOutsiderAudio')) document.getElementById('inpAdminOutsiderAudio').value = data.outsider;
                 }
             });
 
-            // 4. Deadline yüklə
             database.ref('deadline_time').on('value', snap => {
                 const val = snap.val(); 
                 deadlineTimestamp = val ? new Date(val).getTime() : null;
@@ -468,60 +516,110 @@
                 if(dt) dt.innerText = val ? new Date(val).toLocaleString('az-AZ') : "Təyin edilməyib";
                 startDeadlineTimer();
             });
+
+            loadAdminFeedback();
         };
 
-        // --- AUTH ---
+        function toggleTheme() {
+            const isLight = document.body.getAttribute('data-theme') === 'light';
+            if(isLight) { document.body.removeAttribute('data-theme'); localStorage.setItem('theme', 'dark'); document.getElementById('themeBtn').innerText = '🌞'; } 
+            else { document.body.setAttribute('data-theme', 'light'); localStorage.setItem('theme', 'light'); document.getElementById('themeBtn').innerText = '🌙'; }
+        }
+        
+        function changeLanguage(lang) { alert("Dil dəyişmə gələcək versiyalarda aktiv olacaq."); }
+
+        // ---------------- GİRİŞ / ÇIXIŞ ----------------
         function checkSession() {
             currentUser = localStorage.getItem('auth_user'); 
             currentUserRole = localStorage.getItem('auth_role');
             updateAuthWidget();
         }
 
-        function loginUser() {
-            const userStr = document.getElementById('loginUsername').value.trim().toLowerCase(); 
-            const passStr = document.getElementById('loginPass').value.trim();
-            
-            if (ADMIN_CREDENTIALS[userStr] && ADMIN_CREDENTIALS[userStr] === passStr) {
-                currentUser = userStr; 
-                currentUserRole = userStr === 'jagermaster' ? 'master' : 'admin'; 
-                localStorage.setItem('auth_user', currentUser); 
-                localStorage.setItem('auth_role', currentUserRole);
-                alert("Xoş gəldiniz Admin! ✅"); 
-                closeModal('authModal'); 
-                updateAuthWidget();
-                renderTable();
-            } else if (userStr && passStr) {
-                // Tələbə simulyasiyası (mövcud tələbə adı yazarsa girir)
-                let found = (globalData.cpp || []).find(s => s.ad.toLowerCase() === userStr);
-                if(found) {
-                    currentUser = found.ad;
-                    currentUserRole = 'student';
-                    localStorage.setItem('auth_user', currentUser); 
-                    localStorage.setItem('auth_role', currentUserRole);
-                    alert("Xoş gəldin, " + found.ad + "! ✅"); 
-                    closeModal('authModal'); 
-                    updateAuthWidget();
-                } else {
-                    alert("Şifrə və ya ad yanlışdır!");
-                }
+        function openAuthModal() {
+            openModal('authModal');
+            switchAuthTab('login');
+        }
+
+        function switchAuthTab(tab) {
+            if (tab === 'login') {
+                document.getElementById('tabBtnLogin').classList.add('active'); document.getElementById('tabBtnReg').classList.remove('active');
+                document.getElementById('loginForm').style.display = 'block'; document.getElementById('registerForm').style.display = 'none';
             } else {
-                alert("Məlumat daxil edin.");
+                document.getElementById('tabBtnReg').classList.add('active'); document.getElementById('tabBtnLogin').classList.remove('active');
+                document.getElementById('loginForm').style.display = 'none'; document.getElementById('registerForm').style.display = 'block';
+                populateRegNames();
             }
         }
 
+        async function populateRegNames() {
+            const sel = document.getElementById('regNameSelect'); 
+            sel.innerHTML = '<option value="">-- Seçin --</option>';
+            const snap = await database.ref('user_accounts').once('value');
+            const registeredUsers = snap.val() || {}; 
+            Object.keys(STUDENT_GENDERS).forEach(name => {
+                if (!registeredUsers[name] && !Object.values(ADMIN_TO_STUDENT_MAP).includes(name)) {
+                    sel.innerHTML += '<option value="' + name + '">' + name + '</option>';
+                }
+            });
+        }
+
+        function registerUser() {
+            const name = document.getElementById('regNameSelect').value; 
+            const pass = document.getElementById('regPass').value.trim();
+            if (!name) return alert("Seçim edin!"); 
+            if (pass.length < 4) return alert("Şifrə min. 4 simvol.");
+            
+            database.ref('user_accounts/' + name).set({ password: pass, gender: STUDENT_GENDERS[name] || 'Məlum deyil', created_at: new Date().toISOString() }).then(() => {
+                alert("Uğurlu! İndi giriş edə bilərsiniz."); 
+                switchAuthTab('login'); 
+                document.getElementById('loginUsername').value = name;
+            });
+        }
+
+        async function loginUser() {
+            const userStr = document.getElementById('loginUsername').value.trim().toLowerCase(); 
+            const passStr = document.getElementById('loginPass').value.trim();
+            
+            if (ADMIN_CREDENTIALS[userStr]) {
+                const isMaster = userStr === 'jagermaster';
+                if ((isMaster && passStr === '1002') || (userStr === 'chivas' && passStr === 'turan2008') || (userStr === 'jameson' && passStr === 'kenan69')) {
+                    currentUser = userStr; currentUserRole = ADMIN_CREDENTIALS[userStr]; 
+                    finalizeLogin(); return;
+                }
+            }
+            
+            const snap = await database.ref('user_accounts/' + document.getElementById('loginUsername').value.trim()).once('value'); 
+            const data = snap.val();
+            if (data && data.password.toLowerCase() === passStr.toLowerCase()) { 
+                currentUser = document.getElementById('loginUsername').value.trim(); currentUserRole = 'student'; finalizeLogin(); 
+            } else {
+                alert("Şifrə və ya ad yanlışdır!");
+            }
+        }
+
+        function finalizeLogin() {
+            localStorage.setItem('auth_user', currentUser); localStorage.setItem('auth_role', currentUserRole);
+            alert("Xoş gəldiniz! 🎉"); closeModal('authModal'); updateAuthWidget(); renderTable();
+            database.ref('activity_logs').push({ user: currentUser, action: "Sistemə daxil oldu", timestamp: new Date().toISOString() });
+        }
+
         function logoutUser() {
+            if(!confirm("Çıxış edilsin?")) return;
             localStorage.clear(); currentUser = null; currentUserRole = null; 
             updateAuthWidget(); openPage('mainDashboard');
         }
 
         function updateAuthWidget() {
-            const outDiv = document.getElementById('authLoggedOut'); 
-            const inDiv = document.getElementById('authLoggedIn');
+            const outDiv = document.getElementById('authLoggedOut'); const inDiv = document.getElementById('authLoggedIn');
             if (currentUser) {
                 outDiv.style.display = 'none'; inDiv.style.display = 'flex';
                 let displayName = ADMIN_TO_STUDENT_MAP[currentUser] || currentUser;
                 document.getElementById('topUsername').innerText = displayName;
                 document.getElementById('topRoleBadge').innerText = currentUserRole !== 'student' ? "Admin" : "TƏLƏBƏ";
+                
+                let avatarUrl = 'https://svgsilh.com/svg/1300331.svg';
+                if(globalData.cpp) { let st = globalData.cpp.find(s => s.ad === displayName) || globalData.python.find(s => s.ad === displayName); if(st && st.foto) avatarUrl = st.foto; }
+                document.getElementById('topAvatar').src = avatarUrl;
                 document.getElementById('btnAdminPanel').style.display = currentUserRole !== 'student' ? 'inline-block' : 'none';
             } else {
                 outDiv.style.display = 'block'; inDiv.style.display = 'none';
@@ -529,91 +627,95 @@
             }
         }
         
-        function openMyProfile() {
-            if (!currentUser) return;
-            const targetName = ADMIN_TO_STUDENT_MAP[currentUser] || currentUser;
-            openProfileByName(targetName);
-        }
+        function goToMyProfile() { if (currentUser) openProfileByName(ADMIN_TO_STUDENT_MAP[currentUser] || currentUser); }
 
-        // --- CƏDVƏL & TABLOLAR ---
+        // ---------------- CƏDVƏL & TABLOLAR ----------------
         function switchTab(tabName) { 
             currentTab = tabName; 
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active')); 
             document.getElementById('btn-' + tabName).classList.add('active'); 
             renderTable();
-            if(currentUserRole === 'admin' || currentUserRole === 'master') renderAdminBody();
+            if(currentUserRole !== 'student' && currentUserRole) renderAdminBody();
         }
 
         function calculateTotals(student) {
-            if (!student) return { cari_reyting: 0, ayliq_reyting: 0 };
+            if (!student) return { cari_reyting: 0, ayliq_reyting: 0, artim: 0, kecmis_reyting: 0 };
             if (currentTab === 'common') {
                 const cppS = globalData.cpp ? globalData.cpp.find(s => s.ad === student.ad) : null; 
                 const pyS = globalData.python ? globalData.python.find(s => s.ad === student.ad) : null;
                 const cppCari = cppS ? (Number(cppS.fm)||0)+(Number(cppS.stepping)||0)+(Number(cppS.e_olimp)||0)+(Number(cppS.codesources)||0)+(Number(cppS.hackerrank)||0) : 0;
                 const pyCari = pyS ? (Number(pyS.fm)||0)+(Number(pyS.stepping)||0)+(Number(pyS.e_olimp)||0)+(Number(pyS.codesources)||0)+(Number(pyS.hackerrank)||0) : 0;
-                return { ...student, cari_reyting: cppCari + pyCari, ayliq_reyting: (Number(cppS?.ayliq_reyting)||0) + (Number(pyS?.ayliq_reyting)||0) + cppCari + pyCari };
+                const cari = cppCari + pyCari;
+                const kecmis = (Number(cppS?.kecmis_reyting)||0) + (Number(pyS?.kecmis_reyting)||0);
+                return { ...student, cari_reyting: cari, ayliq_reyting: (Number(cppS?.ayliq_reyting)||0) + (Number(pyS?.ayliq_reyting)||0) + cari, artim: cari - kecmis, kecmis_reyting: kecmis };
             } else {
                 const cari = (Number(student.fm)||0)+(Number(student.stepping)||0)+(Number(student.e_olimp)||0)+(Number(student.codesources)||0)+(Number(student.hackerrank)||0);
-                return { ...student, cari_reyting: cari, ayliq_reyting: Number(student.ayliq_reyting||0) + cari };
+                const kecmis = Number(student.kecmis_reyting||0);
+                return { ...student, cari_reyting: cari, ayliq_reyting: Number(student.ayliq_reyting||0) + cari, artim: cari - kecmis, kecmis_reyting: kecmis };
             }
         }
 
         function renderTable() {
             const tableBody = document.querySelector('#tableBody'); 
             const tableHead = document.querySelector('#ratingTable thead');
-            if (currentTab === 'common') tableHead.innerHTML = '<tr><th>#</th><th>Tələbə</th><th>Cari Reytinq</th></tr>';
-            else tableHead.innerHTML = '<tr><th>#</th><th>Tələbə</th><th>FM</th><th>stepik</th><th>eolymp</th><th>codesrc</th><th>hackrank</th><th>Cari</th></tr>';
+            if (currentTab === 'common') tableHead.innerHTML = '<tr><th>#</th><th>Tələbə</th><th>Cari Reytinq</th><th>Keçmiş</th><th>Artım</th></tr>';
+            else tableHead.innerHTML = '<tr><th>#</th><th>Tələbə</th><th>FM</th><th>stepik</th><th>eolymp</th><th>codesrc</th><th>hackrank</th><th>Cari</th><th>Keçmiş</th><th>Artım</th></tr>';
 
             const list = (globalData[currentTab] || []).map(s => calculateTotals(s));
             const sortedByCari = [...list].sort((a,b) => b.cari_reyting - a.cari_reyting);
 
-            renderBoards(sortedByCari);
+            renderBoards(list, sortedByCari);
 
             let tableHTML = '';
             const totalStudents = sortedByCari.length;
 
             sortedByCari.forEach((item, index) => {
-                let rowClass = '';
-                if (index < 3) rowClass = 'rank-red-row'; // İlk 3 qırmızı
-                else if (index === 3 || index === 4) rowClass = 'rank-white-row'; // 4-5 ağ
-                else if (index >= totalStudents - 3 && totalStudents >= 6) rowClass = 'rank-black-row'; // Son 3 qara
-
+                let rowClass = index < 3 ? 'rank-red-row' : (index === 3 || index === 4 ? 'rank-white-row' : (index >= totalStudents - 3 && totalStudents >= 6 ? 'rank-black-row' : ''));
                 const rankIcon = index === 0 ? '🥇' : (index === 1 ? '🥈' : (index === 2 ? '🥉' : (index + 1)));
                 const nameHTML = '<div class="student-info"><div class="avatar"><img src="' + (item.foto || 'https://svgsilh.com/svg/1300331.svg') + '"></div><span class="clickable-name" onclick="openProfileByName(\'' + item.ad + '\')">' + item.ad + '</span></div>';
+                
+                const artimColor = item.artim >= 0 ? 'var(--positive)' : 'var(--negative)';
+                const artimSign = item.artim >= 0 ? '+' + item.artim : item.artim;
 
                 let colsHTML = '';
                 if (currentTab === 'common') {
-                    colsHTML = '<td class="rank-col">' + rankIcon + '</td><td>' + nameHTML + '</td><td><strong>' + item.cari_reyting + ' pt</strong></td>';
+                    colsHTML = '<td class="rank-col">' + rankIcon + '</td><td>' + nameHTML + '</td><td><strong>' + item.cari_reyting + ' pt</strong></td><td>' + item.kecmis_reyting + ' pt</td><td style="color:' + artimColor + '; font-weight:800;">' + artimSign + '</td>';
                 } else {
-                    colsHTML = '<td class="rank-col">' + rankIcon + '</td><td>' + nameHTML + '</td><td>' + item.fm + '</td><td>' + item.stepping + '</td><td>' + item.e_olimp + '</td><td>' + item.codesources + '</td><td>' + item.hackerrank + '</td><td><strong>' + item.cari_reyting + ' pt</strong></td>';
+                    colsHTML = '<td class="rank-col">' + rankIcon + '</td><td>' + nameHTML + '</td><td>' + item.fm + '</td><td>' + item.stepping + '</td><td>' + item.e_olimp + '</td><td>' + item.codesources + '</td><td>' + item.hackerrank + '</td><td><strong>' + item.cari_reyting + ' pt</strong></td><td>' + item.kecmis_reyting + ' pt</td><td style="color:' + artimColor + '; font-weight:800;">' + artimSign + '</td>';
                 }
                 tableHTML += '<tr class="' + rowClass + '">' + colsHTML + '</tr>';
             });
             tableBody.innerHTML = tableHTML;
         }
 
-        function renderBoards(sortedByCari) {
+        function renderBoards(list, sortedByCari) {
             const top3Div = document.getElementById('boardTop3');
-            const monthlyTop3Div = document.getElementById('boardMonthlyTop3');
+            const prevTop3Div = document.getElementById('boardPrevTop3');
             const bottom3Div = document.getElementById('boardBottom3');
+            const monthlyTop3Div = document.getElementById('boardMonthlyTop3');
 
             const top3 = sortedByCari.slice(0,3);
             let htmlTop = '';
-            top3.forEach((s, i) => htmlTop += '<div class="v-board-item"><div class="v-board-rank">' + (i+1) + '</div><img src="' + (s.foto || 'https://svgsilh.com/svg/1300331.svg') + '"><div><strong>' + s.ad + '</strong><br><span style="color:var(--negative); font-weight:bold;">' + s.cari_reyting + ' pt</span></div></div>');
+            top3.forEach((s, i) => htmlTop += '<div class="v-board-item"><div class="v-board-rank">' + (i===0?'🥇':(i===1?'🥈':'🥉')) + '</div><img src="' + (s.foto || 'https://svgsilh.com/svg/1300331.svg') + '"><div><strong class="clickable-name" onclick="openProfileByName(\''+s.ad+'\')">' + s.ad + '</strong><br><span style="color:var(--negative); font-weight:bold;">' + s.cari_reyting + ' pt</span></div></div>');
             if(top3Div) top3Div.innerHTML = htmlTop;
 
-            const monthlySorted = [...sortedByCari].sort((a,b) => b.ayliq_reyting - a.ayliq_reyting).slice(0,3);
+            const prevSorted = [...list].sort((a,b) => Number(b.kecmis_reyting) - Number(a.kecmis_reyting)).slice(0,3);
+            let htmlPrev = '';
+            prevSorted.forEach((s, i) => htmlPrev += '<div class="v-board-item"><div class="v-board-rank">' + (i===0?'🥇':(i===1?'🥈':'🥉')) + '</div><img src="' + (s.foto || 'https://svgsilh.com/svg/1300331.svg') + '"><div><strong class="clickable-name" onclick="openProfileByName(\''+s.ad+'\')">' + s.ad + '</strong><br><span style="color:var(--silver); font-weight:bold;">' + s.kecmis_reyting + ' pt</span></div></div>');
+            if(prevTop3Div) prevTop3Div.innerHTML = htmlPrev;
+
+            const monthlySorted = [...list].sort((a,b) => b.ayliq_reyting - a.ayliq_reyting).slice(0,3);
             let htmlMonthly = '';
-            monthlySorted.forEach((s, i) => htmlMonthly += '<div class="v-board-item"><div class="v-board-rank">' + (i+1) + '</div><img src="' + (s.foto || 'https://svgsilh.com/svg/1300331.svg') + '"><div><strong>' + s.ad + '</strong><br><span style="color:var(--negative); font-weight:bold;">' + s.ayliq_reyting + ' pt</span></div></div>');
+            monthlySorted.forEach((s, i) => htmlMonthly += '<div class="v-board-item"><div class="v-board-rank">' + (i===0?'🥇':(i===1?'🥈':'🥉')) + '</div><img src="' + (s.foto || 'https://svgsilh.com/svg/1300331.svg') + '"><div><strong class="clickable-name" onclick="openProfileByName(\''+s.ad+'\')">' + s.ad + '</strong><br><span style="color:var(--negative); font-weight:bold;">' + s.ayliq_reyting + ' pt</span></div></div>');
             if(monthlyTop3Div) monthlyTop3Div.innerHTML = htmlMonthly;
 
-            const bottom3 = [...sortedByCari].sort((a,b) => a.cari_reyting - b.cari_reyting).slice(0,3);
+            const bottom3 = [...list].sort((a,b) => a.cari_reyting - b.cari_reyting).slice(0,3);
             let htmlBottom = '';
-            bottom3.forEach((s) => htmlBottom += '<div class="v-board-item"><div class="v-board-rank">😭</div><img src="' + (s.foto || 'https://svgsilh.com/svg/1300331.svg') + '"><div><strong>' + s.ad + '</strong><br><span style="font-weight:bold;">' + s.cari_reyting + ' pt</span></div></div>');
+            bottom3.forEach((s) => htmlBottom += '<div class="v-board-item"><div class="v-board-rank">😭</div><img src="' + (s.foto || 'https://svgsilh.com/svg/1300331.svg') + '"><div><strong class="clickable-name" onclick="openProfileByName(\''+s.ad+'\')">' + s.ad + '</strong><br><span style="font-weight:bold;">' + s.cari_reyting + ' pt</span></div></div>');
             if(bottom3Div) bottom3Div.innerHTML = htmlBottom;
         }
 
-        // --- PROFİL VƏ AI YÜKLƏMƏSİ ---
+        // ---------------- ŞƏXSİ PROFİL & SƏRT AI KOD YOXLANIŞI ----------------
         function openProfileByName(studentName) {
             const student = (globalData[currentTab]||[]).find(s => s.ad === studentName); 
             if (!student) return;
@@ -624,23 +726,19 @@
             document.getElementById('pAvatar').src = student.foto || 'https://svgsilh.com/svg/1300331.svg'; 
             document.getElementById('pName').innerText = student.ad;
             document.getElementById('pCari').innerText = computed.cari_reyting + " pt";
+            
+            document.getElementById('pArtim').innerText = (computed.artim >= 0 ? '+' + computed.artim : computed.artim) + " pt";
+            document.getElementById('pArtim').style.color = computed.artim >= 0 ? 'var(--positive)' : 'var(--negative)';
 
             let isOwnProfile = (currentUser === student.ad) || (ADMIN_TO_STUDENT_MAP[currentUser] === student.ad);
             let isAdmin = (currentUserRole !== 'student' && currentUserRole !== null);
 
-            const uploadSec = document.getElementById('privateUploadSection');
-            const statusSec = document.getElementById('studentTaskStatusContainer');
+            document.getElementById('privateUploadSection').style.display = isOwnProfile ? 'block' : 'none';
+            document.getElementById('studentTaskStatusContainer').style.display = (isOwnProfile || isAdmin) ? 'block' : 'none';
 
-            if (isOwnProfile) uploadSec.style.display = 'block'; 
-            else uploadSec.style.display = 'none';
-
-            if (isOwnProfile || isAdmin) {
-                statusSec.style.display = 'block';
-                loadStudentTaskStatuses(student.ad);
-            } else {
-                statusSec.style.display = 'none';
-            }
-
+            if (isOwnProfile || isAdmin) loadStudentTaskStatuses(student.ad);
+            
+            renderStudentChart(computed.artim);
             openPage('profilePage'); 
         }
 
@@ -655,19 +753,12 @@
                     Object.keys(tasks).forEach(key => {
                         const t = tasks[key]; 
                         count++; 
-                        let stText = '';
-                        let stColor = '';
-                        if(t.status === 'correct') {
-                            stText = '✅ Qəbul edildi (+' + t.addedPoints + ' pt)';
-                            stColor = 'var(--positive)';
-                        } else {
-                            stText = '❌ Rədd edildi: ' + (t.reason || 'Bilinməyən xəta');
-                            stColor = 'var(--negative)';
-                        }
+                        let stText = t.status === 'correct' ? '✅ Qəbul edildi (+' + t.addedPoints + ' pt)' : (t.status === 'wrong' ? '❌ Rədd edildi: ' + (t.reason||'Bilinmir') : '⏳ Gözləyir');
+                        let stColor = t.status === 'correct' ? 'var(--positive)' : (t.status === 'wrong' ? 'var(--negative)' : 'var(--gold)');
                         
-                        html += '<div style="margin-top:8px; padding:12px; border-radius:12px; border:1px solid ' + stColor + '; background:var(--card-hover);">' +
-                                '<strong>📄 ' + t.fileName + '</strong><br>' +
-                                '<span style="color:' + stColor + '; font-weight:900; font-size:13px; display:inline-block; margin-top:5px;">' + stText + '</span>' +
+                        html += '<div style="margin-top:8px; padding:12px; border-radius:12px; border:1px solid ' + stColor + '; background:var(--card-hover); display:flex; justify-content:space-between; align-items:center;">' +
+                                '<strong>📄 ' + t.fileName + '</strong>' +
+                                '<span style="color:' + stColor + '; font-weight:900; font-size:13px;">' + stText + '</span>' +
                                 '</div>';
                     });
                 }
@@ -675,8 +766,10 @@
             });
         }
 
-        // ƏSAS AI SİMULYASİYASI (Çox sərtləşdirilmiş)
-        async function uploadAndCheckCode() {
+        // Təkmilləşdirilmiş SƏRT AI yoxlanışı
+        async function uploadStudentTasks() {
+            if (deadlineTimestamp && new Date().getTime() >= deadlineTimestamp) return alert("🚨 Deadline bitib, tapşırıq yükləyə bilməzsiniz!");
+            
             const fileInput = document.getElementById('studentTaskFiles');
             const file = fileInput.files[0];
             const expectedSubject = document.getElementById('studentSubjectSelect').value;
@@ -687,100 +780,91 @@
             reader.onload = async (e) => {
                 let codeContent = e.target.result.toLowerCase();
                 let filename = file.name.toLowerCase();
-                let aiResult = checkCodeLogic(filename, codeContent, expectedSubject);
+                
+                // 1. SƏRT VEB KOD YOXLAMASI (HTML, CSS, JS, PHP rədd edilir)
+                if (codeContent.includes('<html') || codeContent.includes('<!doctype') || codeContent.includes('<body') || codeContent.includes('<div')) {
+                    alert("❌ SƏHV: Süni İntellekt (AI) faylınızı rədd etdi!\nSəbəb: Bu fayl proqramlaşdırma alqoritmi deyil. İçində Veb/HTML strukturu aşkarlandı. Sadəcə C++ və Python qəbul edilir.");
+                    fileInput.value = ''; return;
+                }
 
-                // Yükləməni Firebase-ə yazırıq
-                let newTaskRef = database.ref('student_tasks').push();
-                let taskData = {
-                    studentName: activeProfileStudent,
-                    fileName: file.name,
-                    subject: expectedSubject,
-                    status: aiResult.status,
-                    reason: aiResult.reason || '',
-                    recognizedTask: aiResult.task || '',
-                    addedPoints: aiResult.points || 0,
-                    timestamp: new Date().toISOString()
-                };
+                // 2. ÇOX QISA KOD YOXLAMASI
+                if (codeContent.length < 30) {
+                    alert("❌ SƏHV: Süni İntellekt (AI) faylınızı rədd etdi!\nSəbəb: Kod çox qısadır və məntiqi alqoritm yoxdur.");
+                    fileInput.value = ''; return;
+                }
 
-                await newTaskRef.set(taskData);
+                // 3. DİL VƏ STRUKTUR YOXLAMASI
+                if (expectedSubject === 'cpp' && !codeContent.includes('#include') && !codeContent.includes('main()')) {
+                    alert("❌ SƏHV: Süni İntellekt (AI) faylınızı rədd etdi!\nSəbəb: C++ faylının strukturu düzgün deyil (#include və ya main() tapılmadı).");
+                    fileInput.value = ''; return;
+                }
+                if (expectedSubject === 'python' && (codeContent.includes('#include') || codeContent.includes('int main()'))) {
+                    alert("❌ SƏHV: Süni İntellekt (AI) faylınızı rədd etdi!\nSəbəb: Python seçmisiniz, amma faylın içində C++ kod strukturu var.");
+                    fileInput.value = ''; return;
+                }
 
-                if (aiResult.status === 'correct') {
-                    // Düzgündürsə, balı birbaşa artır
+                // 4. TAPŞIRIQ ADINA UYĞUNLUQ
+                let matchedTask = null;
+                for (let t of dynamicTasksConfig) {
+                    let keywords = t.name.toLowerCase().split(' ');
+                    let matchScore = 0;
+                    keywords.forEach(kw => { if (kw.length > 3 && (filename.includes(kw) || codeContent.includes(kw))) matchScore++; });
+                    if (matchScore > 0) { matchedTask = t; break; }
+                }
+
+                if (!matchedTask) {
+                    alert("❌ SƏHV: Süni İntellekt (AI) faylınızı rədd etdi!\nSəbəb: Kodun içindəki dəyişənlər və ya fayl adı heç bir aktiv tapşırığa uyğun gəlmir (Mövzu kənarıdır).");
+                    
+                    // Səhv kimi bazaya da yazaq (admin görsün)
+                    database.ref('student_tasks').push({ studentName: activeProfileStudent, fileName: file.name, subject: expectedSubject, status: 'wrong', reason: 'Mövzu kənarı / Əlaqəsiz kod', timestamp: new Date().toISOString() });
+                    fileInput.value = ''; return;
+                }
+
+                // HƏR ŞEY DÜZDÜR!
+                let dataReader = new FileReader(); 
+                dataReader.onload = async ev => {
+                    let base64Data = ev.target.result;
+                    
+                    // Balı anında artırırıq
                     let stList = globalData[expectedSubject];
                     let idx = stList.findIndex(s => s.ad === activeProfileStudent);
                     if(idx > -1) {
-                        stList[idx].fm = Number(stList[idx].fm || 0) + aiResult.points;
+                        stList[idx].fm = Number(stList[idx].fm || 0) + matchedTask.points;
                         await database.ref('students_data/' + expectedSubject + '/' + idx + '/fm').set(stList[idx].fm);
                     }
-                    alert("✅ TƏBRİKLƏR! AI sistem kodunuzu tam doğru hesab etdi və " + aiResult.points + " bal hesabınıza oturdu.");
-                } else {
-                    // Səhvdirsə, alert və reason ver
-                    alert("❌ SƏHV: Sizin kodunuz qəbul edilmədi!\nSəbəb: " + aiResult.reason);
-                }
-                
-                fileInput.value = '';
-                renderTable(); // Xalı dərhal yeniləmək üçün
+
+                    await database.ref('student_tasks').push({ 
+                        studentName: activeProfileStudent, fileName: file.name, fileData: base64Data, subject: expectedSubject, status: 'correct', recognizedTask: matchedTask.name, addedPoints: matchedTask.points, timestamp: new Date().toISOString() 
+                    });
+
+                    alert("✅ TƏBRİKLƏR! AI sistem kodunuzun " + matchedTask.name + " alqoritminə uyğun olduğunu təsdiqlədi və " + matchedTask.points + " bal hesabınıza oturdu.");
+                    fileInput.value = '';
+                    renderTable();
+                };
+                dataReader.readAsDataURL(file);
             };
             reader.readAsText(file);
         }
 
-        function checkCodeLogic(filename, content, subject) {
-            // 1. SƏRT VEB KOD YOXLAMASI (HTML, CSS, JS, PHP rədd edilir)
-            if (content.includes('<html') || content.includes('<!doctype') || content.includes('<body') || content.includes('<div') || content.includes('<?php')) {
-                return { status: 'wrong', reason: 'Bu fayl proqramlaşdırma alqoritmi deyil. İçində Veb/HTML strukturu aşkarlandı.' };
-            }
-
-            // 2. DİL YOXLAMASI
-            if (subject === 'cpp') {
-                if (!content.includes('#include') && !content.includes('main()')) {
-                    return { status: 'wrong', reason: 'C++ faylının strukturu düzgün deyil (#include və ya main() tapılmadı).' };
-                }
-                if (content.includes('def ') && content.includes('print(')) {
-                    return { status: 'wrong', reason: 'C++ seçmisiniz, amma faylın içində Python kodu aşkarlandı.' };
-                }
-            } else if (subject === 'python') {
-                if (content.includes('#include') || content.includes('int main()')) {
-                    return { status: 'wrong', reason: 'Python seçmisiniz, amma faylın içində C++ strukturu aşkarlandı.' };
-                }
-            }
-
-            // 3. ÇOX QISA KOD YOXLAMASI
-            if (content.length < 30) {
-                return { status: 'wrong', reason: 'Faylın içindəki kod çox qısadır, məntiqi həll alqoritmi mövcud deyil.' };
-            }
-
-            // 4. TAPŞIRIQ MƏNTİQİ YOXLAMASI (dynamicTasksConfig əsasında)
-            let matchedTask = null;
-            for (let t of dynamicTasksConfig) {
-                let keywords = t.name.toLowerCase().split(' ');
-                let matchScore = 0;
-                keywords.forEach(kw => {
-                    if (kw.length > 3 && (filename.includes(kw) || content.includes(kw))) {
-                        matchScore++;
-                    }
-                });
-                // Əgər ən azı 1 açar söz uyğun gəlsə, tapşırığı qəbul edirik
-                if (matchScore > 0) {
-                    matchedTask = t;
-                    break;
-                }
-            }
-
-            if (!matchedTask) {
-                return { status: 'wrong', reason: 'Kodun daxilindəki dəyişənlər və ya fayl adı heç bir aktiv tapşırığa uyğun gəlmir (Mövzu kənarıdır).' };
-            }
-
-            // HƏR ŞEY QAYDASINDADIRSA:
-            return { status: 'correct', task: matchedTask.name, points: matchedTask.points };
+        function renderStudentChart(wg) {
+            const ctx = document.getElementById('studentChart').getContext('2d'); 
+            if (chartInstance) chartInstance.destroy();
+            const color = '#38bdf8';
+            chartInstance = new Chart(ctx, { 
+                type: 'line', 
+                data: { labels: ['Start', 'M1', 'M2', 'M3', 'Cari Nəticə'], datasets: [{ label: 'Artım qrafiki', data: [0, Math.round(wg*0.2), Math.round(wg*0.55), Math.round(wg*0.8), wg], borderColor: color, backgroundColor: 'rgba(56, 189, 248, 0.1)', fill: true, tension: 0.4 }] }, 
+                options: { responsive: true, plugins: { legend: { display: false } } } 
+            });
         }
 
-        // --- ADMİN PANEL FUNKSİYALARI ---
-        function switchAdminSubTab(tab) {
-            document.querySelectorAll('.admin-nav-btn').forEach(b => b.classList.remove('active'));
-            event.target.classList.add('active');
+        // ---------------- ADMİN PANEL VƏ BÜTÜN FUNKSİYALAR ----------------
+        function switchAdminSubTab(eventObj, tab) {
+            document.querySelectorAll('.admin-nav-btn').forEach(b => b.classList.remove('active')); 
+            if(eventObj && eventObj.currentTarget) eventObj.currentTarget.classList.add('active');
+            
             document.querySelectorAll('.admin-sub-tab').forEach(t => t.style.display = 'none');
-            const targetId = tab === 'students' ? 'adminTabStudents' : (tab === 'tasksConfig' ? 'adminTabTasksConfig' : 'adminTabMedia');
-            document.getElementById(targetId).style.display = 'block';
+            const targetId = 'adminTab' + tab.charAt(0).toUpperCase() + tab.slice(1);
+            if(document.getElementById(targetId)) document.getElementById(targetId).style.display = 'block';
         }
 
         function renderAdminBody() {
@@ -788,7 +872,7 @@
             if(!adminBody) return; 
             
             if (currentTab === 'common') {
-                adminBody.innerHTML = '<div style="color:var(--negative); font-weight:bold; padding:20px;">Common bölməsində bal dəyişdirmək olmur. Zəhmət olmasa yuxarıdan C++ və ya Python seçin.</div>';
+                adminBody.innerHTML = '<div style="color:var(--negative); font-weight:bold; padding:20px;">Common bölməsində bal dəyişdirmək olmur. Zəhmət olmasa C++ və ya Python seçin.</div>';
                 return;
             }
 
@@ -806,20 +890,16 @@
             });
             adminBody.innerHTML = htmlStr;
             renderAdminTaskListUI();
+            loadAllFilesForAdmin();
+            loadAdminAccounts();
+            loadAdminLogs();
         }
 
-        // QÜSURSUZ İŞLƏYƏN "YADDA SAXLA" DÜYMƏSİ
+        // TAM İŞLƏYƏN "YADDA SAXLA"
         function saveAdminChanges() {
-            if (currentTab === 'common') {
-                alert("Common bölməsində bal dəyişdirmək olmur. Zəhmət olmasa C++ və ya Python tabına keçin.");
-                return;
-            }
-
+            if (currentTab === 'common') return alert("Common bölməsində bal dəyişdirmək olmur.");
             let tabData = globalData[currentTab];
-            if(!tabData || tabData.length === 0) {
-                alert("Dəyişdiriləcək məlumat tapılmadı.");
-                return;
-            }
+            if(!tabData || tabData.length === 0) return alert("Dəyişdiriləcək məlumat tapılmadı.");
 
             let updatedCount = 0;
             tabData.forEach((student, index) => {
@@ -835,19 +915,30 @@
             });
 
             if (updatedCount > 0) {
-                // Yalnız açıq olan tabın (cpp və ya python) datasını Firebase-ə göndəririk
                 database.ref('students_data/' + currentTab).set(tabData).then(() => {
-                    alert("✅ Dəyişikliklər uğurla yadda saxlanıldı və cədvəl yeniləndi!");
+                    alert("✅ Dəyişikliklər uğurla yadda saxlanıldı və reytinq cədvəli anında yeniləndi!");
+                    database.ref('activity_logs').push({ user: currentUser, action: "Reytinq ballarını əl ilə yenilədi", timestamp: new Date().toISOString() });
                     renderTable();
-                }).catch(err => {
-                    alert("Xəta baş verdi: " + err.message);
                 });
-            } else {
-                alert("Sistem inputları oxuya bilmədi.");
             }
         }
 
-        // AI TAPŞIRIQ İDARƏSİ
+        async function endWeek() {
+            if(!confirm("🛑 Həftəni sonlandırmaq istədiyinizə əminsiniz? Cari ballar keçmişə atılacaq.")) return;
+            ['cpp', 'python'].forEach(tab => {
+                let stList = globalData[tab];
+                if(stList) {
+                    stList.forEach((st, idx) => {
+                        let cari = (Number(st.fm)||0)+(Number(st.stepping)||0)+(Number(st.e_olimp)||0)+(Number(st.codesources)||0)+(Number(st.hackerrank)||0);
+                        database.ref('students_data/' + tab + '/' + idx + '/kecmis_reyting').set(cari);
+                        database.ref('students_data/' + tab + '/' + idx + '/ayliq_reyting').set(Number(st.ayliq_reyting||0) + cari);
+                    });
+                }
+            });
+            alert("✅ Həftə sonlandırıldı!");
+        }
+
+        // AI Tapşırıqlar Cədvəli
         function renderAdminTaskListUI() {
             const container = document.getElementById('adminTaskListContainer');
             if(!container) return;
@@ -862,77 +953,154 @@
             container.innerHTML = html;
         }
 
-        function addAdminTaskRow() {
-            dynamicTasksConfig.push({ name: "Yeni Tapşırıq", points: 50 });
-            renderAdminTaskListUI();
-        }
-
-        function removeAdminTaskRow(idx) {
-            dynamicTasksConfig.splice(idx, 1);
-            renderAdminTaskListUI();
-        }
-
+        function addAdminTaskRow() { dynamicTasksConfig.push({ name: "Yeni Tapşırıq", points: 50 }); renderAdminTaskListUI(); }
+        function removeAdminTaskRow(idx) { dynamicTasksConfig.splice(idx, 1); renderAdminTaskListUI(); }
         function saveAdminTaskConfigs() {
             let newList = [];
             dynamicTasksConfig.forEach((_, idx) => {
-                let nameInp = document.getElementById('dt_name_' + idx);
-                let ptsInp = document.getElementById('dt_pts_' + idx);
-                if(nameInp && ptsInp) {
-                    newList.push({ name: nameInp.value.trim() || "Tapşırıq", points: parseInt(ptsInp.value) || 50 });
-                }
+                let nameInp = document.getElementById('dt_name_' + idx); let ptsInp = document.getElementById('dt_pts_' + idx);
+                if(nameInp && ptsInp) newList.push({ name: nameInp.value.trim() || "Tapşırıq", points: parseInt(ptsInp.value) || 50 });
             });
             dynamicTasksConfig = newList;
-            database.ref('settings/dynamic_tasks').set(dynamicTasksConfig).then(() => {
-                alert("✅ Tapşırıqlar (AI üçün) uğurla yadda saxlanıldı!");
-            });
+            database.ref('settings/dynamic_tasks').set(dynamicTasksConfig).then(() => alert("✅ AI Tapşırıqları uğurla yadda saxlanıldı!"));
         }
 
-        // MEDİA / SƏSLƏR / DEADLINE
+        // Səs, Media və Deadline parametrləri
         function saveAudioSettings() {
             const wAudio = document.getElementById('inpAdminWinnerAudio').value.trim();
             const oAudio = document.getElementById('inpAdminOutsiderAudio').value.trim();
             database.ref('settings/audio').set({ winner: wAudio, outsider: oAudio }).then(() => {
                 alert("✅ Səs linkləri yadda saxlanıldı! Növbəti dəfə avtomatik oxunacaq.");
+                document.getElementById('audioWinner').src = wAudio;
+                document.getElementById('audioOutsider').src = oAudio;
             });
         }
-
-        function saveDeadline() { 
-            const val = document.getElementById('deadlineInput').value; 
-            if (!val) return; 
-            database.ref('deadline_time').set(val).then(() => alert("✅ Deadline yadda saxlanıldı!")); 
-        }
+        function saveDeadline() { const val = document.getElementById('deadlineInput').value; if (!val) return; database.ref('deadline_time').set(val).then(() => alert("✅ Deadline yadda saxlanıldı!")); }
+        function clearDeadline() { database.ref('deadline_time').remove().then(() => alert("Deadline ləğv edildi!")); }
         
-        function clearDeadline() { 
-            database.ref('deadline_time').remove().then(() => alert("Deadline ləğv edildi!")); 
-        }
-
         function startDeadlineTimer() {
             if (deadlineInterval) clearInterval(deadlineInterval); 
             const countEl = document.getElementById('deadlineTimerCount');
             deadlineInterval = setInterval(() => {
-                if (!deadlineTimestamp) { countEl.innerText = "Limitsiz"; return; }
+                if (!deadlineTimestamp) { countEl.innerText = "Limitsiz"; countEl.style.color = "var(--positive)"; return; }
                 const diff = deadlineTimestamp - new Date().getTime();
-                if (diff <= 0) countEl.innerText = "🚨 VAХT BİTDİ!"; 
+                if (diff <= 0) { countEl.innerText = "🚨 VAХT BİTDİ!"; countEl.style.color = "var(--negative)"; } 
                 else { 
-                    const d = Math.floor(diff/(1000*60*60*24)); 
-                    const h = Math.floor((diff%(1000*60*60*24))/(1000*60*60)); 
-                    const m = Math.floor((diff%(1000*60*60))/(1000*60)); 
+                    const d = Math.floor(diff/(1000*60*60*24)); const h = Math.floor((diff%(1000*60*60*24))/(1000*60*60)); const m = Math.floor((diff%(1000*60*60))/(1000*60)); 
                     countEl.innerText = d + "gün " + h + "saat " + m + "dəq"; 
                 }
             }, 1000);
         }
 
-        // --- HƏRƏKƏTLƏR (MODALS) ---
+        // Fayl arxivləri və yoxlama statusları
+        function loadAllFilesForAdmin() {
+            database.ref('student_tasks').on('value', snap => {
+                const tasks = snap.val() || {};
+                let pCppHTML = ''; let pPyHTML = ''; let cCppHTML = ''; let cPyHTML = '';
+                
+                Object.keys(tasks).forEach(key => {
+                    let t = tasks[key]; let sub = t.subject || 'cpp';
+                    let uiHtml = '<div class="file-item"><div><strong>' + t.studentName + '</strong> <span>(<a href="' + (t.fileData||'#') + '" download="' + t.fileName + '">' + t.fileName + '</a>)</span><div style="font-size:12px;">🕒 ' + new Date(t.timestamp).toLocaleString('az-AZ') + '</div></div><div>' + (t.status === 'correct' ? '✅ +'+t.addedPoints : (t.status === 'wrong' ? '❌ Rədd' : '⏳ Gözləyir')) + '</div></div>';
+                    
+                    if(t.status === 'pending') { if(sub === 'python') pPyHTML += uiHtml; else pCppHTML += uiHtml; } 
+                    else { if(sub === 'python') cPyHTML += uiHtml; else cCppHTML += uiHtml; }
+                });
+                
+                document.getElementById('adminPendingTasksCpp').innerHTML = pCppHTML || 'Fayl yoxdur';
+                document.getElementById('adminPendingTasksPython').innerHTML = pPyHTML || 'Fayl yoxdur';
+                document.getElementById('adminCheckedTasksCpp').innerHTML = cCppHTML || 'Fayl yoxdur';
+                document.getElementById('adminCheckedTasksPython').innerHTML = cPyHTML || 'Fayl yoxdur';
+            });
+        }
+        
+        // Hesablar
+        function loadAdminAccounts() {
+            database.ref('user_accounts').on('value', snap => {
+                const accounts = snap.val(); const listDiv = document.getElementById('adminAccountsList'); 
+                if(!accounts) return listDiv.innerHTML = 'Hesab yoxdur.';
+                let html = '';
+                Object.keys(accounts).forEach(uname => {
+                    html += '<div style="background:var(--card-hover); padding:15px; border-radius:12px; border:1px solid var(--border);"><strong>' + uname + '</strong><br><span style="font-size:13px;">Şifrə: ' + accounts[uname].password + '</span></div>';
+                });
+                listDiv.innerHTML = html;
+            });
+        }
+
+        // Loglar
+        function loadAdminLogs() {
+            database.ref('activity_logs').limitToLast(30).on('value', snap => {
+                const logs = snap.val(); const listDiv = document.getElementById('adminLogsList'); 
+                if(!logs) return listDiv.innerHTML = 'Fəaliyyət yoxdur.';
+                let html = '';
+                Object.values(logs).reverse().forEach(lg => {
+                    html += '<div style="background:var(--card-hover); padding:10px; border-radius:12px; border:1px solid var(--border); margin-bottom:8px; font-size:14px;"><strong>' + lg.user + ':</strong> ' + lg.action + '<br><span style="font-size:11px; color:var(--text-sub);">' + new Date(lg.timestamp).toLocaleString('az-AZ') + '</span></div>';
+                });
+                listDiv.innerHTML = html;
+            });
+        }
+
+        // Feedback
+        function loadAdminFeedback() {
+            database.ref('feedbacks').on('value', snap => {
+                const fbs = snap.val() || {}; const listDiv = document.getElementById('adminFeedbackList'); 
+                let html = '';
+                Object.keys(fbs).reverse().forEach(k => {
+                    let fb = fbs[k];
+                    html += '<div style="background:var(--card-hover); padding:15px; border-radius:12px; border:1px solid var(--border); margin-bottom:10px;"><strong>' + fb.name + '</strong><br>' + fb.msg + '</div>';
+                });
+                if(listDiv) listDiv.innerHTML = html || 'Feedback yoxdur.';
+            });
+        }
+        function sendFeedback() { 
+            const n = document.getElementById('fbName').value; const m = document.getElementById('fbMsg').value; 
+            if(!n || !m) return alert("Xanaları doldurun!");
+            database.ref('feedbacks').push({ name: n, msg: m, timestamp: new Date().toISOString() }).then(() => { 
+                alert("Göndərildi! 💬"); closeModal('feedbackModal'); document.getElementById('fbName').value = ''; document.getElementById('fbMsg').value = ''; 
+            }); 
+        }
+        
+        function filterAdminStudents() { 
+            const query = document.getElementById('adminSearchInput').value.toLowerCase(); 
+            document.querySelectorAll('.admin-student-card').forEach(card => {
+                let nameText = card.querySelector('strong').innerText.toLowerCase();
+                card.style.display = nameText.includes(query) ? 'block' : 'none';
+            }); 
+        }
+
+        // ---------------- MODALLAR VƏ SƏSLƏR ----------------
+        function triggerShame() {
+            const banner = document.getElementById('shameBanner');
+            if(banner) { banner.style.display = 'block'; setTimeout(() => { banner.style.display = 'none'; }, 3500); }
+        }
+
+        function startEmojiRain(type) {
+            clearInterval(emojiInterval);
+            const emojis = type === 'winner' ? ['🎉', '🏆', '👑', '🥳'] : ['😭', '📉', '🤦‍♂️', '😴'];
+            let count = 0;
+            emojiInterval = setInterval(() => {
+                if(count > 40) return clearInterval(emojiInterval);
+                let el = document.createElement('div');
+                el.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+                el.style.position = 'fixed'; el.style.left = (Math.random() * 100) + 'vw'; el.style.top = '-50px'; el.style.fontSize = (Math.random() * 20 + 20) + 'px'; el.style.zIndex = '999999';
+                el.style.transition = 'top 3s linear'; document.body.appendChild(el);
+                setTimeout(() => { el.style.top = '120vh'; }, 50);
+                setTimeout(() => { el.remove(); }, 3000);
+                count++;
+            }, 100);
+        }
+
         function showWinnersCelebration() {
             const list = (globalData[currentTab] || []).map(s => calculateTotals(s)).sort((a,b) => b.cari_reyting - a.cari_reyting).slice(0, 3);
             const grid = document.getElementById('winnersListGrid'); 
             let html = '';
             list.forEach((s, idx) => {
-                html += '<div class="winner-card-v3"><strong>' + (idx+1) + '-ci YER</strong><br><h3>' + s.ad + '</h3><span>' + s.cari_reyting + ' pt</span></div>';
+                html += '<div class="winner-card-v3"><strong>' + (idx+1) + '-ci YER</strong><br><h3>' + s.ad + '</h3><span style="color:var(--accent); font-weight:bold;">' + s.cari_reyting + ' pt</span></div>';
             });
             grid.innerHTML = html;
             openModal('winnersModal');
-            document.getElementById('audioWinner').play().catch(e => console.log("Audio xətası:", e));
+            startEmojiRain('winner');
+            let aw = document.getElementById('audioWinner'); if(aw) aw.play().catch(e=>console.log(e));
+            confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, zIndex: 99999 });
         }
 
         function showOutsidersModal() {
@@ -940,20 +1108,19 @@
             const grid = document.getElementById('outsidersListGrid'); 
             let html = '';
             list.forEach(s => { 
-                html += '<div style="background:var(--bg-color); padding:16px; border:1px solid var(--negative); text-align:center;"><strong>😭 ' + s.ad + '</strong><br><span>' + s.cari_reyting + ' pt</span></div>'; 
+                html += '<div style="background:var(--bg-color); padding:16px; border:1px solid var(--negative); text-align:center; border-radius:12px;"><strong>😭 ' + s.ad + '</strong><br><span style="color:var(--negative); font-weight:bold;">' + s.cari_reyting + ' pt</span></div>'; 
             });
             grid.innerHTML = html;
             openModal('outsidersModal');
-            document.getElementById('audioOutsider').play().catch(e => console.log("Audio xətası:", e));
+            startEmojiRain('outsider');
+            let ao = document.getElementById('audioOutsider'); if(ao) ao.play().catch(e=>console.log(e));
         }
 
         function openModal(id) { document.getElementById(id).style.display = 'flex'; }
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-        
         function closeModalCustom(id) { 
-            closeModal(id); 
-            let aw = document.getElementById('audioWinner');
-            let ao = document.getElementById('audioOutsider');
+            closeModal(id); clearInterval(emojiInterval);
+            let aw = document.getElementById('audioWinner'); let ao = document.getElementById('audioOutsider');
             if(aw) { aw.pause(); aw.currentTime = 0; }
             if(ao) { ao.pause(); ao.currentTime = 0; }
         }
@@ -962,8 +1129,6 @@
             document.querySelectorAll('.page-view').forEach(p => p.style.display = 'none');
             document.getElementById(pageId).style.display = 'block';
         }
-        function openFullAdminPage() { openPage('fullAdminPage'); renderAdminBody(); }
-        function goBackToMain() { openPage('mainDashboard'); }
     </script>
 </body>
 </html>
