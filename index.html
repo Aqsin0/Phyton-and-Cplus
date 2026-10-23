@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>TT-08 Proqram Saytı (V3.6 Pro)</title>
+    <title>TT-08 Proqram Saytı (V3.7 Pro)</title>
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
@@ -114,12 +114,15 @@
             to { text-shadow: 0 0 20px #fff, 0 0 30px var(--negative); opacity: 1; }
         }
 
-        /* TABLE */
+        /* TABLE & LINKS */
         .table-wrapper { overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; text-align: left; min-width: 850px; }
+        table { width: 100%; border-collapse: collapse; text-align: left; min-width: 900px; }
         th, td { padding: 16px 18px; border-bottom: 1px solid var(--border); }
         th { background: var(--card-hover); color: var(--text-sub); font-size: 13px; font-weight: 800; text-transform: uppercase; }
         tr:hover td { background-color: var(--card-hover); }
+
+        .th-link { color: var(--accent); text-decoration: none; display: inline-flex; align-items: center; gap: 4px; transition: 0.2s; }
+        .th-link:hover { text-decoration: underline; color: var(--gold); }
         
         .clickable-name { cursor: pointer; color: var(--text-main); font-weight: 800; font-size: 15px; }
         .clickable-name:hover { color: var(--accent); }
@@ -205,8 +208,8 @@
 <body>
 
     <!-- Dinamik Səs Pleyerləri -->
-    <audio id="audioWinner" preload="auto"></audio>
-    <audio id="audioOutsider" preload="auto"></audio>
+    <audio id="audioWinner" preload="none"></audio>
+    <audio id="audioOutsider" preload="none"></audio>
 
     <div id="shameBanner">⚠️ SHAME ON YOU! ⚠️</div>
 
@@ -214,7 +217,7 @@
         <!-- HEADER -->
         <div class="header card">
             <div class="header-title-box">
-                <h1 id="txtTitle">🏆 TT-08 Proqram Saytı <span class="version-badge" onclick="showVersionModal()">V3.6</span></h1>
+                <h1 id="txtTitle">🏆 TT-08 Proqram Saytı <span class="version-badge" onclick="showVersionModal()">V3.7</span></h1>
                 <div id="liveDateTime" style="font-size:13px; color:var(--text-sub); margin-top:6px; font-weight:800;">📅 Yüklənir...</div>
             </div>
 
@@ -294,9 +297,10 @@
                 <img id="mainGroupImg" src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1200&q=80" style="max-width:100%; max-height:400px; border-radius:12px; object-fit:cover;" alt="Group Image" />
             </div>
 
+            <!-- VİZUAL LİDERLƏR VƏ OUTSİDERLƏR TABLOSU -->
             <div class="visual-boards">
                 <div class="v-board v-board-red">
-                    <h3 id="txtTopLeaders" style="text-align:center; margin-top:0; font-weight:900;">🏆 Həftənin Liderləri</h3>
+                    <h3 id="txtTopLeaders" style="text-align:center; margin-top:0; font-weight:900;">🏆 Həftənin Liderləri (Artıma görə)</h3>
                     <div id="boardTop3">Yüklənir...</div>
                 </div>
                 <div class="v-board v-board-silver">
@@ -304,7 +308,7 @@
                     <div id="boardPrevTop3">Yüklənir...</div>
                 </div>
                 <div class="v-board v-board-black">
-                    <h3 id="txtOutsidersBoard" style="text-align:center; margin-top:0; font-weight:900;">😴 Outsiderlər</h3>
+                    <h3 id="txtOutsidersBoard" style="text-align:center; margin-top:0; font-weight:900;">😴 Həftənin Outsiderləri (Ən az artım)</h3>
                     <div id="boardBottom3">Yüklənir...</div>
                 </div>
                 <div class="v-board v-board-red">
@@ -325,6 +329,7 @@
                 </div>
             </div>
 
+            <!-- CƏDVƏL (LINKLƏR İLƏ) -->
             <div class="table-wrapper card">
                 <table id="ratingTable">
                     <thead></thead>
@@ -333,7 +338,7 @@
             </div>
         </div>
 
-        <!-- TƏLƏBƏ PROFİLİ (KATEQORİYALI FAYL YÜKLƏMƏ) -->
+        <!-- TƏLƏBƏ PROFİLİ -->
         <div id="profilePage" class="page-view card">
             <button class="back-btn" onclick="goBackToMain()" id="txtBackBtn">⬅️ Geri Qayıt</button>
             
@@ -346,44 +351,42 @@
             </div>
 
             <div class="profile-grid-info">
-                <div class="info-box"><span id="txtInfoMajor">🎓 İxtisası</span><strong style="color:var(--accent);">İnformasiya Təhlükəsizliyi</strong></div>
-                <div class="info-box"><span id="txtInfoCourse">📚 Kursu</span><strong id="pKurs">2-ci Kurs</strong></div>
-                <div class="info-box"><span id="txtInfoDob">🎂 Təvəllüd</span><strong id="pTevellud">Məlum deyil</strong></div>
-                <div class="info-box"><span id="txtInfoAge">⏳ Yaş</span><strong id="pAge">Məlum deyil</strong></div>
-                <div class="info-box"><span id="txtInfoGender">👤 Cinsiyyət</span><strong id="pGender">Məlum deyil</strong></div>
-                <div class="info-box"><span id="txtInfoBirthPlace">📍 Doğulduğu Yer</span><strong id="pYer">Gəncə şəhəri</strong></div>
-                <div class="info-box"><span id="txtInfoRating">⭐ Cari Reytinq (Ümumi)</span><strong id="pCari" style="color:var(--accent);">0 pt</strong></div>
-                <div class="info-box"><span id="txtInfoGrowth">📊 Həftəlik Artım</span><strong id="pArtim">0</strong></div>
+                <div class="info-box"><span>🎓 İxtisası</span><strong style="color:var(--accent);">İnformasiya Təhlükəsizliyi</strong></div>
+                <div class="info-box"><span>📚 Kursu</span><strong id="pKurs">2-ci Kurs</strong></div>
+                <div class="info-box"><span>🎂 Təvəllüd</span><strong id="pTevellud">Məlum deyil</strong></div>
+                <div class="info-box"><span>⏳ Yaş</span><strong id="pAge">Məlum deyil</strong></div>
+                <div class="info-box"><span>👤 Cinsiyyət</span><strong id="pGender">Məlum deyil</strong></div>
+                <div class="info-box"><span>📍 Doğulduğu Yer</span><strong id="pYer">Gəncə şəhəri</strong></div>
+                <div class="info-box"><span>⭐ Cari Reytinq (Ümumi)</span><strong id="pCari" style="color:var(--accent);">0 pt</strong></div>
+                <div class="info-box"><span>📊 Həftəlik Artım</span><strong id="pArtim">0</strong></div>
             </div>
 
             <!-- FAYL YÜKLƏMƏ BÖLMƏSİ -->
             <div id="privateUploadSection" class="info-box" style="margin-bottom:20px; display:none; border: 1px solid var(--positive);">
-                <h4 id="txtUploadTitle" style="margin:0 0 15px 0; color:var(--positive); font-size:18px; font-weight:900;">📁 Fayl / Tapşırıq Yüklə</h4>
+                <h4 style="margin:0 0 15px 0; color:var(--positive); font-size:18px; font-weight:900;">📁 Fayl / Tapşırıq Yüklə</h4>
                 
                 <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-bottom:12px;">
-                    <!-- Dil Seçimi -->
                     <select id="studentSubjectSelect" class="form-group" style="margin:0; width:auto;">
                         <option value="cpp">🔵 C++</option>
                         <option value="python">🟡 Python</option>
                     </select>
 
-                    <!-- Kateqoriya / Başlıq Seçimi -->
                     <select id="studentCategorySelect" class="form-group" style="margin:0; width:auto;" onchange="updateUploadNotice()">
-                        <option value="fm">⚡ FM (Həftəlik Tapşırıq - Sİ dərhal yoxlayır)</option>
-                        <option value="stepping">🟢 Stepik (stepik.org - Admin yoxlayır)</option>
-                        <option value="e_olimp">🟠 E-Olimp (eolymp.com - Admin yoxlayır)</option>
-                        <option value="codesources">🟣 CodeSources (codesrc.ru - Admin yoxlayır)</option>
-                        <option value="hackerrank">🟢 HackerRank (hackerrank.com - Admin yoxlayır)</option>
+                        <option value="fm">⚡ FM (Həftəlik Tapşırıq - Avtomatik Test Sistemi)</option>
+                        <option value="stepping">🟢 Stepik (stepik.org - Müəllim yoxlaması)</option>
+                        <option value="e_olimp">🟠 E-Olimp (eolymp.com - Müəllim yoxlaması)</option>
+                        <option value="codesources">🟣 CodeSources (codesrc.ru - Müəllim yoxlaması)</option>
+                        <option value="hackerrank">🟢 HackerRank (hackerrank.com - Müəllim yoxlaması)</option>
                     </select>
 
                     <input type="file" id="studentTaskFiles" multiple class="form-group" style="margin:0; width:auto; padding:10px;" accept=".cpp,.c,.py,.txt,.png,.jpg,.jpeg,.pdf" />
                     
-                    <button class="btn" style="background:var(--positive); color:#fff;" onclick="uploadStudentTasks()" id="txtUploadBtn">🚀 Göndər</button>
+                    <button class="btn" style="background:var(--positive); color:#fff;" onclick="uploadStudentTasks()">🚀 Göndər</button>
                 </div>
 
                 <div id="txtUploadNotice" style="font-size:13px; color:var(--text-sub); line-height:1.5; font-weight:800;">
-                    💡 <strong>FM Seçildikdə:</strong> Faylın adının heç bir fərqi yoxdur (məs. <code>a.cpp</code> və ya <code>kod.py</code> ola bilər). Süni intellekt yalnız daxili kod alqoritmini oxuyub dərhal bal təyin edir.<br>
-                    💡 <strong>Digər Platformalar (Stepik, E-Olimp və s.):</strong> Göndərdiyiniz həll kodları və ya skrinşotlar Admin tərəfindən yoxlanılacaq və bal müvafiq sütuna yazılacaq.
+                    💡 <strong>FM Seçildikdə:</strong> Faylın adının heç bir önəmi yoxdur (məs. <code>task.cpp</code> və ya <code>main.py</code>). Avtomatik yoxlama sistemi yalnız kodun daxili alqoritmini oxuyub dərhal bal təyin edir.<br>
+                    💡 <strong>Digər Platformalar (Stepik, E-Olimp və s.):</strong> Həll kodları və ya nəticə skrinşotları birbaşa Admin tərəfindən yoxlanılacaq və bal müvafiq sütuna yazılacaq.
                 </div>
             </div>
             
@@ -392,12 +395,12 @@
             </div>
 
             <div class="info-box" style="margin-bottom:20px;" id="studentTaskStatusContainer">
-                <h4 id="txtUploadedFilesStatus" style="margin:0 0 15px 0; color:var(--accent); font-size:18px; font-weight:900;">📄 Yüklənilmiş Faylların Vəziyyəti və Nəticəsi</h4>
+                <h4 style="margin:0 0 15px 0; color:var(--accent); font-size:18px; font-weight:900;">📄 Yüklənilmiş Faylların Vəziyyəti və Nəticəsi</h4>
                 <div id="studentTaskStatus" style="font-size:14px; font-weight:800;">Yüklənir...</div>
             </div>
 
             <div class="info-box">
-                <h3 id="txtChartTitle" style="margin:0 0 15px 0; font-size:18px; color:var(--text-main); font-weight:900;">📈 Həftəlik Qazanılan Bal Diaqramı</h3>
+                <h3 style="margin:0 0 15px 0; font-size:18px; color:var(--text-main); font-weight:900;">📈 Həftəlik Qazanılan Bal Diaqramı</h3>
                 <canvas id="studentChart" height="100"></canvas>
             </div>
         </div>
@@ -405,13 +408,13 @@
         <!-- ADMİN PANEL -->
         <div id="fullAdminPage" class="page-view card">
             <div class="admin-dashboard-header">
-                <h2 id="welcomeAdmin" style="margin:0; color:var(--accent); font-size:26px; font-weight:900;">⚙️ Admin Control Panel</h2>
-                <button class="back-btn" style="margin:0;" onclick="goBackToMain()" id="txtAdminBack">⬅️ Ana Səhifəyə</button>
+                <h2 style="margin:0; color:var(--accent); font-size:26px; font-weight:900;">⚙️ Admin Control Panel</h2>
+                <button class="back-btn" style="margin:0;" onclick="goBackToMain()">⬅️ Ana Səhifəyə</button>
             </div>
 
             <div class="admin-nav" id="adminNavTabs">
                 <button class="admin-nav-btn active tab-students" onclick="switchAdminSubTab(event, 'students')">👥 Reytinq və Balların İdarəsi</button>
-                <button class="admin-nav-btn tab-tasksConfig" onclick="switchAdminSubTab(event, 'tasksConfig')">⚙️ FM Tapşırıqları və Sİ Tələbləri</button>
+                <button class="admin-nav-btn tab-tasksConfig" onclick="switchAdminSubTab(event, 'tasksConfig')">⚙️ FM Tapşırıqları və Test Tələbləri</button>
                 <button class="admin-nav-btn tab-pending" onclick="switchAdminSubTab(event, 'pendingFiles')">⏳ Yoxlama Gözləyən Fayllar</button>
                 <button class="admin-nav-btn tab-checked" onclick="switchAdminSubTab(event, 'checkedFiles')">✏️ Yoxlanılmış Fayllar</button>
                 <button class="admin-nav-btn tab-accounts" onclick="switchAdminSubTab(event, 'accounts')">🔐 Hesablar</button>
@@ -439,23 +442,21 @@
                 </div>
             </div>
 
-            <!-- TAB 2: FM TAPŞIRIQLARI VƏ Sİ ALQORİTM TƏLƏBLƏRİ -->
+            <!-- TAB 2: FM TAPŞIRIQLARI VƏ TƏLƏBLƏR -->
             <div id="adminTabTasksConfig" class="admin-sub-tab" style="display:none;">
                 <div class="info-box">
-                    <h3 style="color:var(--accent); margin-top:0;">⚙️ FM Tapşırıqları və Kod Məzmunu Tələbləri</h3>
+                    <h3 style="color:var(--accent); margin-top:0;">⚙️ FM Tapşırıqları və Avtomatik Test Tələbləri</h3>
                     <p style="color:var(--text-sub); font-size:14px; margin-bottom:15px;">
-                        Süni intellekt faylın adına BAXMIR! Sİ tələbənin yazdığı kodun içində buradakı açar sözləri və alqoritmik strukturu (dövr, bölmə, riyazi düstur və s.) axtarır.
+                        Avtomatik sistem faylın adına baxmır. Yüklənən kodun içində buradakı tələb olunan alqoritmik hissələri (dövr, bölmə %, riyazi məntiq) təhlil edir.
                     </p>
-                    
                     <div id="adminTaskListContainer" style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px;"></div>
-                    
                     <button class="btn btn-dark" style="margin-bottom: 15px; color:var(--accent); border-color:var(--accent);" onclick="addAdminTaskRow()">➕ Yeni FM Tapşırığı Əlavə Et</button>
                     <br>
                     <button class="btn" onclick="saveAdminTaskConfigs()">Bütün Tapşırıqları Yadda Saxla 💾</button>
                 </div>
             </div>
 
-            <!-- TAB 3: GÖZLƏYƏN FAYLLAR (PLATFORMA VƏ FM) -->
+            <!-- TAB 3: GÖZLƏYƏN FAYLLAR -->
             <div id="adminTabPendingFiles" class="admin-sub-tab" style="display:none;">
                 <h3 style="color:var(--gold); margin-bottom: 20px; font-size:20px; font-weight:900;">
                     ⏳ Yoxlama Gözləyən Fayllar <span id="totalPendingBadge" style="background:var(--negative); color:#fff; padding:3px 10px; border-radius:12px; font-size:14px; vertical-align:middle; margin-left:8px;">0</span>
@@ -548,7 +549,7 @@
     <!-- MODALLAR -->
     <div id="authModal" class="modal">
         <div class="modal-content" style="text-align:center;">
-            <h2 id="txtAuthModalTitle" style="color:var(--accent); margin-top:0; font-weight:900;">Giriş / Qeydiyyat</h2>
+            <h2 style="color:var(--accent); margin-top:0; font-weight:900;">Giriş / Qeydiyyat</h2>
             <div class="auth-tabs">
                 <div id="tabBtnLogin" class="auth-tab-btn active" onclick="switchAuthTab('login')">Giriş Et</div>
                 <div id="tabBtnReg" class="auth-tab-btn" onclick="switchAuthTab('register')">Qeydiyyat</div>
@@ -570,7 +571,8 @@
     <div id="winnersModal" class="modal">
         <div class="modal-content" style="text-align:center;">
             <div class="abartili-stickers">🎊 🥳 🍾 🎉 🏆 👑</div>
-            <h1 style="color:var(--gold); font-weight:900; margin-top:0;">👑 QALİBLƏR 🏆</h1>
+            <h1 style="color:var(--gold); font-weight:900; margin-top:0;">👑 HƏFTƏNİN LİDERLƏRİ 🏆</h1>
+            <p style="font-size:13px; color:var(--text-sub); margin-top:-10px;">(Həftə ərzində ən çox artım qazananlar)</p>
             <div id="winnersListGrid" class="winners-container-v3"></div>
             <span onclick="playBlackCatVideo()" style="color:var(--text-sub); font-size:12px; font-weight:800; cursor:pointer;">🐈 Sürpriz Video</span><br>
             <button class="btn btn-gold" style="width:100%; margin-top:15px;" onclick="closeModalCustom('winnersModal')">Möhtəşəm!</button>
@@ -580,7 +582,8 @@
     <div id="outsidersModal" class="modal">
         <div class="modal-content" style="text-align:center;">
             <div class="abartili-stickers">😭 📉 🤦‍♂️ 💔 😴 🗑️</div>
-            <h1 style="color:var(--negative); font-weight:900; margin-top:0;">😭 OUTSİDERLƏR 😴</h1>
+            <h1 style="color:var(--negative); font-weight:900; margin-top:0;">😭 HƏFTƏNİN OUTSİDERLƏRİ 😴</h1>
+            <p style="font-size:13px; color:var(--text-sub); margin-top:-10px;">(Həftə ərzində ən az fəallıq və artım göstərənlər)</p>
             <div id="outsidersListGrid" style="display:flex; justify-content:center; gap:15px; flex-wrap:wrap; margin:20px 0;"></div>
             <div style="font-size:14px; font-style:italic; color:var(--text-main); margin:15px 0; text-align:center; white-space:pre-line; padding:15px; background:var(--bg-color); border-radius:10px; border:1px solid var(--border);">Tərpənmə, amandır, bala, qəflətdən ayılma!
 Açma gözünü, xabi-cəhalətdən ayılma!</div>
@@ -607,12 +610,12 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
 
     <div id="versionModal" class="modal">
         <div class="modal-content" style="max-width:600px;">
-            <h2 style="color:var(--accent); margin-top:0; font-weight:900;">🚀 Versiya 3.6 Yenilikləri</h2>
+            <h2 style="color:var(--accent); margin-top:0; font-weight:900;">🚀 Yeniliklər Tarixçəsi (V3.7)</h2>
             <div style="padding:15px; border:1px solid var(--border); border-radius:12px; background:var(--bg-color);">
                 <ul style="font-size:14px; color:var(--text-sub); line-height:1.6; margin:0; padding-left:20px;">
-                    <li><strong>Platforma Yükləmələri:</strong> Stepik, E-Olimp, CodeSources və HackerRank tapşırıqları birbaşa Admin tərəfindən yoxlanılır və bal müvafiq sütuna yazılır.</li>
-                    <li><strong>Mükəmməl Sİ Kodu Yoxlaması:</strong> Sİ fayl adına baxmır. Yalnız daxili proqram kodunun alqoritmini oxuyub dərhal qərar verir.</li>
-                    <li><strong>Saytdaxili Səs İdarəsi:</strong> Qalib və Outsider mahnıları admin tərəfindən tənzimlənir və heç yerə yönləndirmədən saytda çalınır.</li>
+                    <li><strong>Həftəlik Reytinq Dəqiqliyi:</strong> Həftənin Liderləri və Outsiderləri birbaşa həmin həftədə qazanılan artıma görə hesablanır.</li>
+                    <li><strong>Platforma Linkləri:</strong> stepik.org, eolymp.com, codesrc.ru və hackerrank.com başlıqları birbaşa rəsmi saytlara keçidlə təmin edildi.</li>
+                    <li><strong>Sistem Optimizasiyası:</strong> Firebase endirmə limitlərinin qorunması üçün ağır media və faylların avtomatik çəkilməsi dayandırıldı, keşləmə təmin edildi.</li>
                 </ul>
             </div>
             <button class="btn" style="width:100%; margin-top:15px;" onclick="closeModal('versionModal')">Bağla</button>
@@ -656,21 +659,23 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
         const DEFAULT_AUDIO_WINNER = "https://www.myinstants.com/media/sounds/victoryff.mp3";
         const DEFAULT_AUDIO_OUTSIDER = "https://www.myinstants.com/media/sounds/sad-trombone.mp3";
 
+        // KEŞDƏN YÜKLƏMƏ (Firebase Yükünü Qorumaq Üçün)
         let globalData = { cpp: [], python: [], common: [] };
-        
-        // FM TAPŞIRIQLARI VƏ ALQORİTM TƏLƏBLƏRİ
+        try {
+            const cached = localStorage.getItem('tt08_cached_students');
+            if(cached) globalData = JSON.parse(cached);
+        } catch(e) {}
+
         let dynamicTasksConfig = [
             { 
                 name: "n-ci sadə ədədin tapılması", 
                 points: 50, 
-                requiredLogic: ["%", "for", "prime"],
-                desc: "Sadə ədəd məntiqi (bölmə %, dövrlər for/while və ya isprime funksiyası)"
+                requiredLogic: ["%", "for", "prime"]
             },
             { 
                 name: "Vigenere Şifrəsi", 
                 points: 75, 
-                requiredLogic: ["26", "key", "ord"],
-                desc: "Vigenere məntiqi (açar, 26 əlifba sürüşdürməsi və ya mod 26)"
+                requiredLogic: ["26", "key", "ord"]
             }
         ];
         
@@ -684,7 +689,6 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
         let currentUser = null; 
         let currentUserRole = null; 
         let blackCatVideoData = null;
-        let unreadFeedbackCount = 0;
         let emojiInterval = null;
 
         let customAudioWinner = DEFAULT_AUDIO_WINNER;
@@ -696,27 +700,35 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             history.replaceState({page: 'mainDashboard'}, "", window.location.pathname);
             setInterval(updateLiveDateTime, 1000);
             checkSession();
+
+            // İlk render keşdən dərhal aparılır
+            renderTable();
             
-            database.ref('settings/audio_winner').on('value', snap => {
+            // Audio konfiqurasiyası (Yüngül)
+            database.ref('settings/audio_winner').once('value').then(snap => {
                 customAudioWinner = snap.val() || DEFAULT_AUDIO_WINNER;
                 document.getElementById('audioWinner').src = customAudioWinner;
                 const inp = document.getElementById('inpAudioWinner'); if(inp) inp.value = snap.val() || '';
             });
 
-            database.ref('settings/audio_outsider').on('value', snap => {
+            database.ref('settings/audio_outsider').once('value').then(snap => {
                 customAudioOutsider = snap.val() || DEFAULT_AUDIO_OUTSIDER;
                 document.getElementById('audioOutsider').src = customAudioOutsider;
                 const inp = document.getElementById('inpAudioOutsider'); if(inp) inp.value = snap.val() || '';
             });
 
-            database.ref('settings/dynamic_tasks').on('value', snap => {
+            database.ref('settings/dynamic_tasks').once('value').then(snap => {
                 if(snap.val() && Array.isArray(snap.val())) {
                     dynamicTasksConfig = snap.val();
                 }
             });
 
+            // Tələbə Məlumatları Dinləyicisi
             database.ref('students_data').on('value', snap => { 
-                if(snap.val()) globalData = snap.val(); 
+                if(snap.val()) {
+                    globalData = snap.val();
+                    try { localStorage.setItem('tt08_cached_students', JSON.stringify(globalData)); } catch(e){}
+                }
                 renderTable(); 
                 updateJuryAvatars();
                 if(currentUserRole && currentUserRole !== 'student') renderAdminBody(); 
@@ -731,15 +743,10 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
                 startDeadlineTimer();
             });
 
-            database.ref('group_photo').on('value', snap => { 
+            // Qrup fotosu tək dəfə çəkilir (Download azaldılır)
+            database.ref('group_photo').once('value').then(snap => { 
                 if(snap.val()) document.getElementById('mainGroupImg').src = snap.val(); 
             });
-
-            database.ref('video_black_cat').on('value', snap => { 
-                blackCatVideoData = snap.val(); 
-            });
-            
-            loadAdminFeedback(); 
         };
 
         function toggleTheme() {
@@ -992,6 +999,7 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             }
         }
 
+        // CƏDVƏL RENDERİ (URL LİNKLƏRİ İLƏ)
         function renderTable() {
             const tableBody = document.querySelector('#tableBody'); 
             if (!tableBody) return;
@@ -1000,13 +1008,24 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             if (currentTab === 'common') {
                 tableHead.innerHTML = '<tr><th>#</th><th>Tələbə</th><th>Cari Reytinq</th><th>Keçmiş</th><th>Artım</th></tr>';
             } else {
-                tableHead.innerHTML = '<tr><th>#</th><th>Tələbə</th><th>FM</th><th>stepik</th><th>eolymp</th><th>codesrc</th><th>hackrank</th><th>Cari</th><th>Keçmiş</th><th>Artım</th></tr>';
+                tableHead.innerHTML = `<tr>
+                    <th>#</th>
+                    <th>Tələbə</th>
+                    <th>FM</th>
+                    <th><a href="https://stepik.org" target="_blank" rel="noopener noreferrer" class="th-link">stepik.org ↗</a></th>
+                    <th><a href="https://www.eolymp.com" target="_blank" rel="noopener noreferrer" class="th-link">eolymp.com ↗</a></th>
+                    <th><a href="https://codesrc.ru" target="_blank" rel="noopener noreferrer" class="th-link">codesrc.ru ↗</a></th>
+                    <th><a href="https://www.hackerrank.com" target="_blank" rel="noopener noreferrer" class="th-link">hackerrank.com ↗</a></th>
+                    <th>Cari</th>
+                    <th>Keçmiş</th>
+                    <th>Artım</th>
+                </tr>`;
             }
 
             const list = (globalData[currentTab] || []).map(s => calculateTotals(s));
             const sortedByCari = [...list].sort((a,b) => b.cari_reyting - a.cari_reyting);
 
-            renderTopAndBottomBoards(list, sortedByCari);
+            renderTopAndBottomBoards(list);
 
             let tableHTML = '';
             const totalStudents = sortedByCari.length;
@@ -1022,70 +1041,68 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
                 const founderBadge = FOUNDERS.includes(item.ad) ? '<span class="founder-badge">👑 JÜRİ</span>' : '';
                 const rankIcon = index === 0 ? '🥇' : (index === 1 ? '🥈' : (index === 2 ? '🥉' : (index + 1)));
                 
-                const nameHTML = '<div class="student-info"><div class="avatar"><img src="' + (item.foto || DEFAULT_AVATAR_URL) + '"></div><span class="clickable-name" onclick="openProfileByName(\'' + item.ad + '\')">' + item.ad + '</span>' + founderBadge + '</div>';
+                const nameHTML = `<div class="student-info"><div class="avatar"><img src="${item.foto || DEFAULT_AVATAR_URL}"></div><span class="clickable-name" onclick="openProfileByName('${item.ad}')">${item.ad}</span>${founderBadge}</div>`;
 
                 let colsHTML = '';
                 if (currentTab === 'common') {
-                    colsHTML = '<td class="rank-col">' + rankIcon + '</td>' +
-                               '<td>' + nameHTML + '</td>' +
-                               '<td><strong style="font-size:16px;">' + item.cari_reyting + ' pt</strong></td>' +
-                               '<td>' + item.kecmis_reyting + ' pt</td>' +
-                               '<td style="color:' + artimColor + '; font-weight:800;">' + artimSign + '</td>';
+                    colsHTML = `<td class="rank-col">${rankIcon}</td><td>${nameHTML}</td><td><strong style="font-size:16px;">${item.cari_reyting} pt</strong></td><td>${item.kecmis_reyting} pt</td><td style="color:${artimColor}; font-weight:800;">${artimSign}</td>`;
                 } else {
-                    colsHTML = '<td class="rank-col">' + rankIcon + '</td>' +
-                               '<td>' + nameHTML + '</td>' +
-                               '<td>' + (item.fm||0) + '</td><td>' + (item.stepping||0) + '</td><td>' + (item.e_olimp||0) + '</td><td>' + (item.codesources||0) + '</td><td>' + (item.hackerrank||0) + '</td>' +
-                               '<td><strong style="font-size:16px;">' + item.cari_reyting + ' pt</strong></td>' +
-                               '<td>' + item.kecmis_reyting + ' pt</td>' +
-                               '<td style="color:' + artimColor + '; font-weight:800;">' + artimSign + '</td>';
+                    colsHTML = `<td class="rank-col">${rankIcon}</td><td>${nameHTML}</td><td>${item.fm||0}</td><td>${item.stepping||0}</td><td>${item.e_olimp||0}</td><td>${item.codesources||0}</td><td>${item.hackerrank||0}</td><td><strong style="font-size:16px;">${item.cari_reyting} pt</strong></td><td>${item.kecmis_reyting} pt</td><td style="color:${artimColor}; font-weight:800;">${artimSign}</td>`;
                 }
-                tableHTML += '<tr class="' + rowClass + '">' + colsHTML + '</tr>';
+                tableHTML += `<tr class="${rowClass}">${colsHTML}</tr>`;
             });
             tableBody.innerHTML = tableHTML;
         }
 
-        function renderTopAndBottomBoards(list, sortedByCari) {
+        // LİDERLƏR VƏ OUTSİDERLƏR: ARTIMA GÖRƏ HESABLANIR!
+        function renderTopAndBottomBoards(list) {
             const top3Div = document.getElementById('boardTop3');
             const prevTop3Div = document.getElementById('boardPrevTop3');
             const bottom3Div = document.getElementById('boardBottom3');
             const monthlyTop3Div = document.getElementById('boardMonthlyTop3');
             if(!top3Div) return;
 
-            const top3 = sortedByCari.slice(0,3);
+            // 1. HƏFTƏNİN LİDERLƏRİ (YALNIZ ARTIMA GÖRƏ!)
+            const weeklyGrowthSorted = [...list].sort((a,b) => b.artim - a.artim).slice(0,3);
             let htmlTop = '';
-            top3.forEach((s, i) => {
+            weeklyGrowthSorted.forEach((s, i) => {
                 let rankText = i===0 ? '🥇' : (i===1 ? '🥈' : '🥉');
-                htmlTop += '<div class="v-board-item"><div class="v-board-rank">' + rankText + '</div><img src="' + (s.foto || DEFAULT_AVATAR_URL) + '"><div><strong style="display:block; font-size:14px; cursor:pointer;" onclick="openProfileByName(\'' + s.ad + '\')">' + s.ad + '</strong><span style="color:var(--negative); font-weight:900; font-size:13px;">' + s.cari_reyting + ' pt</span></div></div>';
+                let artSign = s.artim >= 0 ? '+' + s.artim : s.artim;
+                htmlTop += `<div class="v-board-item"><div class="v-board-rank">${rankText}</div><img src="${s.foto || DEFAULT_AVATAR_URL}"><div><strong style="display:block; font-size:14px; cursor:pointer;" onclick="openProfileByName('${s.ad}')">${s.ad}</strong><span style="color:var(--positive); font-weight:900; font-size:13px;">${artSign} pt artım</span></div></div>`;
             });
             top3Div.innerHTML = htmlTop;
 
+            // 2. Keçən Həftənin Liderləri (Keçmiş bala görə)
             const prevSorted = [...list].sort((a,b) => Number(b.kecmis_reyting||0) - Number(a.kecmis_reyting||0)).slice(0,3);
             let htmlPrev = '';
             prevSorted.forEach((s, i) => {
                 let rankText = i===0 ? '🥇' : (i===1 ? '🥈' : '🥉');
-                htmlPrev += '<div class="v-board-item"><div class="v-board-rank">' + rankText + '</div><img src="' + (s.foto || DEFAULT_AVATAR_URL) + '"><div><strong style="display:block; font-size:14px; cursor:pointer;" onclick="openProfileByName(\'' + s.ad + '\')">' + s.ad + '</strong><span style="color:var(--silver); font-weight:900; font-size:13px;">' + s.kecmis_reyting + ' pt</span></div></div>';
+                htmlPrev += `<div class="v-board-item"><div class="v-board-rank">${rankText}</div><img src="${s.foto || DEFAULT_AVATAR_URL}"><div><strong style="display:block; font-size:14px; cursor:pointer;" onclick="openProfileByName('${s.ad}')">${s.ad}</strong><span style="color:var(--silver); font-weight:900; font-size:13px;">${s.kecmis_reyting} pt</span></div></div>`;
             });
             prevTop3Div.innerHTML = htmlPrev;
 
-            const bottom3 = [...list].sort((a,b) => a.cari_reyting - b.cari_reyting).slice(0,3);
+            // 3. HƏFTƏNİN OUTSİDERLƏRİ (ƏN AZ ARTIM GÖSTƏRƏNLƏR!)
+            const weeklyOutsidersSorted = [...list].sort((a,b) => a.artim - b.artim).slice(0,3);
             let htmlBottom = '';
-            bottom3.forEach(s => {
-                htmlBottom += '<div class="v-board-item"><div class="v-board-rank">😭</div><img src="' + (s.foto || DEFAULT_AVATAR_URL) + '"><div><strong style="display:block; font-size:14px; cursor:pointer;" onclick="openProfileByName(\'' + s.ad + '\')">' + s.ad + '</strong><span style="font-weight:900; font-size:13px;">' + s.cari_reyting + ' pt</span></div></div>';
+            weeklyOutsidersSorted.forEach(s => {
+                let artSign = s.artim >= 0 ? '+' + s.artim : s.artim;
+                htmlBottom += `<div class="v-board-item"><div class="v-board-rank">😴</div><img src="${s.foto || DEFAULT_AVATAR_URL}"><div><strong style="display:block; font-size:14px; cursor:pointer;" onclick="openProfileByName('${s.ad}')">${s.ad}</strong><span style="color:var(--negative); font-weight:900; font-size:13px;">${artSign} pt artım</span></div></div>`;
             });
             bottom3Div.innerHTML = htmlBottom;
 
+            // 4. Aylıq Liderlər
             const monthlySorted = [...list].sort((a,b) => Number(b.ayliq_reyting||0) - Number(a.ayliq_reyting||0)).slice(0,3);
             let htmlMonthly = '';
             monthlySorted.forEach((s, i) => {
                 let rankText = i===0 ? '🥇' : (i===1 ? '🥈' : '🥉');
-                htmlMonthly += '<div class="v-board-item"><div class="v-board-rank">' + rankText + '</div><img src="' + (s.foto || DEFAULT_AVATAR_URL) + '"><div><strong style="display:block; font-size:14px; cursor:pointer;" onclick="openProfileByName(\'' + s.ad + '\')">' + s.ad + '</strong><span style="color:var(--negative); font-weight:900; font-size:13px;">' + s.ayliq_reyting + ' pt</span></div></div>';
+                htmlMonthly += `<div class="v-board-item"><div class="v-board-rank">${rankText}</div><img src="${s.foto || DEFAULT_AVATAR_URL}"><div><strong style="display:block; font-size:14px; cursor:pointer;" onclick="openProfileByName('${s.ad}')">${s.ad}</strong><span style="color:var(--negative); font-weight:900; font-size:13px;">${s.ayliq_reyting} pt</span></div></div>`;
             });
             monthlyTop3Div.innerHTML = htmlMonthly;
         }
 
         function sortAndRender() { renderTable(); }
 
-        // PROFİL GÖRÜNÜŞÜ
+        // PROFİL GÖRÜNÜŞÜ (BANDWIDTH OPTİMİZE EDİLDİ)
         function openProfileByName(studentName) {
             const student = (globalData[currentTab]||[]).find(s => s.ad === studentName) || (globalData.cpp||[]).find(s => s.ad === studentName); 
             if (!student) return;
@@ -1131,15 +1148,16 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             const cat = document.getElementById('studentCategorySelect').value;
             const notEl = document.getElementById('txtUploadNotice');
             if(cat === 'fm') {
-                notEl.innerHTML = `💡 <strong>FM Seçildi:</strong> Faylın adının heç bir önəmi yoxdur (məs. <code>a.cpp</code> və ya <code>main.py</code>). Süni intellekt birbaşa kodun daxili alqoritmini yoxlayıb dərhal bal təyin edir.`;
+                notEl.innerHTML = `💡 <strong>FM Seçildi:</strong> Faylın adının heç bir önəmi yoxdur (məs. <code>task.cpp</code> və ya <code>main.py</code>). Avtomatik yoxlama sistemi yalnız kodun daxili alqoritmini oxuyub dərhal bal təyin edir.`;
             } else {
                 const names = { stepping: "Stepik", e_olimp: "E-Olimp", codesources: "CodeSources", hackerrank: "HackerRank" };
-                notEl.innerHTML = `👨‍🏫 <strong>${names[cat]} Seçildi:</strong> Bu fayl Sİ tərəfindən DEYİL, birbaşa <strong>Admin tərəfindən</strong> yoxlanılacaq və təsdiq edildikdə bal cədvəldəki müvafiq <strong>${names[cat]}</strong> sütununa yazılacaq.`;
+                notEl.innerHTML = `👨‍🏫 <strong>${names[cat]} Seçildi:</strong> Həll kodları və ya nəticə skrinşotları birbaşa <strong>Admin tərəfindən</strong> yoxlanılacaq və təsdiq edildikdə bal cədvəldəki <strong>${names[cat]}</strong> sütununa yazılacaq.`;
             }
         }
 
+        // Tələbənin öz tapşırıqlarını tək dəfə çəkir (Download qənaəti)
         function loadStudentUploadedTasksList(targetStudent) {
-            database.ref('student_tasks').orderByChild('studentName').equalTo(targetStudent).on('value', snap => {
+            database.ref('student_tasks').orderByChild('studentName').equalTo(targetStudent).once('value').then(snap => {
                 const tasks = snap.val(); 
                 const statusDiv = document.getElementById('studentTaskStatus'); 
                 if(!statusDiv) return; 
@@ -1172,7 +1190,7 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
                             stText = `❌ Rədd edildi (${t.rejectReason || 'Alqoritm və ya şərtlər uyğun deyil'})`;
                             stColor = 'var(--negative)';
                         } else {
-                            stText = '⏳ Admin Yoxlamasındadır...';
+                            stText = '⏳ Müəllim Yoxlamasındadır...';
                             stColor = 'var(--gold)';
                         }
 
@@ -1189,15 +1207,15 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             });
         }
 
-        // 🧠 MÜKƏMMƏL SÜNİ İNTELLEKT KOD ANALİZATORU (FAYL ADINA BAXMIR!)
-        function aiDeepCodeAnalyzer(rawCode, subject) {
+        // AVTOMATİK KOD ANALİZATORU (FAYL ADINA BAXMIR, YALNIZ ALQORİTMİ YOXLAYIR)
+        function automatedCodeAnalyzer(rawCode, subject) {
             let code = rawCode.toLowerCase();
 
-            // 1. Dəxilsiz faylları və Sayt kodunu (HTML/CSS) tam blokla
+            // 1. Sayt/HTML kodları və dəxilsiz faylları blokla
             const forbiddenTokens = ['<!doctype html', '<html', '<head', '<body', '<script', '<div', 'css', 'queryselector', 'display:'];
             for(let tok of forbiddenTokens) {
                 if(code.includes(tok)) {
-                    return { isValid: false, reason: "Sayt/HTML və ya format kodu aşkar edildi! Yalnız proqramlaşdırma həlli qəbul olunur." };
+                    return { isValid: false, reason: "Sayt/HTML kodu aşkar edildi! Yalnız proqramlaşdırma həlli qəbul olunur." };
                 }
             }
 
@@ -1218,17 +1236,17 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
                 }
                 let hasPyTokens = code.includes('def ') || code.includes('for ') || code.includes('while ') || code.includes('print(') || code.includes('input(');
                 if(!hasPyTokens) {
-                    return { isValid: false, reason: "Düzgün Python ifadələri və ya funksiyası tapılmadı!" };
+                    return { isValid: false, reason: "Düzgün Python komandaları və ya funksiyası tapılmadı!" };
                 }
             }
 
-            // 3. Alqoritmin Məzmun Yoxlanışı (Fayl adı burada qətiyyən yoxlanılmır!)
+            // 3. Alqoritmin Məzmun Yoxlanışı
             let bestMatch = null;
 
             for(let task of dynamicTasksConfig) {
                 let taskName = task.name.toLowerCase();
 
-                // SADƏ ƏDƏD ALQORİTMİ
+                // SADƏ ƏDƏD
                 if(taskName.includes("sadə") || taskName.includes("prime")) {
                     let hasModulo = code.includes('%');
                     let hasLoop = code.includes('for') || code.includes('while');
@@ -1240,7 +1258,7 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
                     }
                 }
 
-                // VIGENERE ŞİFRƏLƏMƏ ALQORİTMİ
+                // VIGENERE
                 if(taskName.includes("vigenere") || taskName.includes("şifrə") || taskName.includes("cipher")) {
                     let hasMathModulo = code.includes('26') || code.includes('% 26') || code.includes('%26');
                     let hasKeyShift = code.includes('key') || code.includes('acar') || code.includes('ord(') || code.includes('chr(') || code.includes('+') || code.includes('-');
@@ -1251,7 +1269,7 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
                     }
                 }
 
-                // ADMİN TƏRƏFİNDƏN ƏLAVƏ EDİLƏN XÜSUSİ TƏLƏBLƏR
+                // XÜSUSİ TƏLƏBLƏR
                 if(task.requiredLogic && Array.isArray(task.requiredLogic)) {
                     let matchedAll = task.requiredLogic.every(req => code.includes(req.toLowerCase().trim()));
                     if(matchedAll) {
@@ -1271,7 +1289,7 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             return { isValid: true, taskName: bestMatch.taskName, points: bestMatch.points };
         }
 
-        // TƏLƏBƏ FAYL YÜKLƏMƏSİ (Sİ və ya ADMİN NÖVBƏSİ)
+        // TƏLƏBƏ FAYL YÜKLƏMƏSİ
         async function uploadStudentTasks() {
             if (deadlineTimestamp && new Date().getTime() >= deadlineTimestamp) {
                 return alert("🚨 Deadline bitib! Tapşırıq qəbul edilmir.");
@@ -1292,19 +1310,16 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
                 await new Promise(resolve => {
                     const reader = new FileReader();
 
-                    // Əgər FM-dirsə, Sİ kodu mətn kimi oxuyub analiz edir
                     if(category === 'fm') {
                         reader.onload = async evText => {
                             let rawCode = evText.target.result;
-                            let analysis = aiDeepCodeAnalyzer(rawCode, subject);
+                            let analysis = automatedCodeAnalyzer(rawCode, subject);
 
-                            // Faylın dataURL-ini də alırıq
                             const b64Reader = new FileReader();
                             b64Reader.onload = async b64Ev => {
                                 let base64Data = b64Ev.target.result;
 
                                 if (analysis.isValid) {
-                                    // Sİ Təsdiq etdi: Bal birbaşa FM sütununa yazılır
                                     let stList = globalData[subject];
                                     if(stList) {
                                         let idx = stList.findIndex(s => s.ad === activeProfileStudent);
@@ -1328,7 +1343,6 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
                                     });
                                     aiAccepted++;
                                 } else {
-                                    // Sİ Rədd etdi: 0 bal və səbəb göstərilir
                                     await database.ref('student_tasks').push({ 
                                         studentName: activeProfileStudent, 
                                         fileName: file.name, 
@@ -1349,8 +1363,6 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
                         };
                         reader.readAsText(file);
                     } else {
-                        // Əgər Stepik, E-Olimp, CodeSources və ya HackerRank-dırsa:
-                        // Sİ YOX, BİRBAŞA ADMİN YOXLAMASINA GÖNDƏRİLİR!
                         reader.onload = async evB64 => {
                             let base64Data = evB64.target.result;
                             await database.ref('student_tasks').push({ 
@@ -1373,13 +1385,14 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             }
 
             let msg = "GÖNDƏRMƏ NƏTİCƏSİ:\n";
-            if(aiAccepted > 0) msg += `✅ Sİ tərəfindən təsdiqləndi: ${aiAccepted} fayl (FM balınız artırıldı)\n`;
-            if(aiRejected > 0) msg += `❌ Sİ tərəfindən rədd edildi: ${aiRejected} fayl (Səbəbi status siyahısında)\n`;
-            if(adminPending > 0) msg += `👨‍🏫 Admin yoxlamasına göndərildi: ${adminPending} fayl (Admin yoxladıqdan sonra müvafiq sütuna yazılacaq)\n`;
+            if(aiAccepted > 0) msg += `✅ Avtomatik qəbul edildi: ${aiAccepted} fayl (FM balınız artırıldı)\n`;
+            if(aiRejected > 0) msg += `❌ Uyğunsuzluq: ${aiRejected} fayl (Səbəbi status siyahısında göstərildi)\n`;
+            if(adminPending > 0) msg += `👨‍🏫 Müəllim yoxlamasına göndərildi: ${adminPending} fayl\n`;
 
             alert(msg);
             document.getElementById('studentTaskFiles').value = '';
             renderTable();
+            if(activeProfileStudent) loadStudentUploadedTasksList(activeProfileStudent);
         }
 
         function renderStudentChart(wg) {
@@ -1402,11 +1415,12 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             });
         }
 
-        // ADMİN PANELİ VƏ REYTİNQ İDARƏSİ
+        // ADMİN PANELİ
         function openFullAdminPage() {
             openPage('fullAdminPage');
             renderAdminTaskListUI();
             renderAdminBody();
+            loadAllFilesForAdmin();
         }
 
         function changeAdminTab(tab) {
@@ -1457,7 +1471,6 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
                 `;
             });
             adminBody.innerHTML = htmlStr;
-            loadAllFilesForAdmin();
         }
 
         function saveSingleStudent(idx) {
@@ -1507,7 +1520,6 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             }); 
         }
 
-        // FM TAPŞIRIQ TƏNZİMLƏNMƏSİ
         function renderAdminTaskListUI() {
             const container = document.getElementById('adminTaskListContainer');
             if(!container) return;
@@ -1553,13 +1565,13 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             });
             dynamicTasksConfig = newList;
             database.ref('settings/dynamic_tasks').set(dynamicTasksConfig).then(() => {
-                alert("✅ FM Tapşırıqları və alqoritm tələbləri yadda saxlanıldı!");
+                alert("✅ FM Tapşırıqları və tələbləri yadda saxlanıldı!");
             });
         }
 
-        // ADMİN FAYL YOXLANIŞI VƏ MÜVAFİQ SÜTUNA BAL YAZILMASI
+        // ADMİN FAYL YOXLAMASI (Yalnız Admin Açanda Çəkilir -> Bandwidth Qorunur)
         function loadAllFilesForAdmin() {
-            database.ref('student_tasks').on('value', snap => {
+            database.ref('student_tasks').limitToLast(100).once('value').then(snap => {
                 const tasks = snap.val() || {};
                 const pCpp = document.getElementById('adminPendingTasksCpp'); 
                 const pPy = document.getElementById('adminPendingTasksPython'); 
@@ -1568,7 +1580,6 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
                 
                 let countPCpp = 0, countPPy = 0;
                 let pCppHTML = '', pPyHTML = '', cCppHTML = '', cPyHTML = '';
-
                 const catNames = { fm: "FM", stepping: "Stepik", e_olimp: "E-Olimp", codesources: "CodeSources", hackerrank: "HackerRank" };
 
                 Object.keys(tasks).reverse().forEach(key => {
@@ -1615,7 +1626,6 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             });
         }
 
-        // ADMİN FAYLI YOXLAYANDA BALIN MÜVAFİQ BAŞLIĞA (SÜTUNA) YAZILMASI
         async function adminManualEvaluate(key, studentName, subject, category, isCorrect) {
             let points = 0;
             if(isCorrect) {
@@ -1628,7 +1638,6 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             if(stList) {
                 let idx = stList.findIndex(s => s.ad === studentName);
                 if(idx > -1 && isCorrect) {
-                    // Müvafiq sütuna yazırıq (fm, stepping, e_olimp, codesources, hackerrank)
                     let col = category;
                     stList[idx][col] = (Number(stList[idx][col]) || 0) + points;
                     await database.ref(`students_data/${subject}/${idx}/${col}`).set(stList[idx][col]);
@@ -1638,15 +1647,16 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             await database.ref(`student_tasks/${key}`).update({
                 status: isCorrect ? 'correct' : 'wrong',
                 addedPoints: points,
-                rejectReason: isCorrect ? '' : 'Müəllim/Admin tərəfindən rədd edildi'
+                rejectReason: isCorrect ? '' : 'Müəllim tərəfindən rədd edildi'
             });
             alert(`Nəticə yeniləndi və bal '${category}' sütununa yazıldı!`);
             renderTable();
+            loadAllFilesForAdmin();
         }
 
-        // QALİBLƏR & OUTSİDERLƏR
+        // QALİBLƏR: YALNIZ HƏFTƏLİK ARTIMA GÖRƏ HESABLANIR!
         function showWinnersCelebration() {
-            const list = (globalData[currentTab] || []).map(s => calculateTotals(s)).sort((a,b) => b.cari_reyting - a.cari_reyting).slice(0, 5);
+            const list = (globalData[currentTab] || []).map(s => calculateTotals(s)).sort((a,b) => b.artim - a.artim).slice(0, 5);
             const grid = document.getElementById('winnersListGrid'); 
             if(!grid) return; 
             let html = '';
@@ -1654,6 +1664,7 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             list.forEach((s, idx) => {
                 let rankClass = idx === 0 ? 'rank-1' : (idx === 1 ? 'rank-2' : (idx === 2 ? 'rank-3' : 'rank-other'));
                 let titleText = idx === 0 ? '👑 ŞAH ÇEMPİON' : (idx === 1 ? '🥈 GÜMÜŞ' : (idx === 2 ? '🥉 BÜRÜNC' : (idx+1)+'-ci'));
+                let artSign = s.artim >= 0 ? '+' + s.artim : s.artim;
                 html += `
                     <div class="winner-card-v3 ${rankClass}">
                         <span class="rank-badge-title">${titleText}</span>
@@ -1662,7 +1673,8 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
                             <img src="${s.foto || DEFAULT_AVATAR_URL}">
                         </div>
                         <strong style="display:block; font-size:16px;">${s.ad}</strong>
-                        <span style="color:var(--accent); font-weight:900; margin-top:4px; display:block;">${s.cari_reyting} pt</span>
+                        <span style="color:var(--positive); font-weight:900; margin-top:4px; display:block; font-size:15px;">${artSign} pt artım</span>
+                        <span style="color:var(--text-sub); font-size:11px; display:block; margin-top:2px;">(Cari: ${s.cari_reyting} pt)</span>
                     </div>
                 `;
             });
@@ -1674,17 +1686,20 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             confetti({ particleCount: 80, spread: 100, origin: { y: 0.6 }, zIndex: 99999 });
         }
 
+        // OUTSİDERLƏR: YALNIZ HƏFTƏLİK ƏN AZ ARTIMA GÖRƏ HESABLANIR!
         function showOutsidersModal() {
-            const list = (globalData[currentTab] || []).map(s => calculateTotals(s)).sort((a,b) => a.cari_reyting - b.cari_reyting).slice(0, 3);
+            const list = (globalData[currentTab] || []).map(s => calculateTotals(s)).sort((a,b) => a.artim - b.artim).slice(0, 3);
             const grid = document.getElementById('outsidersListGrid'); 
             if(!grid) return; 
             let html = '';
             list.forEach(s => { 
+                let artSign = s.artim >= 0 ? '+' + s.artim : s.artim;
                 html += `
                     <div style="background:var(--bg-color); padding:16px 20px; border-radius:14px; border:1px solid var(--negative); text-align:center;">
                         <img src="${s.foto || DEFAULT_AVATAR_URL}" style="width:70px; height:70px; border-radius:50%; border:3px solid var(--negative); object-fit:cover; margin-bottom:10px;" />
-                        <strong style="display:block; font-size:15px;">😭 ${s.ad}</strong>
-                        <span style="color:var(--negative); font-weight:900; font-size:14px; margin-top:5px; display:block;">${s.cari_reyting} pt</span>
+                        <strong style="display:block; font-size:15px;">😴 ${s.ad}</strong>
+                        <span style="color:var(--negative); font-weight:900; font-size:14px; margin-top:5px; display:block;">${artSign} pt artım</span>
+                        <span style="color:var(--text-sub); font-size:11px; display:block; margin-top:2px;">(Cari: ${s.cari_reyting} pt)</span>
                     </div>
                 `; 
             });
@@ -1695,7 +1710,12 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             if(ao) { ao.currentTime = 0; ao.play().catch(e => console.log(e)); }
         }
 
-        function playBlackCatVideo() {
+        // VİDEO YALNIZ DÜYMƏYƏ BASILANDA ÇƏKİLİR (Firebase Download Qorunur)
+        async function playBlackCatVideo() {
+            if(!blackCatVideoData) {
+                const snap = await database.ref('video_black_cat').once('value');
+                blackCatVideoData = snap.val();
+            }
             if (!blackCatVideoData) return alert("Sürpriz video tapılmadı!");
             closeModalCustom('winnersModal'); 
             openModal('videoModal');
@@ -1704,11 +1724,25 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             player.play();
             player.onended = () => closeVideoModal();
         }
+
         function closeVideoModal() { 
             const player = document.getElementById('blackCatPlayer'); 
             player.pause(); 
             player.src = ""; 
             closeModal('videoModal'); 
+        }
+
+        function uploadBlackCatVideo() {
+            const file = document.getElementById('blackCatVideoFile').files[0];
+            if(!file) return alert("Video seçin!");
+            const reader = new FileReader();
+            reader.onload = e => {
+                database.ref('video_black_cat').set(e.target.result).then(() => {
+                    alert("Video yükləndi! 🐈");
+                    blackCatVideoData = e.target.result;
+                });
+            };
+            reader.readAsDataURL(file);
         }
 
         function saveDeadline() {
@@ -1765,7 +1799,7 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
         }
 
         function loadAdminFeedback() {
-            database.ref('feedbacks').on('value', snap => {
+            database.ref('feedbacks').limitToLast(30).once('value').then(snap => {
                 const fbs = snap.val() || {};
                 const listDiv = document.getElementById('adminFeedbackList');
                 if(!listDiv) return;
