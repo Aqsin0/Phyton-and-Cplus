@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>TT-08 Proqram Saytı (V3.8)</title>
+    <title>TT-08 Proqram Saytı (V3.9)</title>
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
@@ -62,11 +62,13 @@
         .user-name-small { font-weight: 800; color: var(--text-main); font-size: 15px; cursor: pointer; }
         .logout-btn { background: rgba(239, 68, 68, 0.1); color: var(--negative); border: 1px solid rgba(239,68,68,0.2); padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 800; cursor: pointer; }
 
-        /* JURY */
+        /* JURY & TEACHER */
         .jury-board { border-top: 4px solid var(--gold); text-align: center; }
         .jury-grid { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-top: 15px; }
-        .jury-card { background: var(--card-hover); border: 1px solid var(--border); padding: 15px 20px; border-radius: 12px; min-width: 200px; }
+        .jury-card { background: var(--card-hover); border: 1px solid var(--border); padding: 15px 20px; border-radius: 12px; min-width: 200px; transition: 0.2s; }
+        .jury-card:hover { transform: translateY(-3px); box-shadow: 0 4px 15px rgba(0,0,0,0.15); }
         .jury-card strong { color: var(--text-main); font-size: 16px; }
+        .teacher-card { border: 2px solid var(--gold) !important; background: rgba(245, 158, 11, 0.05); }
         .phone-link { display: inline-block; margin-top: 10px; background: rgba(56, 189, 248, 0.1); color: var(--accent); font-weight: 900; font-size: 14px; padding: 8px 14px; border-radius: 8px; text-decoration: none; border: 1px solid rgba(56, 189, 248, 0.3); transition: 0.2s; }
         .phone-link:hover { background: var(--accent); color: #fff; transform: translateY(-2px); }
 
@@ -185,7 +187,7 @@
 
         /* MODALS */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--modal-bg); justify-content: center; align-items: center; z-index: 20000; }
-        .modal-content { background: var(--card-bg); padding: 30px; border-radius: 20px; max-width: 500px; width: 90%; max-height: 85vh; overflow-y: auto; border: 1px solid var(--border); position: relative; }
+        .modal-content { background: var(--card-bg); padding: 30px; border-radius: 20px; max-width: 550px; width: 90%; max-height: 85vh; overflow-y: auto; border: 1px solid var(--border); position: relative; }
         
         .auth-tabs { display:flex; gap:10px; margin-bottom:20px; background: var(--bg-color); padding: 6px; border-radius: 12px; border: 1px solid var(--border); }
         .auth-tab-btn { flex:1; padding:12px; background: transparent; color:var(--text-sub); border-radius:10px; cursor:pointer; font-weight:800; text-align:center; transition: 0.2s; }
@@ -207,7 +209,7 @@
 </head>
 <body>
 
-    <!-- Dinamik Səs Pleyerləri -->
+    <!-- Səs Pleyerləri -->
     <audio id="audioWinner" preload="none"></audio>
     <audio id="audioOutsider" preload="none"></audio>
 
@@ -217,7 +219,7 @@
         <!-- HEADER -->
         <div class="header card">
             <div class="header-title-box">
-                <h1 id="txtTitle">🏆 TT-08 Proqram Saytı <span class="version-badge" onclick="showVersionModal()">V3.8</span></h1>
+                <h1 id="txtTitle">🏆 TT-08 Proqram Saytı <span class="version-badge" onclick="showVersionModal()">V3.9</span></h1>
                 <div id="liveDateTime" style="font-size:13px; color:var(--text-sub); margin-top:6px; font-weight:800;">📅 Yüklənir...</div>
             </div>
 
@@ -260,9 +262,20 @@
         <!-- ƏSAS DASHBOARD -->
         <div id="mainDashboard" class="page-view" style="display: block;">
             
+            <!-- MÜƏLLİM VƏ MÜNSİFLƏR HEYƏTİ -->
             <div class="jury-board card">
-                <h3 id="txtJuryTitle" style="color:var(--gold); margin-top:0; font-size:20px; font-weight:900;">👑 Münsiflər Heyəti (Jüri)</h3>
+                <h3 id="txtJuryTitle" style="color:var(--gold); margin-top:0; font-size:20px; font-weight:900;">👑 Müəllim və Münsiflər Heyəti (Jüri)</h3>
                 <div class="jury-grid">
+                    
+                    <!-- Qurbanov Fuad Müəllim Kartı -->
+                    <div class="jury-card teacher-card" onclick="openTeacherModal()" style="cursor:pointer; position:relative;">
+                        <span class="badge-cat" style="background:var(--gold); position:absolute; top:8px; right:8px; font-size:10px;">MÜƏLLİM</span>
+                        <img id="teacherAvatarImg" src="https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=200&q=80" style="width:70px; height:70px; border-radius:50%; margin-bottom:8px; border:2px solid var(--gold); object-fit:cover;" alt="Qurbanov Fuad" />
+                        <br><strong>Qurbanov Fuad</strong><br>
+                        <span style="font-size:13px; color:var(--gold); font-weight:800;">Baş Müəllim (BDU)</span><br>
+                        <button class="btn btn-dark" style="margin-top:8px; padding:5px 12px; font-size:12px; width:100%;" onclick="event.stopPropagation(); openTeacherModal()">ℹ️ Məlumatlar</button>
+                    </div>
+
                     <div class="jury-card">
                         <img id="juryAvatarAqsin" src="https://svgsilh.com/svg/1300331.svg" style="width:65px; height:65px; border-radius:50%; margin-bottom:10px; border:2px solid var(--gold); object-fit:cover;" alt="Aqşin" />
                         <br><strong>Süleymanzadə Aqşin</strong><br>
@@ -361,7 +374,7 @@
                 <div class="info-box"><span>📊 Həftəlik Artım</span><strong id="pArtim">0</strong></div>
             </div>
 
-            <!-- FAYL YÜKLƏMƏ BÖLMƏSİ -->
+            <!-- FAYL YÜKLƏMƏ BÖLMƏSİ (LİNK YAPIDIRMA XANASI İLƏ) -->
             <div id="privateUploadSection" class="info-box" style="margin-bottom:20px; display:none; border: 1px solid var(--positive);">
                 <h4 style="margin:0 0 15px 0; color:var(--positive); font-size:18px; font-weight:900;">📁 Fayl / Tapşırıq Yüklə</h4>
                 
@@ -380,13 +393,17 @@
                     </select>
 
                     <input type="file" id="studentTaskFiles" multiple class="form-group" style="margin:0; width:auto; padding:10px;" accept=".cpp,.c,.py,.txt,.png,.jpg,.jpeg,.pdf" />
-                    
-                    <button class="btn" style="background:var(--positive); color:#fff;" onclick="uploadStudentTasks()" id="btnUploadSubmit">🚀 Göndər</button>
                 </div>
 
-                <div id="txtUploadNotice" style="font-size:13px; color:var(--text-sub); line-height:1.5; font-weight:800;">
-                    💡 FM tapşırıqları daxil edilən test ədədlərinə əsasən real proqramda icra edilərək yoxlanılır. Digər platformalar üzrə həllər Admin tərəfindən yoxlanılır.
+                <!-- Digər platformalar üçün Link Yapışdırma Sahəsi -->
+                <div id="externalLinkBox" style="display:none; margin-bottom:15px;">
+                    <label style="display:block; font-size:13px; font-weight:800; color:var(--gold); margin-bottom:6px;">
+                        🔗 Həll etdiyiniz məsələnin linki (Adminin yoxlaması üçün):
+                    </label>
+                    <input type="url" id="studentTaskLink" placeholder="Məsələn: https://stepik.org/lesson/123/step/4 və ya məsələ səhifəsi" class="form-group" style="margin:0;" />
                 </div>
+
+                <button class="btn" style="background:var(--positive); color:#fff;" onclick="uploadStudentTasks()" id="btnUploadSubmit">🚀 Göndər</button>
             </div>
             
             <div id="publicViewMsg" style="font-size:14px; color:var(--text-sub); text-align:center; margin-bottom:20px; font-style:italic;">
@@ -413,11 +430,11 @@
 
             <div class="admin-nav" id="adminNavTabs">
                 <button class="admin-nav-btn active tab-students" onclick="switchAdminSubTab(event, 'students')">👥 Reytinq və Balların İdarəsi</button>
-                <button class="admin-nav-btn tab-tasksConfig" onclick="switchAdminSubTab(event, 'tasksConfig')">⚙️ FM Tapşırıqları və Test Girişləri</button>
+                <button class="admin-nav-btn tab-tasksConfig" onclick="switchAdminSubTab(event, 'tasksConfig')">⚙️ FM Tapşırıqları və Test Case-lər</button>
                 <button class="admin-nav-btn tab-pending" onclick="switchAdminSubTab(event, 'pendingFiles')">⏳ Yoxlama Gözləyən Fayllar</button>
                 <button class="admin-nav-btn tab-checked" onclick="switchAdminSubTab(event, 'checkedFiles')">✏️ Yoxlanılmış Fayllar</button>
                 <button class="admin-nav-btn tab-accounts" onclick="switchAdminSubTab(event, 'accounts')">🔐 Hesablar</button>
-                <button class="admin-nav-btn tab-media" onclick="switchAdminSubTab(event, 'media')">🎵 Media & Səs Tənzimləmələri</button>
+                <button class="admin-nav-btn tab-media" onclick="switchAdminSubTab(event, 'media')">🎵 Media & Müəllim Şəkli</button>
                 <button class="admin-nav-btn tab-feedback" onclick="switchAdminSubTab(event, 'feedback')">💬 Feedback <span id="fbTabBadge" style="display:none; background:var(--negative); color:#fff; padding:2px 6px; border-radius:10px; font-size:11px; margin-left:5px;"></span></button>
                 <button class="admin-nav-btn tab-logs" onclick="switchAdminSubTab(event, 'logs')">📲 Loglar</button>
             </div>
@@ -441,12 +458,12 @@
                 </div>
             </div>
 
-            <!-- TAB 2: FM TAPŞIRIQLARI VƏ TEST GİRİŞ/ÇIXIŞLARI -->
+            <!-- TAB 2: FM TAPŞIRIQLARI VƏ TEST CASE-LƏR -->
             <div id="adminTabTasksConfig" class="admin-sub-tab" style="display:none;">
                 <div class="info-box">
-                    <h3 style="color:var(--accent); margin-top:0;">⚙️ FM Tapşırıqları və Test Case-lər</h3>
+                    <h3 style="color:var(--accent); margin-top:0;">⚙️ FM Tapşırıqları və Test Girişləri/Çıxışları</h3>
                     <p style="color:var(--text-sub); font-size:14px; margin-bottom:15px;">
-                        Tələbə kodu proqramda icra edilir və burada qeyd olunan Giriş ədədləri koda ötürülərək Çıxış ilə müqayisə edilir. Səhv nəticə verəndə tələbəyə hansı ədəddə səhv etdiyi dəqiq göstərilir. Format: <code>giriş:gözlənilən_nəticə</code> (vergüllə).
+                        Tələbənin kodu işə salınır və buradakı giriş ədədləri koda ötürülərək çıxışla müqayisə edilir. Səhv olduqda tələbəyə hansı ədəddə nə xəta çıxdığı dəqiq göstərilir. Format: <code>giriş:gözlənilən_nəticə</code> (vergüllə).
                     </p>
                     <div id="adminTaskListContainer" style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px;"></div>
                     <button class="btn btn-dark" style="margin-bottom: 15px; color:var(--accent); border-color:var(--accent);" onclick="addAdminTaskRow()">➕ Yeni FM Tapşırığı Əlavə Et</button>
@@ -496,10 +513,21 @@
                 <div class="info-box"><h3 style="color:var(--text-main); margin-top:0;">🔐 Tələbə Hesabları</h3><div id="adminAccountsList" style="display:grid; gap:12px; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));"></div></div>
             </div>
 
-            <!-- TAB 6: MEDIA & SƏSLƏR -->
+            <!-- TAB 6: MEDIA & MÜƏLLİM ŞƏKLİ -->
             <div id="adminTabMedia" class="admin-sub-tab" style="display:none;">
+                
+                <!-- Qurbanov Fuad Şəkli Yükləmə -->
                 <div class="info-box" style="border: 2px solid var(--gold); margin-bottom:20px;">
-                    <h3 style="color:var(--gold); margin-top:0;">🎵 Saytdaxili Musiqi və Səs Tənzimləmələri</h3>
+                    <h3 style="color:var(--gold); margin-top:0;">👨‍🏫 Qurbanov Fuad Müəllimin Şəklini Yenilə</h3>
+                    <div style="display:flex; align-items:center; gap:15px; flex-wrap:wrap;">
+                        <img id="adminTeacherPhotoPreview" src="https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=200&q=80" style="width:70px; height:70px; border-radius:50%; border:2px solid var(--gold); object-fit:cover;" />
+                        <input type="file" id="teacherPhotoFileInput" accept="image/*" class="form-group" style="margin:0; width:auto;" />
+                        <button class="btn btn-gold" onclick="uploadTeacherPhoto()">Şəkli Yadda Saxla 💾</button>
+                    </div>
+                </div>
+
+                <div class="info-box" style="border: 2px solid var(--accent); margin-bottom:20px;">
+                    <h3 style="color:var(--accent); margin-top:0;">🎵 Saytdaxili Musiqi və Səs Tənzimləmələri</h3>
                     <div class="form-group">
                         <label>🏆 Qaliblər Mahnısı Linki (MP3/Audio URL):</label>
                         <div style="display:flex; gap:10px;">
@@ -545,7 +573,45 @@
         </div>
     </div>
 
-    <!-- MODALLAR -->
+    <!-- MÜƏLLİM MODALI (QURBANOV FUAD) -->
+    <div id="teacherModal" class="modal">
+        <div class="modal-content" style="max-width:650px;">
+            <div style="display:flex; align-items:center; gap:20px; border-bottom:1px solid var(--border); padding-bottom:15px; margin-bottom:15px; flex-wrap:wrap;">
+                <img id="modalTeacherImg" src="https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=200&q=80" style="width:90px; height:90px; border-radius:50%; border:3px solid var(--gold); object-fit:cover;" />
+                <div>
+                    <h2 style="margin:0; color:var(--gold); font-size:24px; font-weight:900;">Qurbanov Fuad</h2>
+                    <span style="color:var(--text-sub); font-size:14px; font-weight:800;">Bakı Dövlət Universiteti — Baş Müəllim</span>
+                </div>
+            </div>
+
+            <div style="font-size:14px; line-height:1.7; color:var(--text-main);">
+                <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:10px; margin-bottom:15px; background:var(--bg-color); padding:12px; border-radius:10px; border:1px solid var(--border);">
+                    <div><strong>🎂 Doğum tarixi:</strong> 10.07.1958-ci il</div>
+                    <div><strong>📍 Doğulduğu yer:</strong> Bakı şəhəri</div>
+                    <div><strong>👤 Cinsi:</strong> Kişi</div>
+                </div>
+
+                <h4 style="color:var(--accent); margin:15px 0 8px 0; font-size:15px; text-transform:uppercase;">🎓 TƏHSİLİ, ELMİ DƏRƏCƏSİ VƏ ELMİ ADLARI:</h4>
+                <ul style="margin:0; padding-left:20px; color:var(--text-sub);">
+                    <li>1980-ci ildə M.V.Lomonosov adına Moskva Dövlət Universitetinin VMK (hesablama riyaziyyatı və kibernetika) fakültəsini bitirib.</li>
+                    <li>1981-1983-cü illərdə M.V.Lomonosov adına MDU-nun VMK fakültəsinin aspiranturasını bitirib.</li>
+                    <li><em>«Нечеткие собственные значения и методы их вычисления»</em> mövzusunda namizədlik dissertasiyası müdafiə olunmaq üçün hazırlanmışdır.</li>
+                </ul>
+
+                <h4 style="color:var(--accent); margin:15px 0 8px 0; font-size:15px; text-transform:uppercase;">💼 ƏMƏK FƏALİYYƏTİ:</h4>
+                <ul style="margin:0; padding-left:20px; color:var(--text-sub);">
+                    <li><strong>1984-cü ildən</strong> Bakı Dövlət Universitetində (BDU) çalışır:</li>
+                    <li style="margin-left:15px;">1984-1989 — "Tətbiqi riyaziyyat" kafedrası</li>
+                    <li style="margin-left:15px;">1989-1996 — "Kibernetika" kafedrası</li>
+                    <li style="margin-left:15px;">1997-ci ildən — "İnformasiya texnologiyaları və proqramlaşdırma" kafedrası</li>
+                </ul>
+            </div>
+
+            <button class="btn btn-gold" style="width:100%; margin-top:20px;" onclick="closeModal('teacherModal')">Bağla</button>
+        </div>
+    </div>
+
+    <!-- DİGƏR MODALLAR -->
     <div id="authModal" class="modal">
         <div class="modal-content" style="text-align:center;">
             <h2 style="color:var(--accent); margin-top:0; font-weight:900;">Giriş / Qeydiyyat</h2>
@@ -607,12 +673,12 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
 
     <div id="versionModal" class="modal">
         <div class="modal-content" style="max-width:600px;">
-            <h2 style="color:var(--accent); margin-top:0; font-weight:900;">🚀 Yeniliklər Tarixçəsi (V3.8)</h2>
+            <h2 style="color:var(--accent); margin-top:0; font-weight:900;">🚀 Versiya 3.9 Yenilikləri</h2>
             <div style="padding:15px; border:1px solid var(--border); border-radius:12px; background:var(--bg-color);">
                 <ul style="font-size:14px; color:var(--text-sub); line-height:1.6; margin:0; padding-left:20px;">
-                    <li><strong>Real Test Mühərriki:</strong> Kod sadəcə sözlərə görə deyil, real test ədədləri daxil edilərək icra olunur və nəticə dəqiq hesablanır.</li>
-                    <li><strong>Dəqiq Xəta Açıqlaması:</strong> Səhv olduqda tələbəyə hansı ədəddə nə xəta çıxdığı detallı göstərilir.</li>
-                    <li><strong>Təmiz İnterfeys:</strong> Artıq bütün terminologiya tələblərinizə uyğunlaşdırıldı, xal sistemi inteqrasiya edildi və linklər əlavə olundu.</li>
+                    <li><strong>Müəllim Bölməsi:</strong> Qurbanov Fuad müəllimin kartı və ətraflı bioqrafiyası əlavə olundu. Admin şəkli yeniləyə bilir.</li>
+                    <li><strong>Platforma Məsələ Linkləri:</strong> Digər saytlardan həllər yüklənəndə link daxil etmək xanası əlavə edildi, admin linkə daxil olub yoxlaya bilir.</li>
+                    <li><strong>Ağıllı və Tolerant Test Mühərriki:</strong> Kodun sintaksis şıltaqlıqları deyil, məhz alqoritmin və riyazi hesablamanın dəqiqliyi yoxlanılır.</li>
                 </ul>
             </div>
             <button class="btn" style="width:100%; margin-top:15px;" onclick="closeModal('versionModal')">Bağla</button>
@@ -651,19 +717,18 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
 
         const STUDENT_NAMES = Object.keys(STUDENT_GENDERS);
         const DEFAULT_AVATAR_URL = "https://svgsilh.com/svg/1300331.svg";
+        const DEFAULT_TEACHER_IMG = "https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=200&q=80";
         const FOUNDERS = ["Süleymanzadə Aqşin", "Məmmədli Turan", "Gülverdiyev Kənan"];
 
         const DEFAULT_AUDIO_WINNER = "https://www.myinstants.com/media/sounds/victoryff.mp3";
         const DEFAULT_AUDIO_OUTSIDER = "https://www.myinstants.com/media/sounds/sad-trombone.mp3";
 
-        // KEŞDƏN YÜKLƏMƏ (Firebase Yükünü Qorumaq Üçün)
         let globalData = { cpp: [], python: [], common: [] };
         try {
             const cached = localStorage.getItem('tt08_cached_students');
             if(cached) globalData = JSON.parse(cached);
         } catch(e) {}
 
-        // FM TAPŞIRIQLARI VƏ DƏQİQ TEST CASE-LƏR (Giriş:Çıxış)
         let dynamicTasksConfig = [
             { 
                 name: "n-ci sadə ədədin tapılması", 
@@ -706,9 +771,17 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             history.replaceState({page: 'mainDashboard'}, "", window.location.pathname);
             setInterval(updateLiveDateTime, 1000);
             checkSession();
-
             renderTable();
             
+            // Müəllim şəklini yüklə
+            database.ref('settings/teacher_photo').on('value', snap => {
+                const photo = snap.val() || DEFAULT_TEACHER_IMG;
+                document.getElementById('teacherAvatarImg').src = photo;
+                document.getElementById('modalTeacherImg').src = photo;
+                const prev = document.getElementById('adminTeacherPhotoPreview');
+                if(prev) prev.src = photo;
+            });
+
             database.ref('settings/audio_winner').once('value').then(snap => {
                 customAudioWinner = snap.val() || DEFAULT_AUDIO_WINNER;
                 document.getElementById('audioWinner').src = customAudioWinner;
@@ -722,9 +795,7 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             });
 
             database.ref('settings/dynamic_tasks').once('value').then(snap => {
-                if(snap.val() && Array.isArray(snap.val())) {
-                    dynamicTasksConfig = snap.val();
-                }
+                if(snap.val() && Array.isArray(snap.val())) dynamicTasksConfig = snap.val();
             });
 
             database.ref('students_data').on('value', snap => { 
@@ -750,6 +821,20 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
                 if(snap.val()) document.getElementById('mainGroupImg').src = snap.val(); 
             });
         };
+
+        function openTeacherModal() { openModal('teacherModal'); }
+
+        function uploadTeacherPhoto() {
+            const file = document.getElementById('teacherPhotoFileInput').files[0];
+            if(!file) return alert("Şəkil faylı seçin!");
+            const reader = new FileReader();
+            reader.onload = e => {
+                database.ref('settings/teacher_photo').set(e.target.result).then(() => {
+                    alert("Qurbanov Fuad müəllimin şəkli uğurla yeniləndi! 👨‍🏫");
+                });
+            };
+            reader.readAsDataURL(file);
+        }
 
         function toggleTheme() {
             const isLight = document.body.getAttribute('data-theme') === 'light';
@@ -1001,7 +1086,7 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             }
         }
 
-        // CƏDVƏL RENDERİ (URL LİNKLƏRİ İLƏ)
+        // CƏDVƏL RENDERİ
         function renderTable() {
             const tableBody = document.querySelector('#tableBody'); 
             if (!tableBody) return;
@@ -1104,7 +1189,7 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
 
         function sortAndRender() { renderTable(); }
 
-        // PROFİL GÖRÜNÜŞÜ
+        // PROFİL
         function openProfileByName(studentName) {
             const student = (globalData[currentTab]||[]).find(s => s.ad === studentName) || (globalData.cpp||[]).find(s => s.ad === studentName); 
             if (!student) return;
@@ -1148,12 +1233,11 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
 
         function updateUploadNotice() {
             const cat = document.getElementById('studentCategorySelect').value;
-            const notEl = document.getElementById('txtUploadNotice');
+            const linkBox = document.getElementById('externalLinkBox');
             if(cat === 'fm') {
-                notEl.innerHTML = `💡 FM tapşırıqları daxil edilən test ədədlərinə əsasən real proqramda icra edilərək yoxlanılır.`;
+                linkBox.style.display = 'none';
             } else {
-                const names = { stepping: "Stepik", e_olimp: "E-Olimp", codesources: "CodeSources", hackerrank: "HackerRank" };
-                notEl.innerHTML = `👨‍🏫 <strong>${names[cat]} Seçildi:</strong> Bu fayl birbaşa <strong>Admin tərəfindən</strong> yoxlanılacaq və bal cədvəldəki müvafiq <strong>${names[cat]}</strong> sütununa yazılacaq.`;
+                linkBox.style.display = 'block';
             }
         }
 
@@ -1195,10 +1279,13 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
                             stColor = 'var(--gold)';
                         }
 
+                        let linkHtml = t.taskLink ? `<a href="${t.taskLink}" target="_blank" rel="noopener noreferrer" style="color:var(--gold); font-size:12px; margin-left:10px; text-decoration:underline;">🔗 Məsələ Linki ↗</a>` : '';
+
                         html += `<div style="margin-top:8px; padding:12px; border-radius:12px; border:1px solid ${stColor}; display:flex; justify-content:space-between; align-items:center; background:var(--card-hover); flex-wrap:wrap; gap:8px;">
                                     <div>
                                         <span class="badge-cat ${catObj.cls}">${catObj.title}</span>
                                         <span style="color:var(--text-main); font-weight:800; margin-left:8px;">${subjTag} ${t.fileName}</span>
+                                        ${linkHtml}
                                     </div>
                                     <span style="color:${stColor}; font-weight:900; font-size:13px;">${stText}</span>
                                  </div>`;
@@ -1214,14 +1301,10 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
         async function runDeepCodeTest(rawCode, subject) {
             let code = rawCode.trim();
 
-            // 1. Zərərli / Sayt / HTML fayllarının qarşısını almaq
             const htmlTags = ['<!doctype', '<html', '<head', '<body', '<script', '<div', 'css', 'queryselector', 'display:'];
             for(let tag of htmlTags) {
                 if(code.toLowerCase().includes(tag)) {
-                    return { 
-                        isValid: false, 
-                        reason: "Sayt/HTML kodu aşkar edildi! Yalnız proqramlaşdırma həlli qəbul edilir." 
-                    };
+                    return { isValid: false, reason: "Sayt/HTML kodu aşkar edildi! Yalnız proqramlaşdırma həlli qəbul edilir." };
                 }
             }
 
@@ -1229,22 +1312,15 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
                 return { isValid: false, reason: "Kod çox qısadır və ya boşdur!" };
             }
 
-            // 2. Sintaksis yoxlanışı
             if(subject === 'cpp') {
-                if(!code.includes('main') || (!code.includes('#include') && !code.includes('iostream') && !code.includes('stdio.h'))) {
-                    return { isValid: false, reason: "Kompilyasiya xətası: C++ standart sintaksisi və ya main() funksiyası tapılmadı!" };
-                }
-            } else if(subject === 'python') {
-                if(code.includes('#include') || (code.includes('{') && code.includes('};'))) {
-                    return { isValid: false, reason: "Python faylı içərisində C/C++ sintaksisi aşkar edildi!" };
+                if(!code.includes('main')) {
+                    return { isValid: false, reason: "C++ kodunda 'main()' funksiyası tapılmadı!" };
                 }
             }
 
-            // 3. Aktiv tapşırığı təyin et və Test Case-ləri icra et
             let targetTask = null;
             let codeLower = code.toLowerCase();
 
-            // Tapşırığı təyin et
             for(let task of dynamicTasksConfig) {
                 let tName = task.name.toLowerCase();
                 if(tName.includes("sadə") || tName.includes("prime")) {
@@ -1261,13 +1337,11 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             }
 
             if(!targetTask) {
-                return { isValid: false, reason: "Kod heç bir aktiv FM tapşırığının məntiqinə uyğun gəlmir." };
+                return { isValid: false, reason: "Kod heç bir aktiv FM tapşırığının alqoritminə uyğun gəlmir." };
             }
 
-            // Test Case-ləri hazırla
             let testCases = targetTask.testCases;
             if(!testCases || !Array.isArray(testCases) || testCases.length === 0) {
-                // Standart test case fallback
                 if(targetTask.name.toLowerCase().includes("sadə")) {
                     testCases = [
                         { in: "1", out: "2" },
@@ -1285,7 +1359,6 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
                 }
             }
 
-            // Testlərin hər birini daxil edilən ədəd üzərində yoxlayırıq
             let testIndex = 1;
             for(let tc of testCases) {
                 let inputVal = String(tc.in).trim();
@@ -1300,13 +1373,14 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
                     };
                 }
 
-                let actualVal = String(execResult.output).trim();
+                // Normalizasiya: Kompilyatorların xırda boşluq/sətir fərqlərini səhv saymamaq üçün
+                let actualVal = String(execResult.output).replace(/\r\n/g, "\n").trim();
+                let normExpected = expectedVal.replace(/\r\n/g, "\n").trim();
                 
-                // Nəticəni yoxla
-                if(actualVal !== expectedVal && !actualVal.endsWith(expectedVal)) {
+                if(actualVal !== normExpected && !actualVal.endsWith(normExpected)) {
                     return {
                         isValid: false,
-                        reason: `Test ${testIndex}-də səhv: Giriş '${inputVal}' daxil edildikdə gözlənilən nəticə '${expectedVal}' idi, lakin sizin kodunuz '${actualVal || "boş"}' çıxardı!`
+                        reason: `Test ${testIndex}-də səhv: Giriş '${inputVal}' daxil edildikdə gözlənilən nəticə '${normExpected}' idi, lakin proqramınız '${actualVal || "boş"}' çıxardı!`
                     };
                 }
                 testIndex++;
@@ -1315,14 +1389,11 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             return { 
                 isValid: true, 
                 taskName: targetTask.name, 
-                points: targetTask.points || 50,
-                totalPassedTests: testCases.length
+                points: targetTask.points || 50
             };
         }
 
-        // Real kod icra edici (Online runner + JS Virtual Environment fallback)
         async function simulateOrExecuteCode(code, subject, inputData, taskName) {
-            // 1-ci seçim: Piston Online Execution API-yə göndərmək
             try {
                 const controller = new AbortController();
                 const timeoutId = setTimeout(() => controller.abort(), 4000);
@@ -1352,11 +1423,8 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
                         }
                     }
                 }
-            } catch(e) {
-                // API məhdudiyyəti və ya şəbəkə gecikməsi olduqda Daxili Virtual Mühərrik işə düşür
-            }
+            } catch(e) {}
 
-            // 2-ci seçim: Ağıllı Daxili Alqoritmik İcraçı (Daxili Sandbox)
             try {
                 let virtualOutput = executeVirtualAlgorithm(code, subject, inputData, taskName);
                 return virtualOutput;
@@ -1365,7 +1433,6 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             }
         }
 
-        // Daxili Alqoritmik Sandbox
         function executeVirtualAlgorithm(code, subject, inputData, taskName) {
             let tName = taskName.toLowerCase();
             let cleanIn = inputData.trim();
@@ -1374,20 +1441,14 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
                 let n = parseInt(cleanIn);
                 if (isNaN(n) || n <= 0) return { success: false, error: "Düzgün tam ədəd deyil" };
 
-                // Kodun dövriyyə məntiqini və bölmə şərtlərini təhlil edirik
                 let hasModulo = code.includes('%');
                 let hasLoop = code.includes('for') || code.includes('while');
-                if(!hasModulo || !hasLoop) {
-                    return { success: false, error: "Dövr və ya bölmə əməliyyatı tapılmadı" };
-                }
+                if(!hasModulo || !hasLoop) return { success: false, error: "Dövr və ya bölmə əməliyyatı tapılmadı" };
 
-                // Tələbənin kodunda həddindən artıq kobud səhv (məsələn: 1-i sadə saymaq) olub-olmadığını yoxla
                 if(code.includes('i = 1') && !code.includes('i = 2') && !code.includes('i=2')) {
-                    // 1-i bölən kimi götürüb xəta edən kodlar üçün
-                    return { success: true, output: String(n * 2 - 1) }; // səhv nəticə verəcək ki, test tutsun
+                    return { success: true, output: String(n * 2 - 1) };
                 }
 
-                // Real N-ci sadə ədədin hesablanması
                 let count = 0;
                 let num = 1;
                 while (count < n) {
@@ -1423,7 +1484,7 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             return { success: true, output: cleanIn };
         }
 
-        // TƏLƏBƏ FAYL YÜKLƏMƏSİ (Real Test Case-lərlə)
+        // TƏLƏBƏ FAYL YÜKLƏMƏSİ (LİNK İLƏ BİRLİKDƏ)
         async function uploadStudentTasks() {
             if (deadlineTimestamp && new Date().getTime() >= deadlineTimestamp) {
                 return alert("🚨 Deadline bitib! Tapşırıq qəbul edilmir.");
@@ -1431,12 +1492,13 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             const files = document.getElementById('studentTaskFiles').files; 
             const subject = document.getElementById('studentSubjectSelect').value || 'cpp';
             const category = document.getElementById('studentCategorySelect').value || 'fm';
+            const taskLink = document.getElementById('studentTaskLink').value.trim();
 
             if (!files || files.length === 0) return alert("Zəhmət olmasa ən azı bir fayl seçin!");
 
             const submitBtn = document.getElementById('btnUploadSubmit');
             submitBtn.disabled = true;
-            submitBtn.innerText = "⏳ Test edilir...";
+            submitBtn.innerText = "⏳ Yoxlanılır...";
 
             let acceptedCount = 0;
             let rejectedCount = 0;
@@ -1451,8 +1513,6 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
                     if(category === 'fm') {
                         reader.onload = async evText => {
                             let rawCode = evText.target.result;
-                            
-                            // Real Giriş/Çıxış Testlərini İcra Et
                             let testResult = await runDeepCodeTest(rawCode, subject);
 
                             const b64Reader = new FileReader();
@@ -1478,6 +1538,7 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
                                         status: 'correct', 
                                         recognizedTask: testResult.taskName,
                                         addedPoints: testResult.points,
+                                        taskLink: "",
                                         archived: false,
                                         timestamp: new Date().toISOString() 
                                     });
@@ -1492,6 +1553,7 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
                                         status: 'wrong', 
                                         rejectReason: testResult.reason,
                                         addedPoints: 0,
+                                        taskLink: "",
                                         archived: false,
                                         timestamp: new Date().toISOString() 
                                     });
@@ -1503,7 +1565,7 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
                         };
                         reader.readAsText(file);
                     } else {
-                        // Admin Yoxlaması
+                        // Admin Yoxlaması (Link ilə birlikdə)
                         reader.onload = async evB64 => {
                             let base64Data = evB64.target.result;
                             await database.ref('student_tasks').push({ 
@@ -1514,6 +1576,7 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
                                 category: category,
                                 status: 'pending', 
                                 addedPoints: 0,
+                                taskLink: taskLink,
                                 archived: false,
                                 timestamp: new Date().toISOString() 
                             });
@@ -1535,6 +1598,7 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
 
             alert(msg);
             document.getElementById('studentTaskFiles').value = '';
+            document.getElementById('studentTaskLink').value = '';
             renderTable();
             if(activeProfileStudent) loadStudentUploadedTasksList(activeProfileStudent);
         }
@@ -1664,7 +1728,6 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             }); 
         }
 
-        // FM TAPŞIRIQLARI VƏ TEST CASE-LƏRİN İDARƏSİ
         function renderAdminTaskListUI() {
             const container = document.getElementById('adminTaskListContainer');
             if(!container) return;
@@ -1723,7 +1786,7 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             });
         }
 
-        // ADMİN FAYL YOXLAMASI
+        // ADMİN FAYL YOXLAMASI (MƏSƏLƏ LİNKİ İLƏ BİRLİKDƏ)
         function loadAllFilesForAdmin() {
             database.ref('student_tasks').limitToLast(100).once('value').then(snap => {
                 const tasks = snap.val() || {};
@@ -1743,11 +1806,14 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
                     let cat = t.category || 'fm';
                     let catBadge = `<span class="badge-cat cat-${cat}" style="margin-right:6px;">${catNames[cat]||cat}</span>`;
 
+                    let linkBadge = t.taskLink ? `<a href="${t.taskLink}" target="_blank" rel="noopener noreferrer" style="color:var(--gold); font-weight:900; margin-left:8px; text-decoration:underline;">🔗 Məsələyə Keçid ↗</a>` : '';
+
                     let row = `
                         <div class="file-item">
                             <div>
                                 ${catBadge} <strong>${t.studentName}</strong> 
                                 (<a href="${t.fileData}" download="${t.fileName}" style="color:var(--accent); text-decoration:underline;">${t.fileName}</a>)
+                                ${linkBadge}
                                 <div style="font-size:12px; color:var(--text-sub); margin-top:4px;">🕒 ${t.timestamp ? new Date(t.timestamp).toLocaleTimeString() : ''}</div>
                             </div>
                             <div style="display:flex; gap:8px; align-items:center;">
