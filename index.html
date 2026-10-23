@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>TT-08 Proqram Saytı (V3.5 Tam Qüsursuz)</title>
+    <title>TT-08 Proqram Saytı (V3.6 Pro)</title>
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
@@ -43,10 +43,9 @@
             overflow-x: hidden;
         }
         .container { max-width: 1300px; margin: 0 auto; }
-        
         .card { background-color: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; padding: 20px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); margin-bottom: 20px; }
 
-        /* HEADER & AUTH */
+        /* HEADER */
         .header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; margin-bottom: 10px; }
         .header-title-box h1 { margin: 0; font-size: 24px; font-weight: 900; color: var(--text-main); display: flex; align-items: center; gap: 10px; }
         .version-badge { background-color: var(--accent); color: #fff; font-size: 11px; padding: 4px 10px; border-radius: 12px; cursor: pointer; font-weight: 900; border: none; }
@@ -55,7 +54,6 @@
         .theme-toggle:hover { background: var(--card-hover); }
 
         .lang-select { background: var(--card-bg); border: 1px solid var(--border); color: var(--text-main); font-size: 14px; font-weight: 800; padding: 8px 12px; border-radius: 10px; cursor: pointer; outline: none; transition: 0.2s; font-family: inherit; }
-        .lang-select:hover { border-color: var(--accent); }
 
         .auth-widget { display: flex; align-items: center; gap: 12px; padding: 8px 16px; border-radius: 14px; border: 1px solid var(--border); background: var(--card-bg); }
         .auth-btn { background: var(--accent); color: #fff; font-weight: 800; border: none; padding: 10px 20px; border-radius: 10px; cursor: pointer; transition: 0.2s; }
@@ -175,6 +173,13 @@
         .file-list-inner { padding: 15px; min-height: 150px; max-height: 500px; overflow-y: auto; }
         .file-item { background: var(--card-bg); padding: 15px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
 
+        .badge-cat { padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 900; color: #fff; display: inline-block; }
+        .cat-fm { background: var(--accent); }
+        .cat-stepping { background: #10b981; }
+        .cat-e_olimp { background: #f59e0b; }
+        .cat-codesources { background: #8b5cf6; }
+        .cat-hackerrank { background: #059669; }
+
         /* MODALS */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--modal-bg); justify-content: center; align-items: center; z-index: 20000; }
         .modal-content { background: var(--card-bg); padding: 30px; border-radius: 20px; max-width: 500px; width: 90%; max-height: 85vh; overflow-y: auto; border: 1px solid var(--border); position: relative; }
@@ -209,7 +214,7 @@
         <!-- HEADER -->
         <div class="header card">
             <div class="header-title-box">
-                <h1 id="txtTitle">🏆 TT-08 Proqram Saytı <span class="version-badge" onclick="showVersionModal()">V3.5</span></h1>
+                <h1 id="txtTitle">🏆 TT-08 Proqram Saytı <span class="version-badge" onclick="showVersionModal()">V3.6</span></h1>
                 <div id="liveDateTime" style="font-size:13px; color:var(--text-sub); margin-top:6px; font-weight:800;">📅 Yüklənir...</div>
             </div>
 
@@ -249,7 +254,7 @@
             Qızıl cilalanmasa parlamaz
         </div>
 
-        <!-- ƏSAS SƏHİFƏ -->
+        <!-- ƏSAS DASHBOARD -->
         <div id="mainDashboard" class="page-view" style="display: block;">
             
             <div class="jury-board card">
@@ -328,7 +333,7 @@
             </div>
         </div>
 
-        <!-- TƏLƏBƏ PROFİLİ -->
+        <!-- TƏLƏBƏ PROFİLİ (KATEQORİYALI FAYL YÜKLƏMƏ) -->
         <div id="profilePage" class="page-view card">
             <button class="back-btn" onclick="goBackToMain()" id="txtBackBtn">⬅️ Geri Qayıt</button>
             
@@ -351,18 +356,34 @@
                 <div class="info-box"><span id="txtInfoGrowth">📊 Həftəlik Artım</span><strong id="pArtim">0</strong></div>
             </div>
 
+            <!-- FAYL YÜKLƏMƏ BÖLMƏSİ -->
             <div id="privateUploadSection" class="info-box" style="margin-bottom:20px; display:none; border: 1px solid var(--positive);">
-                <h4 id="txtUploadTitle" style="margin:0 0 15px 0; color:var(--positive); font-size:18px; font-weight:900;">📁 Fayl / Kod Yüklə</h4>
-                <div style="display:flex; gap:15px; align-items:center; flex-wrap:wrap;">
+                <h4 id="txtUploadTitle" style="margin:0 0 15px 0; color:var(--positive); font-size:18px; font-weight:900;">📁 Fayl / Tapşırıq Yüklə</h4>
+                
+                <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-bottom:12px;">
+                    <!-- Dil Seçimi -->
                     <select id="studentSubjectSelect" class="form-group" style="margin:0; width:auto;">
-                        <option value="cpp">🔵 C++ Faylı (.cpp)</option>
-                        <option value="python">🟡 Python Faylı (.py)</option>
+                        <option value="cpp">🔵 C++</option>
+                        <option value="python">🟡 Python</option>
                     </select>
-                    <input type="file" id="studentTaskFiles" multiple class="form-group" style="margin:0; width:auto; padding:10px;" accept=".cpp,.c,.py" />
-                    <button class="btn" style="background:var(--positive); color:#fff;" onclick="uploadStudentTasks()" id="txtUploadBtn">🚀 Yoxla və Göndər</button>
+
+                    <!-- Kateqoriya / Başlıq Seçimi -->
+                    <select id="studentCategorySelect" class="form-group" style="margin:0; width:auto;" onchange="updateUploadNotice()">
+                        <option value="fm">⚡ FM (Həftəlik Tapşırıq - Sİ dərhal yoxlayır)</option>
+                        <option value="stepping">🟢 Stepik (stepik.org - Admin yoxlayır)</option>
+                        <option value="e_olimp">🟠 E-Olimp (eolymp.com - Admin yoxlayır)</option>
+                        <option value="codesources">🟣 CodeSources (codesrc.ru - Admin yoxlayır)</option>
+                        <option value="hackerrank">🟢 HackerRank (hackerrank.com - Admin yoxlayır)</option>
+                    </select>
+
+                    <input type="file" id="studentTaskFiles" multiple class="form-group" style="margin:0; width:auto; padding:10px;" accept=".cpp,.c,.py,.txt,.png,.jpg,.jpeg,.pdf" />
+                    
+                    <button class="btn" style="background:var(--positive); color:#fff;" onclick="uploadStudentTasks()" id="txtUploadBtn">🚀 Göndər</button>
                 </div>
-                <div id="txtUploadNotice" style="font-size:12px; color:var(--text-sub); margin-top:10px; font-weight:800;">
-                    💡 DİQQƏT: Sistem kodu oxuyur, proqramlaşdırma sintaksisini və verilən tapşırığın alqoritmini yoxlayır. Səhv və ya aidiyyatsız kodlar avtomatik rədd ediləcək!
+
+                <div id="txtUploadNotice" style="font-size:13px; color:var(--text-sub); line-height:1.5; font-weight:800;">
+                    💡 <strong>FM Seçildikdə:</strong> Faylın adının heç bir fərqi yoxdur (məs. <code>a.cpp</code> və ya <code>kod.py</code> ola bilər). Süni intellekt yalnız daxili kod alqoritmini oxuyub dərhal bal təyin edir.<br>
+                    💡 <strong>Digər Platformalar (Stepik, E-Olimp və s.):</strong> Göndərdiyiniz həll kodları və ya skrinşotlar Admin tərəfindən yoxlanılacaq və bal müvafiq sütuna yazılacaq.
                 </div>
             </div>
             
@@ -390,7 +411,7 @@
 
             <div class="admin-nav" id="adminNavTabs">
                 <button class="admin-nav-btn active tab-students" onclick="switchAdminSubTab(event, 'students')">👥 Reytinq və Balların İdarəsi</button>
-                <button class="admin-nav-btn tab-tasksConfig" onclick="switchAdminSubTab(event, 'tasksConfig')">⚙️ Tapşırıqlar və Tələblər</button>
+                <button class="admin-nav-btn tab-tasksConfig" onclick="switchAdminSubTab(event, 'tasksConfig')">⚙️ FM Tapşırıqları və Sİ Tələbləri</button>
                 <button class="admin-nav-btn tab-pending" onclick="switchAdminSubTab(event, 'pendingFiles')">⏳ Yoxlama Gözləyən Fayllar</button>
                 <button class="admin-nav-btn tab-checked" onclick="switchAdminSubTab(event, 'checkedFiles')">✏️ Yoxlanılmış Fayllar</button>
                 <button class="admin-nav-btn tab-accounts" onclick="switchAdminSubTab(event, 'accounts')">🔐 Hesablar</button>
@@ -399,7 +420,7 @@
                 <button class="admin-nav-btn tab-logs" onclick="switchAdminSubTab(event, 'logs')">📲 Loglar</button>
             </div>
 
-            <!-- TAB 1: REYTİNQ İDARƏSİ (BALLARIN ƏLLƏ DƏYİŞDİRİLMƏSİ) -->
+            <!-- TAB 1: REYTİNQ İDARƏSİ -->
             <div id="adminTabStudents" class="admin-sub-tab">
                 <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:15px;">
                     <div style="display:flex; gap:10px; align-items:center;">
@@ -418,23 +439,23 @@
                 </div>
             </div>
 
-            <!-- TAB 2: TAPŞIRIQ TƏNZİMLƏMƏLƏRİ -->
+            <!-- TAB 2: FM TAPŞIRIQLARI VƏ Sİ ALQORİTM TƏLƏBLƏRİ -->
             <div id="adminTabTasksConfig" class="admin-sub-tab" style="display:none;">
                 <div class="info-box">
-                    <h3 style="color:var(--accent); margin-top:0;">⚙️ Tapşırıqlar, Ballar və Alqoritm Açar Sözləri</h3>
+                    <h3 style="color:var(--accent); margin-top:0;">⚙️ FM Tapşırıqları və Kod Məzmunu Tələbləri</h3>
                     <p style="color:var(--text-sub); font-size:14px; margin-bottom:15px;">
-                        Avtomatik yoxlayıcı sistem yüklənən kodun içində həm proqram məntiqini, həm də buradakı açar sözləri təhlil edir.
+                        Süni intellekt faylın adına BAXMIR! Sİ tələbənin yazdığı kodun içində buradakı açar sözləri və alqoritmik strukturu (dövr, bölmə, riyazi düstur və s.) axtarır.
                     </p>
                     
                     <div id="adminTaskListContainer" style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px;"></div>
                     
-                    <button class="btn btn-dark" style="margin-bottom: 15px; color:var(--accent); border-color:var(--accent);" onclick="addAdminTaskRow()">➕ Yeni Tapşırıq Əlavə Et</button>
+                    <button class="btn btn-dark" style="margin-bottom: 15px; color:var(--accent); border-color:var(--accent);" onclick="addAdminTaskRow()">➕ Yeni FM Tapşırığı Əlavə Et</button>
                     <br>
                     <button class="btn" onclick="saveAdminTaskConfigs()">Bütün Tapşırıqları Yadda Saxla 💾</button>
                 </div>
             </div>
 
-            <!-- TAB 3: GÖZLƏYƏN FAYLLAR -->
+            <!-- TAB 3: GÖZLƏYƏN FAYLLAR (PLATFORMA VƏ FM) -->
             <div id="adminTabPendingFiles" class="admin-sub-tab" style="display:none;">
                 <h3 style="color:var(--gold); margin-bottom: 20px; font-size:20px; font-weight:900;">
                     ⏳ Yoxlama Gözləyən Fayllar <span id="totalPendingBadge" style="background:var(--negative); color:#fff; padding:3px 10px; border-radius:12px; font-size:14px; vertical-align:middle; margin-left:8px;">0</span>
@@ -442,13 +463,13 @@
                 <div class="file-split-container">
                     <div class="file-split-box" style="border-color: #38bdf8;">
                         <div class="file-split-header" style="background:#38bdf8;">
-                            🔵 C++ Tapşırıqları <span id="cppPendingBadge" style="margin-left:auto; background:#fff; color:#000; padding:2px 8px; border-radius:8px; font-size:13px;">0</span>
+                            🔵 C++ Faylları <span id="cppPendingBadge" style="margin-left:auto; background:#fff; color:#000; padding:2px 8px; border-radius:8px; font-size:13px;">0</span>
                         </div>
                         <div id="adminPendingTasksCpp" class="file-list-inner">Yüklənir...</div>
                     </div>
                     <div class="file-split-box" style="border-color: #f59e0b;">
                         <div class="file-split-header" style="background:#f59e0b;">
-                            🟡 Python Tapşırıqları <span id="pyPendingBadge" style="margin-left:auto; background:#fff; color:#000; padding:2px 8px; border-radius:8px; font-size:13px;">0</span>
+                            🟡 Python Faylları <span id="pyPendingBadge" style="margin-left:auto; background:#fff; color:#000; padding:2px 8px; border-radius:8px; font-size:13px;">0</span>
                         </div>
                         <div id="adminPendingTasksPython" class="file-list-inner">Yüklənir...</div>
                     </div>
@@ -460,11 +481,11 @@
                 <h3 style="color:var(--accent); margin-bottom: 20px; font-size:20px; font-weight:900;">✅ Yoxlanılmış Fayllar (Nəticəni Əllə Dəyiş)</h3>
                 <div class="file-split-container">
                     <div class="file-split-box" style="border-color: #38bdf8;">
-                        <div class="file-split-header" style="background:#38bdf8;">🔵 C++ Tapşırıqları</div>
+                        <div class="file-split-header" style="background:#38bdf8;">🔵 C++ Faylları</div>
                         <div id="adminCheckedTasksCpp" class="file-list-inner" style="padding:15px;">Yüklənir...</div>
                     </div>
                     <div class="file-split-box" style="border-color: #f59e0b;">
-                        <div class="file-split-header" style="background:#f59e0b;">🟡 Python Tapşırıqları</div>
+                        <div class="file-split-header" style="background:#f59e0b;">🟡 Python Faylları</div>
                         <div id="adminCheckedTasksPython" class="file-list-inner" style="padding:15px;">Yüklənir...</div>
                     </div>
                 </div>
@@ -475,41 +496,25 @@
                 <div class="info-box"><h3 style="color:var(--text-main); margin-top:0;">🔐 Tələbə Hesabları</h3><div id="adminAccountsList" style="display:grid; gap:12px; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));"></div></div>
             </div>
 
-            <!-- TAB 6: MEDIA & SƏSLƏR (QALİB / OUTSİDER MAHNILARI) -->
+            <!-- TAB 6: MEDIA & SƏSLƏR -->
             <div id="adminTabMedia" class="admin-sub-tab" style="display:none;">
-                
                 <div class="info-box" style="border: 2px solid var(--gold); margin-bottom:20px;">
                     <h3 style="color:var(--gold); margin-top:0;">🎵 Saytdaxili Musiqi və Səs Tənzimləmələri</h3>
-                    <p style="font-size:13px; color:var(--text-sub);">
-                        Qaliblər və ya Outsiderlər pəncərəsi açılanda çalınacaq səsin linkini daxil edin. Mahnı kənar sayta atmadan, saytın öz daxilində oxudulacaq.
-                    </p>
                     <div class="form-group">
-                        <label>🏆 Qaliblər Mahnısı Linki (MP3/WAV/Audio URL):</label>
+                        <label>🏆 Qaliblər Mahnısı Linki (MP3/Audio URL):</label>
                         <div style="display:flex; gap:10px;">
                             <input type="url" id="inpAudioWinner" placeholder="https://example.com/winner.mp3" />
                             <button class="btn btn-dark" onclick="testAudio('winner')">▶ Dinlə</button>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label>😭 Outsiderlər Mahnısı Linki (MP3/WAV/Audio URL):</label>
+                        <label>😭 Outsiderlər Mahnısı Linki (MP3/Audio URL):</label>
                         <div style="display:flex; gap:10px;">
                             <input type="url" id="inpAudioOutsider" placeholder="https://example.com/outsider.mp3" />
                             <button class="btn btn-dark" onclick="testAudio('outsider')">▶ Dinlə</button>
                         </div>
                     </div>
                     <button class="btn btn-gold" onclick="saveAudioSettings()">Musiqiləri Yadda Saxla 💾</button>
-                </div>
-
-                <div class="info-box" id="demoControlBox" style="display:none; border-color:var(--accent); margin-bottom:20px;">
-                    <h3 style="color:var(--accent); margin-top:0;">🎭 Demo Admin Hesabı İdarəsi</h3>
-                    <div style="display:flex; align-items:center; gap:15px; margin-top:10px; margin-bottom: 10px;">
-                        <span id="demoStatusText" style="font-weight:900; font-size:16px;">Status: Yüklənir...</span>
-                        <button id="btnToggleDemo" class="btn btn-gold" onclick="toggleDemoStatus()">Dəyişdir</button>
-                    </div>
-                    <div style="font-size:14px; margin-top:15px; padding-top:15px; border-top:1px solid var(--border);">
-                       İstifadə edən cihaz: <span id="demoDeviceText" style="font-weight:900; color:var(--text-main);">Yoxlanılır...</span> 
-                       <button class="btn btn-admin" style="padding:4px 8px; font-size:12px; margin-left:10px;" onclick="kickDemo()">Cihazı Çıxart</button>
-                    </div>
                 </div>
 
                 <div class="info-box" style="margin-bottom:20px;">
@@ -549,37 +554,37 @@
                 <div id="tabBtnReg" class="auth-tab-btn" onclick="switchAuthTab('register')">Qeydiyyat</div>
             </div>
             <div id="loginForm">
-                <div class="form-group"><label id="txtLoginUserLabel">İstifadəçi / Admin adı:</label><input type="text" id="loginUsername" placeholder="Adınız..." onkeydown="if(event.key==='Enter') document.getElementById('loginPass').focus()" /></div>
-                <div class="form-group"><label id="txtLoginPassLabel">Şifrə:</label><input type="password" id="loginPass" placeholder="Şifrəniz..." onkeydown="if(event.key==='Enter') loginUser()" /></div>
-                <button class="btn" style="width:100%; margin-top:10px;" onclick="loginUser()" id="txtLoginSubmit">Daxil Ol 🚀</button>
+                <div class="form-group"><label>İstifadəçi / Admin adı:</label><input type="text" id="loginUsername" placeholder="Adınız..." onkeydown="if(event.key==='Enter') document.getElementById('loginPass').focus()" /></div>
+                <div class="form-group"><label>Şifrə:</label><input type="password" id="loginPass" placeholder="Şifrəniz..." onkeydown="if(event.key==='Enter') loginUser()" /></div>
+                <button class="btn" style="width:100%; margin-top:10px;" onclick="loginUser()">Daxil Ol 🚀</button>
             </div>
             <div id="registerForm" style="display:none;">
-                <div class="form-group"><label id="txtRegSelectLabel">Siyahıdan Adınızı Seçin:</label><select id="regNameSelect"><option value="">-- Seçin --</option></select></div>
-                <div class="form-group"><label id="txtRegPassLabel">Yeni Şifrə Yaradın:</label><input type="password" id="regPass" placeholder="Ən az 4 simvol" /></div>
-                <button class="btn btn-gold" style="width:100%; margin-top:10px;" onclick="registerUser()" id="txtRegSubmit">Qeydiyyatdan Keç ✅</button>
+                <div class="form-group"><label>Siyahıdan Adınızı Seçin:</label><select id="regNameSelect"><option value="">-- Seçin --</option></select></div>
+                <div class="form-group"><label>Yeni Şifrə Yaradın:</label><input type="password" id="regPass" placeholder="Ən az 4 simvol" /></div>
+                <button class="btn btn-gold" style="width:100%; margin-top:10px;" onclick="registerUser()">Qeydiyyatdan Keç ✅</button>
             </div>
-            <button class="btn btn-dark" style="width:100%; margin-top:15px;" onclick="closeModal('authModal')" id="txtCloseAuth">Bağla</button>
+            <button class="btn btn-dark" style="width:100%; margin-top:15px;" onclick="closeModal('authModal')">Bağla</button>
         </div>
     </div>
 
     <div id="winnersModal" class="modal">
         <div class="modal-content" style="text-align:center;">
             <div class="abartili-stickers">🎊 🥳 🍾 🎉 🏆 👑</div>
-            <h1 id="txtWinnersModalTitle" style="color:var(--gold); font-weight:900; margin-top:0;">👑 QALİBLƏR 🏆</h1>
+            <h1 style="color:var(--gold); font-weight:900; margin-top:0;">👑 QALİBLƏR 🏆</h1>
             <div id="winnersListGrid" class="winners-container-v3"></div>
-            <span onclick="playBlackCatVideo()" style="color:var(--text-sub); font-size:12px; font-weight:800; cursor:pointer;" id="txtCatVideo">🐈 Sürpriz Video</span><br>
-            <button class="btn btn-gold" style="width:100%; margin-top:15px;" onclick="closeModalCustom('winnersModal')" id="txtWinnersClose">Möhtəşəm!</button>
+            <span onclick="playBlackCatVideo()" style="color:var(--text-sub); font-size:12px; font-weight:800; cursor:pointer;">🐈 Sürpriz Video</span><br>
+            <button class="btn btn-gold" style="width:100%; margin-top:15px;" onclick="closeModalCustom('winnersModal')">Möhtəşəm!</button>
         </div>
     </div>
     
     <div id="outsidersModal" class="modal">
         <div class="modal-content" style="text-align:center;">
             <div class="abartili-stickers">😭 📉 🤦‍♂️ 💔 😴 🗑️</div>
-            <h1 id="txtOutsidersModalTitle" style="color:var(--negative); font-weight:900; margin-top:0;">😭 OUTSİDERLƏR 😴</h1>
+            <h1 style="color:var(--negative); font-weight:900; margin-top:0;">😭 OUTSİDERLƏR 😴</h1>
             <div id="outsidersListGrid" style="display:flex; justify-content:center; gap:15px; flex-wrap:wrap; margin:20px 0;"></div>
             <div style="font-size:14px; font-style:italic; color:var(--text-main); margin:15px 0; text-align:center; white-space:pre-line; padding:15px; background:var(--bg-color); border-radius:10px; border:1px solid var(--border);">Tərpənmə, amandır, bala, qəflətdən ayılma!
 Açma gözünü, xabi-cəhalətdən ayılma!</div>
-            <button class="btn btn-admin" style="width:100%;" onclick="closeModalCustom('outsidersModal')" id="txtOutsidersClose">Bağla</button>
+            <button class="btn btn-admin" style="width:100%;" onclick="closeModalCustom('outsidersModal')">Bağla</button>
         </div>
     </div>
     
@@ -592,31 +597,30 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
 
     <div id="feedbackModal" class="modal">
         <div class="modal-content">
-            <h2 id="txtFbModalTitle" style="color:var(--accent); margin-top:0; font-weight:900;">💬 Feedback</h2>
-            <div class="form-group"><label id="txtFbNameLabel">Adınız:</label><input type="text" id="fbName" /></div>
-            <div class="form-group"><label id="txtFbMsgLabel">Mesajınız:</label><textarea id="fbMsg" rows="4"></textarea></div>
-            <button class="btn" style="width:100%;" onclick="sendFeedback()" id="txtFbSend">Göndər</button>
-            <button class="btn btn-dark" style="width:100%; margin-top:10px;" onclick="closeModal('feedbackModal')" id="txtFbClose">Bağla</button>
+            <h2 style="color:var(--accent); margin-top:0; font-weight:900;">💬 Feedback</h2>
+            <div class="form-group"><label>Adınız:</label><input type="text" id="fbName" /></div>
+            <div class="form-group"><label>Mesajınız:</label><textarea id="fbMsg" rows="4"></textarea></div>
+            <button class="btn" style="width:100%;" onclick="sendFeedback()">Göndər</button>
+            <button class="btn btn-dark" style="width:100%; margin-top:10px;" onclick="closeModal('feedbackModal')">Bağla</button>
         </div>
     </div>
 
     <div id="versionModal" class="modal">
         <div class="modal-content" style="max-width:600px;">
-            <h2 id="txtVersionModalTitle" style="color:var(--accent); margin-top:0; font-weight:900;">🚀 Yeniliklər Tarixçəsi</h2>
+            <h2 style="color:var(--accent); margin-top:0; font-weight:900;">🚀 Versiya 3.6 Yenilikləri</h2>
             <div style="padding:15px; border:1px solid var(--border); border-radius:12px; background:var(--bg-color);">
-                <h3 style="color:var(--accent); margin:0 0 10px 0;">🌟 Versiya 3.5</h3>
                 <ul style="font-size:14px; color:var(--text-sub); line-height:1.6; margin:0; padding-left:20px;">
-                    <li>Admin panelində balların həm tək-tək, həm də toplu şəkildə qüsursuz yadda saxlanılması təmin edildi.</li>
-                    <li>Admin tərəfindən Qaliblər və Outsiderlər üçün xüsusi musiqi linklərinin təyin edilməsi və saytdaxili oxunması funksiyası əlavə olundu.</li>
-                    <li>Süni intellekt kod yoxlaması tam yeniləndi: aidiyyatsız/sayt faylları rədd edilir, yalnız doğru alqoritmli proqram kodlarına bal verilir və rədd səbəbləri göstərilir.</li>
+                    <li><strong>Platforma Yükləmələri:</strong> Stepik, E-Olimp, CodeSources və HackerRank tapşırıqları birbaşa Admin tərəfindən yoxlanılır və bal müvafiq sütuna yazılır.</li>
+                    <li><strong>Mükəmməl Sİ Kodu Yoxlaması:</strong> Sİ fayl adına baxmır. Yalnız daxili proqram kodunun alqoritmini oxuyub dərhal qərar verir.</li>
+                    <li><strong>Saytdaxili Səs İdarəsi:</strong> Qalib və Outsider mahnıları admin tərəfindən tənzimlənir və heç yerə yönləndirmədən saytda çalınır.</li>
                 </ul>
             </div>
-            <button class="btn" style="width:100%; margin-top:15px;" onclick="closeModal('versionModal')" id="txtVersionClose">Bağla</button>
+            <button class="btn" style="width:100%; margin-top:15px;" onclick="closeModal('versionModal')">Bağla</button>
         </div>
     </div>
 
     <script>
-        // FIREBASE TƏNZİMLƏNMƏSİ
+        // FIREBASE İNİT
         const firebaseConfig = {
             apiKey: "AIzaSyAug3XL0WtYr6a-_9qcLMjiE16oEA-y5XU",
             authDomain: "phyton-and-cplus.firebaseapp.com",
@@ -629,7 +633,7 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
-        // ADMİNLƏR VƏ HÜQUQLAR
+        // CREDENTIALS
         const ADMIN_CREDENTIALS = { "jagermaster": "1002", "chivas": "turan2008", "jameson": "kenan69", "rəho": "poni1813", "reho": "poni1813", "demo": "demo123" };
         const ADMIN_ROLES = { "jagermaster": "master", "chivas": "admin", "jameson": "admin", "rəho": "restricted", "reho": "restricted", "demo": "demo" };
         const ADMIN_TO_STUDENT_MAP = { "jagermaster": "Süleymanzadə Aqşin", "chivas": "Məmmədli Turan", "jameson": "Gülverdiyev Kənan", "rəho": "Əlizadə Rəhimə", "reho": "Əlizadə Rəhimə" };
@@ -649,14 +653,25 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
         const DEFAULT_AVATAR_URL = "https://svgsilh.com/svg/1300331.svg";
         const FOUNDERS = ["Süleymanzadə Aqşin", "Məmmədli Turan", "Gülverdiyev Kənan"];
 
-        // Standart ehtiyat səslər
         const DEFAULT_AUDIO_WINNER = "https://www.myinstants.com/media/sounds/victoryff.mp3";
         const DEFAULT_AUDIO_OUTSIDER = "https://www.myinstants.com/media/sounds/sad-trombone.mp3";
 
         let globalData = { cpp: [], python: [], common: [] };
+        
+        // FM TAPŞIRIQLARI VƏ ALQORİTM TƏLƏBLƏRİ
         let dynamicTasksConfig = [
-            { name: "n-ci sadə ədədin tapılması", points: 50, keywords: "prime,sadə,%,sqrt,dövr" },
-            { name: "Vigenere Şifrəsi", points: 75, keywords: "vigenere,cipher,şifrə,key,26" }
+            { 
+                name: "n-ci sadə ədədin tapılması", 
+                points: 50, 
+                requiredLogic: ["%", "for", "prime"],
+                desc: "Sadə ədəd məntiqi (bölmə %, dövrlər for/while və ya isprime funksiyası)"
+            },
+            { 
+                name: "Vigenere Şifrəsi", 
+                points: 75, 
+                requiredLogic: ["26", "key", "ord"],
+                desc: "Vigenere məntiqi (açar, 26 əlifba sürüşdürməsi və ya mod 26)"
+            }
         ];
         
         let currentTab = 'cpp';
@@ -668,7 +683,6 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
 
         let currentUser = null; 
         let currentUserRole = null; 
-        let demoIsActive = false;
         let blackCatVideoData = null;
         let unreadFeedbackCount = 0;
         let emojiInterval = null;
@@ -676,84 +690,23 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
         let customAudioWinner = DEFAULT_AUDIO_WINNER;
         let customAudioOutsider = DEFAULT_AUDIO_OUTSIDER;
 
-        // DİL TƏRCÜMƏLƏRİ
-        const translations = {
-            az: { title: "🏆 TT-08 Proqram Saytı", goldenSlogan: "Qızıl cilalanmasa parlamaz", shameBannerText: "⚠️ SHAME ON YOU! ⚠️", loginBtn: "🔐 Giriş", logoutBtn: "Çıxış", roleStudent: "TƏLƏBƏ", juryTitle: "👑 Münsiflər Heyəti (Jüri)", masterRole: "Baş Admin (Master)", adminRole: "Admin", deadlineTitle: "⏳ TAPŞIRIQ QƏBULU DEADLİNE:", noDeadline: "Təyin edilməyib", groupPhotoTitle: "📸 Bizim Qrupumuz", topLeaders: "🏆 Həftənin Liderləri", prevLeaders: "🥈 Keçən Həftənin Liderləri", outsidersBoard: "😴 Outsiderlər", monthlyLeaders: "🏆 Aylıq Liderlər", btnWinners: "🎉 Həftənin Qalibləri", btnOutsiders: "😴 Həftənin Outsiderləri", btnFeedback: "💬 Feedback Göndər", btnRefresh: "🔄 Yenilə", backBtn: "⬅️ Geri Qayıt", infoMajor: "🎓 İxtisası", infoCourse: "📚 Kursu", infoDob: "🎂 Təvəllüd", infoAge: "⏳ Yaş", infoGender: "👤 Cinsiyyət", infoBirthPlace: "📍 Doğulduğu Yer", infoRating: "⭐ Cari Reytinq (Ümumi)", infoGrowth: "📊 Həftəlik Artım", uploadTitle: "📁 Fayl / Kod Yüklə", uploadBtn: "🚀 Yoxla və Göndər", uploadNotice: "💡 DİQQƏT: Sistem kodu oxuyur, proqramlaşdırma sintaksisini və alqoritmi yoxlayır. Səhv kodlar qəbul edilməyəcək!", publicMsg: "(Fayl yükləmə bölməsi yalnız bu hesabın sahibinə göstərilir)", uploadedFilesStatus: "📄 Yüklənilmiş Faylların Vəziyyəti və Nəticəsi", chartTitle: "📈 Həftəlik Qazanılan Bal Diaqramı", adminHeader: "⚙️ Admin Control Panel" },
-            ru: { title: "🏆 Программный сайт TT-08", goldenSlogan: "Золото не блестит без полировки", shameBannerText: "⚠️ SHAME ON YOU! ⚠️", loginBtn: "🔐 Войти", logoutBtn: "Выйти", roleStudent: "СТУДЕНТ", juryTitle: "👑 Жюри", masterRole: "Главный админ", adminRole: "Админ", deadlineTitle: "⏳ ДЕДЛАЙН:", noDeadline: "Не установлено", groupPhotoTitle: "📸 Наша Группа", topLeaders: "🏆 Лидеры Недели", prevLeaders: "🥈 Прошлая Неделя", outsidersBoard: "😴 Аутсайдеры", monthlyLeaders: "🏆 Лидеры Месяца", btnWinners: "🎉 Победители", btnOutsiders: "😴 Аутсайдеры", btnFeedback: "💬 Отзыв", btnRefresh: "🔄 Обновить", backBtn: "⬅️ Назад", infoMajor: "🎓 Специальность", infoCourse: "📚 Курс", infoDob: "🎂 Дата рождения", infoAge: "⏳ Возраст", infoGender: "👤 Пол", infoBirthPlace: "📍 Место рождения", infoRating: "⭐ Текущий Рейтинг", infoGrowth: "📊 Рост", uploadTitle: "📁 Загрузить код", uploadBtn: "🚀 Проверить и отправить", uploadNotice: "💡 Система проверяет синтаксис и логику алгоритма.", publicMsg: "(Доступно только владельцу)", uploadedFilesStatus: "📄 Статус файлов", chartTitle: "📈 График балов", adminHeader: "⚙️ Панель управления" },
-            en: { title: "🏆 TT-08 Program Site", goldenSlogan: "Gold does not shine without polishing", shameBannerText: "⚠️ SHAME ON YOU! ⚠️", loginBtn: "🔐 Login", logoutBtn: "Logout", roleStudent: "STUDENT", juryTitle: "👑 Jury Board", masterRole: "Head Admin", adminRole: "Admin", deadlineTitle: "⏳ DEADLINE:", noDeadline: "Not set", groupPhotoTitle: "📸 Our Group", topLeaders: "🏆 Weekly Leaders", prevLeaders: "🥈 Previous Week", outsidersBoard: "😴 Outsiders", monthlyLeaders: "🏆 Monthly Leaders", btnWinners: "🎉 Winners", btnOutsiders: "😴 Outsiders", btnFeedback: "💬 Feedback", btnRefresh: "🔄 Refresh", backBtn: "⬅️ Back", infoMajor: "🎓 Major", infoCourse: "📚 Course", infoDob: "🎂 Birthdate", infoAge: "⏳ Age", infoGender: "👤 Gender", infoBirthPlace: "📍 Birth Place", infoRating: "⭐ Current Rating", infoGrowth: "📊 Growth", uploadTitle: "📁 Upload Code", uploadBtn: "🚀 Verify & Submit", uploadNotice: "💡 AI verifies algorithm and syntax. Incorrect files rejected!", publicMsg: "(Visible only to account owner)", uploadedFilesStatus: "📄 Uploaded Files Status", chartTitle: "📈 Points Chart", adminHeader: "⚙️ Admin Panel" },
-            tr: { title: "🏆 TT-08 Program Sitesi", goldenSlogan: "Altın cilalanmasa parlamaz", shameBannerText: "⚠️ SHAME ON YOU! ⚠️", loginBtn: "🔐 Giriş", logoutBtn: "Çıkış", roleStudent: "ÖĞRENCİ", juryTitle: "👑 Jüri Heyeti", masterRole: "Baş Admin", adminRole: "Admin", deadlineTitle: "⏳ SON TARİH:", noDeadline: "Belirlenmedi", groupPhotoTitle: "📸 Grubumuz", topLeaders: "🏆 Haftanın Liderleri", prevLeaders: "🥈 Geçen Hafta", outsidersBoard: "😴 Düşükler", monthlyLeaders: "🏆 Aylık Liderler", btnWinners: "🎉 Kazananlar", btnOutsiders: "😴 Düşükler", btnFeedback: "💬 Bildirim", btnRefresh: "🔄 Yenile", backBtn: "⬅️ Geri", infoMajor: "🎓 Bölümü", infoCourse: "📚 Sınıfı", infoDob: "🎂 Doğum Tarihi", infoAge: "⏳ Yaş", infoGender: "👤 Cinsiyet", infoBirthPlace: "📍 Doğum Yeri", infoRating: "⭐ Puan", infoGrowth: "📊 Artış", uploadTitle: "📁 Kod Yükle", uploadBtn: "🚀 Kontrol Et & Gönder", uploadNotice: "💡 Sistem kodu ve algoritmayı denetler.", publicMsg: "(Sadece hesap sahibi görebilir)", uploadedFilesStatus: "📄 Dosya Durumu", chartTitle: "📈 Puan Grafiği", adminHeader: "⚙️ Admin Paneli" }
-        };
-
-        let currentLang = localStorage.getItem('site_lang') || 'az';
-        function changeLanguage(lang) {
-            currentLang = lang;
-            localStorage.setItem('site_lang', lang);
-            document.getElementById('langSelect').value = lang;
-            applyTranslations();
-        }
-
-        function applyTranslations() {
-            const t = translations[currentLang] || translations['az'];
-            document.getElementById('txtTitle').innerHTML = t.title + ' <span class="version-badge" onclick="showVersionModal()">V3.5</span>';
-            document.getElementById('txtGoldenSlogan').innerText = t.goldenSlogan;
-            document.getElementById('shameBanner').innerText = t.shameBannerText;
-            document.getElementById('txtLoginBtn').innerText = t.loginBtn;
-            document.getElementById('txtLogoutBtn').innerText = t.logoutBtn;
-            document.getElementById('txtJuryTitle').innerText = t.juryTitle;
-            document.getElementById('txtMasterRole').innerText = t.masterRole;
-            document.getElementById('txtAdminRole').innerText = t.adminRole;
-            document.getElementById('txtAdminRole2').innerText = t.adminRole;
-            document.getElementById('txtDeadlineTitle').innerText = t.deadlineTitle;
-            document.getElementById('txtGroupPhotoTitle').innerText = t.groupPhotoTitle;
-            document.getElementById('txtTopLeaders').innerText = t.topLeaders;
-            document.getElementById('txtPrevLeaders').innerText = t.prevLeaders;
-            document.getElementById('txtOutsidersBoard').innerText = t.outsidersBoard;
-            document.getElementById('txtMonthlyLeaders').innerText = t.monthlyLeaders;
-            document.getElementById('txtBtnWinners').innerText = t.btnWinners;
-            document.getElementById('txtBtnOutsiders').innerText = t.btnOutsiders;
-            document.getElementById('txtBtnFeedback').innerText = t.btnFeedback;
-            document.getElementById('txtBtnRefresh').innerText = t.btnRefresh;
-            document.getElementById('txtBackBtn').innerText = t.backBtn;
-            document.getElementById('txtInfoMajor').innerText = t.infoMajor;
-            document.getElementById('txtInfoCourse').innerText = t.infoCourse;
-            document.getElementById('txtInfoDob').innerText = t.infoDob;
-            document.getElementById('txtInfoAge').innerText = t.infoAge;
-            document.getElementById('txtInfoGender').innerText = t.infoGender;
-            document.getElementById('txtInfoBirthPlace').innerText = t.infoBirthPlace;
-            document.getElementById('txtInfoRating').innerText = t.infoRating;
-            document.getElementById('txtInfoGrowth').innerText = t.infoGrowth;
-            document.getElementById('txtUploadTitle').innerText = t.uploadTitle;
-            document.getElementById('txtUploadBtn').innerText = t.uploadBtn;
-            document.getElementById('txtUploadNotice').innerText = t.uploadNotice;
-            document.getElementById('publicViewMsg').innerText = t.publicMsg;
-            document.getElementById('txtUploadedFilesStatus').innerText = t.uploadedFilesStatus;
-            document.getElementById('txtChartTitle').innerText = t.chartTitle;
-            document.getElementById('welcomeAdmin').innerText = t.adminHeader;
-            document.getElementById('txtAdminBack').innerText = t.backBtn;
-        }
-
-        // INIT & LISTENERS
+        // INIT
         window.onload = () => {
             initTheme();
-            document.getElementById('langSelect').value = currentLang;
-            applyTranslations();
             history.replaceState({page: 'mainDashboard'}, "", window.location.pathname);
             setInterval(updateLiveDateTime, 1000);
             checkSession();
             
-            // Səs parametrlərini yüklə
             database.ref('settings/audio_winner').on('value', snap => {
                 customAudioWinner = snap.val() || DEFAULT_AUDIO_WINNER;
                 document.getElementById('audioWinner').src = customAudioWinner;
-                const inp = document.getElementById('inpAudioWinner');
-                if(inp) inp.value = snap.val() || '';
+                const inp = document.getElementById('inpAudioWinner'); if(inp) inp.value = snap.val() || '';
             });
 
             database.ref('settings/audio_outsider').on('value', snap => {
                 customAudioOutsider = snap.val() || DEFAULT_AUDIO_OUTSIDER;
                 document.getElementById('audioOutsider').src = customAudioOutsider;
-                const inp = document.getElementById('inpAudioOutsider');
-                if(inp) inp.value = snap.val() || '';
+                const inp = document.getElementById('inpAudioOutsider'); if(inp) inp.value = snap.val() || '';
             });
 
             database.ref('settings/dynamic_tasks').on('value', snap => {
@@ -763,14 +716,10 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             });
 
             database.ref('students_data').on('value', snap => { 
-                if(snap.val()) {
-                    globalData = snap.val(); 
-                }
+                if(snap.val()) globalData = snap.val(); 
                 renderTable(); 
                 updateJuryAvatars();
-                if(currentUserRole && currentUserRole !== 'student') {
-                    renderAdminBody(); 
-                }
+                if(currentUserRole && currentUserRole !== 'student') renderAdminBody(); 
                 updateAuthWidget();
             });
             
@@ -818,29 +767,20 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             document.querySelectorAll('.page-view').forEach(p => p.style.display = 'none');
             document.getElementById(pageId).style.display = 'block';
             window.scrollTo(0,0);
-            if(pageId !== 'mainDashboard') {
-                history.pushState({page: pageId}, "", "#" + pageId);
-            } else {
-                history.pushState({page: 'mainDashboard'}, "", window.location.pathname);
-            }
+            if(pageId !== 'mainDashboard') history.pushState({page: pageId}, "", "#" + pageId);
+            else history.pushState({page: 'mainDashboard'}, "", window.location.pathname);
         }
 
         function goBackToMain() { 
-            if(history.state && history.state.page !== 'mainDashboard') {
-                history.back(); 
-            } else {
-                openPage('mainDashboard'); 
-            }
+            if(history.state && history.state.page !== 'mainDashboard') history.back(); 
+            else openPage('mainDashboard'); 
         }
 
         window.addEventListener('popstate', (e) => {
             document.querySelectorAll('.page-view').forEach(p => p.style.display = 'none');
             document.querySelectorAll('.modal').forEach(m => m.style.display = 'none');
-            if (e.state && e.state.page) {
-                document.getElementById(e.state.page).style.display = 'block';
-            } else {
-                document.getElementById('mainDashboard').style.display = 'block';
-            }
+            if (e.state && e.state.page) document.getElementById(e.state.page).style.display = 'block';
+            else document.getElementById('mainDashboard').style.display = 'block';
             clearInterval(emojiInterval);
         });
 
@@ -864,32 +804,19 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             }
         }
 
-        // SƏS FUNKSİYALARI (ADMIN PANEL VƏ MODALLAR)
         function saveAudioSettings() {
             const winVal = document.getElementById('inpAudioWinner').value.trim();
             const outVal = document.getElementById('inpAudioOutsider').value.trim();
-
             database.ref('settings/audio_winner').set(winVal);
             database.ref('settings/audio_outsider').set(outVal).then(() => {
-                alert("✅ Musiqi linkləri uğurla yadda saxlanıldı!");
-                logActivity("Admin qələbə/outsider musiqilərini yenilədi.");
+                alert("✅ Musiqi linkləri yadda saxlanıldı!");
             });
         }
 
         function testAudio(type) {
             let src = type === 'winner' ? (document.getElementById('inpAudioWinner').value.trim() || customAudioWinner) : (document.getElementById('inpAudioOutsider').value.trim() || customAudioOutsider);
             let aud = new Audio(src);
-            aud.play().catch(e => alert("Səs oxunarkən xəta: Linkin birbaşa audio faylı (.mp3) olduğuna əmin olun!"));
-        }
-
-        // AUTH & LOGLAR
-        async function logActivity(actionMsg) {
-            if(!currentUser) return;
-            database.ref('activity_logs').push({ 
-                user: currentUser, 
-                action: actionMsg, 
-                timestamp: new Date().toISOString() 
-            }).catch(e => console.log(e));
+            aud.play().catch(e => alert("Səs oxunmadı! Birbaşa MP3 linki olduğundan əmin olun."));
         }
 
         function checkSession() {
@@ -970,14 +897,11 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
         function registerUser() {
             const name = document.getElementById('regNameSelect').value; 
             const pass = document.getElementById('regPass').value.trim();
-            if (!name) return alert("Seçim edin!"); 
-            if (pass.length < 4) return alert("Şifrə min. 4 simvol.");
+            if (!name || pass.length < 4) return alert("Ad seçin və ən azı 4 simvollu şifrə yazın!");
             database.ref('user_accounts/' + name).set({ 
-                password: pass, 
-                gender: STUDENT_GENDERS[name], 
-                created_at: new Date().toISOString() 
+                password: pass, gender: STUDENT_GENDERS[name], created_at: new Date().toISOString() 
             }).then(() => {
-                alert("Qeydiyyat tamamlandı! Giriş edə bilərsiniz."); 
+                alert("Qeydiyyat tamamlandı!"); 
                 switchAuthTab('login'); 
                 document.getElementById('loginUsername').value = name;
             });
@@ -1016,12 +940,10 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             closeModal('authModal'); 
             updateAuthWidget(); 
             renderTable();
-            logActivity("Sistemə daxil oldu.");
         }
 
         function logoutUser() {
             if (!confirm("Çıxış edilsin?")) return;
-            logActivity("Çıxış etdi.");
             localStorage.removeItem('auth_user'); 
             localStorage.removeItem('auth_role');
             currentUser = null; 
@@ -1037,9 +959,8 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
         }
 
         function updateLiveDateTime() {
-            const options = { day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
             const dtEl = document.getElementById('liveDateTime'); 
-            if(dtEl) dtEl.innerText = "📅 " + new Date().toLocaleDateString('az-AZ', options);
+            if(dtEl) dtEl.innerText = "📅 " + new Date().toLocaleDateString('az-AZ', { day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' });
         }
 
         function switchTab(tabName) { 
@@ -1101,7 +1022,7 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
                 const founderBadge = FOUNDERS.includes(item.ad) ? '<span class="founder-badge">👑 JÜRİ</span>' : '';
                 const rankIcon = index === 0 ? '🥇' : (index === 1 ? '🥈' : (index === 2 ? '🥉' : (index + 1)));
                 
-                const nameHTML = '<div class="student-info"><div class="avatar"><img src="' + (item.foto || DEFAULT_AVATAR_URL) + '" alt="Ava"></div><span class="clickable-name" onclick="openProfileByName(\'' + item.ad + '\')">' + item.ad + '</span>' + founderBadge + '</div>';
+                const nameHTML = '<div class="student-info"><div class="avatar"><img src="' + (item.foto || DEFAULT_AVATAR_URL) + '"></div><span class="clickable-name" onclick="openProfileByName(\'' + item.ad + '\')">' + item.ad + '</span>' + founderBadge + '</div>';
 
                 let colsHTML = '';
                 if (currentTab === 'common') {
@@ -1164,7 +1085,7 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
 
         function sortAndRender() { renderTable(); }
 
-        // PROFİL VƏ SÜNİ İNTELLEKT KOD ANALİZATORU
+        // PROFİL GÖRÜNÜŞÜ
         function openProfileByName(studentName) {
             const student = (globalData[currentTab]||[]).find(s => s.ad === studentName) || (globalData.cpp||[]).find(s => s.ad === studentName); 
             if (!student) return;
@@ -1206,6 +1127,17 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             openPage('profilePage'); 
         }
 
+        function updateUploadNotice() {
+            const cat = document.getElementById('studentCategorySelect').value;
+            const notEl = document.getElementById('txtUploadNotice');
+            if(cat === 'fm') {
+                notEl.innerHTML = `💡 <strong>FM Seçildi:</strong> Faylın adının heç bir önəmi yoxdur (məs. <code>a.cpp</code> və ya <code>main.py</code>). Süni intellekt birbaşa kodun daxili alqoritmini yoxlayıb dərhal bal təyin edir.`;
+            } else {
+                const names = { stepping: "Stepik", e_olimp: "E-Olimp", codesources: "CodeSources", hackerrank: "HackerRank" };
+                notEl.innerHTML = `👨‍🏫 <strong>${names[cat]} Seçildi:</strong> Bu fayl Sİ tərəfindən DEYİL, birbaşa <strong>Admin tərəfindən</strong> yoxlanılacaq və təsdiq edildikdə bal cədvəldəki müvafiq <strong>${names[cat]}</strong> sütununa yazılacaq.`;
+            }
+        }
+
         function loadStudentUploadedTasksList(targetStudent) {
             database.ref('student_tasks').orderByChild('studentName').equalTo(targetStudent).on('value', snap => {
                 const tasks = snap.val(); 
@@ -1214,28 +1146,41 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
                 
                 let count = 0;
                 let html = '';
+                const catLabels = {
+                    fm: { title: "FM", cls: "cat-fm" },
+                    stepping: { title: "Stepik", cls: "cat-stepping" },
+                    e_olimp: { title: "E-Olimp", cls: "cat-e_olimp" },
+                    codesources: { title: "CodeSrc", cls: "cat-codesources" },
+                    hackerrank: { title: "HackerRank", cls: "cat-hackerrank" }
+                };
+
                 if (tasks) {
-                    Object.keys(tasks).forEach(key => {
+                    Object.keys(tasks).reverse().forEach(key => {
                         const t = tasks[key]; 
                         if(t.archived) return;
                         count++; 
                         let subjTag = (t.subject || 'cpp') === 'python' ? '🟡' : '🔵';
                         let fileSt = t.status || 'pending';
-                        
+                        let catObj = catLabels[t.category] || { title: "FM", cls: "cat-fm" };
+
                         let stText = '';
                         let stColor = 'var(--gold)';
                         if(fileSt === 'correct') {
-                            stText = `✅ Təsdiqləndi: ${t.recognizedTask} (+${t.addedPoints||0} pt)`;
+                            stText = `✅ Təsdiqləndi: ${t.recognizedTask || catObj.title} (+${t.addedPoints||0} pt)`;
                             stColor = 'var(--positive)';
                         } else if(fileSt === 'wrong') {
-                            stText = `❌ Rədd edildi (${t.rejectReason || 'Alqoritm uyğun deyil'})`;
+                            stText = `❌ Rədd edildi (${t.rejectReason || 'Alqoritm və ya şərtlər uyğun deyil'})`;
                             stColor = 'var(--negative)';
                         } else {
-                            stText = '⏳ Yoxlanılır...';
+                            stText = '⏳ Admin Yoxlamasındadır...';
+                            stColor = 'var(--gold)';
                         }
 
                         html += `<div style="margin-top:8px; padding:12px; border-radius:12px; border:1px solid ${stColor}; display:flex; justify-content:space-between; align-items:center; background:var(--card-hover); flex-wrap:wrap; gap:8px;">
-                                    <span style="color:var(--text-main); font-weight:800;">${subjTag} ${t.fileName}</span>
+                                    <div>
+                                        <span class="badge-cat ${catObj.cls}">${catObj.title}</span>
+                                        <span style="color:var(--text-main); font-weight:800; margin-left:8px;">${subjTag} ${t.fileName}</span>
+                                    </div>
                                     <span style="color:${stColor}; font-weight:900; font-size:13px;">${stText}</span>
                                  </div>`;
                     });
@@ -1244,162 +1189,194 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             });
         }
 
-        // TƏKMİLLƏŞDİRİLMİŞ SÜNİ İNTELLEKT KOD ANALİZATORU
-        function analyzeCodeContent(fileName, textContent, subject) {
-            let ext = fileName.split('.').pop().toLowerCase();
-            
-            // 1. Fayl tipi yoxlanışı
-            if (subject === 'cpp' && !['cpp', 'c', 'cc', 'cxx'].includes(ext)) {
-                return { isValid: false, reason: "Fayl C++ formatında deyil (.cpp olmalıdır)!" };
-            }
-            if (subject === 'python' && ext !== 'py') {
-                return { isValid: false, reason: "Fayl Python formatında deyil (.py olmalıdır)!" };
-            }
+        // 🧠 MÜKƏMMƏL SÜNİ İNTELLEKT KOD ANALİZATORU (FAYL ADINA BAXMIR!)
+        function aiDeepCodeAnalyzer(rawCode, subject) {
+            let code = rawCode.toLowerCase();
 
-            // 2. Dəxilsiz faylları və Sayt kodunu (HTML/CSS/JS) rədd etmə
-            const bannedKeywords = ['<!doctype html>', '<html', '<head', '<body', '<script', '<div', 'css', 'querySelector'];
-            for(let b of bannedKeywords) {
-                if(textContent.includes(b.toLowerCase())) {
-                    return { isValid: false, reason: "Sayt və ya HTML/veb kodu aşkar edildi! Yalnız proqramlaşdırma tapşırığı kodu qəbul olunur." };
+            // 1. Dəxilsiz faylları və Sayt kodunu (HTML/CSS) tam blokla
+            const forbiddenTokens = ['<!doctype html', '<html', '<head', '<body', '<script', '<div', 'css', 'queryselector', 'display:'];
+            for(let tok of forbiddenTokens) {
+                if(code.includes(tok)) {
+                    return { isValid: false, reason: "Sayt/HTML və ya format kodu aşkar edildi! Yalnız proqramlaşdırma həlli qəbul olunur." };
                 }
             }
 
-            if(textContent.trim().length < 30) {
-                return { isValid: false, reason: "Fayl daxilində kod yetərsizdir və ya boşdur!" };
+            if(code.trim().length < 35) {
+                return { isValid: false, reason: "Kod çox qısadır və ya boşdur!" };
             }
 
-            // 3. Sintaksis yoxlanışı
+            // 2. Dil Sintaksisi Yoxlanışı
             if(subject === 'cpp') {
-                if(!textContent.includes('main') || (!textContent.includes('#include') && !textContent.includes('iostream') && !textContent.includes('stdio.h'))) {
-                    return { isValid: false, reason: "C++ sintaksisi və ya main() funksiyası tapılmadı!" };
+                let hasInclude = code.includes('#include') || code.includes('iostream') || code.includes('stdio.h');
+                let hasMain = code.includes('main(') || code.includes('main (');
+                if(!hasInclude || !hasMain) {
+                    return { isValid: false, reason: "C++ sintaksisi və ya main() giriş funksiyası tapılmadı!" };
                 }
-            }
-            if(subject === 'python') {
-                if(textContent.includes('#include') || textContent.includes('{') && textContent.includes('};')) {
-                    return { isValid: false, reason: "Python faylı içərisində C/C++ sintaksisi aşkar edildi!" };
+            } else if(subject === 'python') {
+                if(code.includes('#include') || (code.includes('{') && code.includes('};'))) {
+                    return { isValid: false, reason: "Python bölməsində C/C++ sintaksisi aşkar edildi!" };
+                }
+                let hasPyTokens = code.includes('def ') || code.includes('for ') || code.includes('while ') || code.includes('print(') || code.includes('input(');
+                if(!hasPyTokens) {
+                    return { isValid: false, reason: "Düzgün Python ifadələri və ya funksiyası tapılmadı!" };
                 }
             }
 
-            // 4. Tapşırığın tanınması və alqoritmin yoxlanması
-            let matchedTask = null;
-            let earnedPoints = 0;
-            let fileLower = fileName.toLowerCase();
+            // 3. Alqoritmin Məzmun Yoxlanışı (Fayl adı burada qətiyyən yoxlanılmır!)
+            let bestMatch = null;
 
             for(let task of dynamicTasksConfig) {
-                let nameLower = task.name.toLowerCase();
-                let keys = task.keywords ? task.keywords.toLowerCase().split(',') : [];
+                let taskName = task.name.toLowerCase();
 
-                let hasKeyword = keys.some(k => k.trim() && (fileLower.includes(k.trim()) || textContent.includes(k.trim())));
-                let hasName = nameLower.split(' ').some(w => w.length > 3 && (fileLower.includes(w) || textContent.includes(w)));
-
-                if(hasKeyword || hasName) {
-                    matchedTask = task.name;
-                    earnedPoints = task.points || 50;
-
-                    // Alqoritmin dərin yoxlanışı
-                    if(nameLower.includes("sadə") || nameLower.includes("prime")) {
-                        let hasModulo = textContent.includes('%');
-                        let hasLoop = textContent.includes('for') || textContent.includes('while');
-                        if(!hasModulo || !hasLoop) {
-                            return { isValid: false, reason: "Sadə ədəd alqoritmi üçün tələb olunan dövr və ya bölünmə (%) məntiqi tapılmadı!" };
-                        }
+                // SADƏ ƏDƏD ALQORİTMİ
+                if(taskName.includes("sadə") || taskName.includes("prime")) {
+                    let hasModulo = code.includes('%');
+                    let hasLoop = code.includes('for') || code.includes('while');
+                    let hasPrimeTokens = code.includes('prime') || code.includes('sade') || code.includes('sqrt') || code.includes('2') || code.includes('dövr');
+                    
+                    if(hasModulo && hasLoop && (hasPrimeTokens || code.includes('count') || code.includes('bool'))) {
+                        bestMatch = { taskName: task.name, points: task.points || 50 };
+                        break;
                     }
-                    if(nameLower.includes("vigenere") || nameLower.includes("şifrə")) {
-                        let hasMathShift = textContent.includes('26') || textContent.includes('ord(') || textContent.includes('+') || textContent.includes('%');
-                        if(!hasMathShift) {
-                            return { isValid: false, reason: "Vigenere şifrələməsi üçün riyazi sürüşdürmə və ya açar məntiqi tapılmadı!" };
-                        }
+                }
+
+                // VIGENERE ŞİFRƏLƏMƏ ALQORİTMİ
+                if(taskName.includes("vigenere") || taskName.includes("şifrə") || taskName.includes("cipher")) {
+                    let hasMathModulo = code.includes('26') || code.includes('% 26') || code.includes('%26');
+                    let hasKeyShift = code.includes('key') || code.includes('acar') || code.includes('ord(') || code.includes('chr(') || code.includes('+') || code.includes('-');
+                    
+                    if(hasMathModulo && hasKeyShift) {
+                        bestMatch = { taskName: task.name, points: task.points || 75 };
+                        break;
                     }
-                    break;
+                }
+
+                // ADMİN TƏRƏFİNDƏN ƏLAVƏ EDİLƏN XÜSUSİ TƏLƏBLƏR
+                if(task.requiredLogic && Array.isArray(task.requiredLogic)) {
+                    let matchedAll = task.requiredLogic.every(req => code.includes(req.toLowerCase().trim()));
+                    if(matchedAll) {
+                        bestMatch = { taskName: task.name, points: task.points || 50 };
+                        break;
+                    }
                 }
             }
 
-            if(!matchedTask) {
-                return { isValid: false, reason: "Kod heç bir aktiv tapşırığın alqoritminə və tələblərinə uyğun gəlmir!" };
+            if(!bestMatch) {
+                return { 
+                    isValid: false, 
+                    reason: "Yazılan kod heç bir aktiv FM tapşırığının alqoritminə uyğun gəlmir (Məs: Sadə ədəd və ya Vigenere məntiqi tapılmadı)." 
+                };
             }
 
-            return { isValid: true, taskName: matchedTask, points: earnedPoints };
+            return { isValid: true, taskName: bestMatch.taskName, points: bestMatch.points };
         }
 
+        // TƏLƏBƏ FAYL YÜKLƏMƏSİ (Sİ və ya ADMİN NÖVBƏSİ)
         async function uploadStudentTasks() {
             if (deadlineTimestamp && new Date().getTime() >= deadlineTimestamp) {
-                return alert("🚨 Deadline bitib! Artıq tapşırıq qəbul edilmir.");
+                return alert("🚨 Deadline bitib! Tapşırıq qəbul edilmir.");
             }
             const files = document.getElementById('studentTaskFiles').files; 
-            const defaultSubject = document.getElementById('studentSubjectSelect').value || 'cpp';
+            const subject = document.getElementById('studentSubjectSelect').value || 'cpp';
+            const category = document.getElementById('studentCategorySelect').value || 'fm';
+
             if (!files || files.length === 0) return alert("Zəhmət olmasa ən azı bir fayl seçin!");
 
-            let uploadedCount = 0;
-            let rejectedCount = 0;
-            
+            let aiAccepted = 0;
+            let aiRejected = 0;
+            let adminPending = 0;
+
             for (let i = 0; i < files.length; i++) {
                 let file = files[i];
-                let actualSubject = defaultSubject;
-                let ext = file.name.split('.').pop().toLowerCase();
-                if (['cpp', 'c'].includes(ext)) actualSubject = 'cpp';
-                else if (ext === 'py') actualSubject = 'python';
 
                 await new Promise(resolve => {
-                    const textReader = new FileReader();
-                    textReader.onload = async eText => {
-                        let rawContent = eText.target.result;
-                        let textLower = rawContent.toLowerCase();
+                    const reader = new FileReader();
 
-                        // Sİ Təhlili
-                        let analysis = analyzeCodeContent(file.name, textLower, actualSubject);
+                    // Əgər FM-dirsə, Sİ kodu mətn kimi oxuyub analiz edir
+                    if(category === 'fm') {
+                        reader.onload = async evText => {
+                            let rawCode = evText.target.result;
+                            let analysis = aiDeepCodeAnalyzer(rawCode, subject);
 
-                        const dataReader = new FileReader(); 
-                        dataReader.onload = async ev => {
-                            let base64Data = ev.target.result;
-                            
-                            if (analysis.isValid) {
-                                // Bal əlavə edilir
-                                let stList = globalData[actualSubject];
-                                if(stList) {
-                                    let idx = stList.findIndex(s => s.ad === activeProfileStudent);
-                                    if(idx > -1) {
-                                        stList[idx].fm = Number(stList[idx].fm || 0) + analysis.points;
-                                        await database.ref('students_data/' + actualSubject + '/' + idx + '/fm').set(stList[idx].fm);
+                            // Faylın dataURL-ini də alırıq
+                            const b64Reader = new FileReader();
+                            b64Reader.onload = async b64Ev => {
+                                let base64Data = b64Ev.target.result;
+
+                                if (analysis.isValid) {
+                                    // Sİ Təsdiq etdi: Bal birbaşa FM sütununa yazılır
+                                    let stList = globalData[subject];
+                                    if(stList) {
+                                        let idx = stList.findIndex(s => s.ad === activeProfileStudent);
+                                        if(idx > -1) {
+                                            stList[idx].fm = (Number(stList[idx].fm) || 0) + analysis.points;
+                                            await database.ref(`students_data/${subject}/${idx}/fm`).set(stList[idx].fm);
+                                        }
                                     }
-                                }
 
-                                await database.ref('student_tasks').push({ 
-                                    studentName: activeProfileStudent, 
-                                    fileName: file.name, 
-                                    fileData: base64Data, 
-                                    subject: actualSubject, 
-                                    status: 'correct', 
-                                    recognizedTask: analysis.taskName,
-                                    addedPoints: analysis.points,
-                                    archived: false,
-                                    timestamp: new Date().toISOString() 
-                                });
-                                uploadedCount++;
-                            } else {
-                                // Rədd edilir
-                                await database.ref('student_tasks').push({ 
-                                    studentName: activeProfileStudent, 
-                                    fileName: file.name, 
-                                    fileData: base64Data, 
-                                    subject: actualSubject, 
-                                    status: 'wrong', 
-                                    rejectReason: analysis.reason,
-                                    addedPoints: 0,
-                                    archived: false,
-                                    timestamp: new Date().toISOString() 
-                                });
-                                rejectedCount++;
-                            }
-                            resolve(); 
-                        }; 
-                        dataReader.readAsDataURL(file);
-                    };
-                    textReader.readAsText(file);
+                                    await database.ref('student_tasks').push({ 
+                                        studentName: activeProfileStudent, 
+                                        fileName: file.name, 
+                                        fileData: base64Data, 
+                                        subject: subject, 
+                                        category: 'fm',
+                                        status: 'correct', 
+                                        recognizedTask: analysis.taskName,
+                                        addedPoints: analysis.points,
+                                        archived: false,
+                                        timestamp: new Date().toISOString() 
+                                    });
+                                    aiAccepted++;
+                                } else {
+                                    // Sİ Rədd etdi: 0 bal və səbəb göstərilir
+                                    await database.ref('student_tasks').push({ 
+                                        studentName: activeProfileStudent, 
+                                        fileName: file.name, 
+                                        fileData: base64Data, 
+                                        subject: subject, 
+                                        category: 'fm',
+                                        status: 'wrong', 
+                                        rejectReason: analysis.reason,
+                                        addedPoints: 0,
+                                        archived: false,
+                                        timestamp: new Date().toISOString() 
+                                    });
+                                    aiRejected++;
+                                }
+                                resolve();
+                            };
+                            b64Reader.readAsDataURL(file);
+                        };
+                        reader.readAsText(file);
+                    } else {
+                        // Əgər Stepik, E-Olimp, CodeSources və ya HackerRank-dırsa:
+                        // Sİ YOX, BİRBAŞA ADMİN YOXLAMASINA GÖNDƏRİLİR!
+                        reader.onload = async evB64 => {
+                            let base64Data = evB64.target.result;
+                            await database.ref('student_tasks').push({ 
+                                studentName: activeProfileStudent, 
+                                fileName: file.name, 
+                                fileData: base64Data, 
+                                subject: subject, 
+                                category: category,
+                                status: 'pending', 
+                                addedPoints: 0,
+                                archived: false,
+                                timestamp: new Date().toISOString() 
+                            });
+                            adminPending++;
+                            resolve();
+                        };
+                        reader.readAsDataURL(file);
+                    }
                 });
             }
 
-            let msg = `Nəticə:\n✅ Təsdiqlənən və bal verilən: ${uploadedCount}\n`;
-            if(rejectedCount > 0) msg += `❌ Səhv/dəxilsiz olub rədd edilən: ${rejectedCount} (Səbəbi statusda qeyd olundu)`;
+            let msg = "GÖNDƏRMƏ NƏTİCƏSİ:\n";
+            if(aiAccepted > 0) msg += `✅ Sİ tərəfindən təsdiqləndi: ${aiAccepted} fayl (FM balınız artırıldı)\n`;
+            if(aiRejected > 0) msg += `❌ Sİ tərəfindən rədd edildi: ${aiRejected} fayl (Səbəbi status siyahısında)\n`;
+            if(adminPending > 0) msg += `👨‍🏫 Admin yoxlamasına göndərildi: ${adminPending} fayl (Admin yoxladıqdan sonra müvafiq sütuna yazılacaq)\n`;
+
             alert(msg);
             document.getElementById('studentTaskFiles').value = '';
             renderTable();
@@ -1408,7 +1385,6 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
         function renderStudentChart(wg) {
             const ctx = document.getElementById('studentChart').getContext('2d'); 
             if (chartInstance) chartInstance.destroy();
-            const color = '#38bdf8';
             chartInstance = new Chart(ctx, { 
                 type: 'line', 
                 data: { 
@@ -1416,7 +1392,7 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
                     datasets: [{ 
                         label: 'Artım', 
                         data: [0, Math.round(wg*0.2), Math.round(wg*0.55), Math.round(wg*0.8), wg], 
-                        borderColor: color, 
+                        borderColor: '#38bdf8', 
                         fill: true, 
                         backgroundColor: 'rgba(56, 189, 248, 0.1)', 
                         tension: 0.4 
@@ -1426,7 +1402,7 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             });
         }
 
-        // ADMİN PANEL VƏ BALLARIN ƏLLƏ DƏYİŞDİRİLMƏSİ (TAM İŞLƏK)
+        // ADMİN PANELİ VƏ REYTİNQ İDARƏSİ
         function openFullAdminPage() {
             openPage('fullAdminPage');
             renderAdminTaskListUI();
@@ -1454,7 +1430,7 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
 
             let list = globalData[adminActiveTab] || [];
             if(list.length === 0) {
-                adminBody.innerHTML = '<div style="padding:20px; color:var(--text-sub);">Bu bölmədə tələbə məlumatı yoxdur.</div>';
+                adminBody.innerHTML = '<div style="padding:20px; color:var(--text-sub);">Məlumat yoxdur.</div>';
                 return;
             }
 
@@ -1484,7 +1460,6 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             loadAllFilesForAdmin();
         }
 
-        // Tək bir tələbənin balını dərhal yadda saxlayır
         function saveSingleStudent(idx) {
             let student = globalData[adminActiveTab][idx];
             if(!student) return;
@@ -1497,13 +1472,11 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             student.kecmis_reyting = Number(document.getElementById(`inp_${idx}_kecmis`).value) || 0;
 
             database.ref(`students_data/${adminActiveTab}/${idx}`).set(student).then(() => {
-                alert(`✅ ${student.ad} üçün ballar uğurla yeniləndi!`);
+                alert(`✅ ${student.ad} üçün ballar yeniləndi!`);
                 renderTable();
-                logActivity(`Admin tək tələbə balını yenilədi: ${student.ad}`);
-            }).catch(err => alert("Xəta: " + err.message));
+            });
         }
 
-        // Bütün tələbələrin ballarını kütləvi şəkildə yadda saxlayır
         function saveAdminChanges() {
             let list = globalData[adminActiveTab];
             if(!list) return alert("Məlumat tapılmadı!");
@@ -1521,10 +1494,9 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             });
 
             database.ref(`students_data/${adminActiveTab}`).set(list).then(() => {
-                alert(`🚀 ${adminActiveTab.toUpperCase()} siyahısındakı bütün tələbələrin balları uğurla yadda saxlanıldı!`);
+                alert(`🚀 ${adminActiveTab.toUpperCase()} siyahısındakı bütün ballar yadda saxlanıldı!`);
                 renderTable();
-                logActivity(`Admin bütün balları yenilədi (${adminActiveTab})`);
-            }).catch(e => alert("Yadda saxlanılarkən xəta: " + e.message));
+            });
         }
 
         function filterAdminStudents() { 
@@ -1535,17 +1507,18 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             }); 
         }
 
-        // TAPŞIRIQ İDARƏSİ
+        // FM TAPŞIRIQ TƏNZİMLƏNMƏSİ
         function renderAdminTaskListUI() {
             const container = document.getElementById('adminTaskListContainer');
             if(!container) return;
             let html = '';
             dynamicTasksConfig.forEach((t, idx) => {
+                let logStr = t.requiredLogic ? t.requiredLogic.join(',') : '';
                 html += `
                     <div style="display:flex; gap:10px; align-items:center; background:var(--card-hover); padding:12px; border-radius:12px; border:1px solid var(--border); flex-wrap:wrap;">
-                        <input type="text" id="dt_name_${idx}" value="${t.name}" placeholder="Tapşırıq adı" class="form-group" style="flex:2; margin:0;" />
-                        <input type="number" id="dt_pts_${idx}" value="${t.points}" placeholder="Bal" class="form-group" style="flex:1; margin:0; min-width:80px;" />
-                        <input type="text" id="dt_kw_${idx}" value="${t.keywords||''}" placeholder="Açar sözlər (vergüllə)" class="form-group" style="flex:2; margin:0;" />
+                        <input type="text" id="dt_name_${idx}" value="${t.name}" placeholder="Tapşırıq adı (Məlumat üçün)" class="form-group" style="flex:2; margin:0;" />
+                        <input type="number" id="dt_pts_${idx}" value="${t.points}" placeholder="Bal" class="form-group" style="flex:1; margin:0; min-width:70px;" />
+                        <input type="text" id="dt_log_${idx}" value="${logStr}" placeholder="Kodda tələb olunanlar (vergüllə)" class="form-group" style="flex:2; margin:0;" />
                         <button class="btn btn-admin" style="padding:10px 14px;" onclick="removeAdminTaskRow(${idx})">🗑️</button>
                     </div>
                 `;
@@ -1554,7 +1527,7 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
         }
 
         function addAdminTaskRow() {
-            dynamicTasksConfig.push({ name: "Yeni Tapşırıq", points: 50, keywords: "" });
+            dynamicTasksConfig.push({ name: "Yeni FM Tapşırığı", points: 50, requiredLogic: ["for", "%"] });
             renderAdminTaskListUI();
         }
 
@@ -1568,22 +1541,23 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             dynamicTasksConfig.forEach((_, idx) => {
                 let nameInp = document.getElementById(`dt_name_${idx}`);
                 let ptsInp = document.getElementById(`dt_pts_${idx}`);
-                let kwInp = document.getElementById(`dt_kw_${idx}`);
+                let logInp = document.getElementById(`dt_log_${idx}`);
                 if(nameInp && ptsInp) {
+                    let logs = logInp ? logInp.value.split(',').map(s=>s.trim()).filter(Boolean) : [];
                     newList.push({ 
                         name: nameInp.value.trim() || "Tapşırıq", 
                         points: parseInt(ptsInp.value) || 50,
-                        keywords: kwInp ? kwInp.value.trim() : ""
+                        requiredLogic: logs
                     });
                 }
             });
             dynamicTasksConfig = newList;
             database.ref('settings/dynamic_tasks').set(dynamicTasksConfig).then(() => {
-                alert("✅ Tapşırıqlar və tələblər uğurla yadda saxlanıldı!");
+                alert("✅ FM Tapşırıqları və alqoritm tələbləri yadda saxlanıldı!");
             });
         }
 
-        // GÖZLƏYƏN VƏ YOXLANIŞDAN KEÇƏN FAYLLAR
+        // ADMİN FAYL YOXLANIŞI VƏ MÜVAFİQ SÜTUNA BAL YAZILMASI
         function loadAllFilesForAdmin() {
             database.ref('student_tasks').on('value', snap => {
                 const tasks = snap.val() || {};
@@ -1595,24 +1569,29 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
                 let countPCpp = 0, countPPy = 0;
                 let pCppHTML = '', pPyHTML = '', cCppHTML = '', cPyHTML = '';
 
-                Object.keys(tasks).forEach(key => {
+                const catNames = { fm: "FM", stepping: "Stepik", e_olimp: "E-Olimp", codesources: "CodeSources", hackerrank: "HackerRank" };
+
+                Object.keys(tasks).reverse().forEach(key => {
                     let t = tasks[key];
                     let sub = t.subject || 'cpp';
                     let status = t.status || 'pending';
+                    let cat = t.category || 'fm';
+                    let catBadge = `<span class="badge-cat cat-${cat}" style="margin-right:6px;">${catNames[cat]||cat}</span>`;
 
                     let row = `
                         <div class="file-item">
                             <div>
-                                <strong>${t.studentName}</strong> (<a href="${t.fileData}" download="${t.fileName}" style="color:var(--accent);">${t.fileName}</a>)
-                                <div style="font-size:12px; color:var(--text-sub);">🕒 ${t.timestamp ? new Date(t.timestamp).toLocaleTimeString() : ''}</div>
+                                ${catBadge} <strong>${t.studentName}</strong> 
+                                (<a href="${t.fileData}" download="${t.fileName}" style="color:var(--accent); text-decoration:underline;">${t.fileName}</a>)
+                                <div style="font-size:12px; color:var(--text-sub); margin-top:4px;">🕒 ${t.timestamp ? new Date(t.timestamp).toLocaleTimeString() : ''}</div>
                             </div>
                             <div style="display:flex; gap:8px; align-items:center;">
                                 ${status === 'pending' ? `
-                                    <button class="btn" style="background:var(--positive); padding:6px 12px; font-size:12px;" onclick="adminManualEvaluate('${key}', '${t.studentName}', '${sub}', true)">✅ Qəbul</button>
-                                    <button class="btn btn-admin" style="padding:6px 12px; font-size:12px;" onclick="adminManualEvaluate('${key}', '${t.studentName}', '${sub}', false)">❌ Rədd</button>
+                                    <button class="btn" style="background:var(--positive); padding:6px 12px; font-size:12px;" onclick="adminManualEvaluate('${key}', '${t.studentName}', '${sub}', '${cat}', true)">✅ Qəbul et və Bal ver</button>
+                                    <button class="btn btn-admin" style="padding:6px 12px; font-size:12px;" onclick="adminManualEvaluate('${key}', '${t.studentName}', '${sub}', '${cat}', false)">❌ Rədd et</button>
                                 ` : `
                                     <span style="font-weight:900; color:${status==='correct'?'var(--positive)':'var(--negative)'};">${status==='correct'?'✅ +'+t.addedPoints:'❌'}</span>
-                                    <button class="btn btn-dark" style="padding:4px 8px; font-size:11px;" onclick="adminManualEvaluate('${key}', '${t.studentName}', '${sub}', ${status!=='correct'})">Dəyiş</button>
+                                    <button class="btn btn-dark" style="padding:4px 8px; font-size:11px;" onclick="adminManualEvaluate('${key}', '${t.studentName}', '${sub}', '${cat}', ${status!=='correct'})">Dəyiş</button>
                                 `}
                             </div>
                         </div>
@@ -1625,10 +1604,10 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
                     }
                 });
 
-                if(pCpp) pCpp.innerHTML = pCppHTML || 'Gözləyən fayl yoxdur.';
-                if(pPy) pPy.innerHTML = pPyHTML || 'Gözləyən fayl yoxdur.';
-                if(cCpp) cCpp.innerHTML = cCppHTML || 'Fayl yoxdur.';
-                if(cPy) cPy.innerHTML = cPyHTML || 'Fayl yoxdur.';
+                if(pCpp) pCpp.innerHTML = countPCpp ? pCppHTML : '<div style="padding:10px; color:var(--text-sub);">Gözləyən fayl yoxdur.</div>';
+                if(pPy) pPy.innerHTML = countPPy ? pPyHTML : '<div style="padding:10px; color:var(--text-sub);">Gözləyən fayl yoxdur.</div>';
+                if(cCpp) cCpp.innerHTML = cCppHTML || '<div style="padding:10px; color:var(--text-sub);">Fayl yoxdur.</div>';
+                if(cPy) cPy.innerHTML = cPyHTML || '<div style="padding:10px; color:var(--text-sub);">Fayl yoxdur.</div>';
 
                 const tb = document.getElementById('totalPendingBadge'); if(tb) tb.innerText = countPCpp + countPPy;
                 const cb = document.getElementById('cppPendingBadge'); if(cb) cb.innerText = countPCpp;
@@ -1636,10 +1615,11 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             });
         }
 
-        async function adminManualEvaluate(key, studentName, subject, isCorrect) {
+        // ADMİN FAYLI YOXLAYANDA BALIN MÜVAFİQ BAŞLIĞA (SÜTUNA) YAZILMASI
+        async function adminManualEvaluate(key, studentName, subject, category, isCorrect) {
             let points = 0;
             if(isCorrect) {
-                let p = prompt(`${studentName} üçün neçə bal təyin edilsin?`, "50");
+                let p = prompt(`${studentName} üçün '${category.toUpperCase()}' sütununa neçə bal əlavə edilsin?`, "30");
                 if(p === null) return;
                 points = parseInt(p) || 0;
             }
@@ -1648,21 +1628,23 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             if(stList) {
                 let idx = stList.findIndex(s => s.ad === studentName);
                 if(idx > -1 && isCorrect) {
-                    stList[idx].fm = (Number(stList[idx].fm) || 0) + points;
-                    await database.ref(`students_data/${subject}/${idx}/fm`).set(stList[idx].fm);
+                    // Müvafiq sütuna yazırıq (fm, stepping, e_olimp, codesources, hackerrank)
+                    let col = category;
+                    stList[idx][col] = (Number(stList[idx][col]) || 0) + points;
+                    await database.ref(`students_data/${subject}/${idx}/${col}`).set(stList[idx][col]);
                 }
             }
 
             await database.ref(`student_tasks/${key}`).update({
                 status: isCorrect ? 'correct' : 'wrong',
                 addedPoints: points,
-                rejectReason: isCorrect ? '' : 'Admin tərəfindən rədd edildi'
+                rejectReason: isCorrect ? '' : 'Müəllim/Admin tərəfindən rədd edildi'
             });
-            alert("Nəticə yeniləndi!");
+            alert(`Nəticə yeniləndi və bal '${category}' sütununa yazıldı!`);
             renderTable();
         }
 
-        // QALİBLƏR VƏ OUTSİDERLƏR MODALI (SƏSLƏR BİRBAŞA SAYTDA OXUNUR)
+        // QALİBLƏR & OUTSİDERLƏR
         function showWinnersCelebration() {
             const list = (globalData[currentTab] || []).map(s => calculateTotals(s)).sort((a,b) => b.cari_reyting - a.cari_reyting).slice(0, 5);
             const grid = document.getElementById('winnersListGrid'); 
@@ -1687,12 +1669,8 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             grid.innerHTML = html;
             openModal('winnersModal');
 
-            // Musiqini birbaşa sayt daxilində oxutmaq
             let aw = document.getElementById('audioWinner');
-            if(aw) {
-                aw.currentTime = 0;
-                aw.play().catch(e => console.log("Audio avto-play xətası:", e));
-            }
+            if(aw) { aw.currentTime = 0; aw.play().catch(e => console.log(e)); }
             confetti({ particleCount: 80, spread: 100, origin: { y: 0.6 }, zIndex: 99999 });
         }
 
@@ -1713,12 +1691,8 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             grid.innerHTML = html;
             openModal('outsidersModal');
 
-            // Outsider musiqisini birbaşa sayt daxilində oxutmaq
             let ao = document.getElementById('audioOutsider');
-            if(ao) {
-                ao.currentTime = 0;
-                ao.play().catch(e => console.log("Audio avto-play xətası:", e));
-            }
+            if(ao) { ao.currentTime = 0; ao.play().catch(e => console.log(e)); }
         }
 
         function playBlackCatVideo() {
