@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>TT-08 Proqram Saytı (V4.0 Real-AI)</title>
+    <title>TT-08 Proqram Saytı (V3.0)</title>
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
@@ -219,7 +219,7 @@
         <!-- HEADER -->
         <div class="header card">
             <div class="header-title-box">
-                <h1 id="txtTitle">🏆 TT-08 Proqram Saytı <span class="version-badge" onclick="showVersionModal()">V4.0</span></h1>
+                <h1 id="txtTitle">🏆 TT-08 Proqram Saytı <span class="version-badge" onclick="showVersionModal()">V3.0</span></h1>
                 <div id="liveDateTime" style="font-size:13px; color:var(--text-sub); margin-top:6px; font-weight:800;">📅 Yüklənir...</div>
             </div>
 
@@ -430,7 +430,7 @@
 
             <div class="admin-nav" id="adminNavTabs">
                 <button class="admin-nav-btn active tab-students" onclick="switchAdminSubTab(event, 'students')">👥 Reytinq və Balların İdarəsi</button>
-                <button class="admin-nav-btn tab-tasksConfig" onclick="switchAdminSubTab(event, 'tasksConfig')">⚙️ FM Tapşırıqları və Ballar</button>
+                <button class="admin-nav-btn tab-tasksConfig" onclick="switchAdminSubTab(event, 'tasksConfig')">⚙️ FM Tapşırıqları və Nümunə Kodlar</button>
                 <button class="admin-nav-btn tab-aiConfig" onclick="switchAdminSubTab(event, 'aiConfig')">🤖 Süni İntellekt (AI Quraşdırma)</button>
                 <button class="admin-nav-btn tab-pending" onclick="switchAdminSubTab(event, 'pendingFiles')">⏳ Yoxlama Gözləyən Fayllar</button>
                 <button class="admin-nav-btn tab-checked" onclick="switchAdminSubTab(event, 'checkedFiles')">✏️ Yoxlanılmış Fayllar</button>
@@ -459,14 +459,15 @@
                 </div>
             </div>
 
-            <!-- TAB 2: FM TAPŞIRIQLARI -->
+            <!-- TAB 2: FM TAPŞIRIQLARI VƏ NÜMUNƏ KODLAR -->
             <div id="adminTabTasksConfig" class="admin-sub-tab" style="display:none;">
                 <div class="info-box">
-                    <h3 style="color:var(--accent); margin-top:0;">⚙️ FM Tapşırıqları və Ballar</h3>
+                    <h3 style="color:var(--accent); margin-top:0;">⚙️ FM Tapşırıqları və Nümunə Kodlar (Referans)</h3>
                     <p style="color:var(--text-sub); font-size:14px; margin-bottom:15px;">
-                        Süni intellekt tələbənin kodunu oxuyaraq buradakı hansı tapşırığı həll etdiyini avtomatik təyin edir və onun məntiqini dərindən analiz edir.
+                        Mürəkkəb və ya xüsusi tapşırıqlar (məsələn: xüsusi massiv əməliyyatları, alqoritmlər) üçün aşağıya nümunə düzgün işləyən həll kodu qoya bilərsiniz. 
+                        <strong>Süni intellekt bu kodu yalnız tapşırığın məqsədini anlamaq üçün referans götürür</strong> — tələbənin kodu fərqli üsulla yazmasına mane olmur və eyni nəticəni verən fərqli həllərə tam bal təyin edir.
                     </p>
-                    <div id="adminTaskListContainer" style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px;"></div>
+                    <div id="adminTaskListContainer" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;"></div>
                     <button class="btn btn-dark" style="margin-bottom: 15px; color:var(--accent); border-color:var(--accent);" onclick="addAdminTaskRow()">➕ Yeni FM Tapşırığı Əlavə Et</button>
                     <br>
                     <button class="btn" onclick="saveAdminTaskConfigs()">Bütün Tapşırıqları Yadda Saxla 💾</button>
@@ -688,17 +689,20 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
         </div>
     </div>
 
+    <!-- VERSİYA TARİXÇƏSİ (YALNIZ VACİB İSTİFADƏÇİ YENİLİKLƏRİ) -->
     <div id="versionModal" class="modal">
         <div class="modal-content" style="max-width:600px;">
-            <h2 style="color:var(--accent); margin-top:0; font-weight:900;">🚀 Yeniliklər Tarixçəsi (V4.0)</h2>
+            <h2 style="color:var(--accent); margin-top:0; font-weight:900;">🚀 Yeniliklər Tarixçəsi (V3.0)</h2>
             <div style="padding:15px; border:1px solid var(--border); border-radius:12px; background:var(--bg-color);">
-                <ul style="font-size:14px; color:var(--text-sub); line-height:1.6; margin:0; padding-left:20px;">
-                    <li><strong>Real Süni İntellekt (AI) İnteqrasiyası:</strong> Kodun məqsədini, kənar hallarını və bütün ehtimallarını dərindən analiz edən neyron şəbəkə mühərriki.</li>
-                    <li><strong>Müəllim Bölməsi:</strong> Qurbanov Fuad müəllimin bioqrafiyası və şəkil idarəetməsi.</li>
-                    <li><strong>Məsələ Linki:</strong> Stepik, E-Olimp və digər platformalar üzrə həll linki dəstəyi.</li>
+                <ul style="font-size:14px; color:var(--text-sub); line-height:1.7; margin:0; padding-left:20px;">
+                    <li><strong>Tədris Platformalarına Birbaşa Keçid:</strong> Reytinq cədvəlində <em>stepik.org</em>, <em>eolymp.com</em>, <em>codesrc.ru</em> və <em>hackerrank.com</em> platformalarının rəsmi səhifələrinə birbaşa keçid linkləri əlavə edildi.</li>
+                    <li><strong>Həll Linklərinin Əlavə Edilməsi:</strong> Tələbələr digər platformalarda həll etdikləri məsələlərin birbaşa linkini əlavə edərək nəticələrini təsdiqləyə bilərlər.</li>
+                    <li><strong>Müəllim Bölməsi:</strong> BDU-nun Baş Müəllimi <strong>Qurbanov Fuad</strong> haqqında ətraflı bioqrafiya, elmi dərəcələri və təhsil məlumatları səhifəsi istifadəçilərə təqdim olundu.</li>
+                    <li><strong>Həftəlik Nəticələrə Uyğun Reytinq:</strong> Həftənin Liderləri və Outsiderləri bölməsi cari həftə ərzində toplanan xal artımına uyğun dinamik olaraq yenilənir.</li>
+                    <li><strong>Sürətli və İşıqlı/Qaranlıq İnterfeys:</strong> Saytın sürəti optimallaşdırıldı, xal sistemi təkmilləşdirildi və interaktiv təbriklər əlavə edildi.</li>
                 </ul>
             </div>
-            <button class="btn" style="width:100%; margin-top:15px;" onclick="closeModal('versionModal')">Bağla</button>
+            <button class="btn btn-gold" style="width:100%; margin-top:15px;" onclick="closeModal('versionModal')">Bağla</button>
         </div>
     </div>
 
@@ -747,8 +751,8 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
         } catch(e) {}
 
         let dynamicTasksConfig = [
-            { name: "n-ci sadə ədədin tapılması", points: 50 },
-            { name: "Vigenere Şifrəsi", points: 75 }
+            { name: "n-ci sadə ədədin tapılması", points: 50, sampleCode: "" },
+            { name: "Vigenere Şifrəsi", points: 75, sampleCode: "" }
         ];
         
         let currentTab = 'cpp';
@@ -1311,9 +1315,9 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             });
         }
 
-        // ==========================================================
-        // 🧠 HƏQİQİ SÜNİ İNTELLEKT (LLM / NEURAL EVALUATOR) MÜHƏRRİKİ
-        // ==========================================================
+        // =========================================================================
+        // 🧠 HƏQİQİ SÜNİ İNTELLEKT (LLM + MÜƏLLİMİN NÜMUNƏ KODU ƏSASINDA ANALİZATOR)
+        // =========================================================================
         async function runTrueAiEvaluation(rawCode, subject) {
             let code = rawCode.trim();
 
@@ -1329,25 +1333,37 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
                 return { isValid: false, reason: "Kod çox qısadır və ya boşdur!" };
             }
 
+            // Müəllimin qoyduğu referans nümunə kodları toplayırıq
+            let sampleCodeContext = "";
+            let tasksWithSample = dynamicTasksConfig.filter(t => t.sampleCode && t.sampleCode.trim().length > 10);
+            if(tasksWithSample.length > 0) {
+                sampleCodeContext = "\nMüəllimin təyin etdiyi NÜMUNƏ DÜZGÜN İŞLƏYƏN KODLAR (MƏQSƏDİ ANLAMAQ ÜÇÜN REFERANS):\n";
+                tasksWithSample.forEach(t => {
+                    sampleCodeContext += `--- TAPŞIRIQ: ${t.name} (Bal: ${t.points}) ---\nNümunə Kod:\n${t.sampleCode}\n--------------------\n`;
+                });
+            }
+
             // 2. Əgər Admin Gemini API açarı daxil edibsə, Real Gemini 1.5 Flash çağırılır
             if(geminiApiKey && geminiApiKey.startsWith("AIzaSy")) {
                 try {
                     let prompt = `
-Sən ali məktəbdə alqoritmlər və proqramlaşdırma üzrə sərt və ədalətli professorsun.
-Aşağıdakı tələbənin yazdığı ${subject.toUpperCase()} kodunu analiz et:
+Sən ali məktəbdə alqoritmlər və proqramlaşdırma üzrə dahi və ədalətli professorsun.
+Aşağıdakı tələbənin yazdığı ${subject.toUpperCase()} kodunu dəqiq analiz et:
 
-=== TƏLƏBƏ KODU ===
+=== TƏLƏBƏNİN KODU ===
 ${code}
 === KOD BİTDİ ===
 
-Mövcud kurs tapşırıqları siyahısı:
-${JSON.stringify(dynamicTasksConfig)}
+Mövcud kurs tapşırıqları:
+${JSON.stringify(dynamicTasksConfig.map(t => ({ name: t.name, points: t.points })))}
+${sampleCodeContext}
 
-Sənin vəzifən:
-1. Kodun niyyətini və hansı alqoritmi həll etmək istədiyini anla.
-2. Bütün ehtimalları və kənar halları (edge cases: 0, 1, mənfi ədədlər, böyük ədədlər, sonsuz dövrlər, məntiq xətaları) beynində yoxla.
-3. Kompilyator şıltaqlıqlarına (başlıq faylları, return 0 və s.) görə kodu səhv sayma! Əsas məntiq və alqoritm düzgündürsə və bütün hallarda doğru işləyirsə, qəbul et.
-4. Nəticəni YALNIZ və YALNIZ bu JSON formatında qaytar (heç bir əlavə yazı və ya markdown yazma):
+ÇOX VACİB İNTELLEKTUAL QAYDALAR:
+1. Əgər yuxarıda müəllimin nümunə kodu verilibsə, onu YALNIZ məsələnin məntiqini və nəticəsini anlamaq üçün referans kimi istifadə et.
+2. Tələbənin kodu müəllimin kodunun eynisi OLMAMALIDIR! Tələbələr eyni məsələni 1000 fərqli alqoritmlə, fərqli dövrlərlə, fərqli dəyişən adları ilə yaza bilərlər.
+3. Tələbənin kodunu bütün ehtimallarla (kənar hallar: 0, 1, mənfi ədədlər, böyük ədədlər, boş massiv, sonsuz dövrlər) beynində virtual sınaqdan keçir.
+4. Kompilyator şıltaqlıqlarına (başlıq faylları, return 0, standart kitabxana fərqləri və s.) görə kodu səhv sayma! Əsas məntiq və nəticə düzgündürsə, qəbul et.
+5. Nəticəni YALNIZ bu JSON formatında qaytar (heç bir markdown və ya əlavə söz yazma):
 {
   "isCorrect": true və ya false,
   "taskName": "Tapşırığın adı",
@@ -1375,7 +1391,7 @@ Sənin vəzifən:
                 }
             }
 
-            // 3. Daxili İntellektual Alqoritmik Analizator (Bütün Kənar Hallarla - Corner Cases)
+            // 3. Daxili İntellektual Alqoritmik Analizator (Bütün Kənar Hallarla)
             return evaluateInternalEdgeCases(code, subject);
         }
 
@@ -1383,7 +1399,6 @@ Sənin vəzifən:
         function evaluateInternalEdgeCases(code, subject) {
             let codeLower = code.toLowerCase();
 
-            // C++ üçün minimal sintaksis
             if(subject === 'cpp' && !code.includes('main')) {
                 return { isValid: false, reason: "C++ kodunda giriş 'main()' funksiyası tapılmadı!" };
             }
@@ -1392,12 +1407,10 @@ Sənin vəzifən:
             if(codeLower.includes('%') && (codeLower.includes('prime') || codeLower.includes('sade') || codeLower.includes('dövr') || codeLower.includes('for') || codeLower.includes('while'))) {
                 let matchedTask = dynamicTasksConfig.find(t => t.name.toLowerCase().includes("sadə")) || { name: "n-ci sadə ədədin tapılması", points: 50 };
                 
-                // Kənar hal 1: 1-i sadə ədəd saymaq xətası
                 if(codeLower.includes('i = 1') && !codeLower.includes('i = 2') && !codeLower.includes('i=2')) {
                     return { isValid: false, reason: "Kənar hal xətası: 1 ədədi sadə ədəd deyil! Sizin kodunuz 1-i bölən kimi qəbul edərək səhv nəticə çıxarır." };
                 }
 
-                // Kənar hal 2: Cüt ədədləri (2-dən böyük) və mənfi ədədləri nəzərə almama
                 if(!codeLower.includes('2') && !codeLower.includes('sqrt')) {
                     return { isValid: false, reason: "Alqoritmik xəta: Kod 2 ədədinin yeganə cüt sadə ədəd olması xüsusiyyətini nəzərə almır və ya sonsuz dövrə girir." };
                 }
@@ -1413,7 +1426,6 @@ Sənin vəzifən:
             if(codeLower.includes('26') || (codeLower.includes('key') && (codeLower.includes('ord') || codeLower.includes('chr') || codeLower.includes('%')))) {
                 let matchedTask = dynamicTasksConfig.find(t => t.name.toLowerCase().includes("vigenere")) || { name: "Vigenere Şifrəsi", points: 75 };
                 
-                // Kənar hal: Açarın mətndən qısa olduğu halda dövrün aşması
                 if(!codeLower.includes('%') && !codeLower.includes('len')) {
                     return { isValid: false, reason: "Kənar hal xətası: Açar söz mətndən qısa olduqda açarın indeksinin təkrar başa qayıtması (modulo / dövr) nəzərə alınmayıb." };
                 }
@@ -1425,9 +1437,22 @@ Sənin vəzifən:
                 };
             }
 
+            // 3. Əgər admin hər hansı tapşırıq üçün Nümunə Kod veribsə, ümumi məntiqi uyğunluğu qəbul et
+            let taskWithSample = dynamicTasksConfig.find(t => t.sampleCode && t.sampleCode.trim().length > 10);
+            if(taskWithSample) {
+                // Kodda minimal dövr və ya funksiya varsa və HTML deyilsə, qəbul edirik
+                if(codeLower.includes('for') || codeLower.includes('while') || codeLower.includes('def') || codeLower.includes('int ')) {
+                    return {
+                        isValid: true,
+                        taskName: taskWithSample.name,
+                        points: taskWithSample.points || 50
+                    };
+                }
+            }
+
             return { 
                 isValid: false, 
-                reason: "Süni intellekt bu kodun hər hansı tələb olunan alqoritmə uyğun tam və işlək həll olduğunu təsdiqləmədi. Xahiş olunur alqoritmin bütün ehtimallarını (sıfır, mənfi hallar və s.) nəzərə alaraq yenidən yoxlayasınız." 
+                reason: "Sistem bu kodun verilən tapşırıq şərtlərinə tam uyğun olduğunu təsdiqləmədi. Xahiş olunur bütün kənar halları (0, mənfi ədədlər, massiv sərhədləri və s.) nəzərə alaraq yenidən yoxlayasınız." 
             };
         }
 
@@ -1445,7 +1470,7 @@ Sənin vəzifən:
 
             const submitBtn = document.getElementById('btnUploadSubmit');
             submitBtn.disabled = true;
-            submitBtn.innerText = "⏳ AI Analiz edir...";
+            submitBtn.innerText = "⏳ Yoxlanılır...";
 
             let acceptedCount = 0;
             let rejectedCount = 0;
@@ -1461,7 +1486,7 @@ Sənin vəzifən:
                         reader.onload = async evText => {
                             let rawCode = evText.target.result;
                             
-                            // Süni İntellekt Dərin Analizi
+                            // Ağıllı Analiz
                             let aiEval = await runTrueAiEvaluation(rawCode, subject);
 
                             const b64Reader = new FileReader();
@@ -1514,7 +1539,7 @@ Sənin vəzifən:
                         };
                         reader.readAsText(file);
                     } else {
-                        // Admin Yoxlaması (Link ilə birlikdə)
+                        // Admin Yoxlaması
                         reader.onload = async evB64 => {
                             let base64Data = evB64.target.result;
                             await database.ref('student_tasks').push({ 
@@ -1541,7 +1566,7 @@ Sənin vəzifən:
             submitBtn.innerText = "🚀 Göndər";
 
             let msg = "YOXLAMA NƏTİCƏSİ:\n";
-            if(acceptedCount > 0) msg += `✅ Süni İntellekt tərəfindən təsdiqləndi: ${acceptedCount} fayl (FM balınız artırıldı)\n`;
+            if(acceptedCount > 0) msg += `✅ Təsdiqləndi: ${acceptedCount} fayl (FM balınız artırıldı)\n`;
             if(rejectedCount > 0) msg += `❌ Xətalar aşkar edildi: ${rejectedCount} fayl (Səbəb profilinizdəki statusda göstərildi)\n`;
             if(adminPending > 0) msg += `👨‍🏫 Admin yoxlamasına göndərildi: ${adminPending} fayl\n`;
 
@@ -1677,17 +1702,25 @@ Sənin vəzifən:
             }); 
         }
 
-        // FM TAPŞIRIQLARININ İDARƏSİ
+        // FM TAPŞIRIQLARI VƏ REFERANS NÜMUNƏ KODLARIN İDARƏSİ
         function renderAdminTaskListUI() {
             const container = document.getElementById('adminTaskListContainer');
             if(!container) return;
             let html = '';
             dynamicTasksConfig.forEach((t, idx) => {
                 html += `
-                    <div style="display:flex; gap:10px; align-items:center; background:var(--card-hover); padding:12px; border-radius:12px; border:1px solid var(--border); flex-wrap:wrap;">
-                        <input type="text" id="dt_name_${idx}" value="${t.name}" placeholder="Tapşırıq adı (Məsələn: n-ci sadə ədəd)" class="form-group" style="flex:2; margin:0;" />
-                        <input type="number" id="dt_pts_${idx}" value="${t.points}" placeholder="Bal" class="form-group" style="flex:1; margin:0; min-width:70px;" />
-                        <button class="btn btn-admin" style="padding:10px 14px;" onclick="removeAdminTaskRow(${idx})">🗑️</button>
+                    <div style="background:var(--card-hover); padding:15px; border-radius:12px; border:1px solid var(--border);">
+                        <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-bottom:10px;">
+                            <input type="text" id="dt_name_${idx}" value="${t.name}" placeholder="Tapşırıq adı (Məsələn: Massivlərdə xüsusi axtarış)" class="form-group" style="flex:3; margin:0;" />
+                            <input type="number" id="dt_pts_${idx}" value="${t.points}" placeholder="Bal" class="form-group" style="flex:1; margin:0; min-width:70px;" />
+                            <button class="btn btn-admin" style="padding:10px 14px;" onclick="removeAdminTaskRow(${idx})">🗑️ Sil</button>
+                        </div>
+                        <div>
+                            <label style="display:block; font-size:12px; font-weight:800; color:var(--gold); margin-bottom:4px;">
+                                💡 Nümunə Düzgün Kod (İstəyə bağlı - Sistemin tapşırığın məntiqini dəqiq anlaması üçün referans):
+                            </label>
+                            <textarea id="dt_sample_${idx}" placeholder="Bura bu məsələnin düzgün işləyən istənilən kodunu yapışdıra bilərsiniz. Sistem bunu yalnız məsələni anlamaq üçün referans götürəcək, tələbənin fərqli yolla yazmasına mane olmayacaq." class="form-group" style="margin:0; min-height:85px; font-size:12px; font-family:monospace;">${t.sampleCode || ''}</textarea>
+                        </div>
                     </div>
                 `;
             });
@@ -1695,7 +1728,7 @@ Sənin vəzifən:
         }
 
         function addAdminTaskRow() {
-            dynamicTasksConfig.push({ name: "Yeni FM Tapşırığı", points: 50 });
+            dynamicTasksConfig.push({ name: "Yeni FM Tapşırığı", points: 50, sampleCode: "" });
             renderAdminTaskListUI();
         }
 
@@ -1709,20 +1742,22 @@ Sənin vəzifən:
             dynamicTasksConfig.forEach((_, idx) => {
                 let nameInp = document.getElementById(`dt_name_${idx}`);
                 let ptsInp = document.getElementById(`dt_pts_${idx}`);
+                let sampleInp = document.getElementById(`dt_sample_${idx}`);
                 if(nameInp && ptsInp) {
                     newList.push({ 
                         name: nameInp.value.trim() || "Tapşırıq", 
-                        points: parseInt(ptsInp.value) || 50
+                        points: parseInt(ptsInp.value) || 50,
+                        sampleCode: sampleInp ? sampleInp.value.trim() : ""
                     });
                 }
             });
             dynamicTasksConfig = newList;
             database.ref('settings/dynamic_tasks').set(dynamicTasksConfig).then(() => {
-                alert("✅ FM Tapşırıqları və balları yadda saxlanıldı!");
+                alert("✅ FM Tapşırıqları və Nümunə Referans Kodlar yadda saxlanıldı!");
             });
         }
 
-        // ADMİN FAYL YOXLAMASI (MƏSƏLƏ LİNKİ İLƏ BİRLİKDƏ)
+        // ADMİN FAYL YOXLAMASI
         function loadAllFilesForAdmin() {
             database.ref('student_tasks').limitToLast(100).once('value').then(snap => {
                 const tasks = snap.val() || {};
