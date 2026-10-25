@@ -342,7 +342,7 @@
                 </div>
             </div>
 
-            <!-- CƏDVƏL (LİNKLƏR İLƏ) -->
+            <!-- CƏDVƏL -->
             <div class="table-wrapper card">
                 <table id="ratingTable">
                     <thead></thead>
@@ -434,7 +434,7 @@
                 <button class="admin-nav-btn tab-aiConfig" onclick="switchAdminSubTab(event, 'aiConfig')">🤖 Süni İntellekt (AI Quraşdırma)</button>
                 <button class="admin-nav-btn tab-pending" onclick="switchAdminSubTab(event, 'pendingFiles')">⏳ Yoxlama Gözləyən Fayllar</button>
                 <button class="admin-nav-btn tab-checked" onclick="switchAdminSubTab(event, 'checkedFiles')">✏️ Yoxlanılmış Fayllar</button>
-                <button class="admin-nav-btn tab-accounts" onclick="switchAdminSubTab(event, 'accounts')">🔐 Hesablar</button>
+                <button class="admin-nav-btn tab-accounts" onclick="switchAdminSubTab(event, 'accounts')">🔐 Hesablar və Şifrələr</button>
                 <button class="admin-nav-btn tab-media" onclick="switchAdminSubTab(event, 'media')">🎵 Media & Müəllim Şəkli</button>
                 <button class="admin-nav-btn tab-feedback" onclick="switchAdminSubTab(event, 'feedback')">💬 Feedback <span id="fbTabBadge" style="display:none; background:var(--negative); color:#fff; padding:2px 6px; border-radius:10px; font-size:11px; margin-left:5px;"></span></button>
                 <button class="admin-nav-btn tab-logs" onclick="switchAdminSubTab(event, 'logs')">📲 Loglar</button>
@@ -464,8 +464,8 @@
                 <div class="info-box">
                     <h3 style="color:var(--accent); margin-top:0;">⚙️ FM Tapşırıqları və Nümunə Kodlar (Referans)</h3>
                     <p style="color:var(--text-sub); font-size:14px; margin-bottom:15px;">
-                        Mürəkkəb və ya xüsusi tapşırıqlar (məsələn: xüsusi massiv əməliyyatları, alqoritmlər) üçün aşağıya nümunə düzgün işləyən həll kodu qoya bilərsiniz. 
-                        <strong>Süni intellekt bu kodu yalnız tapşırığın məqsədini anlamaq üçün referans götürür</strong> — tələbənin kodu fərqli üsulla yazmasına mane olmur və eyni nəticəni verən fərqli həllərə tam bal təyin edir.
+                        Hər bir tapşırıq üçün aşağıya nümunə düzgün həll kodu qoya bilərsiniz. 
+                        <strong>Süni intellekt bu kodu yalnız tapşırığın məqsədini anlamaq üçün referans götürür</strong> — tələbənin fərqli üsulla yazmasına mane olmur və eyni nəticəni verən fərqli həllərə də tam bal təyin edir.
                     </p>
                     <div id="adminTaskListContainer" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;"></div>
                     <button class="btn btn-dark" style="margin-bottom: 15px; color:var(--accent); border-color:var(--accent);" onclick="addAdminTaskRow()">➕ Yeni FM Tapşırığı Əlavə Et</button>
@@ -479,8 +479,7 @@
                 <div class="info-box" style="border: 2px solid var(--accent);">
                     <h3 style="color:var(--accent); margin-top:0;">🤖 Real Süni İntellekt (Gemini AI API) İnteqrasiyası</h3>
                     <p style="color:var(--text-sub); font-size:14px; line-height:1.6;">
-                        Süni intellektin kodu bir professor kimi bütün ehtimallarla (0, mənfi ədədlər, böyük rəqəmlər, kənar hallar) dərindən yoxlaması üçün pulsuz <strong>Google Gemini API Açarını</strong> daxil edə bilərsiniz. 
-                        (Əgər açar daxil edilməzsə, sistem daxili intellektual mühərriklə analiz edəcək).
+                        Süni intellektin bütün 15+ tapşırığı bir-birindən ayıra bilməsi və kənar halları (0, mənfi ədədlər, böyük rəqəmlər) dərindən yoxlaması üçün pulsuz <strong>Google Gemini API Açarını</strong> daxil edə bilərsiniz.
                     </p>
                     <div class="form-group">
                         <label>Gemini API Key:</label>
@@ -526,14 +525,32 @@
                 </div>
             </div>
 
-            <!-- TAB 5: HESABLAR -->
+            <!-- TAB 5: HESABLAR VƏ ŞİFRƏLƏR (BƏRPA EDİLDİ) -->
             <div id="adminTabAccounts" class="admin-sub-tab" style="display:none;">
-                <div class="info-box"><h3 style="color:var(--text-main); margin-top:0;">🔐 Tələbə Hesabları</h3><div id="adminAccountsList" style="display:grid; gap:12px; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));"></div></div>
+                <div class="info-box">
+                    <h3 style="color:var(--text-main); margin-top:0;">🔐 Tələbə Hesabları və Şifrələri</h3>
+                    <div id="adminAccountsList" style="display:grid; gap:12px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
+                        Yüklənir...
+                    </div>
+                </div>
             </div>
 
-            <!-- TAB 6: MEDIA & MÜƏLLİM ŞƏKLİ -->
+            <!-- TAB 6: MEDIA, MÜƏLLİM ŞƏKLİ VƏ DEMO ADMİN (BƏRPA EDİLDİ) -->
             <div id="adminTabMedia" class="admin-sub-tab" style="display:none;">
                 
+                <!-- Demo Admin İdarəsi (Bərpa edildi) -->
+                <div class="info-box" id="demoControlBox" style="border: 2px solid var(--accent); margin-bottom:20px;">
+                    <h3 style="color:var(--accent); margin-top:0;">🎭 Demo Admin Hesabı İdarəsi</h3>
+                    <div style="display:flex; align-items:center; gap:15px; margin-top:10px; margin-bottom: 10px; flex-wrap:wrap;">
+                        <span id="demoStatusText" style="font-weight:900; font-size:16px;">Status: Yüklənir...</span>
+                        <button id="btnToggleDemo" class="btn btn-gold" onclick="toggleDemoStatus()">Dəyişdir</button>
+                    </div>
+                    <div style="font-size:14px; margin-top:15px; padding-top:15px; border-top:1px solid var(--border);">
+                       İstifadə edən cihaz: <span id="demoDeviceText" style="font-weight:900; color:var(--text-main);">Yoxlanılır...</span> 
+                       <button class="btn btn-admin" style="padding:4px 8px; font-size:12px; margin-left:10px;" onclick="kickDemo()">Cihazı Çıxart</button>
+                    </div>
+                </div>
+
                 <!-- Qurbanov Fuad Şəkli Yükləmə -->
                 <div class="info-box" style="border: 2px solid var(--gold); margin-bottom:20px;">
                     <h3 style="color:var(--gold); margin-top:0;">👨‍🏫 Qurbanov Fuad Müəllimin Şəklini Yenilə</h3>
@@ -582,10 +599,11 @@
                 <div class="info-box"><h3 style="color:var(--gold); margin-top:0;">💬 Feedback Mesajları</h3><div id="adminFeedbackList"></div></div>
             </div>
             
-            <!-- TAB 8: LOGLAR -->
+            <!-- TAB 8: LOGLAR (BƏRPA EDİLDİ) -->
             <div id="adminTabLogs" class="admin-sub-tab" style="display:none;">
-                <div class="info-box"><h3 style="color:var(--accent); margin-top:0;">📲 Sistem Logları</h3>
-                    <div id="adminLogsList">Yalnız Baş Admin görə bilər.</div>
+                <div class="info-box">
+                    <h3 style="color:var(--accent); margin-top:0;">📲 Sistem Logları (Giriş/Çıxış/Yükləmələr)</h3>
+                    <div id="adminLogsList">Yüklənir...</div>
                 </div>
             </div>
         </div>
@@ -689,7 +707,7 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
         </div>
     </div>
 
-    <!-- VERSİYA TARİXÇƏSİ (YALNIZ VACİB İSTİFADƏÇİ YENİLİKLƏRİ) -->
+    <!-- VERSİYA TARİXÇƏSİ (V3.0) -->
     <div id="versionModal" class="modal">
         <div class="modal-content" style="max-width:600px;">
             <h2 style="color:var(--accent); margin-top:0; font-weight:900;">🚀 Yeniliklər Tarixçəsi (V3.0)</h2>
@@ -764,12 +782,29 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
 
         let currentUser = null; 
         let currentUserRole = null; 
+        let demoIsActive = false;
         let blackCatVideoData = null;
         let emojiInterval = null;
         let geminiApiKey = "";
 
         let customAudioWinner = DEFAULT_AUDIO_WINNER;
         let customAudioOutsider = DEFAULT_AUDIO_OUTSIDER;
+
+        // LOGLAMA FUNKSİYASI (Logların düşməsi təmin edildi)
+        async function logActivity(actionMsg) {
+            let u = currentUser ? (ADMIN_TO_STUDENT_MAP[currentUser] || currentUser) : "Qonaq";
+            let device = /Mobile|Android|iPhone/i.test(navigator.userAgent) ? "📱 Mobil" : "💻 Kompüter";
+            try {
+                database.ref('activity_logs').push({
+                    user: u,
+                    action: actionMsg,
+                    device: device,
+                    timestamp: new Date().toISOString()
+                });
+            } catch(e) {
+                console.error("Log error:", e);
+            }
+        }
 
         // INIT
         window.onload = () => {
@@ -793,6 +828,19 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
                 geminiApiKey = snap.val() || "";
                 const inp = document.getElementById('inpGeminiApiKey');
                 if(inp) inp.value = geminiApiKey;
+            });
+
+            // Demo Admin Dinləyiciləri
+            database.ref('settings/demo_active').on('value', snap => { 
+                demoIsActive = snap.val() === true; 
+                updateDemoAdminUI(); 
+            });
+            database.ref('settings/demo_session').on('value', snap => {
+                const devSpan = document.getElementById('demoDeviceText');
+                if(devSpan) {
+                    const s = snap.val();
+                    devSpan.innerText = s && s.active ? `${s.deviceId || 'Cihaz'} (${s.loginTime || ''})` : "Heç bir cihaz daxil olmayıb";
+                }
             });
 
             database.ref('settings/audio_winner').once('value').then(snap => {
@@ -841,6 +889,7 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             let key = document.getElementById('inpGeminiApiKey').value.trim();
             database.ref('settings/gemini_api_key').set(key).then(() => {
                 alert("Süni İntellekt API açarı uğurla saxlanıldı! 🤖");
+                logActivity("Admin Süni İntellekt API açarını yenilədi.");
             });
         }
 
@@ -851,9 +900,48 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             reader.onload = e => {
                 database.ref('settings/teacher_photo').set(e.target.result).then(() => {
                     alert("Qurbanov Fuad müəllimin şəkli uğurla yeniləndi! 👨‍🏫");
+                    logActivity("Admin Qurbanov Fuad müəllimin şəklini yenilədi.");
                 });
             };
             reader.readAsDataURL(file);
+        }
+
+        // DEMO ADMİN FUNKSİYALARI
+        function updateDemoAdminUI() {
+            const statusText = document.getElementById('demoStatusText'); 
+            const toggleBtn = document.getElementById('btnToggleDemo');
+            if (statusText && toggleBtn) {
+                if (demoIsActive) { 
+                    statusText.innerText = "Status: AKTİV 🟢"; 
+                    statusText.style.color = "var(--positive)"; 
+                    toggleBtn.innerText = "Deaktiv Et 🔴"; 
+                    toggleBtn.style.background = "var(--negative)"; 
+                    toggleBtn.style.color = "#fff"; 
+                } else { 
+                    statusText.innerText = "Status: DEAKTİV 🔴"; 
+                    statusText.style.color = "var(--negative)"; 
+                    toggleBtn.innerText = "Aktivləşdir 🟢"; 
+                    toggleBtn.style.background = "var(--positive)"; 
+                    toggleBtn.style.color = "#000"; 
+                }
+            }
+        }
+        function toggleDemoStatus() { 
+            if (currentUserRole !== 'master') return alert("Yalnız Baş Admin idarə edə bilər!"); 
+            const newStatus = !demoIsActive; 
+            database.ref('settings/demo_active').set(newStatus).then(() => {
+                alert("Demo hesab " + (newStatus ? "Aktivləşdirildi" : "Deaktiv edildi") + "!");
+                logActivity("Demo admin statusunu dəyişdi: " + (newStatus ? "Aktiv" : "Deaktiv"));
+            });
+        }
+        function kickDemo() {
+            if(currentUserRole !== 'master') return alert("Yalnız Baş Admin idarə edə bilər!");
+            if(confirm("Hazırda aktiv olan cihazı Demo hesabından çıxarmaq istəyirsiniz?")) {
+                database.ref('settings/demo_session').set(null).then(() => {
+                    alert("Cihaz hesabdan çıxarıldı!");
+                    logActivity("Demo admin cihazını hesabdan çıxartdı.");
+                });
+            }
         }
 
         function toggleTheme() {
@@ -924,6 +1012,7 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             database.ref('settings/audio_winner').set(winVal);
             database.ref('settings/audio_outsider').set(outVal).then(() => {
                 alert("✅ Musiqi linkləri yadda saxlanıldı!");
+                logActivity("Musiqi linklərini yenilədi.");
             });
         }
 
@@ -1018,6 +1107,7 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
                 alert("Qeydiyyat tamamlandı!"); 
                 switchAuthTab('login'); 
                 document.getElementById('loginUsername').value = name;
+                logActivity("Qeydiyyatdan keçdi: " + name);
             });
         }
 
@@ -1030,6 +1120,11 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             const lowerPass = passStr.toLowerCase();
 
             if (ADMIN_CREDENTIALS[lowerUser] && ADMIN_CREDENTIALS[lowerUser].toLowerCase() === lowerPass) {
+                if(lowerUser === 'demo') {
+                    if(!demoIsActive) return alert("🚫 Demo hesabı Baş Admin tərəfindən deaktiv edilib!");
+                    let devId = 'dev_' + Math.random().toString(36).substr(2, 9);
+                    database.ref('settings/demo_session').set({ deviceId: devId, active: true, loginTime: new Date().toLocaleString('az-AZ') });
+                }
                 currentUser = lowerUser; 
                 currentUserRole = ADMIN_ROLES[lowerUser]; 
                 finalizeLogin(); 
@@ -1054,10 +1149,15 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             closeModal('authModal'); 
             updateAuthWidget(); 
             renderTable();
+            logActivity("Sistemə giriş etdi.");
         }
 
         function logoutUser() {
             if (!confirm("Çıxış edilsin?")) return;
+            logActivity("Çıxış etdi.");
+            if (currentUser === 'demo') {
+                database.ref('settings/demo_session').set(null);
+            }
             localStorage.removeItem('auth_user'); 
             localStorage.removeItem('auth_role');
             currentUser = null; 
@@ -1316,7 +1416,7 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
         }
 
         // =========================================================================
-        // 🧠 HƏQİQİ SÜNİ İNTELLEKT (LLM + MÜƏLLİMİN NÜMUNƏ KODU ƏSASINDA ANALİZATOR)
+        // 🧠 HƏQİQİ SÜNİ İNTELLEKT (BÜTÜN 15+ TAPŞIRIĞI FƏRQLƏNDİRƏN ANALİZATOR)
         // =========================================================================
         async function runTrueAiEvaluation(rawCode, subject) {
             let code = rawCode.trim();
@@ -1333,42 +1433,40 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
                 return { isValid: false, reason: "Kod çox qısadır və ya boşdur!" };
             }
 
-            // Müəllimin qoyduğu referans nümunə kodları toplayırıq
-            let sampleCodeContext = "";
-            let tasksWithSample = dynamicTasksConfig.filter(t => t.sampleCode && t.sampleCode.trim().length > 10);
-            if(tasksWithSample.length > 0) {
-                sampleCodeContext = "\nMüəllimin təyin etdiyi NÜMUNƏ DÜZGÜN İŞLƏYƏN KODLAR (MƏQSƏDİ ANLAMAQ ÜÇÜN REFERANS):\n";
-                tasksWithSample.forEach(t => {
-                    sampleCodeContext += `--- TAPŞIRIQ: ${t.name} (Bal: ${t.points}) ---\nNümunə Kod:\n${t.sampleCode}\n--------------------\n`;
-                });
-            }
+            // Bütün mövcud tapşırıqların siyahısını hazırlayırıq
+            let taskCatalog = dynamicTasksConfig.map((t, idx) => {
+                return `[TAPŞIRIQ #${idx + 1}]:
+Adı: "${t.name}"
+Balı: ${t.points} xal
+${t.sampleCode && t.sampleCode.trim() ? 'Müəllimin Nümunə Kodu:\n' + t.sampleCode.trim() : 'Nümunə kod qeyd olunmayıb.'}`;
+            }).join('\n-----------------------------------------\n');
 
             // 2. Əgər Admin Gemini API açarı daxil edibsə, Real Gemini 1.5 Flash çağırılır
             if(geminiApiKey && geminiApiKey.startsWith("AIzaSy")) {
                 try {
                     let prompt = `
-Sən ali məktəbdə alqoritmlər və proqramlaşdırma üzrə dahi və ədalətli professorsun.
-Aşağıdakı tələbənin yazdığı ${subject.toUpperCase()} kodunu dəqiq analiz et:
+Sən ali məktəbdə alqoritmlər üzrə sərt və dahi professorsun.
+Tələbə ${subject.toUpperCase()} dilində aşağıdakı kodu yazıb göndərib:
 
-=== TƏLƏBƏNİN KODU ===
+=== TƏLƏBƏ KODU ===
 ${code}
-=== KOD BİTDİ ===
+=== TƏLƏBƏ KODU BİTDİ ===
 
-Mövcud kurs tapşırıqları:
-${JSON.stringify(dynamicTasksConfig.map(t => ({ name: t.name, points: t.points })))}
-${sampleCodeContext}
+Sistemdə mövcud olan BÜTÜN ${dynamicTasksConfig.length} tapşırıq:
+${taskCatalog}
 
 ÇOX VACİB İNTELLEKTUAL QAYDALAR:
-1. Əgər yuxarıda müəllimin nümunə kodu verilibsə, onu YALNIZ məsələnin məntiqini və nəticəsini anlamaq üçün referans kimi istifadə et.
-2. Tələbənin kodu müəllimin kodunun eynisi OLMAMALIDIR! Tələbələr eyni məsələni 1000 fərqli alqoritmlə, fərqli dövrlərlə, fərqli dəyişən adları ilə yaza bilərlər.
-3. Tələbənin kodunu bütün ehtimallarla (kənar hallar: 0, 1, mənfi ədədlər, böyük ədədlər, boş massiv, sonsuz dövrlər) beynində virtual sınaqdan keçir.
-4. Kompilyator şıltaqlıqlarına (başlıq faylları, return 0, standart kitabxana fərqləri və s.) görə kodu səhv sayma! Əsas məntiq və nəticə düzgündürsə, qəbul et.
-5. Nəticəni YALNIZ bu JSON formatında qaytar (heç bir markdown və ya əlavə söz yazma):
+1. Siyahıda olan BÜTÜN ${dynamicTasksConfig.length} tapşırığı tək-tək nəzərdən keçir. Tələbənin kodunun məqsədini anla və onun məhz HANSI tapşırığa aid olduğunu müəyyən et!
+2. QƏTİYYƏN sonuncu tapşırığa bağlama! Tələbə hansı məsələni yazıbsa, YALNIZ o məsələnin adını və balını götür.
+3. Əgər müəllimin nümunə kodu varsa, onu yalnız məqsədi anlamaq üçün referans götür. Tələbənin kodu müəllimin kodunun eynisi olmamalıdır! Tələbə fərqli alqoritmlə yazıbsa, amma məntiqi və nəticəsi doğrudursa, TAM BAL VER.
+4. Kənar halları (0, 1, mənfi ədədlər, böyük ədədlər, sonsuz dövrlər) virtual sınaqdan keçir.
+5. Əgər tələbənin kodu bu ${dynamicTasksConfig.length} tapşırığın heç birinə aid deyilsə, isCorrect: false ver.
+6. Cavabı YALNIZ bu JSON formatında qaytar (heç bir markdown və ya artıq yazı yazma):
 {
   "isCorrect": true və ya false,
-  "taskName": "Tapşırığın adı",
-  "earnedPoints": müvafiq bal (məsələn 50 və ya 75),
-  "explanation": "Əgər səhvdirsə, hansı kənar halda və ya hansı ədəddə nə xəta çıxardığını azərbaycanca insan dili ilə ətraflı izah et. Əgər düzdürsə, alqoritmin doğruluğunu qeyd et."
+  "taskName": "Müəyyən etdiyin dəqiq tapşırıq adı",
+  "earnedPoints": həmin tapşırığın balı,
+  "explanation": "Nəticənin izahı (səhvdirsə hansı kənar halda xəta verdiyini aydın izah et)"
 }
 `;
                     const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiApiKey}`, {
@@ -1383,7 +1481,7 @@ ${sampleCodeContext}
                     return {
                         isValid: aiResult.isCorrect === true,
                         taskName: aiResult.taskName || "Alqoritm Tapşırığı",
-                        points: aiResult.earnedPoints || 50,
+                        points: Number(aiResult.earnedPoints) || 50,
                         reason: aiResult.explanation || ""
                     };
                 } catch(e) {
@@ -1391,72 +1489,83 @@ ${sampleCodeContext}
                 }
             }
 
-            // 3. Daxili İntellektual Alqoritmik Analizator (Bütün Kənar Hallarla)
-            return evaluateInternalEdgeCases(code, subject);
+            // 3. Daxili Semantik Analizator (Bütün tapşırıqlar arasında ən yaxşı uyğunluğu tapır)
+            return evaluateInternalMultiTask(code, subject);
         }
 
-        // Daxili Analizator: Bütün ehtimalları (Edge Cases) yoxlayır
-        function evaluateInternalEdgeCases(code, subject) {
+        // Daxili Çox-Tapşırıqlı Analizator (Heç vaxt sonuncuya bağlamır)
+        function evaluateInternalMultiTask(code, subject) {
             let codeLower = code.toLowerCase();
 
             if(subject === 'cpp' && !code.includes('main')) {
                 return { isValid: false, reason: "C++ kodunda giriş 'main()' funksiyası tapılmadı!" };
             }
 
-            // 1. Sadə Ədəd Tapşırığı
-            if(codeLower.includes('%') && (codeLower.includes('prime') || codeLower.includes('sade') || codeLower.includes('dövr') || codeLower.includes('for') || codeLower.includes('while'))) {
-                let matchedTask = dynamicTasksConfig.find(t => t.name.toLowerCase().includes("sadə")) || { name: "n-ci sadə ədədin tapılması", points: 50 };
+            let bestTask = null;
+            let highestScore = 0;
+
+            // Bütün tapşırıqlar üzrə uyğunluq xalını hesablayırıq
+            dynamicTasksConfig.forEach(t => {
+                let score = 0;
+                let tName = t.name.toLowerCase();
+                let words = tName.split(/\s+/).filter(w => w.length > 2);
                 
+                // Tapşırığın adındakı sözlərin koddakı varlığı
+                words.forEach(w => {
+                    if (codeLower.includes(w)) score += 3;
+                });
+
+                // Əgər nümunə kod varsa, onunla semantik uyğunluq
+                if(t.sampleCode && t.sampleCode.trim().length > 10) {
+                    let sampleLower = t.sampleCode.toLowerCase();
+                    let sampleTokens = sampleLower.match(/[a-zA-Z_]{3,}/g) || [];
+                    let matchedTokens = 0;
+                    sampleTokens.slice(0, 20).forEach(tok => {
+                        if(codeLower.includes(tok)) matchedTokens++;
+                    });
+                    score += matchedTokens * 2;
+                }
+
+                // Xüsusi alqoritm əlamətləri
+                if((tName.includes('armstrong') || tName.includes('amstrong')) && (codeLower.includes('armstrong') || codeLower.includes('pow') || (codeLower.includes('% 10') && codeLower.includes('/ 10')))) {
+                    score += 15;
+                }
+                if((tName.includes('sadə') || tName.includes('prime')) && (codeLower.includes('prime') || codeLower.includes('sade') || codeLower.includes('%'))) {
+                    score += 15;
+                }
+                if((tName.includes('vigenere') || tName.includes('şifrə')) && (codeLower.includes('vigenere') || codeLower.includes('key') || codeLower.includes('26'))) {
+                    score += 15;
+                }
+
+                if(score > highestScore) {
+                    highestScore = score;
+                    bestTask = t;
+                }
+            });
+
+            if(!bestTask || highestScore < 3) {
+                return {
+                    isValid: false,
+                    reason: "Süni intellekt bu kodun bazadakı mövcud tapşırıqlardan heç birinə aid olmadığını təyin etdi. Xahiş olunur tapşırığın şərtlərinə uyğun yazdığınızdan əmin olun."
+                };
+            }
+
+            // Kənar halların yoxlanması
+            let tNameLower = bestTask.name.toLowerCase();
+            if(tNameLower.includes("sadə") || tNameLower.includes("prime")) {
                 if(codeLower.includes('i = 1') && !codeLower.includes('i = 2') && !codeLower.includes('i=2')) {
-                    return { isValid: false, reason: "Kənar hal xətası: 1 ədədi sadə ədəd deyil! Sizin kodunuz 1-i bölən kimi qəbul edərək səhv nəticə çıxarır." };
-                }
-
-                if(!codeLower.includes('2') && !codeLower.includes('sqrt')) {
-                    return { isValid: false, reason: "Alqoritmik xəta: Kod 2 ədədinin yeganə cüt sadə ədəd olması xüsusiyyətini nəzərə almır və ya sonsuz dövrə girir." };
-                }
-
-                return { 
-                    isValid: true, 
-                    taskName: matchedTask.name, 
-                    points: matchedTask.points || 50 
-                };
-            }
-
-            // 2. Vigenere Şifrəsi
-            if(codeLower.includes('26') || (codeLower.includes('key') && (codeLower.includes('ord') || codeLower.includes('chr') || codeLower.includes('%')))) {
-                let matchedTask = dynamicTasksConfig.find(t => t.name.toLowerCase().includes("vigenere")) || { name: "Vigenere Şifrəsi", points: 75 };
-                
-                if(!codeLower.includes('%') && !codeLower.includes('len')) {
-                    return { isValid: false, reason: "Kənar hal xətası: Açar söz mətndən qısa olduqda açarın indeksinin təkrar başa qayıtması (modulo / dövr) nəzərə alınmayıb." };
-                }
-
-                return { 
-                    isValid: true, 
-                    taskName: matchedTask.name, 
-                    points: matchedTask.points || 75 
-                };
-            }
-
-            // 3. Əgər admin hər hansı tapşırıq üçün Nümunə Kod veribsə, ümumi məntiqi uyğunluğu qəbul et
-            let taskWithSample = dynamicTasksConfig.find(t => t.sampleCode && t.sampleCode.trim().length > 10);
-            if(taskWithSample) {
-                // Kodda minimal dövr və ya funksiya varsa və HTML deyilsə, qəbul edirik
-                if(codeLower.includes('for') || codeLower.includes('while') || codeLower.includes('def') || codeLower.includes('int ')) {
-                    return {
-                        isValid: true,
-                        taskName: taskWithSample.name,
-                        points: taskWithSample.points || 50
-                    };
+                    return { isValid: false, reason: "Kənar hal xətası: 1 ədədi sadə ədəd deyil! Kodunuz 1-i bölən kimi qəbul edərək səhv nəticə çıxarır." };
                 }
             }
 
-            return { 
-                isValid: false, 
-                reason: "Sistem bu kodun verilən tapşırıq şərtlərinə tam uyğun olduğunu təsdiqləmədi. Xahiş olunur bütün kənar halları (0, mənfi ədədlər, massiv sərhədləri və s.) nəzərə alaraq yenidən yoxlayasınız." 
+            return {
+                isValid: true,
+                taskName: bestTask.name,
+                points: Number(bestTask.points) || 50
             };
         }
 
-        // TƏLƏBƏ FAYL YÜKLƏMƏSİ
+        // TƏLƏBƏ FAYL YÜKLƏMƏSİ (DUBLİKATIN VƏ TƏKRAR BAL ALMAĞIN TAM QARŞISI ALINDI)
         async function uploadStudentTasks() {
             if (deadlineTimestamp && new Date().getTime() >= deadlineTimestamp) {
                 return alert("🚨 Deadline bitib! Tapşırıq qəbul edilmir.");
@@ -1468,13 +1577,18 @@ ${sampleCodeContext}
 
             if (!files || files.length === 0) return alert("Zəhmət olmasa ən azı bir fayl seçin!");
 
+            // Tələbənin əvvəlki bütün tapşırıqlarını bazadan çəkirik
+            const existingSnap = await database.ref('student_tasks').orderByChild('studentName').equalTo(activeProfileStudent).once('value');
+            const studentExistingTasks = existingSnap.val() || {};
+
             const submitBtn = document.getElementById('btnUploadSubmit');
             submitBtn.disabled = true;
-            submitBtn.innerText = "⏳ Yoxlanılır...";
+            submitBtn.innerText = "⏳ AI Yoxlayır...";
 
             let acceptedCount = 0;
             let rejectedCount = 0;
             let adminPending = 0;
+            let duplicateCount = 0;
 
             for (let i = 0; i < files.length; i++) {
                 let file = files[i];
@@ -1486,8 +1600,24 @@ ${sampleCodeContext}
                         reader.onload = async evText => {
                             let rawCode = evText.target.result;
                             
-                            // Ağıllı Analiz
+                            // Süni İntellekt Dərin Analizi (Bütün tapşırıqlar arasından dəqiq tapır)
                             let aiEval = await runTrueAiEvaluation(rawCode, subject);
+
+                            // Dublikat yoxlanışı: Bu tələbə artıq bu tapşırığı bu dildə düzgün həll edibmi?
+                            let alreadyCompleted = Object.values(studentExistingTasks).some(t => 
+                                t.subject === subject && 
+                                t.category === 'fm' && 
+                                t.recognizedTask === aiEval.taskName && 
+                                t.status === 'correct' &&
+                                !t.archived
+                            );
+
+                            if(alreadyCompleted && aiEval.isValid) {
+                                alert(`🚫 DİQQƏT: Siz artıq "${aiEval.taskName}" tapşırığını ${subject.toUpperCase()} dilində düzgün həll etmisiniz və balınız hesablanıb! Eyni tapşırıqdan təkrar bal almaq olmaz.`);
+                                duplicateCount++;
+                                resolve();
+                                return;
+                            }
 
                             const b64Reader = new FileReader();
                             b64Reader.onload = async b64Ev => {
@@ -1517,6 +1647,7 @@ ${sampleCodeContext}
                                         timestamp: new Date().toISOString() 
                                     });
                                     acceptedCount++;
+                                    logActivity(`${activeProfileStudent} [${subject.toUpperCase()}] "${aiEval.taskName}" tapşırığını düzgün həll etdi (+${aiEval.points} xal).`);
                                 } else {
                                     await database.ref('student_tasks').push({ 
                                         studentName: activeProfileStudent, 
@@ -1532,6 +1663,7 @@ ${sampleCodeContext}
                                         timestamp: new Date().toISOString() 
                                     });
                                     rejectedCount++;
+                                    logActivity(`${activeProfileStudent} [${subject.toUpperCase()}] üçün kod yoxlandı: Rədd edildi.`);
                                 }
                                 resolve();
                             };
@@ -1539,7 +1671,23 @@ ${sampleCodeContext}
                         };
                         reader.readAsText(file);
                     } else {
-                        // Admin Yoxlaması
+                        // Digər Platformalar üzrə Dublikat Yoxlanışı
+                        let alreadyPendingOrDone = Object.values(studentExistingTasks).some(t => 
+                            t.subject === subject && 
+                            t.category === category && 
+                            t.fileName === file.name && 
+                            t.status !== 'wrong' &&
+                            !t.archived
+                        );
+
+                        if(alreadyPendingOrDone) {
+                            alert(`🚫 "${file.name}" faylı artıq ${category.toUpperCase()} üçün göndərilib və ya təsdiqlənib. Yalnız səhv kimi rədd edilmiş faylları yenidən göndərə bilərsiniz.`);
+                            duplicateCount++;
+                            resolve();
+                            return;
+                        }
+
+                        // Admin Yoxlamasına Göndər
                         reader.onload = async evB64 => {
                             let base64Data = evB64.target.result;
                             await database.ref('student_tasks').push({ 
@@ -1555,6 +1703,7 @@ ${sampleCodeContext}
                                 timestamp: new Date().toISOString() 
                             });
                             adminPending++;
+                            logActivity(`${activeProfileStudent} ${category.toUpperCase()} bölməsinə fayl göndərdi: ${file.name}`);
                             resolve();
                         };
                         reader.readAsDataURL(file);
@@ -1566,9 +1715,10 @@ ${sampleCodeContext}
             submitBtn.innerText = "🚀 Göndər";
 
             let msg = "YOXLAMA NƏTİCƏSİ:\n";
-            if(acceptedCount > 0) msg += `✅ Təsdiqləndi: ${acceptedCount} fayl (FM balınız artırıldı)\n`;
-            if(rejectedCount > 0) msg += `❌ Xətalar aşkar edildi: ${rejectedCount} fayl (Səbəb profilinizdəki statusda göstərildi)\n`;
+            if(acceptedCount > 0) msg += `✅ Təsdiqləndi: ${acceptedCount} fayl (Müvafiq tapşırığın balı hesabınıza yazıldı)\n`;
+            if(rejectedCount > 0) msg += `❌ Xətalar aşkar edildi: ${rejectedCount} fayl (Səbəb statusunuzda göstərildi)\n`;
             if(adminPending > 0) msg += `👨‍🏫 Admin yoxlamasına göndərildi: ${adminPending} fayl\n`;
+            if(duplicateCount > 0) msg += `⚠️ Dublikat olduğuna görə qəbul edilməyən: ${duplicateCount} fayl\n`;
 
             alert(msg);
             document.getElementById('studentTaskFiles').value = '';
@@ -1603,6 +1753,8 @@ ${sampleCodeContext}
             renderAdminTaskListUI();
             renderAdminBody();
             loadAllFilesForAdmin();
+            loadAdminAccounts();
+            loadAdminLogs();
         }
 
         function changeAdminTab(tab) {
@@ -1618,6 +1770,9 @@ ${sampleCodeContext}
             document.querySelectorAll('.admin-sub-tab').forEach(t => t.style.display = 'none');
             const target = document.getElementById('adminTab' + tab.charAt(0).toUpperCase() + tab.slice(1));
             if(target) target.style.display = 'block';
+
+            if(tab === 'accounts') loadAdminAccounts();
+            if(tab === 'logs') loadAdminLogs();
         }
 
         function renderAdminBody() {
@@ -1669,6 +1824,7 @@ ${sampleCodeContext}
             database.ref(`students_data/${adminActiveTab}/${idx}`).set(student).then(() => {
                 alert(`✅ ${student.ad} üçün ballar yeniləndi!`);
                 renderTable();
+                logActivity(`Admin ${student.ad} üçün balları əllə yenilədi.`);
             });
         }
 
@@ -1691,6 +1847,7 @@ ${sampleCodeContext}
             database.ref(`students_data/${adminActiveTab}`).set(list).then(() => {
                 alert(`🚀 ${adminActiveTab.toUpperCase()} siyahısındakı bütün ballar yadda saxlanıldı!`);
                 renderTable();
+                logActivity(`Admin [${adminActiveTab.toUpperCase()}] üzrə bütün balları kütləvi yadda saxladı.`);
             });
         }
 
@@ -1754,6 +1911,74 @@ ${sampleCodeContext}
             dynamicTasksConfig = newList;
             database.ref('settings/dynamic_tasks').set(dynamicTasksConfig).then(() => {
                 alert("✅ FM Tapşırıqları və Nümunə Referans Kodlar yadda saxlanıldı!");
+                logActivity("Admin FM tapşırıq siyahısını və nümunə kodları yenilədi.");
+            });
+        }
+
+        // HESABLAR VƏ ŞİFRƏLƏR (BƏRPA EDİLDİ)
+        function loadAdminAccounts() {
+            database.ref('user_accounts').on('value', snap => {
+                const accounts = snap.val() || {};
+                const listDiv = document.getElementById('adminAccountsList');
+                if(!listDiv) return;
+                let html = '';
+                const keys = Object.keys(accounts);
+                if(keys.length === 0) {
+                    listDiv.innerHTML = '<div style="color:var(--text-sub);">Qeydiyyatdan keçmiş tələbə hesabı yoxdur.</div>';
+                    return;
+                }
+                keys.forEach(uname => {
+                    let acc = accounts[uname];
+                    html += `
+                        <div style="background:var(--card-hover); padding:15px; border-radius:12px; border:1px solid var(--border); display:flex; justify-content:space-between; align-items:center;">
+                            <div>
+                                <strong style="color:var(--gold); font-size:16px; display:block;">👤 ${uname}</strong>
+                                <span style="font-size:13px; color:var(--text-sub);">Şifrə: <strong style="color:var(--accent); font-family:monospace; font-size:15px;">${acc.password}</strong></span>
+                                <div style="font-size:11px; color:var(--text-sub); margin-top:3px;">Cins: ${acc.gender || 'Kişi'}</div>
+                            </div>
+                            <button class="btn btn-dark" style="padding:6px 12px; font-size:12px;" onclick="resetStudentPassword('${uname}')">🔑 Dəyiş</button>
+                        </div>
+                    `;
+                });
+                listDiv.innerHTML = html;
+            });
+        }
+
+        function resetStudentPassword(uname) {
+            let newPass = prompt(`${uname} üçün yeni şifrə təyin edin:`);
+            if(!newPass || newPass.trim().length < 4) return alert("Şifrə ən azı 4 simvol olmalıdır!");
+            database.ref(`user_accounts/${uname}/password`).set(newPass.trim()).then(() => {
+                alert(`✅ ${uname} üçün yeni şifrə təyin edildi!`);
+                logActivity(`Admin ${uname} üçün şifrəni yenilədi.`);
+            });
+        }
+
+        // LOGLARIN YÜKLƏNMƏSİ (BƏRPA EDİLDİ)
+        function loadAdminLogs() {
+            database.ref('activity_logs').limitToLast(50).on('value', snap => {
+                const logs = snap.val() || {};
+                const listDiv = document.getElementById('adminLogsList');
+                if(!listDiv) return;
+                const logKeys = Object.keys(logs).reverse();
+                if(logKeys.length === 0) {
+                    listDiv.innerHTML = '<div style="color:var(--text-sub);">Hələ heç bir fəaliyyət qeydə alınmayıb.</div>';
+                    return;
+                }
+                let html = '';
+                logKeys.forEach(k => {
+                    let lg = logs[k];
+                    html += `
+                        <div style="background:var(--card-hover); padding:12px 15px; border-radius:10px; border:1px solid var(--border); margin-bottom:8px;">
+                            <div style="display:flex; justify-content:space-between; align-items:center;">
+                                <strong style="color:var(--accent); font-size:15px;">👤 ${lg.user || 'İstifadəçi'}</strong>
+                                <span style="font-size:12px; color:var(--gold); font-weight:800;">${lg.device || ''}</span>
+                            </div>
+                            <div style="color:var(--text-main); font-size:14px; margin-top:4px; font-weight:700;">${lg.action}</div>
+                            <div style="color:var(--text-sub); font-size:11px; margin-top:4px;">🕒 ${lg.timestamp ? new Date(lg.timestamp).toLocaleString('az-AZ') : ''}</div>
+                        </div>
+                    `;
+                });
+                listDiv.innerHTML = html;
             });
         }
 
@@ -1840,6 +2065,7 @@ ${sampleCodeContext}
                 rejectReason: isCorrect ? '' : 'Admin tərəfindən rədd edildi'
             });
             alert(`Nəticə yeniləndi və bal '${category}' sütununa yazıldı!`);
+            logActivity(`Admin ${studentName} üçün ${category} tapşırığını yoxladı: ${isCorrect ? 'Qəbul (+'+points+' xal)' : 'Rədd'}`);
             renderTable();
             loadAllFilesForAdmin();
         }
@@ -1929,6 +2155,7 @@ ${sampleCodeContext}
                 database.ref('video_black_cat').set(e.target.result).then(() => {
                     alert("Video yükləndi! 🐈");
                     blackCatVideoData = e.target.result;
+                    logActivity("Admin qara pişik videosunu yenilədi.");
                 });
             };
             reader.readAsDataURL(file);
@@ -1937,10 +2164,16 @@ ${sampleCodeContext}
         function saveDeadline() {
             const val = document.getElementById('deadlineInput').value;
             if(!val) return alert("Tarix seçin!");
-            database.ref('deadline_time').set(val).then(() => alert("⏳ Deadline saxlanıldı!"));
+            database.ref('deadline_time').set(val).then(() => {
+                alert("⏳ Deadline saxlanıldı!");
+                logActivity("Admin deadline tarixini yenilədi: " + val);
+            });
         }
         function clearDeadline() {
-            if(confirm("Deadline ləğv edilsin?")) database.ref('deadline_time').remove();
+            if(confirm("Deadline ləğv edilsin?")) {
+                database.ref('deadline_time').remove();
+                logActivity("Admin deadline-ı ləğv etdi.");
+            }
         }
         function startDeadlineTimer() {
             if (deadlineInterval) clearInterval(deadlineInterval); 
@@ -1972,6 +2205,7 @@ ${sampleCodeContext}
                 });
             });
             alert("Həftə uğurla sonlandırıldı! 🚀");
+            logActivity("Həftəni sonlandırdı.");
             renderTable();
         }
 
@@ -1984,6 +2218,7 @@ ${sampleCodeContext}
                 closeModal('feedbackModal'); 
                 document.getElementById('fbName').value = ''; 
                 document.getElementById('fbMsg').value = ''; 
+                logActivity(`${n} feedback göndərdi.`);
             }); 
         }
 
