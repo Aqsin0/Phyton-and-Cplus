@@ -1067,7 +1067,7 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
         }
 
         // =========================================================================
-        // ⚡ GROQ DİNAMİK MODEL AXTARIŞI VƏ ÇAĞIRIŞI (OPENAI COMPATIBLE)
+        // ⚡ GROQ DİNAMİK MODEL AXTARIŞI VƏ ÇAĞIRIŞI
         // =========================================================================
         async function getLiveGroqModel(apiKey) {
             let saved = sessionStorage.getItem('groq_working_model');
@@ -1786,35 +1786,99 @@ TƏLİMATLAR:
             let isCollatz = (codeLower.includes('3 * n + 1') || codeLower.includes('3*n + 1') || codeLower.includes('3*n+1') || (codeLower.includes('n % 2') && codeLower.includes('n / 2') && codeLower.includes('while')));
             if (isCollatz) {
                 let task = tasks.find(t => t.name.toLowerCase().includes("collatz") || t.name.toLowerCase().includes("kolat") || t.name.toLowerCase().includes("3n+1"));
-                if (task) return { isValid: true, taskName: task.name, points: parseInt(task.points) || 50 };
+                if (task) {
+                    return { isValid: true, taskName: task.name, points: parseInt(task.points) || 50 };
+                } else {
+                    return { isValid: false, reason: "Daxil edilən kod Collatz (3n+1) alqoritmidir, lakin sistemdə belə bir aktiv tapşırıq tələb olunmur." };
+                }
+            }
+
+            let isSumOfSquares = (codeLower.includes('*') && (codeLower.includes('sum') || codeLower.includes('cem') || codeLower.includes('c +=') || codeLower.includes('s +=')) && (codeLower.includes('i * i') || codeLower.includes('i*i') || codeLower.includes('pow')));
+            if (isSumOfSquares) {
+                let task = tasks.find(t => t.name.toLowerCase().includes("kvadrat") && (t.name.toLowerCase().includes("cəm") || t.name.toLowerCase().includes("cem")));
+                if (task) {
+                    return { isValid: true, taskName: task.name, points: parseInt(task.points) || 50 };
+                }
             }
 
             let hasGcdKeywords = codeLower.includes('ebob') || codeLower.includes('ekob') || codeLower.includes('gcd') || codeLower.includes('lcm');
-            if (hasGcdKeywords || (codeLower.includes('%') && codeLower.includes('while'))) {
-                let task = tasks.find(t => t.name.toLowerCase().includes("ebob") || t.name.toLowerCase().includes("əbob"));
-                if (task) return { isValid: true, taskName: task.name, points: parseInt(task.points) || 50 };
+            let hasEuclidPattern = (codeLower.includes('%') && codeLower.includes('while') && (codeLower.includes('b != 0') || codeLower.includes('b!=0') || codeLower.includes('b > 0')));
+            if (hasGcdKeywords || hasEuclidPattern) {
+                let task = tasks.find(t => {
+                    let n = t.name.toLowerCase();
+                    return n.includes("ebob") || n.includes("əbob") || n.includes("ekob") || n.includes("əkob") || n.includes("gcd") || n.includes("lcm");
+                });
+                if (task) {
+                    return { isValid: true, taskName: task.name, points: parseInt(task.points) || 50 };
+                } else {
+                    return { isValid: false, reason: "Daxil edilən kod ƏBOB/ƏKOB alqoritmidir, lakin sistemdə belə bir aktiv tapşırıq tələb olunmur." };
+                }
             }
 
-            if (codeLower.includes('armstrong') || codeLower.includes('amstrong') || (codeLower.includes('% 10') && codeLower.includes('/ 10'))) {
-                let task = tasks.find(t => t.name.toLowerCase().includes("armstrong"));
-                if (task) return { isValid: true, taskName: task.name, points: parseInt(task.points) || 50 };
+            if (codeLower.includes('armstrong') || codeLower.includes('amstrong') || (codeLower.includes('% 10') && codeLower.includes('/ 10') && (codeLower.includes('pow') || codeLower.includes('**')))) {
+                let task = tasks.find(t => t.name.toLowerCase().includes("armstrong") || t.name.toLowerCase().includes("amstrong"));
+                if (task) {
+                    let hasDigitExtract = codeLower.includes('% 10') || codeLower.includes('%10') || codeLower.includes('str(');
+                    let hasSumComparison = codeLower.includes('==');
+                    if (!hasDigitExtract || !hasSumComparison) {
+                        return { isValid: false, reason: "Məntiq xətası: Armstrong ədədi üçün rəqəmlərin qüvvətləri cəminin ilkin ədədlə bərabərliyi yoxlanılmayıb!" };
+                    }
+                    return { isValid: true, taskName: task.name, points: parseInt(task.points) || 50 };
+                }
             }
 
             if (codeLower.includes('prime') || codeLower.includes('sade') || codeLower.includes('sadə')) {
-                let task = tasks.find(t => t.name.toLowerCase().includes("sadə"));
-                if (task) return { isValid: true, taskName: task.name, points: parseInt(task.points) || 50 };
+                let task = tasks.find(t => t.name.toLowerCase().includes("sadə") || t.name.toLowerCase().includes("prime"));
+                if (task) {
+                    let hasLoop = codeLower.includes('for') || codeLower.includes('while');
+                    let hasModulo = codeLower.includes('%');
+                    if (!hasLoop || !hasModulo) {
+                        return { isValid: false, reason: "Alqoritm xətası: Sadə ədəd üçün dövr və ya bölünmə (%) yoxlanışı tapılmadı!" };
+                    }
+                    if (codeLower.includes('i = 1') && !codeLower.includes('i = 2') && !codeLower.includes('i=2')) {
+                        return { isValid: false, reason: "Kənar hal xətası: 1 ədədi sadə ədəd deyil! Kodunuz 1-i bölən kimi qəbul edir." };
+                    }
+                    return { isValid: true, taskName: task.name, points: parseInt(task.points) || 50 };
+                }
             }
 
-            return { isValid: false, reason: "Daxil edilən kod aktiv tapşırıqlar arasında tapılmadı. Hal-hazırda belə bir tapşırıq tələb olunmur." };
+            if (codeLower.includes('vigenere') || (codeLower.includes('key') && (codeLower.includes('26') || codeLower.includes('% 26')))) {
+                let task = tasks.find(t => t.name.toLowerCase().includes("vigenere") || t.name.toLowerCase().includes("şifrə"));
+                if (task) {
+                    return { isValid: true, taskName: task.name, points: parseInt(task.points) || 75 };
+                }
+            }
+
+            for (let t of tasks) {
+                if (t.sampleCode && t.sampleCode.trim().length > 25) {
+                    let sampleTokens = t.sampleCode.toLowerCase().match(/[a-zA-Z_]{5,}/g) || [];
+                    let ignored = ['include', 'iostream', 'using', 'namespace', 'return', 'vector', 'string', 'while'];
+                    let cleanSampleTokens = sampleTokens.filter(tok => !ignored.includes(tok));
+
+                    let matchedCount = 0;
+                    cleanSampleTokens.forEach(tok => {
+                        if (codeLower.includes(tok)) matchedCount++;
+                    });
+                    if (cleanSampleTokens.length > 0 && matchedCount / cleanSampleTokens.length >= 0.5) {
+                        return { isValid: true, taskName: t.name, points: parseInt(t.points) || 50 };
+                    }
+                }
+            }
+
+            return {
+                isValid: false,
+                reason: "Daxil edilən kod aktiv tapşırıqlar arasında tapılmadı. Hal-hazırda belə bir tapşırıq tələb olunmur."
+            };
         }
 
-        // TƏLƏBƏ FAYL YÜKLƏMƏSİ (DİGƏR SAYTLAR ÜÇÜN YENİ PƏNCƏRƏYƏ GÖNDƏRİR)
+        // TƏLƏBƏ FAYL YÜKLƏMƏSİ (ADMİNLƏR DEADLİNEDAN ASILI OLMADAN HƏR KƏSƏ YÜKLƏYƏ BİLİR)
         let isUploadingActive = false;
 
         async function uploadStudentTasks() {
             if (isUploadingActive) return;
 
             let isAdmin = (currentUserRole && currentUserRole !== 'student');
+
             if (!isAdmin && deadlineTimestamp && new Date().getTime() >= deadlineTimestamp) {
                 return alert("🚨 Deadline bitib! Tapşırıq qəbul edilmir.");
             }
@@ -1845,7 +1909,7 @@ TƏLİMATLAR:
 
                 let acceptedCount = 0;
                 let rejectedCount = 0;
-                let groqVerifiedCount = 0;
+                let adminPending = 0;
                 let duplicateCount = 0;
 
                 for (let i = 0; i < files.length; i++) {
@@ -1854,24 +1918,26 @@ TƏLİMATLAR:
                     await new Promise(resolve => {
                         const reader = new FileReader();
 
-                        reader.onload = async evText => {
-                            let rawCode = evText.target.result;
-                            let aiEval = await runTrueAiEvaluation(rawCode, subject);
+                        if (category === 'fm') {
+                            reader.onload = async evText => {
+                                let rawCode = evText.target.result;
+                                let aiEval = await runTrueAiEvaluation(rawCode, subject);
 
-                            const b64Reader = new FileReader();
-                            b64Reader.onload = async b64Ev => {
-                                let base64Data = b64Ev.target.result;
+                                if (aiEval.isValid) {
+                                    let cleanTaskName = aiEval.taskName.trim().toLowerCase();
 
-                                if (category === 'fm') {
-                                    if (aiEval.isValid) {
-                                        let cleanTaskName = aiEval.taskName.trim().toLowerCase();
-                                        if (completedTaskNames.has(cleanTaskName)) {
-                                            alert(`🚫 "${aiEval.taskName}" artıq həll edilib!`);
-                                            duplicateCount++;
-                                            resolve();
-                                            return;
-                                        }
-                                        completedTaskNames.add(cleanTaskName);
+                                    if (completedTaskNames.has(cleanTaskName)) {
+                                        alert(`🚫 DİQQƏT: "${aiEval.taskName}" tapşırığı ${subject.toUpperCase()} bölməsində artıq düzgün həll edilib və xal hesablanıb! Eyni tapşırıqdan təkrar bal almaq olmaz.`);
+                                        duplicateCount++;
+                                        resolve();
+                                        return;
+                                    }
+
+                                    completedTaskNames.add(cleanTaskName);
+
+                                    const b64Reader = new FileReader();
+                                    b64Reader.onload = async b64Ev => {
+                                        let base64Data = b64Ev.target.result;
 
                                         let stList = globalData[subject];
                                         if (stList) {
@@ -1896,7 +1962,14 @@ TƏLİMATLAR:
                                             timestamp: new Date().toISOString() 
                                         });
                                         acceptedCount++;
-                                    } else {
+                                        logActivity(`${activeProfileStudent} [${subject.toUpperCase()}] "${aiEval.taskName}" tapşırığını düzgün həll etdi (+${aiEval.points} xal).`);
+                                        resolve();
+                                    };
+                                    b64Reader.readAsDataURL(file);
+                                } else {
+                                    const b64Reader = new FileReader();
+                                    b64Reader.onload = async b64Ev => {
+                                        let base64Data = b64Ev.target.result;
                                         await database.ref('student_tasks').push({ 
                                             studentName: activeProfileStudent, 
                                             fileName: file.name, 
@@ -1911,53 +1984,58 @@ TƏLİMATLAR:
                                             timestamp: new Date().toISOString() 
                                         });
                                         rejectedCount++;
-                                    }
-                                } else {
-                                    // Digər saytlar (Stepik, E-Olimp və s.) Groq AI tərəfindən yoxlanılır
-                                    if (aiEval.isValid) {
-                                        await database.ref('student_tasks').push({ 
-                                            studentName: activeProfileStudent, 
-                                            fileName: file.name, 
-                                            fileData: base64Data, 
-                                            subject: subject, 
-                                            category: category,
-                                            status: 'pending', 
-                                            recognizedTask: aiEval.taskName,
-                                            addedPoints: 0,
-                                            taskLink: taskLink,
-                                            archived: false,
-                                            timestamp: new Date().toISOString() 
-                                        });
-                                        groqVerifiedCount++;
-                                    } else {
-                                        await database.ref('student_tasks').push({ 
-                                            studentName: activeProfileStudent, 
-                                            fileName: file.name, 
-                                            fileData: base64Data, 
-                                            subject: subject, 
-                                            category: category,
-                                            status: 'wrong', 
-                                            rejectReason: aiEval.reason,
-                                            addedPoints: 0,
-                                            taskLink: taskLink,
-                                            archived: false,
-                                            timestamp: new Date().toISOString() 
-                                        });
-                                        rejectedCount++;
-                                    }
+                                        logActivity(`${activeProfileStudent} [${subject.toUpperCase()}] kodu rədd edildi: ${aiEval.reason}`);
+                                        resolve();
+                                    };
+                                    b64Reader.readAsDataURL(file);
                                 }
+                            };
+                            reader.readAsText(file);
+                        } else {
+                            let cleanFileName = file.name.trim().toLowerCase();
+                            let alreadyPendingOrDone = Object.values(studentExistingTasks).some(t => 
+                                t.subject === subject && 
+                                t.category === category && 
+                                t.fileName.trim().toLowerCase() === cleanFileName && 
+                                t.status !== 'wrong' &&
+                                !t.archived
+                            );
+
+                            if (alreadyPendingOrDone) {
+                                alert(`🚫 "${file.name}" faylı artıq ${category.toUpperCase()} üçün göndərilib və ya təsdiqlənib. Yalnız səhv kimi rədd edilmiş faylları təkrar göndərə bilərsiniz.`);
+                                duplicateCount++;
+                                resolve();
+                                return;
+                            }
+
+                            reader.onload = async evB64 => {
+                                let base64Data = evB64.target.result;
+                                await database.ref('student_tasks').push({ 
+                                    studentName: activeProfileStudent, 
+                                    fileName: file.name, 
+                                    fileData: base64Data, 
+                                    subject: subject, 
+                                    category: category,
+                                    status: 'pending', 
+                                    addedPoints: 0,
+                                    taskLink: taskLink,
+                                    archived: false,
+                                    timestamp: new Date().toISOString() 
+                                });
+                                adminPending++;
+                                logActivity(`${activeProfileStudent} ${category.toUpperCase()} bölməsinə fayl göndərdi: ${file.name}`);
                                 resolve();
                             };
-                            b64Reader.readAsDataURL(file);
-                        };
-                        reader.readAsText(file);
+                            reader.readAsDataURL(file);
+                        }
                     });
                 }
 
                 let msg = "YOXLAMA NƏTİCƏSİ:\n";
-                if (acceptedCount > 0) msg += `✅ FM Qəbul edildi: ${acceptedCount} fayl (Bal yazıldı)\n`;
-                if (groqVerifiedCount > 0) msg += `🎯 AI Təsdiqlədi: ${groqVerifiedCount} fayl (Admin paneldəki 'Groq Təsdiqli Həllər' pəncərəsinə göndərildi)\n`;
-                if (rejectedCount > 0) msg += `❌ Səhv/Rədd edildi: ${rejectedCount} fayl (Səbəbə statusda baxa bilərsiniz)\n`;
+                if (acceptedCount > 0) msg += `✅ Düzgün qəbul edildi: ${acceptedCount} fayl (Təyin edilmiş xal hesabınıza yazıldı)\n`;
+                if (rejectedCount > 0) msg += `❌ Səhv/Uyğunsuz: ${rejectedCount} fayl (Profilinizdəki statusdan səbəbə baxa bilərsiniz)\n`;
+                if (adminPending > 0) msg += `👨‍🏫 Admin yoxlamasına göndərildi: ${adminPending} fayl\n`;
+                if (duplicateCount > 0) msg += `⚠️ Dublikat olduğuna görə bal verilməyən: ${duplicateCount} fayl\n`;
 
                 alert(msg);
                 document.getElementById('studentTaskFiles').value = '';
@@ -1999,7 +2077,6 @@ TƏLİMATLAR:
             renderAdminTaskListUI();
             renderAdminBody();
             loadAllFilesForAdmin();
-            loadAdminGroqVerifiedTasks();
             loadAdminAccounts();
             loadAdminLogs();
         }
@@ -2267,7 +2344,6 @@ TƏLİMATLAR:
             logActivity(`Admin ${studentName} tələbəsinin [${category}] faylını sildi.`);
             renderTable();
             loadAllFilesForAdmin();
-            loadAdminGroqVerifiedTasks();
         }
 
         // ADMİN: GROQ AI TƏSDİQLİ HƏLLƏR PƏNCƏRƏSİ
@@ -2284,7 +2360,6 @@ TƏLİMATLAR:
 
                 Object.keys(tasks).reverse().forEach(key => {
                     let t = tasks[key];
-                    // Yalnız digər saytlardan (FM olmayan) və Groq AI tərəfindən 'pending' statuslu (düzgün) atılanlar
                     if (t.status === 'pending' && t.category !== 'fm' && !t.archived) {
                         count++;
                         let catLabel = catNames[t.category] || t.category;
