@@ -464,7 +464,7 @@
             <div class="admin-nav" id="adminNavTabs">
                 <button class="admin-nav-btn active tab-students" onclick="switchAdminSubTab(event, 'students')">👥 Reytinq və Balların İdarəsi</button>
                 <button class="admin-nav-btn tab-tasksConfig" onclick="switchAdminSubTab(event, 'tasksConfig')">⚙️ FM Tapşırıqları və Nümunə Kodlar</button>
-                <button class="admin-nav-btn tab-aiConfig" onclick="switchAdminSubTab(event, 'aiConfig')">🤖 Süni İntellekt (Groq AI Quraşdırma)</button>
+                <button class="admin-nav-btn tab-aiConfig" onclick="switchAdminSubTab(event, 'aiConfig')">🤖 Süni İntellekt (Groq AI)</button>
                 <button class="admin-nav-btn tab-pending" onclick="switchAdminSubTab(event, 'pendingFiles')">⏳ Yoxlama Gözləyən Fayllar</button>
                 <button class="admin-nav-btn tab-checked" onclick="switchAdminSubTab(event, 'checkedFiles')">✏️ Yoxlanılmış Fayllar</button>
                 <button class="admin-nav-btn tab-accounts" onclick="switchAdminSubTab(event, 'accounts')">🔐 Hesablar və Şifrələr</button>
@@ -507,12 +507,12 @@
                 </div>
             </div>
 
-            <!-- TAB 2.5: GROQ AI QURAŞDIRILMASI VƏ TEST DÜYMƏSİ -->
+            <!-- TAB 2.5: GROQ AI QURAŞDIRILMASI -->
             <div id="adminTabAiConfig" class="admin-sub-tab" style="display:none;">
                 <div class="info-box" style="border: 2px solid var(--accent);">
                     <h3 style="color:var(--accent); margin-top:0;">⚡ Ultra Sürətli Groq AI İnteqrasiyası</h3>
                     <p style="color:var(--text-sub); font-size:14px; line-height:1.6;">
-                        Pulsuz və limitsiz <strong>Groq API Açarını (`gsk_...`)</strong> daxil edin. Groq LPU texnologiyası sayəsində kodlar <strong>1 saniyəyə</strong> Llama-3.3-70b modeli ilə qüsursuz analiz edilir və server yüklənməsi xətası vermir.
+                        Pulsuz <strong>Groq API Açarını (`gsk_...`)</strong> daxil edin. Sistem Groq-dan aktiv modeli avtomatik aşkarlayaraq kodları <strong>1 saniyəyə</strong> qüsursuz yoxlayacaq.
                         <br>🔗 Pulsuz açar almaq üçün: <a href="https://console.groq.com/keys" target="_blank" style="color:var(--gold); font-weight:900;">console.groq.com/keys</a>
                     </p>
                     <div class="form-group">
@@ -547,7 +547,7 @@
                 </div>
             </div>
 
-            <!-- TAB 4: REDAKTƏ ÜÇÜN FAYLLAR (SİL DÜYMƏSİ ƏLAVƏ EDİLDİ) -->
+            <!-- TAB 4: REDAKTƏ ÜÇÜN FAYLLAR -->
             <div id="adminTabCheckedFiles" class="admin-sub-tab" style="display:none;">
                 <h3 style="color:var(--accent); margin-bottom: 20px; font-size:20px; font-weight:900;">
                     ✅ Yoxlanılmış Fayllar (Tələbəyə görə sıralanmış)
@@ -1025,72 +1025,108 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
         }
 
         // =========================================================================
-        // ⚡ GROQ AI ÇAĞIRIŞI (LLAMA-3.3-70B MODELİ İLƏ 1 SANİYƏYƏ CAVAB)
+        // ⚡ GROQ DİNAMİK MODEL AXTARIŞI VƏ ÇAĞIRIŞI (HƏR ZAMAN CANLI MODEL SEÇİR)
         // =========================================================================
-        async function requestGroqAI(apiKey, systemPrompt, userPrompt) {
-            const models = ["llama-3.3-70b-versatile", "llama-3.1-8b-instant"];
-            let lastError = null;
+        async function getLiveGroqModel(apiKey) {
+            let saved = sessionStorage.getItem('groq_working_model');
+            if (saved) return saved;
 
-            for (let model of models) {
-                try {
-                    const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-                        method: "POST",
-                        headers: {
-                            "Authorization": `Bearer ${apiKey}`,
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify({
-                            model: model,
-                            messages: [
-                                { role: "system", content: systemPrompt },
-                                { role: "user", content: userPrompt }
-                            ],
-                            response_format: { type: "json_object" },
-                            temperature: 0.1
-                        })
-                    });
-
-                    const resData = await res.json();
-
-                    if (!res.ok) {
-                        throw new Error(resData.error?.message || `HTTP ${res.status}`);
-                    }
-
-                    if (resData.choices && resData.choices.length > 0) {
-                        let text = resData.choices[0].message.content;
-                        return {
-                            model: model,
-                            data: JSON.parse(text)
-                        };
-                    }
-                } catch (e) {
-                    lastError = e;
-                    if (e.message.includes("Invalid API Key") || e.message.includes("authentication")) {
-                        throw new Error("Daxil etdiyiniz Groq API açarı yanlışdır!");
-                    }
+            // Groq-un rəsmi models endpointindən canlı aktiv modelləri alırıq
+            let res = await fetch("https://api.groq.com/openai/v1/models", {
+                headers: {
+                    "Authorization": `Bearer ${apiKey}`,
+                    "Content-Type": "application/json"
                 }
+            });
+
+            let data = await res.json();
+            if (data.error) {
+                throw new Error(data.error.message || "Groq API açarı yanlışdır.");
             }
 
-            throw lastError || new Error("Groq API ilə əlaqə qurulmadı.");
+            if (!data.data || !Array.isArray(data.data) || data.data.length === 0) {
+                throw new Error("Bu açar üçün heç bir aktiv Groq modeli tapılmadı.");
+            }
+
+            // Audio/whisper modellərini kənarlaşdırıb yalnız mətn/kod modellərini süzürük
+            let chatModels = data.data.filter(m => 
+                !m.id.includes("whisper") && 
+                !m.id.includes("guard") && 
+                !m.id.includes("tts")
+            );
+
+            // Prioritet modellər: gpt-oss, qwen və ya mövcud ən güclü model
+            let best = chatModels.find(m => m.id.includes("gpt-oss-120b"))
+                    || chatModels.find(m => m.id.includes("gpt-oss-20b"))
+                    || chatModels.find(m => m.id.includes("qwen"))
+                    || chatModels.find(m => m.id.includes("llama-3.3"))
+                    || chatModels.find(m => m.id.includes("llama"))
+                    || chatModels[0];
+
+            if (!best) {
+                throw new Error("Mətn/kod təhlili üçün uyğun aktiv Groq modeli tapılmadı.");
+            }
+
+            sessionStorage.setItem('groq_working_model', best.id);
+            return best.id;
         }
 
-        // 🧪 GROQ TEST DÜYMƏSİ
+        async function requestGroqAI(apiKey, systemPrompt, userPrompt) {
+            let activeModel = await getLiveGroqModel(apiKey);
+
+            const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${apiKey}`,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    model: activeModel,
+                    messages: [
+                        { role: "system", content: systemPrompt },
+                        { role: "user", content: userPrompt }
+                    ],
+                    response_format: { type: "json_object" },
+                    temperature: 0.1
+                })
+            });
+
+            const resData = await res.json();
+
+            if (!res.ok) {
+                if (res.status === 404) sessionStorage.removeItem('groq_working_model');
+                throw new Error(resData.error?.message || `HTTP ${res.status}`);
+            }
+
+            if (resData.choices && resData.choices.length > 0) {
+                let text = resData.choices[0].message.content;
+                return {
+                    model: activeModel,
+                    data: JSON.parse(text)
+                };
+            }
+
+            throw new Error("Groq heç bir cavab qaytarmadı.");
+        }
+
+        // 🧪 GROQ TEST DÜYMƏSİ (CANLI MODEL AXTARIŞI İLƏ)
         async function testAiApiKey() {
             let key = document.getElementById('inpGroqApiKey').value.trim() || groqApiKey;
             if(!key) return alert("Zəhmət olmasa əvvəlcə Groq API açarını (`gsk_...`) xanaya daxil edin!");
 
             const btn = event.target;
             btn.disabled = true;
-            btn.innerText = "⏳ Groq LPU test edilir...";
+            btn.innerText = "⏳ Groq modelləri yoxlanılır...";
 
             try {
+                sessionStorage.removeItem('groq_working_model');
                 let systemPrompt = "You are a test assistant. Always output JSON.";
                 let userPrompt = "Return JSON with: {\"status\": \"ok\", \"message\": \"Groq AI is ready\"}";
                 let result = await requestGroqAI(key, systemPrompt, userPrompt);
                 
-                alert(`✅ ƏLA! Groq Süni İntellekt uğurla qoşuldu!\nAktiv Model: ${result.model}\nİndi yüklənən bütün C++ və Python kodları 1 saniyəyə qüsursuz yoxlanılacaq.`);
+                alert(`✅ ƏLA! Groq Süni İntellekt uğurla qoşuldu!\nAktiv Canlı Model: ${result.model}\nİndi bütün kodlar heç bir model xətası olmadan birbaşa bu model ilə yoxlanılacaq.`);
             } catch(e) {
-                alert("❌ Xəta baş verdi:\n" + e.message + "\n\nPulsuz açar almaq üçün: console.groq.com/keys");
+                alert("❌ Xəta baş verdi:\n" + e.message);
             } finally {
                 btn.disabled = false;
                 btn.innerText = "🧪 API Açarını Test Et";
@@ -1625,7 +1661,7 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
         }
 
         // =========================================================================
-        // 🧠 TƏKMİLLƏŞDİRİLMİŞ SÜNİ İNTELLEKT (GROQ AI - LLAMA 3.3 İLƏ DƏQİQ ANALİZ)
+        // 🧠 TƏKMİLLƏŞDİRİLMİŞ SÜNİ İNTELLEKT (GROQ AI - CANLI MODEL AXTARIŞI)
         // =========================================================================
         async function runTrueAiEvaluation(rawCode, subject) {
             let code = rawCode.trim();
@@ -1654,7 +1690,7 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
                 }
             }
 
-            // 3. Əgər Groq API açarı varsa, birbaşa Groq LPU ilə yoxlayırıq
+            // 3. Əgər Groq API açarı varsa, birbaşa canlı model axtarışı ilə sorğu göndər
             let activeKey = groqApiKey || localStorage.getItem('tt08_groq_key') || "";
             if(activeKey && activeKey.startsWith("gsk_")) {
                 try {
@@ -1662,7 +1698,7 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
                         return `[TAPŞIRIQ ID: ${idx + 1}]\nAdı: "${t.name}"\nAdminin Qoyduğu Bal: ${t.points} xal\n${t.sampleCode && t.sampleCode.trim() ? 'Müəllimin Referans Kodu:\n' + t.sampleCode.trim() : 'Referans kod yoxdur'}`;
                     }).join('\n-----------------------------------------\n');
 
-                    let systemPrompt = `Sən universitetdə alqoritmlər üzrə sərt və ədalətli professorsan. Tələbələrin ${subject.toUpperCase()} kodlarını yoxlayırsan. YALNIZ və YALNIZ JSON formatında cavab ver. Format: {"isCorrect": boolean, "detectedAlgorithm": string, "taskIndex": number, "taskName": string, "earnedPoints": number, "explanation": string}`;
+                    let systemPrompt = `Sən universitetdə alqoritmlər üzrə sərt və dahi professorsan. Tələbələrin ${subject.toUpperCase()} kodlarını yoxlayırsan. YALNIZ və YALNIZ JSON formatında cavab ver. Format: {"isCorrect": boolean, "detectedAlgorithm": string, "taskIndex": number, "taskName": string, "earnedPoints": number, "explanation": string}`;
 
                     let userPrompt = `
 Tələbənin kodu:
@@ -1788,23 +1824,6 @@ TƏLİMATLAR:
                 }
             }
 
-            // 7. Əgər adminin nümunə kodu varsa, yalnız unikal riyazi ifadələrə görə müqayisə
-            for (let t of tasks) {
-                if (t.sampleCode && t.sampleCode.trim().length > 25) {
-                    let sampleTokens = t.sampleCode.toLowerCase().match(/[a-zA-Z_]{5,}/g) || [];
-                    let ignored = ['include', 'iostream', 'using', 'namespace', 'return', 'vector', 'string', 'while'];
-                    let cleanSampleTokens = sampleTokens.filter(tok => !ignored.includes(tok));
-
-                    let matchedCount = 0;
-                    cleanSampleTokens.forEach(tok => {
-                        if (codeLower.includes(tok)) matchedCount++;
-                    });
-                    if (cleanSampleTokens.length > 0 && matchedCount / cleanSampleTokens.length >= 0.5) {
-                        return { isValid: true, taskName: t.name, points: parseInt(t.points) || 50 };
-                    }
-                }
-            }
-
             // Heç bir meyara uyğun gəlmirsə:
             return {
                 isValid: false,
@@ -1820,6 +1839,7 @@ TƏLİMATLAR:
 
             let isAdmin = (currentUserRole && currentUserRole !== 'student');
 
+            // Əgər admin deyilsə və deadline bitibsə, blokla
             if (!isAdmin && deadlineTimestamp && new Date().getTime() >= deadlineTimestamp) {
                 return alert("🚨 Deadline bitib! Tapşırıq qəbul edilmir.");
             }
