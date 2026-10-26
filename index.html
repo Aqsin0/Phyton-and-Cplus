@@ -302,7 +302,7 @@
                         <span class="badge-cat" style="background:var(--gold); position:absolute; top:8px; right:8px; font-size:10px;">MÜƏLLİM</span>
                         <img id="teacherAvatarImg" src="https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=200&q=80" style="width:70px; height:70px; border-radius:50%; margin-bottom:8px; border:2px solid var(--gold); object-fit:cover;" alt="Qurbanov Fuad" />
                         <br><strong>Qurbanov Fuad</strong><br>
-                        <span style="font-size:13px; color:var(--gold); font-weight:800;">Baş Müəllim (BDU)</span><br>
+                        <span style="font-size:13px; color:var(--gold); font-weight:800;">Müəllim (BDU)</span><br>
                         <button class="btn btn-dark" style="margin-top:8px; padding:5px 12px; font-size:12px; width:100%;" onclick="event.stopPropagation(); openTeacherModal()">ℹ️ Məlumatlar</button>
                     </div>
 
@@ -495,7 +495,7 @@
                     <h3 style="color:var(--accent); margin-top:0;">⚙️ FM Tapşırıqları və Nümunə Kodlar (Referans)</h3>
                     <p style="color:var(--text-sub); font-size:14px; margin-bottom:15px;">
                         Hər bir tapşırıq üçün aşağıya nümunə düzgün həll kodu qoya bilərsiniz. 
-                        <strong>Süni intellekt bu kodu yalnız tapşırığın məqsədini anlamaq üçün referans götürür</strong> — tələbənin fərqli üsulla yazmasına mane olmur və eyni nəticəni verən fərqli həllərə də tam bal təyin edir.
+                        <strong>Süni intellekt bu kodu yalnız tapşırığın məqsədini anlamaq üçün referans götürür</strong> — tələbənin fərqli üsulla yazmasına mane olmur və eyni nəticəni verən fərqli həllərə də təyin edilmiş tam balı verir.
                     </p>
                     <div id="adminTaskListContainer" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;"></div>
                     <button class="btn btn-dark" style="margin-bottom: 15px; color:var(--accent); border-color:var(--accent);" onclick="addAdminTaskRow()">➕ Yeni FM Tapşırığı Əlavə Et</button>
@@ -540,9 +540,11 @@
                 </div>
             </div>
 
-            <!-- TAB 4: REDAKTƏ ÜÇÜN FAYLLAR -->
+            <!-- TAB 4: REDAKTƏ ÜÇÜN FAYLLAR (TƏLƏBƏ ADLARI İLƏ QURUPLAŞDIRILDI) -->
             <div id="adminTabCheckedFiles" class="admin-sub-tab" style="display:none;">
-                <h3 style="color:var(--accent); margin-bottom: 20px; font-size:20px; font-weight:900;">✅ Yoxlanılmış Fayllar (Nəticəni Əllə Dəyiş)</h3>
+                <h3 style="color:var(--accent); margin-bottom: 20px; font-size:20px; font-weight:900;">
+                    ✅ Yoxlanılmış Fayllar (Tələbəyə görə sıralanmış)
+                </h3>
                 <div class="file-split-container">
                     <div class="file-split-box" style="border-color: #38bdf8;">
                         <div class="file-split-header" style="background:#38bdf8;">🔵 C++ Faylları</div>
@@ -658,7 +660,7 @@
                 <img id="modalTeacherImg" src="https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=200&q=80" style="width:90px; height:90px; border-radius:50%; border:3px solid var(--gold); object-fit:cover;" />
                 <div>
                     <h2 style="margin:0; color:var(--gold); font-size:24px; font-weight:900;">Qurbanov Fuad</h2>
-                    <span style="color:var(--text-sub); font-size:14px; font-weight:800;">Bakı Dövlət Universiteti — Baş Müəllim</span>
+                    <span style="color:var(--text-sub); font-size:14px; font-weight:800;">Bakı Dövlət Universiteti — Müəllim</span>
                 </div>
             </div>
 
@@ -757,7 +759,7 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
                 <ul style="font-size:14px; color:var(--text-sub); line-height:1.7; margin:0; padding-left:20px;">
                     <li><strong>Tədris Platformalarına Birbaşa Keçid:</strong> Reytinq cədvəlində <em>stepik.org</em>, <em>eolymp.com</em>, <em>codesrc.ru</em> və <em>hackerrank.com</em> platformalarının rəsmi səhifələrinə birbaşa keçid linkləri əlavə edildi.</li>
                     <li><strong>Həll Linklərinin Əlavə Edilməsi:</strong> Tələbələr digər platformalarda həll etdikləri məsələlərin birbaşa linkini əlavə edərək nəticələrini təsdiqləyə bilərlər.</li>
-                    <li><strong>Müəllim Bölməsi:</strong> BDU-nun Baş Müəllimi <strong>Qurbanov Fuad</strong> haqqında ətraflı bioqrafiya, elmi dərəcələri və təhsil məlumatları səhifəsi istifadəçilərə təqdim olundu.</li>
+                    <li><strong>Müəllim Bölməsi:</strong> BDU-nun Müəllimi <strong>Qurbanov Fuad</strong> haqqında ətraflı bioqrafiya, elmi dərəcələri və təhsil məlumatları səhifəsi istifadəçilərə təqdim olundu.</li>
                     <li><strong>Həftəlik Nəticələrə Uyğun Reytinq:</strong> Həftənin Liderləri və Outsiderləri bölməsi cari həftə ərzində toplanan xal artımına uyğun dinamik olaraq yenilənir.</li>
                     <li><strong>Sürətli və İşıqlı/Qaranlıq İnterfeys:</strong> Saytın sürəti optimallaşdırıldı, xal sistemi təkmilləşdirildi və interaktiv təbriklər əlavə edildi.</li>
                 </ul>
@@ -904,8 +906,11 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
                 const inp = document.getElementById('inpAudioOutsider'); if(inp) inp.value = snap.val() || '';
             });
 
-            database.ref('settings/dynamic_tasks').once('value').then(snap => {
-                if(snap.val() && Array.isArray(snap.val())) dynamicTasksConfig = snap.val();
+            database.ref('settings/dynamic_tasks').on('value', snap => {
+                if(snap.val() && Array.isArray(snap.val())) {
+                    dynamicTasksConfig = snap.val();
+                    if(currentUserRole && currentUserRole !== 'student') renderAdminTaskListUI();
+                }
             });
 
             database.ref('students_data').on('value', snap => { 
@@ -953,7 +958,6 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             }
 
             if(maintenanceMode) {
-                // Əgər daxil olan istifadəçi admindirsə, sayt ona açıq qalır
                 if(currentUserRole && currentUserRole !== 'student') {
                     overlay.style.display = 'none';
                 } else {
@@ -1530,7 +1534,7 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
         }
 
         // =========================================================================
-        // 🧠 CİDDİ VƏ HƏQİQİ SÜNİ İNTELLEKT ANALİZATORU (XƏTASIZ VƏ DƏQİQ)
+        // 🧠 TƏKMİLLƏŞDİRİLMİŞ SÜNİ İNTELLEKT (MƏQSƏDƏ GÖRƏ REAL BAL TƏYİNİ)
         // =========================================================================
         async function runTrueAiEvaluation(rawCode, subject) {
             let code = rawCode.trim();
@@ -1539,7 +1543,7 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             const htmlTags = ['<!doctype', '<html', '<head', '<body', '<script', '<div', 'css', 'queryselector', 'display:', 'style='];
             for(let tag of htmlTags) {
                 if(code.toLowerCase().includes(tag)) {
-                    return { isValid: false, reason: "Sayt/HTML kodu aşkar edildi! Yalnız təmiz proqramlaşdırma kodu qəbul edilir." };
+                    return { isValid: false, reason: "Sayt/HTML kodu aşkar edildi! Yalnız proqramlaşdırma həlli qəbul edilir." };
                 }
             }
 
@@ -1562,7 +1566,7 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             if(geminiApiKey && geminiApiKey.startsWith("AIzaSy")) {
                 try {
                     let taskCatalog = dynamicTasksConfig.map((t, idx) => {
-                        return `[ID: ${idx + 1}] Adı: "${t.name}" | Balı: ${t.points} xal\n${t.sampleCode ? 'Referans Həll:\n' + t.sampleCode : 'Referans yoxdur'}`;
+                        return `[ID: ${idx + 1}] Adı: "${t.name}" | Balı: ${t.points} xal\n${t.sampleCode ? 'Referans Həll:\n' + t.sampleCode : 'Referans kod qeyd edilməyib'}`;
                     }).join('\n---------------------\n');
 
                     let prompt = `
@@ -1573,20 +1577,21 @@ Tələbə ${subject.toUpperCase()} dilində aşağıdakı kodu yazıb:
 ${code}
 === KOD BİTDİ ===
 
-Sistemdəki tapşırıqlar:
+Sistemdə mövcud olan aktiv tapşırıqlar siyahısı:
 ${taskCatalog}
 
 TƏLİMATLAR:
 1. Əsla boş yerə bal vermə! Əgər kod natamamdırsa, işləmirsə, sadəcə print verirsə və ya dummy koddursa, QƏTİYYƏN QƏBUL ETMƏ (isCorrect: false).
-2. Tələbənin kodunun məhz HANSI tapşırığa aid olduğunu dəqiq təyin et. Heç bir halda avtomatik sonuncu tapşırığa bağlama!
-3. Alqoritmin riyazi doğruluğunu, kənar hallarını (0, 1, mənfi hallar, böyük ədədlər, sonsuz dövr) virtual sınaqdan keçir.
-4. Əgər kod bu tapşırıqlardan heç birinə aid deyilsə və ya səhvdirsə, isCorrect: false ver.
+2. Tələbənin kodunun məhz HANSI tapşırığa aid olduğunu siyahıdakı hər tapşırığı tək-tək yoxlayaraq tap.
+3. ƏGƏR BU KOD SİYAHIDAKI TAPŞIRIQLARIN HEÇ BİRİNƏ AİD DEYİLSƏ, isCorrect: false ver və izaha dəqiq bunu yaz: "Daxil edilən kod aktiv tapşırıqlar arasında tapılmadı. Hal-hazırda belə bir tapşırıq tələb olunmur."
+4. Əgər kod siyahıdakı tapşırıqlardan birinə aiddirsə və bütün hallarda (0, 1, mənfi, böyük ədədlər) düzgün işləyirsə, həmin tapşırığın siyahıdakı DƏQİQ BALINI (earnedPoints) ver.
 5. YALNIZ və YALNIZ bu JSON formatında cavab ver (heç bir markdown və ya artıq söz yazma):
 {
   "isCorrect": true/false,
-  "taskName": "Dəqiq tapşırıq adı",
-  "earnedPoints": həmin tapşırığın balı,
-  "explanation": "Azərbaycanca ətraflı izah (səhvdirsə hansı girişdə/halda səhv etdiyini izah et)"
+  "taskIndex": uyğun gələn tapşırığın 1-dən başlayan ID nömrəsi (uyğun gəlmirsə 0),
+  "taskName": "Tapşırığın dəqiq adı",
+  "earnedPoints": həmin tapşırığın konfiqurasiyadakı dəqiq balı,
+  "explanation": "Ətraflı azərbaycanca izah"
 }
 `;
                     const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiApiKey}`, {
@@ -1598,74 +1603,81 @@ TƏLİMATLAR:
                     let text = resData?.candidates?.[0]?.content?.parts?.[0]?.text || "";
                     let cleanJson = text.replace(/```json/g, "").replace(/```/g, "").trim();
                     let aiResult = JSON.parse(cleanJson);
-                    return {
-                        isValid: aiResult.isCorrect === true,
-                        taskName: aiResult.taskName || "Alqoritm Tapşırığı",
-                        points: Number(aiResult.earnedPoints) || 50,
-                        reason: aiResult.explanation || ""
-                    };
+
+                    let tIdx = Number(aiResult.taskIndex) - 1;
+                    let matchedTask = (tIdx >= 0 && dynamicTasksConfig[tIdx]) ? dynamicTasksConfig[tIdx] : dynamicTasksConfig.find(t => t.name.toLowerCase().trim() === (aiResult.taskName || "").toLowerCase().trim());
+
+                    if (aiResult.isCorrect === true && matchedTask) {
+                        return {
+                            isValid: true,
+                            taskName: matchedTask.name,
+                            points: Number(matchedTask.points), // Adminin yazdığı real bal
+                            reason: aiResult.explanation || ""
+                        };
+                    } else {
+                        return {
+                            isValid: false,
+                            reason: aiResult.explanation || "Daxil edilən kod aktiv tapşırıqlar arasında tapılmadı. Hal-hazırda belə bir tapşırıq tələb olunmur."
+                        };
+                    }
                 } catch(e) {
-                    console.log("Gemini API zəngi uğursuz oldu, daxili dərin analizator işə düşür...", e);
+                    console.log("Gemini API zəngi uğursuz oldu, daxili intellektual mühərrik işə düşür...", e);
                 }
             }
 
-            // 4. Daxili Ciddi Alqoritmik Analizator (Heç vaxt hər şeyə bal vermir!)
+            // 4. Daxili Ciddi Alqoritmik Analizator
             return evaluateStrictAlgorithmicLogic(code, subject);
         }
 
-        // Daxili Ciddi Analizator
+        // Daxili Analizator
         function evaluateStrictAlgorithmicLogic(code, subject) {
             let codeLower = code.toLowerCase();
 
-            // 1. Armstrong Ədədi
-            if (codeLower.includes('armstrong') || (codeLower.includes('% 10') && codeLower.includes('/ 10') && (codeLower.includes('pow') || codeLower.includes('**') || codeLower.includes('*')))) {
-                let task = dynamicTasksConfig.find(t => t.name.toLowerCase().includes("armstrong") || t.name.toLowerCase().includes("amstrong")) || { name: "Armstrong Ədədi", points: 50 };
+            let matchedTask = null;
 
-                // Armstrong üçün mütləq rəqəmlərə ayırma və qüvvət cəmi olmalıdır
-                let hasDigitExtract = codeLower.includes('% 10') || codeLower.includes('%10') || codeLower.includes('str(');
-                let hasSumComparison = codeLower.includes('==') && (codeLower.includes('sum') || codeLower.includes('cem') || codeLower.includes('netice') || codeLower.includes('ans'));
-
-                if (!hasDigitExtract || !hasSumComparison) {
-                    return { isValid: false, reason: "Məntiq xətası: Armstrong ədədi üçün rəqəmlərin qüvvətləri cəminin ilkin ədədlə bərabərliyi yoxlanılmayıb!" };
+            // 1. Armstrong Ədədi yoxlanışı
+            if (codeLower.includes('armstrong') || (codeLower.includes('% 10') && codeLower.includes('/ 10') && (codeLower.includes('pow') || codeLower.includes('**')))) {
+                matchedTask = dynamicTasksConfig.find(t => t.name.toLowerCase().includes("armstrong") || t.name.toLowerCase().includes("amstrong"));
+                if (matchedTask) {
+                    let hasDigitExtract = codeLower.includes('% 10') || codeLower.includes('%10') || codeLower.includes('str(');
+                    let hasSumComparison = codeLower.includes('==');
+                    if (!hasDigitExtract || !hasSumComparison) {
+                        return { isValid: false, reason: "Məntiq xətası: Armstrong ədədi üçün rəqəmlərin qüvvətləri cəminin ilkin ədədlə bərabərliyi yoxlanılmayıb!" };
+                    }
+                    return { isValid: true, taskName: matchedTask.name, points: Number(matchedTask.points) };
                 }
-
-                return { isValid: true, taskName: task.name, points: Number(task.points) || 50 };
             }
 
-            // 2. Sadə Ədəd Tapşırığı
+            // 2. Sadə Ədəd yoxlanışı
             if (codeLower.includes('prime') || codeLower.includes('sade') || (codeLower.includes('%') && (codeLower.includes('for') || codeLower.includes('while')))) {
-                let task = dynamicTasksConfig.find(t => t.name.toLowerCase().includes("sadə") || t.name.toLowerCase().includes("prime")) || { name: "n-ci sadə ədədin tapılması", points: 50 };
-
-                let hasLoop = codeLower.includes('for') || codeLower.includes('while');
-                let hasModulo = codeLower.includes('%');
-
-                if (!hasLoop || !hasModulo) {
-                    return { isValid: false, reason: "Alqoritm xətası: Sadə ədəd məntiqi üçün dövr və ya bölünmə (%) yoxlanışı tapılmadı!" };
+                matchedTask = dynamicTasksConfig.find(t => t.name.toLowerCase().includes("sadə") || t.name.toLowerCase().includes("prime"));
+                if (matchedTask) {
+                    let hasLoop = codeLower.includes('for') || codeLower.includes('while');
+                    let hasModulo = codeLower.includes('%');
+                    if (!hasLoop || !hasModulo) {
+                        return { isValid: false, reason: "Alqoritm xətası: Sadə ədəd məntiqi üçün dövr və ya bölünmə (%) yoxlanışı tapılmadı!" };
+                    }
+                    if (codeLower.includes('i = 1') && !codeLower.includes('i = 2') && !codeLower.includes('i=2')) {
+                        return { isValid: false, reason: "Kənar hal xətası: 1 ədədi sadə ədəd deyil! Kodunuz 1-i bölən kimi qəbul edir." };
+                    }
+                    return { isValid: true, taskName: matchedTask.name, points: Number(matchedTask.points) };
                 }
-
-                // 1-i sadə ədəd saymaq kobud xətası
-                if (codeLower.includes('i = 1') && !codeLower.includes('i = 2') && !codeLower.includes('i=2')) {
-                    return { isValid: false, reason: "Kənar hal xətası: 1 ədədi sadə ədəd deyil! Sizin kodunuz 1-i bölən kimi qəbul edir." };
-                }
-
-                return { isValid: true, taskName: task.name, points: Number(task.points) || 50 };
             }
 
             // 3. Vigenere Şifrəsi
-            if (codeLower.includes('vigenere') || (codeLower.includes('key') && (codeLower.includes('26') || codeLower.includes('% 26') || codeLower.includes('%26')))) {
-                let task = dynamicTasksConfig.find(t => t.name.toLowerCase().includes("vigenere") || t.name.toLowerCase().includes("şifrə")) || { name: "Vigenere Şifrəsi", points: 75 };
-
-                let hasShift = codeLower.includes('26') || codeLower.includes('ord') || codeLower.includes('chr');
-                let hasKey = codeLower.includes('key') || codeLower.includes('acar');
-
-                if (!hasShift || !hasKey) {
-                    return { isValid: false, reason: "Alqoritm xətası: Vigenere şifrələməsi üçün açar və ya 26 əlifba sürüşdürməsi tapılmadı!" };
+            if (codeLower.includes('vigenere') || (codeLower.includes('key') && (codeLower.includes('26') || codeLower.includes('% 26')))) {
+                matchedTask = dynamicTasksConfig.find(t => t.name.toLowerCase().includes("vigenere") || t.name.toLowerCase().includes("şifrə"));
+                if (matchedTask) {
+                    let hasShift = codeLower.includes('26') || codeLower.includes('ord') || codeLower.includes('chr');
+                    let hasKey = codeLower.includes('key') || codeLower.includes('acar');
+                    if (!hasShift || !hasKey) {
+                        return { isValid: false, reason: "Alqoritm xətası: Vigenere şifrələməsi üçün açar və ya 26 əlifba sürüşdürməsi tapılmadı!" };
+                    }
+                    return { isValid: true, taskName: matchedTask.name, points: Number(matchedTask.points) };
                 }
-
-                return { isValid: true, taskName: task.name, points: Number(task.points) || 75 };
             }
 
-            // 4. Əgər xüsusi referans kod qoyulubsa, həmin kodla dərin uyğunluq
+            // 4. Referans kod qoyulmuş digər tapşırıqlar
             for (let t of dynamicTasksConfig) {
                 if (t.sampleCode && t.sampleCode.trim().length > 15) {
                     let sampleTokens = t.sampleCode.toLowerCase().match(/[a-zA-Z_]{4,}/g) || [];
@@ -1673,16 +1685,16 @@ TƏLİMATLAR:
                     sampleTokens.forEach(tok => {
                         if (codeLower.includes(tok)) matchedCount++;
                     });
-                    if (matchedCount >= 4 && (codeLower.includes('for') || codeLower.includes('while') || codeLower.includes('if'))) {
-                        return { isValid: true, taskName: t.name, points: Number(t.points) || 50 };
+                    if (matchedCount >= 5 && (codeLower.includes('for') || codeLower.includes('while') || codeLower.includes('if'))) {
+                        return { isValid: true, taskName: t.name, points: Number(t.points) };
                     }
                 }
             }
 
-            // Əgər heç bir meyara uyğun gəlmirsə, QƏTİYYƏN BAL VERMİRİK!
+            // Əgər siyahıda heç bir tapşırığa uyğun gəlmirsə:
             return {
                 isValid: false,
-                reason: "Sistem bu kodun verilən tapşırıqlardan hər hansı birinin tam və doğru həlli olduğunu təsdiqləmədi. Kod natamamdır və ya tələblərə uyğun deyil."
+                reason: "Daxil edilən kod aktiv tapşırıqlar arasında tapılmadı. Hal-hazırda belə bir tapşırıq tələb olunmur."
             };
         }
 
@@ -1708,11 +1720,9 @@ TƏLİMATLAR:
             submitBtn.innerText = "⏳ Yoxlanılır...";
 
             try {
-                // Tələbənin əvvəlki bütün tapşırıqlarını bazadan təmiz çəkirik
                 const existingSnap = await database.ref('student_tasks').orderByChild('studentName').equalTo(activeProfileStudent).once('value');
                 const studentExistingTasks = existingSnap.val() || {};
 
-                // Artıq bal alınmış tapşırıqların adları
                 let completedTaskNames = new Set();
                 Object.values(studentExistingTasks).forEach(t => {
                     if (t.subject === subject && t.category === 'fm' && t.status === 'correct' && !t.archived && t.recognizedTask) {
@@ -1734,14 +1744,11 @@ TƏLİMATLAR:
                         if (category === 'fm') {
                             reader.onload = async evText => {
                                 let rawCode = evText.target.result;
-                                
-                                // Ciddi Yoxlama
                                 let aiEval = await runTrueAiEvaluation(rawCode, subject);
 
                                 if (aiEval.isValid) {
                                     let cleanTaskName = aiEval.taskName.trim().toLowerCase();
 
-                                    // DUBLİKAT BLOКU: Əgər bu dildə bu tapşırıq artıq düzgündürsə, bal vermə!
                                     if (completedTaskNames.has(cleanTaskName)) {
                                         alert(`🚫 DİQQƏT: Siz artıq "${aiEval.taskName}" tapşırığını ${subject.toUpperCase()} bölməsində düzgün həll etmisiniz və balınız hesablanıb! Eyni tapşırıqdan təkrar bal almaq olmaz.`);
                                         duplicateCount++;
@@ -1749,7 +1756,6 @@ TƏLİMATLAR:
                                         return;
                                     }
 
-                                    // Tapşırığı tamamlanmışlar siyahısına dərhal əlavə edirik ki, eyni anda atılan digər fayl təkrar bal almasın
                                     completedTaskNames.add(cleanTaskName);
 
                                     const b64Reader = new FileReader();
@@ -1784,7 +1790,6 @@ TƏLİMATLAR:
                                     };
                                     b64Reader.readAsDataURL(file);
                                 } else {
-                                    // Səhv olan fayllar qəbul edilmir və bal verilmir
                                     const b64Reader = new FileReader();
                                     b64Reader.onload = async b64Ev => {
                                         let base64Data = b64Ev.target.result;
@@ -1810,7 +1815,6 @@ TƏLİMATLAR:
                             };
                             reader.readAsText(file);
                         } else {
-                            // Digər Platformalar üzrə Dublikat Yoxlanışı
                             let cleanFileName = file.name.trim().toLowerCase();
                             let alreadyPendingOrDone = Object.values(studentExistingTasks).some(t => 
                                 t.subject === subject && 
@@ -1851,7 +1855,7 @@ TƏLİMATLAR:
                 }
 
                 let msg = "YOXLAMA NƏTİCƏSİ:\n";
-                if (acceptedCount > 0) msg += `✅ Düzgün qəbul edildi: ${acceptedCount} fayl (Balınız artırıldı)\n`;
+                if (acceptedCount > 0) msg += `✅ Düzgün qəbul edildi: ${acceptedCount} fayl (Təyin edilmiş xal hesabınıza yazıldı)\n`;
                 if (rejectedCount > 0) msg += `❌ Səhv/Uyğunsuz: ${rejectedCount} fayl (Profilinizdəki statusdan səbəbə baxa bilərsiniz)\n`;
                 if (adminPending > 0) msg += `👨‍🏫 Admin yoxlamasına göndərildi: ${adminPending} fayl\n`;
                 if (duplicateCount > 0) msg += `⚠️ Dublikat olduğuna görə bal verilməyən: ${duplicateCount} fayl\n`;
@@ -2125,9 +2129,17 @@ TƏLİMATLAR:
             });
         }
 
-        // ADMİN FAYL YOXLAMASI
+        // TOGGLE AKKORDEON (Yoxlanılmış faylların səliqəli açılıb bağlanması)
+        function toggleCheckedGroup(id) {
+            let el = document.getElementById(id);
+            if(el) {
+                el.style.display = (el.style.display === 'none' || el.style.display === '') ? 'block' : 'none';
+            }
+        }
+
+        // ADMİN FAYL YOXLAMASI (TƏLƏBƏ ADLARI ÜZRƏ QRUPLAŞDIRILMIŞ VƏ SƏLİQƏLİ)
         function loadAllFilesForAdmin() {
-            database.ref('student_tasks').limitToLast(100).once('value').then(snap => {
+            database.ref('student_tasks').limitToLast(150).once('value').then(snap => {
                 const tasks = snap.val() || {};
                 const pCpp = document.getElementById('adminPendingTasksCpp'); 
                 const pPy = document.getElementById('adminPendingTasksPython'); 
@@ -2135,7 +2147,9 @@ TƏLİMATLAR:
                 const cPy = document.getElementById('adminCheckedTasksPython'); 
                 
                 let countPCpp = 0, countPPy = 0;
-                let pCppHTML = '', pPyHTML = '', cCppHTML = '', cPyHTML = '';
+                let pCppHTML = '', pPyHTML = '';
+
+                let checkedGroups = { cpp: {}, python: {} };
                 const catNames = { fm: "FM", stepping: "Stepik", e_olimp: "E-Olimp", codesources: "CodeSources", hackerrank: "HackerRank" };
 
                 Object.keys(tasks).reverse().forEach(key => {
@@ -2169,14 +2183,51 @@ TƏLİMATLAR:
                     if (status === 'pending') {
                         if (sub === 'python') { pPyHTML += row; countPPy++; } else { pCppHTML += row; countPCpp++; }
                     } else {
-                        if (sub === 'python') cPyHTML += row; else cCppHTML += row;
+                        // Yoxlanılmışları tələbə adı üzrə qruplaşdırırıq
+                        if (!checkedGroups[sub][t.studentName]) checkedGroups[sub][t.studentName] = [];
+                        checkedGroups[sub][t.studentName].push(row);
                     }
                 });
 
                 if(pCpp) pCpp.innerHTML = countPCpp ? pCppHTML : '<div style="padding:10px; color:var(--text-sub);">Gözləyən fayl yoxdur.</div>';
                 if(pPy) pPy.innerHTML = countPPy ? pPyHTML : '<div style="padding:10px; color:var(--text-sub);">Gözləyən fayl yoxdur.</div>';
-                if(cCpp) cCpp.innerHTML = cCppHTML || '<div style="padding:10px; color:var(--text-sub);">Fayl yoxdur.</div>';
-                if(cPy) cPy.innerHTML = cPyHTML || '<div style="padding:10px; color:var(--text-sub);">Fayl yoxdur.</div>';
+
+                // C++ Yoxlanılmış Akkordeon
+                let cCppHTML = '';
+                for (let sName in checkedGroups.cpp) {
+                    let safeId = 'chk_cpp_' + sName.replace(/[^a-zA-Z0-9]/g, '_');
+                    cCppHTML += `
+                        <div style="background:var(--card-bg); border:1px solid var(--border); border-radius:12px; margin-bottom:10px; overflow:hidden;">
+                            <div style="padding:12px 15px; background:var(--card-hover); cursor:pointer; display:flex; justify-content:space-between; align-items:center;" onclick="toggleCheckedGroup('${safeId}')">
+                                <strong style="color:var(--text-main); font-size:15px;">👤 ${sName}</strong>
+                                <span style="font-size:12px; font-weight:800; color:var(--accent); background:rgba(56,189,248,0.1); padding:4px 10px; border-radius:8px;">${checkedGroups.cpp[sName].length} fayl ⬇️</span>
+                            </div>
+                            <div id="${safeId}" style="display:none; padding:12px; border-top:1px solid var(--border);">
+                                ${checkedGroups.cpp[sName].join('')}
+                            </div>
+                        </div>
+                    `;
+                }
+
+                // Python Yoxlanılmış Akkordeon
+                let cPyHTML = '';
+                for (let sName in checkedGroups.python) {
+                    let safeId = 'chk_py_' + sName.replace(/[^a-zA-Z0-9]/g, '_');
+                    cPyHTML += `
+                        <div style="background:var(--card-bg); border:1px solid var(--border); border-radius:12px; margin-bottom:10px; overflow:hidden;">
+                            <div style="padding:12px 15px; background:var(--card-hover); cursor:pointer; display:flex; justify-content:space-between; align-items:center;" onclick="toggleCheckedGroup('${safeId}')">
+                                <strong style="color:var(--text-main); font-size:15px;">👤 ${sName}</strong>
+                                <span style="font-size:12px; font-weight:800; color:var(--gold); background:rgba(245,158,11,0.1); padding:4px 10px; border-radius:8px;">${checkedGroups.python[sName].length} fayl ⬇️</span>
+                            </div>
+                            <div id="${safeId}" style="display:none; padding:12px; border-top:1px solid var(--border);">
+                                ${checkedGroups.python[sName].join('')}
+                            </div>
+                        </div>
+                    `;
+                }
+
+                if(cCpp) cCpp.innerHTML = cCppHTML || '<div style="padding:10px; color:var(--text-sub);">Yoxlanılmış fayl yoxdur.</div>';
+                if(cPy) cPy.innerHTML = cPyHTML || '<div style="padding:10px; color:var(--text-sub);">Yoxlanılmış fayl yoxdur.</div>';
 
                 const tb = document.getElementById('totalPendingBadge'); if(tb) tb.innerText = countPCpp + countPPy;
                 const cb = document.getElementById('cppPendingBadge'); if(cb) cb.innerText = countPCpp;
