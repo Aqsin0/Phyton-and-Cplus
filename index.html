@@ -164,9 +164,16 @@
         /* ADMIN PANEL */
         .admin-dashboard-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
         .admin-nav { display: flex; gap: 10px; margin-bottom: 25px; flex-wrap: wrap; background: var(--card-bg); padding: 10px; border-radius: 14px; border: 1px solid var(--border); }
-        .admin-nav-btn { background: transparent; border: none; color: var(--text-sub); padding: 12px 20px; border-radius: 10px; cursor: pointer; font-weight: 800; font-size: 15px; transition: 0.2s; }
+        .admin-nav-btn { background: transparent; border: none; color: var(--text-sub); padding: 12px 20px; border-radius: 10px; cursor: pointer; font-weight: 800; font-size: 15px; transition: 0.2s; position: relative; }
         .admin-nav-btn.active { background: var(--accent); color: #fff; }
         
+        /* GÖZLƏYƏN FAYL BİLDİRİŞ İŞARƏSİ */
+        .admin-badge-dot {
+            position: absolute; top: 6px; right: 6px; width: 10px; height: 10px;
+            background: var(--negative); border-radius: 50%; display: none;
+            box-shadow: 0 0 8px var(--negative);
+        }
+
         .admin-student-card { background: var(--card-hover); border-radius: 14px; padding: 20px; margin-bottom: 15px; border: 1px solid var(--border); }
         .grid-inputs { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 12px; margin-top: 15px; }
         .grid-inputs input { width: 100%; padding: 10px; border-radius: 10px; border: 1px solid var(--border); background: var(--bg-color); color: var(--text-main); font-weight: 800; font-family: inherit; transition: 0.2s; box-sizing: border-box; }
@@ -465,7 +472,7 @@
                 <button class="admin-nav-btn active tab-students" onclick="switchAdminSubTab(event, 'students')">👥 Reytinq və Balların İdarəsi</button>
                 <button class="admin-nav-btn tab-tasksConfig" onclick="switchAdminSubTab(event, 'tasksConfig')">⚙️ FM Tapşırıqları və Nümunə Kodlar</button>
                 <button class="admin-nav-btn tab-aiConfig" onclick="switchAdminSubTab(event, 'aiConfig')">🤖 Süni İntellekt (Groq AI)</button>
-                <button class="admin-nav-btn tab-pending" onclick="switchAdminSubTab(event, 'pendingFiles')">⏳ Yoxlama Gözləyən Fayllar</button>
+                <button class="admin-nav-btn tab-pending" onclick="switchAdminSubTab(event, 'pendingFiles')">⏳ Yoxlama Gözləyən Fayllar <span id="adminPendingDot" class="admin-badge-dot"></span></button>
                 <button class="admin-nav-btn tab-checked" onclick="switchAdminSubTab(event, 'checkedFiles')">✏️ Yoxlanılmış Fayllar</button>
                 <button class="admin-nav-btn tab-accounts" onclick="switchAdminSubTab(event, 'accounts')">🔐 Hesablar və Şifrələr</button>
                 <button class="admin-nav-btn tab-media" onclick="switchAdminSubTab(event, 'media')">🎵 Media & Tənzimləmələr</button>
@@ -866,6 +873,19 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             checkSession();
             renderTable();
             
+            // Gözləyən faylların sayını anlıq yoxla və qırmızı nöqtəni idarə et
+            database.ref('student_tasks').on('value', snap => {
+                const tasks = snap.val() || {};
+                let pendingCount = 0;
+                Object.values(tasks).forEach(t => {
+                    if (t.status === 'pending' && !t.archived) pendingCount++;
+                });
+                const dot = document.getElementById('adminPendingDot');
+                if (dot) {
+                    dot.style.display = pendingCount > 0 ? 'inline-block' : 'none';
+                }
+            });
+
             // Texniki İşlər Rejimi
             database.ref('settings/maintenance_mode').on('value', snap => {
                 maintenanceMode = snap.val() === true;
@@ -1025,13 +1045,12 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
         }
 
         // =========================================================================
-        // ⚡ GROQ DİNAMİK MODEL AXTARIŞI VƏ ÇAĞIRIŞI (HƏR ZAMAN CANLI MODEL SEÇİR)
+        // ⚡ GROQ DİNAMİK MODEL AXTARIŞI VƏ ÇAĞIRIŞI
         // =========================================================================
         async function getLiveGroqModel(apiKey) {
             let saved = sessionStorage.getItem('groq_working_model');
             if (saved) return saved;
 
-            // Groq-un rəsmi models endpointindən canlı aktiv modelləri alırıq
             let res = await fetch("https://api.groq.com/openai/v1/models", {
                 headers: {
                     "Authorization": `Bearer ${apiKey}`,
@@ -1048,14 +1067,12 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
                 throw new Error("Bu açar üçün heç bir aktiv Groq modeli tapılmadı.");
             }
 
-            // Audio/whisper modellərini kənarlaşdırıb yalnız mətn/kod modellərini süzürük
             let chatModels = data.data.filter(m => 
                 !m.id.includes("whisper") && 
                 !m.id.includes("guard") && 
                 !m.id.includes("tts")
             );
 
-            // Prioritet modellər: gpt-oss, qwen və ya mövcud ən güclü model
             let best = chatModels.find(m => m.id.includes("gpt-oss-120b"))
                     || chatModels.find(m => m.id.includes("gpt-oss-20b"))
                     || chatModels.find(m => m.id.includes("qwen"))
@@ -1109,14 +1126,14 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             throw new Error("Groq heç bir cavab qaytarmadı.");
         }
 
-        // 🧪 GROQ TEST DÜYMƏSİ (CANLI MODEL AXTARIŞI İLƏ)
+        // 🧪 GROQ TEST DÜYMƏSİ
         async function testAiApiKey() {
             let key = document.getElementById('inpGroqApiKey').value.trim() || groqApiKey;
             if(!key) return alert("Zəhmət olmasa əvvəlcə Groq API açarını (`gsk_...`) xanaya daxil edin!");
 
             const btn = event.target;
             btn.disabled = true;
-            btn.innerText = "⏳ Groq modelləri yoxlanılır...";
+            btn.innerText = "⏳ Groq LPU test edilir...";
 
             try {
                 sessionStorage.removeItem('groq_working_model');
@@ -1124,9 +1141,9 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
                 let userPrompt = "Return JSON with: {\"status\": \"ok\", \"message\": \"Groq AI is ready\"}";
                 let result = await requestGroqAI(key, systemPrompt, userPrompt);
                 
-                alert(`✅ ƏLA! Groq Süni İntellekt uğurla qoşuldu!\nAktiv Canlı Model: ${result.model}\nİndi bütün kodlar heç bir model xətası olmadan birbaşa bu model ilə yoxlanılacaq.`);
+                alert(`✅ ƏLA! Groq Süni İntellekt uğurla qoşuldu!\nAktiv Model: ${result.model}\nİndi yüklənən bütün C++ və Python kodları 1 saniyəyə qüsursuz yoxlanılacaq.`);
             } catch(e) {
-                alert("❌ Xəta baş verdi:\n" + e.message);
+                alert("❌ Xəta baş verdi:\n" + e.message + "\n\nPulsuz açar almaq üçün: console.groq.com/keys");
             } finally {
                 btn.disabled = false;
                 btn.innerText = "🧪 API Açarını Test Et";
@@ -1146,7 +1163,7 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             reader.readAsDataURL(file);
         }
 
-        // DEMO ADMİN FUNKSİYALARI
+        // DEMO ADMIN FUNKSİYALARI
         function updateDemoAdminUI() {
             const statusText = document.getElementById('demoStatusText'); 
             const toggleBtn = document.getElementById('btnToggleDemo');
@@ -1564,7 +1581,7 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             document.getElementById('pKurs').innerText = "2-ci Kurs";
             document.getElementById('pTevellud').innerText = STUDENT_BIRTHDATES[student.ad] || "Məlum deyil";
             document.getElementById('pGender').innerText = STUDENT_GENDERS[student.ad] || 'Kişi'; 
-            document.getElementById('pYer').innerText = student.yer || "Bakı şəhəri"; 
+            document.getElementById('pYer').innerText = student.yer || "Gəncə şəhəri"; 
             document.getElementById('pCari').innerText = computed.cari_reyting + " xal";
 
             const weeklyGained = computed.cari_reyting - Number(student.kecmis_reyting || 0);
@@ -1690,15 +1707,15 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
                 }
             }
 
-            // 3. Əgər Groq API açarı varsa, birbaşa canlı model axtarışı ilə sorğu göndər
+            // 3. Əgər Groq API açarı varsa, birbaşa Groq LPU ilə yoxlayırıq
             let activeKey = groqApiKey || localStorage.getItem('tt08_groq_key') || "";
             if(activeKey && activeKey.startsWith("gsk_")) {
                 try {
                     let taskCatalog = tasks.map((t, idx) => {
-                        return `[TAPŞIRIQ ID: ${idx + 1}]\nAdı: "${t.name}"\nAdminin Qoyduğu Bal: ${t.points} xal\n${t.sampleCode && t.sampleCode.trim() ? 'Müəllimin Referans Kodu:\n' + t.sampleCode.trim() : 'Referans kod yoxdur'}`;
+                        return `[TAPŞIRIQ ID: ${idx + 1}]\nAdı: "${t.name}"\nAdminin Qoyduğu Bal: ${t.points} xal\n${t.sampleCode && t.sampleCode.trim() ? 'Müəllimin Referans Kodu:\n' + t.sampleCode.trim() : 'Referans kod qeyd edilməyib'}`;
                     }).join('\n-----------------------------------------\n');
 
-                    let systemPrompt = `Sən universitetdə alqoritmlər üzrə sərt və dahi professorsan. Tələbələrin ${subject.toUpperCase()} kodlarını yoxlayırsan. YALNIZ və YALNIZ JSON formatında cavab ver. Format: {"isCorrect": boolean, "detectedAlgorithm": string, "taskIndex": number, "taskName": string, "earnedPoints": number, "explanation": string}`;
+                    let systemPrompt = `Sən universitetdə alqoritmlər üzrə sərt və ədalətli professorsun. Tələbələrin ${subject.toUpperCase()} kodlarını yoxlayırsan. YALNIZ və YALNIZ JSON formatında cavab ver. Format: {"isCorrect": boolean, "detectedAlgorithm": string, "taskIndex": number, "taskName": string, "earnedPoints": number, "explanation": string}`;
 
                     let userPrompt = `
 Tələbənin kodu:
@@ -1839,7 +1856,6 @@ TƏLİMATLAR:
 
             let isAdmin = (currentUserRole && currentUserRole !== 'student');
 
-            // Əgər admin deyilsə və deadline bitibsə, blokla
             if (!isAdmin && deadlineTimestamp && new Date().getTime() >= deadlineTimestamp) {
                 return alert("🚨 Deadline bitib! Tapşırıq qəbul edilmir.");
             }
