@@ -289,7 +289,7 @@
             Qızıl cilalanmasa parlamaz
         </div>
 
-        <!-- ƏSAS DASHBOARD -->
+        <!--ƏSAS DASHBOARD -->
         <div id="mainDashboard" class="page-view" style="display: block;">
             
             <!-- MÜƏLLİM VƏ MÜNSİFLƏR HEYƏTİ -->
@@ -468,7 +468,7 @@
                 <button class="admin-nav-btn tab-pending" onclick="switchAdminSubTab(event, 'pendingFiles')">⏳ Yoxlama Gözləyən Fayllar</button>
                 <button class="admin-nav-btn tab-checked" onclick="switchAdminSubTab(event, 'checkedFiles')">✏️ Yoxlanılmış Fayllar</button>
                 <button class="admin-nav-btn tab-accounts" onclick="switchAdminSubTab(event, 'accounts')">🔐 Hesablar və Şifrələr</button>
-                <button class="admin-nav-btn tab-media" onclick="switchAdminSubTab(event, 'media')">🎵 Media & Tənzimləmələr</button>
+                <button class="admin-nav-btn tab-media" onclick="switchAdminSubTab(event, 'media')">🎵 Media & Müəllim Şəkli</button>
                 <button class="admin-nav-btn tab-feedback" onclick="switchAdminSubTab(event, 'feedback')">💬 Feedback <span id="fbTabBadge" style="display:none; background:var(--negative); color:#fff; padding:2px 6px; border-radius:10px; font-size:11px; margin-left:5px;"></span></button>
                 <button class="admin-nav-btn tab-logs" onclick="switchAdminSubTab(event, 'logs')">📲 Loglar</button>
             </div>
@@ -880,13 +880,9 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
                 if(prev) prev.src = photo;
             });
 
-            // AI API Key (Həm Firebase, həm LocalStorage)
+            // AI API Key
             database.ref('settings/gemini_api_key').on('value', snap => {
-                let key = snap.val() || "";
-                if(key) {
-                    geminiApiKey = key;
-                    localStorage.setItem('tt08_gemini_key', key);
-                }
+                geminiApiKey = snap.val() || "";
                 const inp = document.getElementById('inpGeminiApiKey');
                 if(inp) inp.value = geminiApiKey;
             });
@@ -1018,48 +1014,14 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             geminiApiKey = key;
             localStorage.setItem('tt08_gemini_key', key);
             database.ref('settings/gemini_api_key').set(key).then(() => {
-                alert("Süni İntellekt API açarı saxlanıldı! İndi 'API Açarını Test Et' düyməsinə basıb yoxlayın. 🤖");
+                alert("Süni İntellekt API açarı uğurla saxlanıldı! 🤖");
                 logActivity("Admin Süni İntellekt API açarını yenilədi.");
             });
         }
 
         // =========================================================================
-        // 🧪 GOOGLE GEMINI DİNAMİK MODEL AXTARIŞI VƏ TESTİ (404 XƏTASINI KƏNARA ATIR)
+        // 🧪 API AÇARINI TEST EDƏN FUNKSİYA (Google API Həmişə işlək model tapır)
         // =========================================================================
-        async function discoverBestGeminiModel(key) {
-            // Əgər bu sessiyada artıq işlək model tapılıbsa, birbaşa onu qaytarırıq
-            let cached = sessionStorage.getItem('gemini_working_model');
-            if (cached) return cached;
-
-            try {
-                // Google-ın ListModels xidmətinə sorğu atıb açarın hansı modellərə icazəsi olduğunu öyrənirik
-                let res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${key}`);
-                if (res.ok) {
-                    let data = await res.json();
-                    if (data.models && Array.isArray(data.models)) {
-                        let supported = data.models.filter(m => m.supportedGenerationMethods && m.supportedGenerationMethods.includes("generateContent"));
-                        
-                        // Ən yeni və sürətli Flash modellərini prioritə alırıq
-                        let preferred = supported.find(m => m.name.includes("flash") && !m.name.includes("image") && !m.name.includes("tts") && !m.name.includes("audio"))
-                                     || supported.find(m => m.name.includes("gemini"))
-                                     || supported[0];
-
-                        if (preferred) {
-                            let cleanName = preferred.name.replace("models/", "");
-                            sessionStorage.setItem('gemini_working_model', cleanName);
-                            return cleanName;
-                        }
-                    }
-                }
-            } catch (e) {
-                console.warn("ListModels zəngi uğursuz oldu:", e);
-            }
-
-            // Əgər ListModels cavab verməsə, ən müasir alternativləri ardıcıl sınaq üçün ilkin namizəd seçirik
-            return "gemini-2.5-flash";
-        }
-
-        // 🧪 API AÇARINI TEST EDƏN FUNKSİYA
         async function testAiApiKey() {
             let key = document.getElementById('inpGeminiApiKey').value.trim() || geminiApiKey;
             if(!key) return alert("Zəhmət olmasa əvvəlcə Gemini API açarını xanaya daxil edin!");
@@ -1069,586 +1031,71 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             btn.innerText = "⏳ Modellər yoxlanılır...";
 
             try {
-                // 1. Dinamik model tapılır
-                let targetModel = await discoverBestGeminiModel(key);
-                btn.innerText = `⏳ [${targetModel}] test edilir...`;
+                // 1. Google-dan bütün işlək modelləri aşkarlayırıq
+                let workingModel = await discoverBestGeminiModel(key);
+                
+                // 2. Test sorğusu göndəririk
+                let testPrompt = `Sadəcə bu JSON-u qaytar: {"status": "ok"}`;
+                let res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${workingModel}:generateContent?key=${key}`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: testPrompt }] }],
+                        generationConfig: { responseMimeType: "application/json", temperature: 0.1 }
+                    })
+                });
 
-                // 2. Namizəd modellər siyahısı
-                let candidateModels = [targetModel, "gemini-2.5-flash", "gemini-2.0-flash", "gemini-flash-latest", "gemini-1.5-pro"];
-                candidateModels = [...new Set(candidateModels)];
-
-                let connectedModel = null;
-                let lastError = null;
-
-                for (let model of candidateModels) {
-                    try {
-                        let res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`, {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({
-                                contents: [{ parts: [{ text: "Salam. Sadəcə 'OK' cavabını ver." }] }]
-                            })
-                        });
-
-                        let data = await res.json();
-                        if (res.ok && data.candidates && data.candidates.length > 0) {
-                            connectedModel = model;
-                            sessionStorage.setItem('gemini_working_model', model);
-                            break;
-                        } else if (data.error) {
-                            lastError = data.error;
-                            // Əgər xəta 404 deyilsə (məs: açar səhvdir 400 və ya 403), dərhal dayandır
-                            if (data.error.code !== 404) break;
-                        }
-                    } catch (e) {
-                        lastError = e;
-                    }
-                }
-
-                if (connectedModel) {
-                    alert(`✅ ƏLA! Süni İntellekt uğurla qoşuldu!\nAktiv və işlək model: ${connectedModel}\nİndi yüklənən kodlar tam dəqiqliklə bu model vasitəsilə yoxlanılacaq.`);
+                let data = await res.json();
+                if(res.ok && data.candidates && data.candidates.length > 0) {
+                    alert(`✅ ƏLA! Süni İntellekt uğurla qoşuldu!\nAktiv işlək model: ${workingModel}\nİndi yüklənən kodlar problemsiz yoxlanılacaq.`);
+                } else if(data.error) {
+                    throw new Error(`Google API Xətası (${data.error.code}): ${data.error.message}`);
                 } else {
-                    let errMsg = lastError?.message || JSON.stringify(lastError);
-                    alert(`❌ Google API Xətası:\n${errMsg}\n\nZəhmət olmasa açarın düzgünlüyünə və Google AI Studio-da aktiv olduğuna əmin olun.`);
+                    throw new Error("Naməlum cavab alındı.");
                 }
             } catch(e) {
-                alert("❌ Bağlantı xətası baş verdi: " + e.message);
+                alert("❌ Xəta: " + e.message + "\nZəhmət olmasa API açarınızın düzgünlüyünə və Google AI Studio-da aktiv olduğuna əmin olun.");
+                console.error("API Test Xətası:", e);
             } finally {
                 btn.disabled = false;
                 btn.innerText = "🧪 API Açarını Test Et";
             }
         }
 
-        function uploadTeacherPhoto() {
-            const file = document.getElementById('teacherPhotoFileInput').files[0];
-            if(!file) return alert("Şəkil faylı seçin!");
-            const reader = new FileReader();
-            reader.onload = e => {
-                database.ref('settings/teacher_photo').set(e.target.result).then(() => {
-                    alert("Qurbanov Fuad müəllimin şəkli uğurla yeniləndi! 👨‍🏫");
-                    logActivity("Admin Qurbanov Fuad müəllimin şəklini yenilədi.");
-                });
-            };
-            reader.readAsDataURL(file);
-        }
+        // 1. API Açarını Dəstəklənən Modelə Qoşmaq (Dinamik Model Axtarışı)
+        async function discoverBestGeminiModel(key) {
+            let cachedModel = sessionStorage.getItem('gemini_working_model');
+            if (cachedModel) return cachedModel;
 
-        // DEMO ADMİN FUNKSİYALARI
-        function updateDemoAdminUI() {
-            const statusText = document.getElementById('demoStatusText'); 
-            const toggleBtn = document.getElementById('btnToggleDemo');
-            if (statusText && toggleBtn) {
-                if (demoIsActive) { 
-                    statusText.innerText = "Status: AKTİV 🟢"; 
-                    statusText.style.color = "var(--positive)"; 
-                    toggleBtn.innerText = "Deaktiv Et 🔴"; 
-                    toggleBtn.style.background = "var(--negative)"; 
-                    toggleBtn.style.color = "#fff"; 
-                } else { 
-                    statusText.innerText = "Status: DEAKTİV 🔴"; 
-                    statusText.style.color = "var(--negative)"; 
-                    toggleBtn.innerText = "Aktivləşdir 🟢"; 
-                    toggleBtn.style.background = "var(--positive)"; 
-                    toggleBtn.style.color = "#000"; 
-                }
-            }
-        }
-        function toggleDemoStatus() { 
-            if (currentUserRole !== 'master') return alert("Yalnız Baş Admin idarə edə bilər!"); 
-            const newStatus = !demoIsActive; 
-            database.ref('settings/demo_active').set(newStatus).then(() => {
-                alert("Demo hesab " + (newStatus ? "Aktivləşdirildi" : "Deaktiv edildi") + "!");
-                logActivity("Demo admin statusunu dəyişdi: " + (newStatus ? "Aktiv" : "Deaktiv"));
-            });
-        }
-        function kickDemo() {
-            if(currentUserRole !== 'master') return alert("Yalnız Baş Admin idarə edə bilər!");
-            if(confirm("Hazırda aktiv olan cihazı Demo hesabından çıxarmaq istəyirsiniz?")) {
-                database.ref('settings/demo_session').set(null).then(() => {
-                    alert("Cihaz hesabdan çıxarıldı!");
-                    logActivity("Demo admin cihazını hesabdan çıxartdı.");
-                });
-            }
-        }
+            const models = ["gemini-2.5-flash", "gemini-2.0-flash", "gemini-flash-latest", "gemini-1.5-pro", "gemini-1.5-flash"]; // Sürətli modellərdən başla
+            let lastError = null;
 
-        function toggleTheme() {
-            const isLight = document.body.getAttribute('data-theme') === 'light';
-            if(isLight) { 
-                document.body.removeAttribute('data-theme'); 
-                localStorage.setItem('theme', 'dark'); 
-                document.getElementById('themeBtn').innerText = '🌞'; 
-            } else { 
-                document.body.setAttribute('data-theme', 'light'); 
-                localStorage.setItem('theme', 'light'); 
-                document.getElementById('themeBtn').innerText = '🌙'; 
-            }
-            if(chartInstance && activeProfileStudent) openProfileByName(activeProfileStudent); 
-        }
-
-        function initTheme() {
-            if(localStorage.getItem('theme') === 'light') { 
-                document.body.setAttribute('data-theme', 'light'); 
-                document.getElementById('themeBtn').innerText = '🌙'; 
-            }
-        }
-
-        function openPage(pageId) {
-            document.querySelectorAll('.page-view').forEach(p => p.style.display = 'none');
-            document.getElementById(pageId).style.display = 'block';
-            window.scrollTo(0,0);
-            if(pageId !== 'mainDashboard') history.pushState({page: pageId}, "", "#" + pageId);
-            else history.pushState({page: 'mainDashboard'}, "", window.location.pathname);
-        }
-
-        function goBackToMain() { 
-            if(history.state && history.state.page !== 'mainDashboard') history.back(); 
-            else openPage('mainDashboard'); 
-        }
-
-        window.addEventListener('popstate', (e) => {
-            document.querySelectorAll('.page-view').forEach(p => p.style.display = 'none');
-            document.querySelectorAll('.modal').forEach(m => m.style.display = 'none');
-            if (e.state && e.state.page) document.getElementById(e.state.page).style.display = 'block';
-            else document.getElementById('mainDashboard').style.display = 'block';
-            clearInterval(emojiInterval);
-        });
-
-        function openModal(id) { document.getElementById(id).style.display = 'flex'; }
-        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-        function closeModalCustom(id) { 
-            closeModal(id); 
-            clearInterval(emojiInterval); 
-            let aw = document.getElementById('audioWinner');
-            let ao = document.getElementById('audioOutsider');
-            if(aw) { aw.pause(); aw.currentTime = 0; }
-            if(ao) { ao.pause(); ao.currentTime = 0; }
-        }
-        function showVersionModal() { openModal('versionModal'); }
-        function openFeedbackModal() { openModal('feedbackModal'); }
-        function triggerShame() {
-            const banner = document.getElementById('shameBanner');
-            if(banner) {
-                banner.style.display = 'block';
-                setTimeout(() => { banner.style.display = 'none'; }, 3500);
-            }
-        }
-
-        function saveAudioSettings() {
-            const winVal = document.getElementById('inpAudioWinner').value.trim();
-            const outVal = document.getElementById('inpAudioOutsider').value.trim();
-            database.ref('settings/audio_winner').set(winVal);
-            database.ref('settings/audio_outsider').set(outVal).then(() => {
-                alert("✅ Musiqi linkləri yadda saxlanıldı!");
-                logActivity("Musiqi linklərini yenilədi.");
-            });
-        }
-
-        function testAudio(type) {
-            let src = type === 'winner' ? (document.getElementById('inpAudioWinner').value.trim() || customAudioWinner) : (document.getElementById('inpAudioOutsider').value.trim() || customAudioOutsider);
-            let aud = new Audio(src);
-            aud.play().catch(e => alert("Səs oxunmadı! Birbaşa MP3 linki olduğundan əmin olun."));
-        }
-
-        function checkSession() {
-            const savedUser = localStorage.getItem('auth_user'); 
-            const savedRole = localStorage.getItem('auth_role');
-            if (savedUser && savedRole) { 
-                currentUser = savedUser; 
-                currentUserRole = savedRole; 
-                updateAuthWidget(); 
-            }
-        }
-
-        function updateAuthWidget() {
-            const outDiv = document.getElementById('authLoggedOut'); 
-            const inDiv = document.getElementById('authLoggedIn');
-            if (currentUser) {
-                outDiv.style.display = 'none'; 
-                inDiv.style.display = 'flex';
-                let displayName = ADMIN_TO_STUDENT_MAP[currentUser] || currentUser;
-                let displayRole = currentUserRole !== 'student' ? `Admin (${currentUserRole})` : "TƏLƏBƏ";
-                
-                document.getElementById('topUsername').innerText = displayName; 
-                document.getElementById('topRoleBadge').innerText = displayRole;
-                
-                let avatarUrl = DEFAULT_AVATAR_URL;
-                if (globalData.cpp && globalData.cpp.length > 0) {
-                    let st = globalData.cpp.find(s => s.ad === displayName) || (globalData.python||[]).find(s => s.ad === displayName);
-                    if(st && st.foto) avatarUrl = st.foto;
-                }
-                document.getElementById('topAvatar').src = avatarUrl;
-                document.getElementById('btnAdminPanel').style.display = currentUserRole !== 'student' ? 'inline-block' : 'none';
-            } else {
-                outDiv.style.display = 'block'; 
-                inDiv.style.display = 'none'; 
-                document.getElementById('btnAdminPanel').style.display = 'none';
-            }
-            applyMaintenanceOverlay();
-        }
-
-        function updateJuryAvatars() {
-            const getAvatar = (name) => {
-                let st = (globalData.cpp || []).find(s => s.ad === name) || (globalData.python || []).find(s => s.ad === name);
-                return (st && st.foto) ? st.foto : DEFAULT_AVATAR_URL;
-            };
-            const aq = document.getElementById('juryAvatarAqsin'); if(aq) aq.src = getAvatar("Süleymanzadə Aqşin");
-            const tu = document.getElementById('juryAvatarTuran'); if(tu) tu.src = getAvatar("Məmmədli Turan");
-            const ke = document.getElementById('juryAvatarKenan'); if(ke) ke.src = getAvatar("Gülverdiyev Kənan");
-        }
-
-        function openAuthModal() { openModal('authModal'); switchAuthTab('login'); }
-        function switchAuthTab(tab) {
-            if (tab === 'login') {
-                document.getElementById('tabBtnLogin').classList.add('active'); 
-                document.getElementById('tabBtnReg').classList.remove('active');
-                document.getElementById('loginForm').style.display = 'block'; 
-                document.getElementById('registerForm').style.display = 'none';
-            } else {
-                document.getElementById('tabBtnReg').classList.add('active'); 
-                document.getElementById('tabBtnLogin').classList.remove('active');
-                document.getElementById('loginForm').style.display = 'none'; 
-                document.getElementById('registerForm').style.display = 'block'; 
-                populateRegNames();
-            }
-        }
-
-        async function populateRegNames() {
-            const sel = document.getElementById('regNameSelect'); 
-            sel.innerHTML = '<option value="">-- Seçin --</option>';
-            const snap = await database.ref('user_accounts').once('value');
-            const registeredUsers = snap.val() || {}; 
-            const adminNames = Object.values(ADMIN_TO_STUDENT_MAP);
-            STUDENT_NAMES.forEach(name => {
-                if (!registeredUsers[name] && !adminNames.includes(name)) {
-                    sel.innerHTML += '<option value="' + name + '">' + name + '</option>';
-                }
-            });
-        }
-
-        function registerUser() {
-            const name = document.getElementById('regNameSelect').value; 
-            const pass = document.getElementById('regPass').value.trim();
-            if (!name || pass.length < 4) return alert("Ad seçin və ən azı 4 simvollu şifrə yazın!");
-            database.ref('user_accounts/' + name).set({ 
-                password: pass, gender: STUDENT_GENDERS[name], created_at: new Date().toISOString() 
-            }).then(() => {
-                alert("Qeydiyyat tamamlandı!"); 
-                switchAuthTab('login'); 
-                document.getElementById('loginUsername').value = name;
-                logActivity("Qeydiyyatdan keçdi: " + name);
-            });
-        }
-
-        async function loginUser() {
-            const userStr = document.getElementById('loginUsername').value.trim(); 
-            const passStr = document.getElementById('loginPass').value.trim();
-            if (!userStr || !passStr) return alert("Xanaları doldurun!");
-            
-            const lowerUser = userStr.toLowerCase();
-            const lowerPass = passStr.toLowerCase();
-
-            if (ADMIN_CREDENTIALS[lowerUser] && ADMIN_CREDENTIALS[lowerUser].toLowerCase() === lowerPass) {
-                if(lowerUser === 'demo') {
-                    if(!demoIsActive) return alert("🚫 Demo hesabı Baş Admin tərəfindən deaktiv edilib!");
-                    let devId = 'dev_' + Math.random().toString(36).substr(2, 9);
-                    database.ref('settings/demo_session').set({ deviceId: devId, active: true, loginTime: new Date().toLocaleString('az-AZ') });
-                }
-                currentUser = lowerUser; 
-                currentUserRole = ADMIN_ROLES[lowerUser]; 
-                finalizeLogin(); 
-                return;
-            }
-            
-            const snap = await database.ref('user_accounts/' + userStr).once('value'); 
-            const data = snap.val();
-            if (data && data.password.toLowerCase() === lowerPass) { 
-                currentUser = userStr; 
-                currentUserRole = 'student'; 
-                finalizeLogin(); 
-            } else {
-                alert("İstifadəçi adı və ya şifrə yanlışdır!");
-            }
-        }
-
-        function finalizeLogin() {
-            localStorage.setItem('auth_user', currentUser); 
-            localStorage.setItem('auth_role', currentUserRole);
-            alert("Xoş gəldiniz! 🎉"); 
-            closeModal('authModal'); 
-            updateAuthWidget(); 
-            renderTable();
-            logActivity("Sistemə giriş etdi.");
-        }
-
-        function logoutUser() {
-            if (!confirm("Çıxış edilsin?")) return;
-            logActivity("Çıxış etdi.");
-            if (currentUser === 'demo') {
-                database.ref('settings/demo_session').set(null);
-            }
-            localStorage.removeItem('auth_user'); 
-            localStorage.removeItem('auth_role');
-            currentUser = null; 
-            currentUserRole = null; 
-            updateAuthWidget(); 
-            openPage('mainDashboard');
-        }
-
-        function goToMyProfile() {
-            if (!currentUser) return;
-            const targetName = ADMIN_TO_STUDENT_MAP[currentUser] || currentUser;
-            openProfileByName(targetName); 
-        }
-
-        function updateLiveDateTime() {
-            const dtEl = document.getElementById('liveDateTime'); 
-            if(dtEl) dtEl.innerText = "📅 " + new Date().toLocaleDateString('az-AZ', { day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' });
-        }
-
-        function switchTab(tabName) { 
-            currentTab = tabName; 
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active')); 
-            document.getElementById('btn-' + tabName).classList.add('active'); 
-            renderTable(); 
-        }
-
-        function calculateTotals(student) {
-            if (!student) return { cari_reyting: 0, artim: 0, kecmis_reyting: 0, ayliq_reyting: 0 };
-            
-            if (currentTab === 'common') {
-                const cppS = (globalData.cpp || []).find(s => s.ad === student.ad); 
-                const pyS = (globalData.python || []).find(s => s.ad === student.ad);
-                
-                const cppCari = cppS ? (Number(cppS.fm)||0)+(Number(cppS.stepping)||0)+(Number(cppS.e_olimp)||0)+(Number(cppS.codesources)||0)+(Number(cppS.hackerrank)||0) : 0;
-                const pyCari = pyS ? (Number(pyS.fm)||0)+(Number(pyS.stepping)||0)+(Number(pyS.e_olimp)||0)+(Number(pyS.codesources)||0)+(Number(pyS.hackerrank)||0) : 0;
-                
-                const cari = cppCari + pyCari; 
-                const kecmis = (cppS ? Number(cppS.kecmis_reyting)||0 : 0) + (pyS ? Number(pyS.kecmis_reyting)||0 : 0);
-                const ayliq = (cppS ? Number(cppS.ayliq_reyting)||0 : 0) + (pyS ? Number(pyS.ayliq_reyting)||0 : 0) + cari;
-                
-                return { ...student, cari_reyting: cari, kecmis_reyting: kecmis, ayliq_reyting: ayliq, artim: cari - kecmis };
-            } else {
-                const cari = Number(student.fm || 0) + Number(student.stepping || 0) + Number(student.e_olimp || 0) + Number(student.codesources || 0) + Number(student.hackerrank || 0);
-                const ayliq = Number(student.ayliq_reyting || 0) + cari;
-                return { ...student, cari_reyting: cari, ayliq_reyting: ayliq, artim: cari - Number(student.kecmis_reyting || 0) };
-            }
-        }
-
-        // CƏDVƏL RENDERİ
-        function renderTable() {
-            const tableBody = document.querySelector('#tableBody'); 
-            if (!tableBody) return;
-            
-            const tableHead = document.querySelector('#ratingTable thead');
-            if (currentTab === 'common') {
-                tableHead.innerHTML = '<tr><th>#</th><th>Tələbə</th><th>Cari Reytinq</th><th>Keçmiş</th><th>Artım</th></tr>';
-            } else {
-                tableHead.innerHTML = `<tr>
-                    <th>#</th>
-                    <th>Tələbə</th>
-                    <th>FM</th>
-                    <th><a href="https://stepik.org" target="_blank" rel="noopener noreferrer" class="th-link">stepik.org ↗</a></th>
-                    <th><a href="https://www.eolymp.com" target="_blank" rel="noopener noreferrer" class="th-link">eolymp.com ↗</a></th>
-                    <th><a href="https://codesrc.ru" target="_blank" rel="noopener noreferrer" class="th-link">codesrc.ru ↗</a></th>
-                    <th><a href="https://www.hackerrank.com" target="_blank" rel="noopener noreferrer" class="th-link">hackerrank.com ↗</a></th>
-                    <th>Cari</th>
-                    <th>Keçmiş</th>
-                    <th>Artım</th>
-                </tr>`;
-            }
-
-            const list = (globalData[currentTab] || []).map(s => calculateTotals(s));
-            const sortedByCari = [...list].sort((a,b) => b.cari_reyting - a.cari_reyting);
-
-            renderTopAndBottomBoards(list);
-
-            let tableHTML = '';
-            const totalStudents = sortedByCari.length;
-
-            sortedByCari.forEach((item, index) => {
-                let rowClass = '';
-                if (index < 3) rowClass = 'rank-red-row';
-                else if (index === 3 || index === 4) rowClass = 'rank-white-row';
-                else if (totalStudents >= 6 && index >= totalStudents - 3) rowClass = 'rank-black-row';
-
-                const artimSign = item.artim >= 0 ? '+' + item.artim : item.artim;
-                const artimColor = item.artim >= 0 ? 'var(--positive)' : 'var(--negative)';
-                const founderBadge = FOUNDERS.includes(item.ad) ? '<span class="founder-badge">👑 JÜRİ</span>' : '';
-                const rankIcon = index === 0 ? '🥇' : (index === 1 ? '🥈' : (index === 2 ? '🥉' : (index + 1)));
-                
-                const nameHTML = `<div class="student-info"><div class="avatar"><img src="${item.foto || DEFAULT_AVATAR_URL}"></div><span class="clickable-name" onclick="openProfileByName('${item.ad}')">${item.ad}</span>${founderBadge}</div>`;
-
-                let colsHTML = '';
-                if (currentTab === 'common') {
-                    colsHTML = `<td class="rank-col">${rankIcon}</td><td>${nameHTML}</td><td><strong style="font-size:16px;">${item.cari_reyting} xal</strong></td><td>${item.kecmis_reyting} xal</td><td style="color:${artimColor}; font-weight:800;">${artimSign}</td>`;
-                } else {
-                    colsHTML = `<td class="rank-col">${rankIcon}</td><td>${nameHTML}</td><td>${item.fm||0}</td><td>${item.stepping||0}</td><td>${item.e_olimp||0}</td><td>${item.codesources||0}</td><td>${item.hackerrank||0}</td><td><strong style="font-size:16px;">${item.cari_reyting} xal</strong></td><td>${item.kecmis_reyting} xal</td><td style="color:${artimColor}; font-weight:800;">${artimSign}</td>`;
-                }
-                tableHTML += `<tr class="${rowClass}">${colsHTML}</tr>`;
-            });
-            tableBody.innerHTML = tableHTML;
-        }
-
-        // LİDERLƏR VƏ OUTSİDERLƏR
-        function renderTopAndBottomBoards(list) {
-            const top3Div = document.getElementById('boardTop3');
-            const prevTop3Div = document.getElementById('boardPrevTop3');
-            const bottom3Div = document.getElementById('boardBottom3');
-            const monthlyTop3Div = document.getElementById('boardMonthlyTop3');
-            if(!top3Div) return;
-
-            // 1. HƏFTƏNİN LİDERLƏRİ
-            const weeklyGrowthSorted = [...list].sort((a,b) => b.artim - a.artim).slice(0,3);
-            let htmlTop = '';
-            weeklyGrowthSorted.forEach((s, i) => {
-                let rankText = i===0 ? '🥇' : (i===1 ? '🥈' : '🥉');
-                let artSign = s.artim >= 0 ? '+' + s.artim : s.artim;
-                htmlTop += `<div class="v-board-item"><div class="v-board-rank">${rankText}</div><img src="${s.foto || DEFAULT_AVATAR_URL}"><div><strong style="display:block; font-size:14px; cursor:pointer;" onclick="openProfileByName('${s.ad}')">${s.ad}</strong><span style="color:var(--positive); font-weight:900; font-size:13px;">${artSign} xal</span></div></div>`;
-            });
-            top3Div.innerHTML = htmlTop;
-
-            // 2. Keçən Həftənin Liderləri
-            const prevSorted = [...list].sort((a,b) => Number(b.kecmis_reyting||0) - Number(a.kecmis_reyting||0)).slice(0,3);
-            let htmlPrev = '';
-            prevSorted.forEach((s, i) => {
-                let rankText = i===0 ? '🥇' : (i===1 ? '🥈' : '🥉');
-                htmlPrev += `<div class="v-board-item"><div class="v-board-rank">${rankText}</div><img src="${s.foto || DEFAULT_AVATAR_URL}"><div><strong style="display:block; font-size:14px; cursor:pointer;" onclick="openProfileByName('${s.ad}')">${s.ad}</strong><span style="color:var(--silver); font-weight:900; font-size:13px;">${s.kecmis_reyting} xal</span></div></div>`;
-            });
-            prevTop3Div.innerHTML = htmlPrev;
-
-            // 3. HƏFTƏNİN OUTSİDERLƏRİ
-            const weeklyOutsidersSorted = [...list].sort((a,b) => a.artim - b.artim).slice(0,3);
-            let htmlBottom = '';
-            weeklyOutsidersSorted.forEach(s => {
-                let artSign = s.artim >= 0 ? '+' + s.artim : s.artim;
-                htmlBottom += `<div class="v-board-item"><div class="v-board-rank">😴</div><img src="${s.foto || DEFAULT_AVATAR_URL}"><div><strong style="display:block; font-size:14px; cursor:pointer;" onclick="openProfileByName('${s.ad}')">${s.ad}</strong><span style="color:var(--negative); font-weight:900; font-size:13px;">${artSign} xal</span></div></div>`;
-            });
-            bottom3Div.innerHTML = htmlBottom;
-
-            // 4. Aylıq Liderlər
-            const monthlySorted = [...list].sort((a,b) => Number(b.ayliq_reyting||0) - Number(a.ayliq_reyting||0)).slice(0,3);
-            let htmlMonthly = '';
-            monthlySorted.forEach((s, i) => {
-                let rankText = i===0 ? '🥇' : (i===1 ? '🥈' : '🥉');
-                htmlMonthly += `<div class="v-board-item"><div class="v-board-rank">${rankText}</div><img src="${s.foto || DEFAULT_AVATAR_URL}"><div><strong style="display:block; font-size:14px; cursor:pointer;" onclick="openProfileByName('${s.ad}')">${s.ad}</strong><span style="color:var(--negative); font-weight:900; font-size:13px;">${s.ayliq_reyting} xal</span></div></div>`;
-            });
-            monthlyTop3Div.innerHTML = htmlMonthly;
-        }
-
-        function sortAndRender() { renderTable(); }
-
-        // PROFİL
-        function openProfileByName(studentName) {
-            const student = (globalData[currentTab]||[]).find(s => s.ad === studentName) || (globalData.cpp||[]).find(s => s.ad === studentName); 
-            if (!student) return;
-            
-            activeProfileStudent = student.ad; 
-            const computed = calculateTotals(student);
-            
-            document.getElementById('pAvatar').src = student.foto || DEFAULT_AVATAR_URL; 
-            document.getElementById('pName').innerText = student.ad;
-            document.getElementById('pBadge').innerHTML = FOUNDERS.includes(student.ad) ? '<span class="founder-badge" style="font-size:12px; padding:4px 10px;">👑 JÜRİ HEYƏTİ</span>' : '';
-            document.getElementById('pKurs').innerText = "2-ci Kurs";
-            document.getElementById('pTevellud').innerText = STUDENT_BIRTHDATES[student.ad] || "Məlum deyil";
-            document.getElementById('pGender').innerText = STUDENT_GENDERS[student.ad] || 'Kişi'; 
-            document.getElementById('pYer').innerText = student.yer || "Bakı şəhəri"; 
-            document.getElementById('pCari').innerText = computed.cari_reyting + " xal";
-
-            const weeklyGained = computed.cari_reyting - Number(student.kecmis_reyting || 0);
-            document.getElementById('pArtim').innerText = (weeklyGained >= 0 ? '+' + weeklyGained : weeklyGained) + " xal";
-            document.getElementById('pArtim').style.color = weeklyGained >= 0 ? 'var(--positive)' : 'var(--negative)';
-
-            const uploadSection = document.getElementById('privateUploadSection'); 
-            const publicMsg = document.getElementById('publicViewMsg');
-            const statusContainer = document.getElementById('studentTaskStatusContainer');
-            const adminNotice = document.getElementById('adminUploadNotice');
-
-            let isOwnProfile = (currentUserRole === 'student' && currentUser === student.ad) || (currentUserRole !== 'student' && ADMIN_TO_STUDENT_MAP[currentUser] === student.ad);
-            let isAdmin = (currentUserRole && currentUserRole !== 'student');
-
-            // Adminlər istənilən tələbənin profilində fayl yükləyə bilər!
-            if (isOwnProfile || isAdmin) {
-                uploadSection.style.display = 'block';
-                publicMsg.style.display = 'none';
-                statusContainer.style.display = 'block';
-                if (adminNotice) adminNotice.style.display = (isAdmin && !isOwnProfile) ? 'inline-block' : 'none';
-                loadStudentUploadedTasksList(student.ad);
-            } else {
-                uploadSection.style.display = 'none';
-                publicMsg.style.display = 'block';
-                statusContainer.style.display = 'none';
-            }
-
-            renderStudentChart(weeklyGained); 
-            openPage('profilePage'); 
-        }
-
-        function updateUploadNotice() {
-            const cat = document.getElementById('studentCategorySelect').value;
-            const linkBox = document.getElementById('externalLinkBox');
-            if(cat === 'fm') {
-                linkBox.style.display = 'none';
-            } else {
-                linkBox.style.display = 'block';
-            }
-        }
-
-        function loadStudentUploadedTasksList(targetStudent) {
-            database.ref('student_tasks').orderByChild('studentName').equalTo(targetStudent).once('value').then(snap => {
-                const tasks = snap.val(); 
-                const statusDiv = document.getElementById('studentTaskStatus'); 
-                if(!statusDiv) return; 
-                
-                let count = 0;
-                let html = '';
-                const catLabels = {
-                    fm: { title: "FM", cls: "cat-fm" },
-                    stepping: { title: "Stepik", cls: "cat-stepping" },
-                    e_olimp: { title: "E-Olimp", cls: "cat-e_olimp" },
-                    codesources: { title: "CodeSrc", cls: "cat-codesources" },
-                    hackerrank: { title: "HackerRank", cls: "cat-hackerrank" }
-                };
-
-                if (tasks) {
-                    Object.keys(tasks).reverse().forEach(key => {
-                        const t = tasks[key]; 
-                        if(t.archived) return;
-                        count++; 
-                        let subjTag = (t.subject || 'cpp') === 'python' ? '🟡' : '🔵';
-                        let fileSt = t.status || 'pending';
-                        let catObj = catLabels[t.category] || { title: "FM", cls: "cat-fm" };
-
-                        let stText = '';
-                        let stColor = 'var(--gold)';
-                        if(fileSt === 'correct') {
-                            stText = `✅ Təsdiqləndi: ${t.recognizedTask || catObj.title} (+${t.addedPoints||0} xal)`;
-                            stColor = 'var(--positive)';
-                        } else if(fileSt === 'wrong') {
-                            stText = `❌ Rədd edildi: ${t.rejectReason || 'Alqoritm və ya şərtlər uyğun deyil'}`;
-                            stColor = 'var(--negative)';
-                        } else {
-                            stText = '⏳ Admin yoxlamasındadır...';
-                            stColor = 'var(--gold)';
-                        }
-
-                        let linkHtml = t.taskLink ? `<a href="${t.taskLink}" target="_blank" rel="noopener noreferrer" style="color:var(--gold); font-size:12px; margin-left:10px; text-decoration:underline;">🔗 Məsələ Linki ↗</a>` : '';
-
-                        html += `<div style="margin-top:8px; padding:12px; border-radius:12px; border:1px solid ${stColor}; display:flex; justify-content:space-between; align-items:center; background:var(--card-hover); flex-wrap:wrap; gap:8px;">
-                                    <div>
-                                        <span class="badge-cat ${catObj.cls}">${catObj.title}</span>
-                                        <span style="color:var(--text-main); font-weight:800; margin-left:8px;">${subjTag} ${t.fileName}</span>
-                                        ${linkHtml}
-                                    </div>
-                                    <span style="color:${stColor}; font-weight:900; font-size:13px;">${stText}</span>
-                                 </div>`;
+            for (let model of models) {
+                try {
+                    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            contents: [{ parts: [{ text: "Sadəcə 'OK' cavabını ver." }] }],
+                            generationConfig: { responseMimeType: "application/json", temperature: 0.1 }
+                        })
                     });
+                    const data = await res.json();
+                    if (res.ok && data.candidates && data.candidates.length > 0) {
+                        sessionStorage.setItem('gemini_working_model', model);
+                        return model;
+                    } else if (data.error) {
+                        lastError = data.error.message;
+                        if (data.error.code !== 404) break; // 404 xaric, digər səhvlərdə dayan
+                    }
+                } catch (e) {
+                    lastError = e.message;
+                    if (e.message.includes("API key not valid")) break;
                 }
-                statusDiv.innerHTML = count === 0 ? '<span style="color:var(--text-sub);">Heç bir fayl yüklənməyib.</span>' : html;
-            });
+            }
+            throw new Error(`Uyğun model tapılmadı. Son xəta: ${lastError}. API açarınızı yoxlayın.`);
         }
 
-        // =========================================================================
-        // 🧠 TƏKMİLLƏŞDİRİLMİŞ SÜNİ İNTELLEKT (DİNAMİK MODEL AXTARIŞI İLƏ)
-        // =========================================================================
         async function runTrueAiEvaluation(rawCode, subject) {
             let code = rawCode.trim();
             const tasks = Array.isArray(dynamicTasksConfig) ? dynamicTasksConfig : Object.values(dynamicTasksConfig || {});
@@ -1682,7 +1129,7 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
                 try {
                     let taskCatalog = tasks.map((t, idx) => {
                         return `[TAPŞIRIQ ID: ${idx + 1}]\nAdı: "${t.name}"\nAdminin Qoyduğu Bal: ${t.points} xal\n${t.sampleCode && t.sampleCode.trim() ? 'Müəllimin Referans Kodu:\n' + t.sampleCode.trim() : 'Referans kod qeyd edilməyib'}`;
-                    }).join('\n-----------------------------------------\n');
+                    }).join('\n---------------------\n');
 
                     let prompt = `
 Sən ali məktəbdə alqoritmlər üzrə sərt və dahi professorsun.
@@ -1698,10 +1145,10 @@ ${taskCatalog}
 TƏLİMATLAR:
 1. Əvvəlcə kodun müstəqil olaraq NƏ ETDİYİNİ (məsələn: Collatz 3n+1, ƏBOB/ƏKOB, Kvadratların cəmi, Armstrong, Sadə ədəd və s.) dərk et.
 2. Tələbənin yazdığı bu alqoritmin yuxarıdakı siyahıdakı tapşırıqların hansı biri ilə EYNİ MƏQSƏDƏ xidmət etdiyini tap.
-   - DİQQƏT: Əgər tələbə Collatz alqoritmi (3n+1) yazıbsa, onu əsla Kvadratların cəmi və ya başqa məsələyə CALAMA!
+   - DİQQƏT: Əgər tələbə Collatz alqoritmi (3n+1) yazıbsa, onu əsla Kvadratların cəmi və ya başqa məsələyə CALAMA! Məsələn, koddakı '%', '/', 'while' kimi operatorlara görə tələsmə, əsas məqsədi tap.
    - ƏGƏR BU KOD SİYAHIDAKI TAPŞIRIQLARIN HEÇ BİRİNƏ AİD DEYİLSƏ, mütləq isCorrect: false, taskIndex: 0 ver və explanation sahəsinə DƏQİQ bu cümləni yaz: "Daxil edilən kod aktiv tapşırıqlar arasında tapılmadı. Hal-hazırda belə bir tapşırıq tələb olunmur."
 3. Əgər kod siyahıdakı tapşırıqlardan birinə aiddirsə və bütün hallarda (0, 1, mənfi, böyük ədədlər, sonsuz dövrlər olmadan) düzgün işləyirsə, taskIndex sahəsində həmin tapşırığın 1-dən başlayan ID nömrəsini və earnedPoints sahəsində həmin tapşırığın siyahıdakı dəqiq balını qeyd et.
-4. Cavabı YALNIZ və YALNIZ bu JSON formatında ver (heç bir markdown və ya artıq söz yazma):
+4. Cavabı YALNIZ və YALNIZ bu JSON formatında ver:
 {
   "isCorrect": true/false,
   "detectedAlgorithm": "kodun icra etdiyi əsas mövzu",
@@ -1714,7 +1161,7 @@ TƏLİMATLAR:
                     // Dinamik model aşkarlanması
                     let detectedModel = await discoverBestGeminiModel(activeKey);
                     let candidateModels = [detectedModel, "gemini-2.5-flash", "gemini-2.0-flash", "gemini-flash-latest", "gemini-1.5-pro"];
-                    candidateModels = [...new Set(candidateModels)];
+                    candidateModels = [...new Set(candidateModels)]; // Unikal modellər
 
                     let aiResult = null;
                     let lastApiError = null;
@@ -1736,15 +1183,17 @@ TƏLİMATLAR:
                             const resData = await res.json();
                             if (res.ok && resData.candidates && resData.candidates.length > 0) {
                                 let text = resData.candidates[0].content.parts[0].text;
-                                aiResult = JSON.parse(text);
-                                sessionStorage.setItem('gemini_working_model', model);
-                                break;
+                                let cleanJson = text.replace(/```json/g, "").replace(/```/g, "").trim();
+                                aiResult = JSON.parse(cleanJson);
+                                sessionStorage.setItem('gemini_working_model', model); // İşlək modeli keşə sal
+                                break; // İlk işlək modeli tapanda dayandır
                             } else if (resData.error) {
-                                lastApiError = resData.error;
-                                if (resData.error.code !== 404) break;
+                                lastApiError = resData.error.message;
+                                if (resData.error.code !== 404) break; // 404 xaric, digər xətalar varsa dayan
                             }
                         } catch (e) {
-                            lastApiError = e;
+                            lastError = e.message;
+                            if (e.message.includes("API key not valid")) throw e;
                         }
                     }
 
@@ -1756,7 +1205,7 @@ TƏLİMATLAR:
                             return {
                                 isValid: true,
                                 taskName: matchedTask.name,
-                                points: parseInt(matchedTask.points) || 50,
+                                points: parseInt(matchedTask.earnedPoints) || 50,
                                 reason: aiResult.explanation || "Tapşırıq düzgün həll edildi."
                             };
                         } else {
@@ -1766,42 +1215,43 @@ TƏLİMATLAR:
                             };
                         }
                     } else if (lastApiError) {
-                        throw new Error(`Google API: ${lastApiError.message || JSON.stringify(lastApiError)}`);
+                        throw new Error(`Google API: ${lastApiError}. Bütün modellər yoxlandı, lakin cavab alınmadı.`);
                     }
                 } catch(e) {
-                    console.error("Gemini API zəngi uğursuz oldu:", e);
+                    console.error("AI Qiymətləndirmə xətası:", e);
                     return {
                         isValid: false,
-                        reason: `[Süni İntellekt Xətası]: ${e.message}. Zəhmət olmasa Admin panelindən API açarını test edin.`
+                        reason: `[Süni İntellekt Xətası]: ${e.message}. API açarınızı və ya model uyğunluğunu yoxlayın.`
                     };
                 }
             }
 
-            // 4. Əgər API açarı daxil edilməyibsə, Daxili Ciddi Alqoritmik Analizator işə düşür
+            // 4. Əgər API açarı yoxdursa və ya işləmirsə, Daxili Analizator işə düşür
             return evaluateStrictAlgorithmicLogic(code, subject, tasks);
         }
 
-        // Daxili Analizator (Heç bir kodu başqa kodla qarışdırmır!)
+        // Daxili Analizator (Hər tapşırığın özünə uyğun dəqiq yoxlama)
         function evaluateStrictAlgorithmicLogic(code, subject, tasks) {
             let codeLower = code.toLowerCase();
+            let matchedTask = null;
 
             // 1. Collatz / 3n+1 İmza Yoxlanışı
             let isCollatz = (codeLower.includes('3 * n + 1') || codeLower.includes('3*n + 1') || codeLower.includes('3*n+1') || (codeLower.includes('n % 2') && codeLower.includes('n / 2') && codeLower.includes('while')));
             if (isCollatz) {
-                let task = tasks.find(t => t.name.toLowerCase().includes("collatz") || t.name.toLowerCase().includes("kolat") || t.name.toLowerCase().includes("3n+1"));
-                if (task) {
-                    return { isValid: true, taskName: task.name, points: parseInt(task.points) || 50 };
+                matchedTask = tasks.find(t => t.name.toLowerCase().includes("collatz") || t.name.toLowerCase().includes("kolat") || t.name.toLowerCase().includes("3n+1"));
+                if (matchedTask) {
+                    return { isValid: true, taskName: matchedTask.name, points: parseInt(matchedTask.points) || 50 };
                 } else {
                     return { isValid: false, reason: "Daxil edilən kod Collatz (3n+1) alqoritmidir, lakin sistemdə belə bir aktiv tapşırıq tələb olunmur." };
                 }
             }
 
             // 2. Kvadratların Cəmi İmza Yoxlanışı
-            let isSumOfSquares = (codeLower.includes('*') && (codeLower.includes('sum') || codeLower.includes('cem') || codeLower.includes('c +=') || codeLower.includes('s +=')) && (codeLower.includes('i * i') || codeLower.includes('i*i') || codeLower.includes('pow')));
+            let isSumOfSquares = (codeLower.includes('*') && (codeLower.includes('sum') || codeLower.includes('cem') || codeLower.includes('c +=') || codeLower.includes('s +=') || codeLower.includes('ans')) && (codeLower.includes('i * i') || codeLower.includes('i*i') || codeLower.includes('pow')));
             if (isSumOfSquares) {
-                let task = tasks.find(t => t.name.toLowerCase().includes("kvadrat") && (t.name.toLowerCase().includes("cəm") || t.name.toLowerCase().includes("cem")));
-                if (task) {
-                    return { isValid: true, taskName: task.name, points: parseInt(task.points) || 50 };
+                matchedTask = tasks.find(t => t.name.toLowerCase().includes("kvadrat") && (t.name.toLowerCase().includes("cəm") || t.name.toLowerCase().includes("cem")));
+                if (matchedTask) {
+                    return { isValid: true, taskName: matchedTask.name, points: parseInt(matchedTask.points) || 50 };
                 }
             }
 
@@ -1822,14 +1272,14 @@ TƏLİMATLAR:
 
             // 4. Armstrong Ədədi
             if (codeLower.includes('armstrong') || codeLower.includes('amstrong') || (codeLower.includes('% 10') && codeLower.includes('/ 10') && (codeLower.includes('pow') || codeLower.includes('**')))) {
-                let task = tasks.find(t => t.name.toLowerCase().includes("armstrong") || t.name.toLowerCase().includes("amstrong"));
-                if (task) {
+                matchedTask = tasks.find(t => t.name.toLowerCase().includes("armstrong") || t.name.toLowerCase().includes("amstrong"));
+                if (matchedTask) {
                     let hasDigitExtract = codeLower.includes('% 10') || codeLower.includes('%10') || codeLower.includes('str(');
                     let hasSumComparison = codeLower.includes('==');
                     if (!hasDigitExtract || !hasSumComparison) {
                         return { isValid: false, reason: "Məntiq xətası: Armstrong ədədi üçün rəqəmlərin qüvvətləri cəminin ilkin ədədlə bərabərliyi yoxlanılmayıb!" };
                     }
-                    return { isValid: true, taskName: task.name, points: parseInt(task.points) || 50 };
+                    return { isValid: true, taskName: matchedTask.name, points: parseInt(matchedTask.points) || 50 };
                 }
             }
 
@@ -1840,7 +1290,7 @@ TƏLİMATLAR:
                     let hasLoop = codeLower.includes('for') || codeLower.includes('while');
                     let hasModulo = codeLower.includes('%');
                     if (!hasLoop || !hasModulo) {
-                        return { isValid: false, reason: "Alqoritm xətası: Sadə ədəd üçün dövr və ya bölünmə (%) yoxlanışı tapılmadı!" };
+                        return { isValid: false, reason: "Alqoritm xətası: Sadə ədəd məntiqi üçün dövr və ya bölünmə (%) yoxlanışı tapılmadı!" };
                     }
                     if (codeLower.includes('i = 1') && !codeLower.includes('i = 2') && !codeLower.includes('i=2')) {
                         return { isValid: false, reason: "Kənar hal xətası: 1 ədədi sadə ədəd deyil! Kodunuz 1-i bölən kimi qəbul edir." };
@@ -1857,10 +1307,10 @@ TƏLİMATLAR:
                 }
             }
 
-            // 7. Əgər adminin nümunə kodu varsa, yalnız unikal riyazi ifadələrə görə müqayisə
+            // 7. Əgər adminin nümunə kodu varsa, onunla dərin müqayisə
             for (let t of tasks) {
                 if (t.sampleCode && t.sampleCode.trim().length > 25) {
-                    let sampleTokens = t.sampleCode.toLowerCase().match(/[a-zA-Z_]{5,}/g) || [];
+                    let sampleTokens = t.sampleCode.toLowerCase().match(/[a-zA-Z_]{4,}/g) || [];
                     let ignored = ['include', 'iostream', 'using', 'namespace', 'return', 'vector', 'string', 'while'];
                     let cleanSampleTokens = sampleTokens.filter(tok => !ignored.includes(tok));
 
@@ -1868,7 +1318,7 @@ TƏLİMATLAR:
                     cleanSampleTokens.forEach(tok => {
                         if (codeLower.includes(tok)) matchedCount++;
                     });
-                    if (cleanSampleTokens.length > 0 && matchedCount / cleanSampleTokens.length >= 0.5) {
+                    if (cleanSampleTokens.length > 0 && matchedCount / cleanSampleTokens.length >= 0.5) { // Əgər 50%-dən çox token uyğun gəlirsə
                         return { isValid: true, taskName: t.name, points: parseInt(t.points) || 50 };
                     }
                 }
@@ -1889,6 +1339,7 @@ TƏLİMATLAR:
 
             let isAdmin = (currentUserRole && currentUserRole !== 'student');
 
+            // Əgər admin deyilsə və deadline bitibsə, blokla
             if (!isAdmin && deadlineTimestamp && new Date().getTime() >= deadlineTimestamp) {
                 return alert("🚨 Deadline bitib! Tapşırıq qəbul edilmir.");
             }
@@ -1936,7 +1387,7 @@ TƏLİMATLAR:
                                     let cleanTaskName = aiEval.taskName.trim().toLowerCase();
 
                                     if (completedTaskNames.has(cleanTaskName)) {
-                                        alert(`🚫 DİQQƏT: "${aiEval.taskName}" tapşırığı ${subject.toUpperCase()} bölməsində artıq düzgün həll edilib və xal hesablanıb! Eyni tapşırıqdan təkrar bal almaq olmaz.`);
+                                        alert(`🚫 DİQQƏT: "${aiEval.taskName}" tapşırığı ${subject.toUpperCase()} bölməsində artıq düzgün həll edilib və balınız hesablanıb! Eyni tapşırıqdan təkrar bal almaq olmaz.`);
                                         duplicateCount++;
                                         resolve();
                                         return;
@@ -2354,7 +1805,7 @@ TƏLİMATLAR:
             loadAllFilesForAdmin();
         }
 
-        // ADMİN FAYL YOXLAMASI (SİL DÜYMƏSİ ƏLAVƏ EDİLDİ)
+        // ADMİN FAYL YOXLAMASI (TƏLƏBƏ ADLARI ÜZRƏ QRUPLAŞDIRILMIŞ VƏ SƏLİQƏLİ)
         function loadAllFilesForAdmin() {
             database.ref('student_tasks').limitToLast(150).once('value').then(snap => {
                 const tasks = snap.val() || {};
@@ -2364,7 +1815,7 @@ TƏLİMATLAR:
                 const cPy = document.getElementById('adminCheckedTasksPython'); 
                 
                 let countPCpp = 0, countPPy = 0;
-                let pCppHTML = '', pPyHTML = '';
+                let pCppHTML = '', pPyHTML = '', cCppHTML = '', cPyHTML = '';
 
                 let checkedGroups = { cpp: {}, python: {} };
                 const catNames = { fm: "FM", stepping: "Stepik", e_olimp: "E-Olimp", codesources: "CodeSources", hackerrank: "HackerRank" };
@@ -2654,12 +2105,3 @@ TƏLİMATLAR:
     </script>
 </body>
 </html>
-
-Faylı Yadda Saxladıqdan Sonra:
-
-1.  Kodu saytınıza yerləşdirib Admin panelə daxil olun.
-2.  «🤖 Süni İntellekt (AI Quraşdırma)» bölməsindəki «🧪 API Açarını Test Et»
-    düyməsinə klikləyin.
-3.  Sistem avtomatik olaraq ListModels vasitəsilə ən uyğun modeli tapacaq və
-    ekranda ✅ ƏLA! Süni İntellekt uğurla qoşuldu! Aktiv və işlək model: ...
-    bildirişi çıxacaq. Bundan sonra bütün kodlar xətasız analiz ediləcək.
