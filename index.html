@@ -1067,7 +1067,7 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
         }
 
         // =========================================================================
-        // ⚡ GROQ DİNAMİK MODEL AXTARIŞI VƏ ÇAĞIRIŞI
+        // ⚡ GROQ DİNAMİK MODEL AXTARIŞI VƏ ÇAĞIRIŞI (OPENAI COMPATIBLE)
         // =========================================================================
         async function getLiveGroqModel(apiKey) {
             let saved = sessionStorage.getItem('groq_working_model');
@@ -1095,10 +1095,8 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
                 !m.id.includes("tts")
             );
 
-            let best = chatModels.find(m => m.id.includes("gpt-oss-120b"))
-                    || chatModels.find(m => m.id.includes("gpt-oss-20b"))
-                    || chatModels.find(m => m.id.includes("qwen"))
-                    || chatModels.find(m => m.id.includes("llama-3.3"))
+            let best = chatModels.find(m => m.id.includes("llama-3.3-70b"))
+                    || chatModels.find(m => m.id.includes("llama-3.1-8b"))
                     || chatModels.find(m => m.id.includes("llama"))
                     || chatModels[0];
 
@@ -1703,9 +1701,9 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
         }
 
         // =========================================================================
-        // 🧠 HƏQİQİ SÜNİ İNTELLEKT (FM ÜÇÜN AVTO-BAL, DIGƏR SAYTLAR ÜÇÜN GROQ ANALİZ VƏ TƏSDİQ)
+        // 🧠 TƏKMİLLƏŞDİRİLMİŞ SÜNİ İNTELLEKT (FM VƏ DIGƏR SAYTLAR ÜÇÜN QÜSURSUZ ANALİZ)
         // =========================================================================
-        async function runTrueAiEvaluation(rawCode, subject, category, taskLink) {
+        async function runTrueAiEvaluation(rawCode, subject) {
             let code = rawCode.trim();
             const tasks = Array.isArray(dynamicTasksConfig) ? dynamicTasksConfig : Object.values(dynamicTasksConfig || {});
 
@@ -1734,46 +1732,44 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             if(activeKey && activeKey.startsWith("gsk_")) {
                 try {
                     let taskCatalog = tasks.map((t, idx) => {
-                        return `[TAPŞIRIQ ID: ${idx + 1}]\nAdı: "${t.name}"\nAdminin Qoyduğu Bal: ${t.points} xal\n${t.sampleCode && t.sampleCode.trim() ? 'Müəllimin Referans Kodu:\n' + t.sampleCode.trim() : 'Referans kod yoxdur'}`;
-                    }.trim()).join('\n-----------------------------------------\n');
+                        return `[TAPŞIRIQ ID: ${idx + 1}]\nAdı: "${t.name}"\nAdminin Qoyduğu Bal: ${t.points} xal\n${t.sampleCode && t.sampleCode.trim() ? 'Müəllimin Referans Kodu:\n' + t.sampleCode.trim() : 'Referans kod qeyd edilməyib'}`;
+                    }).join('\n-----------------------------------------\n');
 
-                    let systemPrompt = `Sən universitetdə alqoritmlər üzrə sərt professorsan. YALNIZ JSON formatında cavab ver: {"isCorrect": boolean, "taskIndex": number, "taskName": string, "earnedPoints": number, "explanation": string}`;
+                    let systemPrompt = `Sən universitetdə alqoritmlər üzrə sərt professorsan. YALNIZ JSON formatında cavab ver: {"isCorrect": boolean, "detectedAlgorithm": string, "taskIndex": number, "taskName": string, "earnedPoints": number, "explanation": string}`;
                     
                     let userPrompt = `
 Tələbənin kodu:
-=== KOD ===
+=== KOD BAŞLANĞICI ===
 ${code}
 === KOD BİTDİ ===
-Məsələ Linki: ${taskLink || 'Yoxdur'}
-Kategoriya: ${category}
 
-Sistemdəki FM tapşırıqları:
+Sistemdə aktiv olan tapşırıqlar siyahısı:
 ${taskCatalog}
 
 TƏLİMATLAR:
-1. Kodun düzgün işləyən alqoritm olub- olmadığını yoxla.
-2. Əgər kategoriya 'fm'-dirsə, yuxarıdakı FM tapşırıqlarından hansına aid olduğunu tap və earnedPoints olaraq həmin balı ver.
-3. Əgər kategoriya 'fm' DEYİLSƏ (yəni Stepik, E-Olimp və s.), kodun həqiqətən dəqiq və məntiqli həll olub-olmadığını yoxla. Düzgündürsə isCorrect: true ver.
-4. Səhvdirsə isCorrect: false ver və səbəbini yaz.
+1. Əvvəlcə kodun müstəqil olaraq NƏ ETDİYİNİ (məsələn: Collatz 3n+1, ƏBOB/ƏKOB, Kvadratların cəmi, Armstrong, Sadə ədəd və s.) dərk et.
+2. Tələbənin yazdığı bu alqoritmin yuxarıdakı siyahıdakı tapşırıqların hansı biri ilə EYNİ MƏQSƏDƏ xidmət etdiyini tap.
+   - DİQQƏT: Əgər tələbə Collatz alqoritmi (3n+1) yazıbsa, onu əsla Kvadratların cəmi və ya başqa məsələyə CALAMA!
+   - ƏGƏR BU KOD SİYAHIDAKI TAPŞIRIQLARIN HEÇ BİRİNƏ AİD DEYİLSƏ, mütləq isCorrect: false, taskIndex: 0 ver və explanation sahəsinə DƏQİQ bu cümləni yaz: "Daxil edilən kod aktiv tapşırıqlar arasında tapılmadı. Hal-hazırda belə bir tapşırıq tələb olunmur."
+3. Əgər kod siyahıdakı tapşırıqlardan birinə aiddirsə və bütün hallarda (0, 1, mənfi, böyük ədədlər, sonsuz dövrlər olmadan) düzgün işləyirsə, taskIndex sahəsində həmin tapşırığın 1-dən başlayan ID nömrəsini və earnedPoints sahəsində həmin tapşırığın siyahıdakı dəqiq balını qeyd et.
 `;
                     let aiResponse = await requestGroqAI(activeKey, systemPrompt, userPrompt);
                     let aiResult = aiResponse.data;
 
                     let tIdx = Number(aiResult.taskIndex) - 1;
                     let matchedTask = (tIdx >= 0 && tasks[tIdx]) ? tasks[tIdx] : tasks.find(t => t.name.toLowerCase().trim() === (aiResult.taskName || "").toLowerCase().trim());
-                    let assignedPoints = matchedTask ? (parseInt(matchedTask.points) || 50) : (aiResult.earnedPoints || 50);
 
-                    if (aiResult.isCorrect === true) {
+                    if (aiResult.isCorrect === true && matchedTask) {
                         return {
                             isValid: true,
-                            taskName: matchedTask ? matchedTask.name : (aiResult.taskName || "Kənar Platforma Həlli"),
-                            points: assignedPoints,
-                            reason: aiResult.explanation || "Kod uğurla yoxlanıldı."
+                            taskName: matchedTask.name,
+                            points: parseInt(matchedTask.points) || 50,
+                            reason: aiResult.explanation || "Tapşırıq düzgün həll edildi."
                         };
                     } else {
                         return {
                             isValid: false,
-                            reason: aiResult.explanation || "Kod tələblərə uyğun gəlmir və ya alqoritmik səhvlər mövcuddur."
+                            reason: aiResult.explanation || "Daxil edilən kod aktiv tapşırıqlar arasında tapılmadı. Hal-hazırda belə bir tapşırıq tələb olunmur."
                         };
                     }
                 } catch(e) {
@@ -1781,12 +1777,12 @@ TƏLİMATLAR:
                 }
             }
 
-            // Fallback daxili yoxlayıcı
             return evaluateStrictAlgorithmicLogic(code, subject, tasks);
         }
 
         function evaluateStrictAlgorithmicLogic(code, subject, tasks) {
             let codeLower = code.toLowerCase();
+
             let isCollatz = (codeLower.includes('3 * n + 1') || codeLower.includes('3*n + 1') || codeLower.includes('3*n+1') || (codeLower.includes('n % 2') && codeLower.includes('n / 2') && codeLower.includes('while')));
             if (isCollatz) {
                 let task = tasks.find(t => t.name.toLowerCase().includes("collatz") || t.name.toLowerCase().includes("kolat") || t.name.toLowerCase().includes("3n+1"));
@@ -1809,15 +1805,10 @@ TƏLİMATLAR:
                 if (task) return { isValid: true, taskName: task.name, points: parseInt(task.points) || 50 };
             }
 
-            // Əgər API yoxdursa və kod ümumilikdə işlək görünürsə
-            if (code.length > 50 && (codeLower.includes('for') || codeLower.includes('while') || codeLower.includes('def'))) {
-                return { isValid: true, taskName: tasks[0]?.name || "Ümumi Tapşırıq", points: tasks[0]?.points || 50 };
-            }
-
-            return { isValid: false, reason: "Kod sintaksisə və ya alqoritm şərtlərinə tam cavab vermir." };
+            return { isValid: false, reason: "Daxil edilən kod aktiv tapşırıqlar arasında tapılmadı. Hal-hazırda belə bir tapşırıq tələb olunmur." };
         }
 
-        // TƏLƏBƏ FAYL YÜKLƏMƏSİ (YENİ PƏNCƏRƏ ÜÇÜN 'groq_verified' VƏ YA 'pending' MƏNTİQİ)
+        // TƏLƏBƏ FAYL YÜKLƏMƏSİ (DİGƏR SAYTLAR ÜÇÜN YENİ PƏNCƏRƏYƏ GÖNDƏRİR)
         let isUploadingActive = false;
 
         async function uploadStudentTasks() {
@@ -1839,7 +1830,7 @@ TƏLİMATLAR:
             isUploadingActive = true;
             const submitBtn = document.getElementById('btnUploadSubmit');
             submitBtn.disabled = true;
-            submitBtn.innerText = "⏳ Groq AI Yoxlayır...";
+            submitBtn.innerText = "⏳ Yoxlanılır...";
 
             try {
                 const existingSnap = await database.ref('student_tasks').orderByChild('studentName').equalTo(activeProfileStudent).once('value');
@@ -1865,15 +1856,13 @@ TƏLİMATLAR:
 
                         reader.onload = async evText => {
                             let rawCode = evText.target.result;
-                            // Groq AI ilə kodu yoxlayırıq
-                            let aiEval = await runTrueAiEvaluation(rawCode, subject, category, taskLink);
+                            let aiEval = await runTrueAiEvaluation(rawCode, subject);
 
                             const b64Reader = new FileReader();
                             b64Reader.onload = async b64Ev => {
                                 let base64Data = b64Ev.target.result;
 
                                 if (category === 'fm') {
-                                    // FM üçün: Əgər AI düzgün desə, birbaşa bal yazılır
                                     if (aiEval.isValid) {
                                         let cleanTaskName = aiEval.taskName.trim().toLowerCase();
                                         if (completedTaskNames.has(cleanTaskName)) {
@@ -1909,7 +1898,7 @@ TƏLİMATLAR:
                                         acceptedCount++;
                                     } else {
                                         await database.ref('student_tasks').push({ 
-                                            studentName: studentExistingTasks ? activeProfileStudent : activeProfileStudent, 
+                                            studentName: activeProfileStudent, 
                                             fileName: file.name, 
                                             fileData: base64Data, 
                                             subject: subject, 
@@ -1924,8 +1913,7 @@ TƏLİMATLAR:
                                         rejectedCount++;
                                     }
                                 } else {
-                                    // Əgər Stepik, E-Olimp və s.-dirsə:
-                                    // AI yoxlayır: Əgər düzgündürsə status 'groq_verified' (yəni admin panelində yeni pəncərəyə düşür), səhvdirsə 'wrong' olur.
+                                    // Digər saytlar (Stepik, E-Olimp və s.) Groq AI tərəfindən yoxlanılır
                                     if (aiEval.isValid) {
                                         await database.ref('student_tasks').push({ 
                                             studentName: activeProfileStudent, 
@@ -1933,7 +1921,7 @@ TƏLİMATLAR:
                                             fileData: base64Data, 
                                             subject: subject, 
                                             category: category,
-                                            status: 'pending', // Admin panelində təsdiq gözləyən pəncərəyə düşür
+                                            status: 'pending', 
                                             recognizedTask: aiEval.taskName,
                                             addedPoints: 0,
                                             taskLink: taskLink,
@@ -1968,8 +1956,8 @@ TƏLİMATLAR:
 
                 let msg = "YOXLAMA NƏTİCƏSİ:\n";
                 if (acceptedCount > 0) msg += `✅ FM Qəbul edildi: ${acceptedCount} fayl (Bal yazıldı)\n`;
-                if (groqVerifiedCount > 0) msg += `🎯 AI Təsdiqlədi: ${groqVerifiedCount} fayl (Admin təsdiqi üçün göndərildi)\n`;
-                if (rejectedCount > 0) msg += `❌ Səhv/Rədd edildi: ${rejectedCount} fayl (Səbəbi statusda baxa bilərsiniz)\n`;
+                if (groqVerifiedCount > 0) msg += `🎯 AI Təsdiqlədi: ${groqVerifiedCount} fayl (Admin paneldəki 'Groq Təsdiqli Həllər' pəncərəsinə göndərildi)\n`;
+                if (rejectedCount > 0) msg += `❌ Səhv/Rədd edildi: ${rejectedCount} fayl (Səbəbə statusda baxa bilərsiniz)\n`;
 
                 alert(msg);
                 document.getElementById('studentTaskFiles').value = '';
@@ -2082,7 +2070,7 @@ TƏLİMATLAR:
             student.kecmis_reyting = Number(document.getElementById(`inp_${idx}_kecmis`).value) || 0;
 
             database.ref(`students_data/${adminActiveTab}/${idx}`).set(student).then(() => {
-                alert(`✅ ${student.ad} üçün balllar yeniləndi!`);
+                alert(`✅ ${student.ad} üçün ballar yeniləndi!`);
                 renderTable();
                 logActivity(`Admin ${student.ad} üçün balları əllə yenilədi.`);
             });
@@ -2296,6 +2284,7 @@ TƏLİMATLAR:
 
                 Object.keys(tasks).reverse().forEach(key => {
                     let t = tasks[key];
+                    // Yalnız digər saytlardan (FM olmayan) və Groq AI tərəfindən 'pending' statuslu (düzgün) atılanlar
                     if (t.status === 'pending' && t.category !== 'fm' && !t.archived) {
                         count++;
                         let catLabel = catNames[t.category] || t.category;
@@ -2368,7 +2357,6 @@ TƏLİMATLAR:
                         </div>
                     `;
 
-                    // Yalnız FM olanlar 'Gözləyən fayllar' bölməsinə düşür. Digərləri Groq Təsdiqli pəncərəyə gedir.
                     if (status === 'pending' && cat === 'fm') {
                         if (sub === 'python') { pPyHTML += row; countPPy++; } else { pCppHTML += row; countPCpp++; }
                     } else if (status !== 'pending') {
