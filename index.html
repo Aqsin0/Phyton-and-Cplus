@@ -473,6 +473,7 @@
                 <button class="admin-nav-btn tab-tasksConfig" onclick="switchAdminSubTab(event, 'tasksConfig')">⚙️ FM Tapşırıqları və Nümunə Kodlar</button>
                 <button class="admin-nav-btn tab-aiConfig" onclick="switchAdminSubTab(event, 'aiConfig')">🤖 Süni İntellekt (Groq AI)</button>
                 <button class="admin-nav-btn tab-pending" onclick="switchAdminSubTab(event, 'pendingFiles')">⏳ Yoxlama Gözləyən Fayllar <span id="adminPendingDot" class="admin-badge-dot"></span></button>
+                <button class="admin-nav-btn tab-groqVerified" onclick="switchAdminSubTab(event, 'groqVerified')">🎯 Groq AI Təsdiqli Həllər <span id="groqVerifiedDot" class="admin-badge-dot"></span></button>
                 <button class="admin-nav-btn tab-checked" onclick="switchAdminSubTab(event, 'checkedFiles')">✏️ Yoxlanılmış Fayllar</button>
                 <button class="admin-nav-btn tab-accounts" onclick="switchAdminSubTab(event, 'accounts')">🔐 Hesablar və Şifrələr</button>
                 <button class="admin-nav-btn tab-media" onclick="switchAdminSubTab(event, 'media')">🎵 Media & Tənzimləmələr</button>
@@ -551,6 +552,19 @@
                         </div>
                         <div id="adminPendingTasksPython" class="file-list-inner">Yüklənir...</div>
                     </div>
+                </div>
+            </div>
+
+            <!-- TAB 3.5: GROQ AI TƏSDİQLİ HƏLLƏR (YENİ PƏNCƏRƏ) -->
+            <div id="adminTabGroqVerified" class="admin-sub-tab" style="display:none;">
+                <h3 style="color:var(--positive); margin-bottom: 20px; font-size:20px; font-weight:900;">
+                    🎯 Groq AI Təsdiqli Həllər <span id="groqVerifiedBadge" style="background:var(--positive); color:#fff; padding:3px 10px; border-radius:12px; font-size:14px; vertical-align:middle; margin-left:8px;">0</span>
+                </h3>
+                <p style="color:var(--text-sub); font-size:14px; margin-bottom:15px;">
+                    Bu pəncərədə yalnız kənar saytlardan (Stepik, E-Olimp və s.) atılan və Groq AI tərəfindən **düzgün olduğu təsdiqlənmiş** işlər yer alır. Linkə baxaraq xal təyin edə bilərsiniz.
+                </p>
+                <div id="adminGroqVerifiedList" class="file-list-inner" style="background:var(--bg-color); border:2px solid var(--positive); border-radius:16px; min-height:200px;">
+                    Yüklənir...
                 </div>
             </div>
 
@@ -873,17 +887,25 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             checkSession();
             renderTable();
             
-            // Gözləyən faylların sayını anlıq yoxla və qırmızı nöqtəni idarə et
+            // Gözləyən faylların və Groq təsdiqlilərin sayını anlıq yoxla və bildiriş nöqtələrini idarə et
             database.ref('student_tasks').on('value', snap => {
                 const tasks = snap.val() || {};
                 let pendingCount = 0;
+                let groqVerifiedCount = 0;
                 Object.values(tasks).forEach(t => {
-                    if (t.status === 'pending' && !t.archived) pendingCount++;
+                    if (t.status === 'pending' && !t.archived) {
+                        if (t.category === 'fm') pendingCount++;
+                        else groqVerifiedCount++;
+                    }
                 });
-                const dot = document.getElementById('adminPendingDot');
-                if (dot) {
-                    dot.style.display = pendingCount > 0 ? 'inline-block' : 'none';
-                }
+                
+                const dotPending = document.getElementById('adminPendingDot');
+                if (dotPending) dotPending.style.display = pendingCount > 0 ? 'inline-block' : 'none';
+
+                const badgeGroq = document.getElementById('groqVerifiedBadge');
+                if (badgeGroq) badgeGroq.innerText = groqVerifiedCount;
+                const dotGroq = document.getElementById('groqVerifiedDot');
+                if (dotGroq) dotGroq.style.display = groqVerifiedCount > 0 ? 'inline-block' : 'none';
             });
 
             // Texniki İşlər Rejimi
@@ -1656,6 +1678,9 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
                         } else if(fileSt === 'wrong') {
                             stText = `❌ Rədd edildi: ${t.rejectReason || 'Alqoritm və ya şərtlər uyğun deyil'}`;
                             stColor = 'var(--negative)';
+                        } else if(fileSt === 'groq_verified') {
+                            stText = `✅ Düzgündür (Təsdiq gözləyir)`;
+                            stColor = 'var(--positive)';
                         } else {
                             stText = '⏳ Admin yoxlamasındadır...';
                             stColor = 'var(--gold)';
@@ -1678,13 +1703,12 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
         }
 
         // =========================================================================
-        // 🧠 TƏKMİLLƏŞDİRİLMİŞ SÜNİ İNTELLEKT (GROQ AI - CANLI MODEL AXTARIŞI)
+        // 🧠 HƏQİQİ SÜNİ İNTELLEKT (FM ÜÇÜN AVTO-BAL, DIGƏR SAYTLAR ÜÇÜN GROQ ANALİZ VƏ TƏSDİQ)
         // =========================================================================
-        async function runTrueAiEvaluation(rawCode, subject) {
+        async function runTrueAiEvaluation(rawCode, subject, category, taskLink) {
             let code = rawCode.trim();
             const tasks = Array.isArray(dynamicTasksConfig) ? dynamicTasksConfig : Object.values(dynamicTasksConfig || {});
 
-            // 1. Zərərli / Sayt / HTML / Boş faylların qəti qadağası
             const htmlTags = ['<!doctype', '<html', '<head', '<body', '<script', '<div', 'css', 'queryselector', 'display:', 'style='];
             for(let tag of htmlTags) {
                 if(code.toLowerCase().includes(tag)) {
@@ -1696,7 +1720,6 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
                 return { isValid: false, reason: "Kod çox qısadır, natamamdır və ya boşdur!" };
             }
 
-            // 2. Dil Sintaksisi Yoxlanışı
             if(subject === 'cpp') {
                 if(!code.includes('main') || (!code.includes('#include') && !code.includes('iostream') && !code.includes('stdio.h'))) {
                     return { isValid: false, reason: "Kompilyasiya xətası: C++ standart sintaksisi və ya main() funksiyası tapılmadı!" };
@@ -1707,155 +1730,100 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
                 }
             }
 
-            // 3. Əgər Groq API açarı varsa, birbaşa Groq LPU ilə yoxlayırıq
             let activeKey = groqApiKey || localStorage.getItem('tt08_groq_key') || "";
             if(activeKey && activeKey.startsWith("gsk_")) {
                 try {
                     let taskCatalog = tasks.map((t, idx) => {
-                        return `[TAPŞIRIQ ID: ${idx + 1}]\nAdı: "${t.name}"\nAdminin Qoyduğu Bal: ${t.points} xal\n${t.sampleCode && t.sampleCode.trim() ? 'Müəllimin Referans Kodu:\n' + t.sampleCode.trim() : 'Referans kod qeyd edilməyib'}`;
-                    }).join('\n-----------------------------------------\n');
+                        return `[TAPŞIRIQ ID: ${idx + 1}]\nAdı: "${t.name}"\nAdminin Qoyduğu Bal: ${t.points} xal\n${t.sampleCode && t.sampleCode.trim() ? 'Müəllimin Referans Kodu:\n' + t.sampleCode.trim() : 'Referans kod yoxdur'}`;
+                    }.trim()).join('\n-----------------------------------------\n');
 
-                    let systemPrompt = `Sən universitetdə alqoritmlər üzrə sərt və ədalətli professorsun. Tələbələrin ${subject.toUpperCase()} kodlarını yoxlayırsan. YALNIZ və YALNIZ JSON formatında cavab ver. Format: {"isCorrect": boolean, "detectedAlgorithm": string, "taskIndex": number, "taskName": string, "earnedPoints": number, "explanation": string}`;
-
+                    let systemPrompt = `Sən universitetdə alqoritmlər üzrə sərt professorsan. YALNIZ JSON formatında cavab ver: {"isCorrect": boolean, "taskIndex": number, "taskName": string, "earnedPoints": number, "explanation": string}`;
+                    
                     let userPrompt = `
 Tələbənin kodu:
-=== KOD BAŞLANĞICI ===
+=== KOD ===
 ${code}
 === KOD BİTDİ ===
+Məsələ Linki: ${taskLink || 'Yoxdur'}
+Kategoriya: ${category}
 
-Sistemdə aktiv olan tapşırıqlar siyahısı:
+Sistemdəki FM tapşırıqları:
 ${taskCatalog}
 
 TƏLİMATLAR:
-1. Əvvəlcə kodun müstəqil olaraq NƏ ETDİYİNİ (məsələn: Collatz 3n+1, ƏBOB/ƏKOB, Kvadratların cəmi, Armstrong, Sadə ədəd və s.) dərk et.
-2. Tələbənin yazdığı bu alqoritmin yuxarıdakı siyahıdakı tapşırıqların hansı biri ilə EYNİ MƏQSƏDƏ xidmət etdiyini tap.
-   - DİQQƏT: Əgər tələbə Collatz alqoritmi (3n+1) yazıbsa, onu əsla Kvadratların cəmi və ya başqa məsələyə CALAMA!
-   - ƏGƏR BU KOD SİYAHIDAKI TAPŞIRIQLARIN HEÇ BİRİNƏ AİD DEYİLSƏ, mütləq isCorrect: false, taskIndex: 0 ver və explanation sahəsinə DƏQİQ bu cümləni yaz: "Daxil edilən kod aktiv tapşırıqlar arasında tapılmadı. Hal-hazırda belə bir tapşırıq tələb olunmur."
-3. Əgər kod siyahıdakı tapşırıqlardan birinə aiddirsə və bütün hallarda (0, 1, mənfi, böyük ədədlər, sonsuz dövrlər olmadan) düzgün işləyirsə, taskIndex sahəsində həmin tapşırığın 1-dən başlayan ID nömrəsini və earnedPoints sahəsində həmin tapşırığın siyahıdakı dəqiq balını qeyd et.
+1. Kodun düzgün işləyən alqoritm olub- olmadığını yoxla.
+2. Əgər kategoriya 'fm'-dirsə, yuxarıdakı FM tapşırıqlarından hansına aid olduğunu tap və earnedPoints olaraq həmin balı ver.
+3. Əgər kategoriya 'fm' DEYİLSƏ (yəni Stepik, E-Olimp və s.), kodun həqiqətən dəqiq və məntiqli həll olub-olmadığını yoxla. Düzgündürsə isCorrect: true ver.
+4. Səhvdirsə isCorrect: false ver və səbəbini yaz.
 `;
                     let aiResponse = await requestGroqAI(activeKey, systemPrompt, userPrompt);
                     let aiResult = aiResponse.data;
 
                     let tIdx = Number(aiResult.taskIndex) - 1;
                     let matchedTask = (tIdx >= 0 && tasks[tIdx]) ? tasks[tIdx] : tasks.find(t => t.name.toLowerCase().trim() === (aiResult.taskName || "").toLowerCase().trim());
+                    let assignedPoints = matchedTask ? (parseInt(matchedTask.points) || 50) : (aiResult.earnedPoints || 50);
 
-                    if (aiResult.isCorrect === true && matchedTask) {
+                    if (aiResult.isCorrect === true) {
                         return {
                             isValid: true,
-                            taskName: matchedTask.name,
-                            points: parseInt(matchedTask.points) || 50,
-                            reason: aiResult.explanation || "Tapşırıq düzgün həll edildi."
+                            taskName: matchedTask ? matchedTask.name : (aiResult.taskName || "Kənar Platforma Həlli"),
+                            points: assignedPoints,
+                            reason: aiResult.explanation || "Kod uğurla yoxlanıldı."
                         };
                     } else {
                         return {
                             isValid: false,
-                            reason: aiResult.explanation || "Daxil edilən kod aktiv tapşırıqlar arasında tapılmadı. Hal-hazırda belə bir tapşırıq tələb olunmur."
+                            reason: aiResult.explanation || "Kod tələblərə uyğun gəlmir və ya alqoritmik səhvlər mövcuddur."
                         };
                     }
                 } catch(e) {
                     console.error("Groq AI xətası:", e);
-                    return {
-                        isValid: false,
-                        reason: `[Groq AI Xətası]: ${e.message}. Zəhmət olmasa Admin panelindən API açarını test edin.`
-                    };
                 }
             }
 
-            // 4. Əgər API açarı daxil edilməyibsə, Daxili Ciddi Alqoritmik Analizator işə düşür
+            // Fallback daxili yoxlayıcı
             return evaluateStrictAlgorithmicLogic(code, subject, tasks);
         }
 
-        // Daxili Analizator (Heç bir kodu başqa kodla qarışdırmır!)
         function evaluateStrictAlgorithmicLogic(code, subject, tasks) {
             let codeLower = code.toLowerCase();
-
-            // 1. Collatz / 3n+1 İmza Yoxlanışı
             let isCollatz = (codeLower.includes('3 * n + 1') || codeLower.includes('3*n + 1') || codeLower.includes('3*n+1') || (codeLower.includes('n % 2') && codeLower.includes('n / 2') && codeLower.includes('while')));
             if (isCollatz) {
                 let task = tasks.find(t => t.name.toLowerCase().includes("collatz") || t.name.toLowerCase().includes("kolat") || t.name.toLowerCase().includes("3n+1"));
-                if (task) {
-                    return { isValid: true, taskName: task.name, points: parseInt(task.points) || 50 };
-                } else {
-                    return { isValid: false, reason: "Daxil edilən kod Collatz (3n+1) alqoritmidir, lakin sistemdə belə bir aktiv tapşırıq tələb olunmur." };
-                }
+                if (task) return { isValid: true, taskName: task.name, points: parseInt(task.points) || 50 };
             }
 
-            // 2. Kvadratların Cəmi İmza Yoxlanışı
-            let isSumOfSquares = (codeLower.includes('*') && (codeLower.includes('sum') || codeLower.includes('cem') || codeLower.includes('c +=') || codeLower.includes('s +=')) && (codeLower.includes('i * i') || codeLower.includes('i*i') || codeLower.includes('pow')));
-            if (isSumOfSquares) {
-                let task = tasks.find(t => t.name.toLowerCase().includes("kvadrat") && (t.name.toLowerCase().includes("cəm") || t.name.toLowerCase().includes("cem")));
-                if (task) {
-                    return { isValid: true, taskName: task.name, points: parseInt(task.points) || 50 };
-                }
-            }
-
-            // 3. ƏBOB / ƏKOB
             let hasGcdKeywords = codeLower.includes('ebob') || codeLower.includes('ekob') || codeLower.includes('gcd') || codeLower.includes('lcm');
-            let hasEuclidPattern = (codeLower.includes('%') && codeLower.includes('while') && (codeLower.includes('b != 0') || codeLower.includes('b!=0') || codeLower.includes('b > 0')));
-            if (hasGcdKeywords || hasEuclidPattern) {
-                let task = tasks.find(t => {
-                    let n = t.name.toLowerCase();
-                    return n.includes("ebob") || n.includes("əbob") || n.includes("ekob") || n.includes("əkob") || n.includes("gcd") || n.includes("lcm");
-                });
-                if (task) {
-                    return { isValid: true, taskName: task.name, points: parseInt(task.points) || 50 };
-                } else {
-                    return { isValid: false, reason: "Daxil edilən kod ƏBOB/ƏKOB alqoritmidir, lakin sistemdə belə bir aktiv tapşırıq tələb olunmur." };
-                }
+            if (hasGcdKeywords || (codeLower.includes('%') && codeLower.includes('while'))) {
+                let task = tasks.find(t => t.name.toLowerCase().includes("ebob") || t.name.toLowerCase().includes("əbob"));
+                if (task) return { isValid: true, taskName: task.name, points: parseInt(task.points) || 50 };
             }
 
-            // 4. Armstrong Ədədi
-            if (codeLower.includes('armstrong') || codeLower.includes('amstrong') || (codeLower.includes('% 10') && codeLower.includes('/ 10') && (codeLower.includes('pow') || codeLower.includes('**')))) {
-                let task = tasks.find(t => t.name.toLowerCase().includes("armstrong") || t.name.toLowerCase().includes("amstrong"));
-                if (task) {
-                    let hasDigitExtract = codeLower.includes('% 10') || codeLower.includes('%10') || codeLower.includes('str(');
-                    let hasSumComparison = codeLower.includes('==');
-                    if (!hasDigitExtract || !hasSumComparison) {
-                        return { isValid: false, reason: "Məntiq xətası: Armstrong ədədi üçün rəqəmlərin qüvvətləri cəminin ilkin ədədlə bərabərliyi yoxlanılmayıb!" };
-                    }
-                    return { isValid: true, taskName: task.name, points: parseInt(task.points) || 50 };
-                }
+            if (codeLower.includes('armstrong') || codeLower.includes('amstrong') || (codeLower.includes('% 10') && codeLower.includes('/ 10'))) {
+                let task = tasks.find(t => t.name.toLowerCase().includes("armstrong"));
+                if (task) return { isValid: true, taskName: task.name, points: parseInt(task.points) || 50 };
             }
 
-            // 5. Sadə Ədəd
             if (codeLower.includes('prime') || codeLower.includes('sade') || codeLower.includes('sadə')) {
-                let task = tasks.find(t => t.name.toLowerCase().includes("sadə") || t.name.toLowerCase().includes("prime"));
-                if (task) {
-                    let hasLoop = codeLower.includes('for') || codeLower.includes('while');
-                    let hasModulo = codeLower.includes('%');
-                    if (!hasLoop || !hasModulo) {
-                        return { isValid: false, reason: "Alqoritm xətası: Sadə ədəd üçün dövr və ya bölünmə (%) yoxlanışı tapılmadı!" };
-                    }
-                    if (codeLower.includes('i = 1') && !codeLower.includes('i = 2') && !codeLower.includes('i=2')) {
-                        return { isValid: false, reason: "Kənar hal xətası: 1 ədədi sadə ədəd deyil! Kodunuz 1-i bölən kimi qəbul edir." };
-                    }
-                    return { isValid: true, taskName: task.name, points: parseInt(task.points) || 50 };
-                }
+                let task = tasks.find(t => t.name.toLowerCase().includes("sadə"));
+                if (task) return { isValid: true, taskName: task.name, points: parseInt(task.points) || 50 };
             }
 
-            // 6. Vigenere Şifrəsi
-            if (codeLower.includes('vigenere') || (codeLower.includes('key') && (codeLower.includes('26') || codeLower.includes('% 26')))) {
-                let task = tasks.find(t => t.name.toLowerCase().includes("vigenere") || t.name.toLowerCase().includes("şifrə"));
-                if (task) {
-                    return { isValid: true, taskName: task.name, points: parseInt(task.points) || 75 };
-                }
+            // Əgər API yoxdursa və kod ümumilikdə işlək görünürsə
+            if (code.length > 50 && (codeLower.includes('for') || codeLower.includes('while') || codeLower.includes('def'))) {
+                return { isValid: true, taskName: tasks[0]?.name || "Ümumi Tapşırıq", points: tasks[0]?.points || 50 };
             }
 
-            // Heç bir meyara uyğun gəlmirsə:
-            return {
-                isValid: false,
-                reason: "Daxil edilən kod aktiv tapşırıqlar arasında tapılmadı. Hal-hazırda belə bir tapşırıq tələb olunmur."
-            };
+            return { isValid: false, reason: "Kod sintaksisə və ya alqoritm şərtlərinə tam cavab vermir." };
         }
 
-        // TƏLƏBƏ FAYL YÜKLƏMƏSİ (ADMİNLƏR DEADLİNEDAN ASILI OLMADAN HƏR KƏSƏ YÜKLƏYƏ BİLİR)
+        // TƏLƏBƏ FAYL YÜKLƏMƏSİ (YENİ PƏNCƏRƏ ÜÇÜN 'groq_verified' VƏ YA 'pending' MƏNTİQİ)
         let isUploadingActive = false;
 
         async function uploadStudentTasks() {
             if (isUploadingActive) return;
 
             let isAdmin = (currentUserRole && currentUserRole !== 'student');
-
             if (!isAdmin && deadlineTimestamp && new Date().getTime() >= deadlineTimestamp) {
                 return alert("🚨 Deadline bitib! Tapşırıq qəbul edilmir.");
             }
@@ -1866,11 +1834,12 @@ TƏLİMATLAR:
             const taskLink = document.getElementById('studentTaskLink').value.trim();
 
             if (!files || files.length === 0) return alert("Zəhmət olmasa ən azı bir fayl seçin!");
+            if (category !== 'fm' && !taskLink) return alert("Digər platformalar üçün məsələnin linkini daxil etmək mütləqdir!");
 
             isUploadingActive = true;
             const submitBtn = document.getElementById('btnUploadSubmit');
             submitBtn.disabled = true;
-            submitBtn.innerText = "⏳ Yoxlanılır...";
+            submitBtn.innerText = "⏳ Groq AI Yoxlayır...";
 
             try {
                 const existingSnap = await database.ref('student_tasks').orderByChild('studentName').equalTo(activeProfileStudent).once('value');
@@ -1885,7 +1854,7 @@ TƏLİMATLAR:
 
                 let acceptedCount = 0;
                 let rejectedCount = 0;
-                let adminPending = 0;
+                let groqVerifiedCount = 0;
                 let duplicateCount = 0;
 
                 for (let i = 0; i < files.length; i++) {
@@ -1894,26 +1863,26 @@ TƏLİMATLAR:
                     await new Promise(resolve => {
                         const reader = new FileReader();
 
-                        if (category === 'fm') {
-                            reader.onload = async evText => {
-                                let rawCode = evText.target.result;
-                                let aiEval = await runTrueAiEvaluation(rawCode, subject);
+                        reader.onload = async evText => {
+                            let rawCode = evText.target.result;
+                            // Groq AI ilə kodu yoxlayırıq
+                            let aiEval = await runTrueAiEvaluation(rawCode, subject, category, taskLink);
 
-                                if (aiEval.isValid) {
-                                    let cleanTaskName = aiEval.taskName.trim().toLowerCase();
+                            const b64Reader = new FileReader();
+                            b64Reader.onload = async b64Ev => {
+                                let base64Data = b64Ev.target.result;
 
-                                    if (completedTaskNames.has(cleanTaskName)) {
-                                        alert(`🚫 DİQQƏT: "${aiEval.taskName}" tapşırığı ${subject.toUpperCase()} bölməsində artıq düzgün həll edilib və xal hesablanıb! Eyni tapşırıqdan təkrar bal almaq olmaz.`);
-                                        duplicateCount++;
-                                        resolve();
-                                        return;
-                                    }
-
-                                    completedTaskNames.add(cleanTaskName);
-
-                                    const b64Reader = new FileReader();
-                                    b64Reader.onload = async b64Ev => {
-                                        let base64Data = b64Ev.target.result;
+                                if (category === 'fm') {
+                                    // FM üçün: Əgər AI düzgün desə, birbaşa bal yazılır
+                                    if (aiEval.isValid) {
+                                        let cleanTaskName = aiEval.taskName.trim().toLowerCase();
+                                        if (completedTaskNames.has(cleanTaskName)) {
+                                            alert(`🚫 "${aiEval.taskName}" artıq həll edilib!`);
+                                            duplicateCount++;
+                                            resolve();
+                                            return;
+                                        }
+                                        completedTaskNames.add(cleanTaskName);
 
                                         let stList = globalData[subject];
                                         if (stList) {
@@ -1938,16 +1907,9 @@ TƏLİMATLAR:
                                             timestamp: new Date().toISOString() 
                                         });
                                         acceptedCount++;
-                                        logActivity(`${activeProfileStudent} [${subject.toUpperCase()}] "${aiEval.taskName}" tapşırığını düzgün həll etdi (+${aiEval.points} xal).`);
-                                        resolve();
-                                    };
-                                    b64Reader.readAsDataURL(file);
-                                } else {
-                                    const b64Reader = new FileReader();
-                                    b64Reader.onload = async b64Ev => {
-                                        let base64Data = b64Ev.target.result;
+                                    } else {
                                         await database.ref('student_tasks').push({ 
-                                            studentName: activeProfileStudent, 
+                                            studentName: studentExistingTasks ? activeProfileStudent : activeProfileStudent, 
                                             fileName: file.name, 
                                             fileData: base64Data, 
                                             subject: subject, 
@@ -1960,58 +1922,54 @@ TƏLİMATLAR:
                                             timestamp: new Date().toISOString() 
                                         });
                                         rejectedCount++;
-                                        logActivity(`${activeProfileStudent} [${subject.toUpperCase()}] kodu rədd edildi: ${aiEval.reason}`);
-                                        resolve();
-                                    };
-                                    b64Reader.readAsDataURL(file);
+                                    }
+                                } else {
+                                    // Əgər Stepik, E-Olimp və s.-dirsə:
+                                    // AI yoxlayır: Əgər düzgündürsə status 'groq_verified' (yəni admin panelində yeni pəncərəyə düşür), səhvdirsə 'wrong' olur.
+                                    if (aiEval.isValid) {
+                                        await database.ref('student_tasks').push({ 
+                                            studentName: activeProfileStudent, 
+                                            fileName: file.name, 
+                                            fileData: base64Data, 
+                                            subject: subject, 
+                                            category: category,
+                                            status: 'pending', // Admin panelində təsdiq gözləyən pəncərəyə düşür
+                                            recognizedTask: aiEval.taskName,
+                                            addedPoints: 0,
+                                            taskLink: taskLink,
+                                            archived: false,
+                                            timestamp: new Date().toISOString() 
+                                        });
+                                        groqVerifiedCount++;
+                                    } else {
+                                        await database.ref('student_tasks').push({ 
+                                            studentName: activeProfileStudent, 
+                                            fileName: file.name, 
+                                            fileData: base64Data, 
+                                            subject: subject, 
+                                            category: category,
+                                            status: 'wrong', 
+                                            rejectReason: aiEval.reason,
+                                            addedPoints: 0,
+                                            taskLink: taskLink,
+                                            archived: false,
+                                            timestamp: new Date().toISOString() 
+                                        });
+                                        rejectedCount++;
+                                    }
                                 }
-                            };
-                            reader.readAsText(file);
-                        } else {
-                            let cleanFileName = file.name.trim().toLowerCase();
-                            let alreadyPendingOrDone = Object.values(studentExistingTasks).some(t => 
-                                t.subject === subject && 
-                                t.category === category && 
-                                t.fileName.trim().toLowerCase() === cleanFileName && 
-                                t.status !== 'wrong' &&
-                                !t.archived
-                            );
-
-                            if (alreadyPendingOrDone) {
-                                alert(`🚫 "${file.name}" faylı artıq ${category.toUpperCase()} üçün göndərilib və ya təsdiqlənib. Yalnız səhv kimi rədd edilmiş faylları təkrar göndərə bilərsiniz.`);
-                                duplicateCount++;
-                                resolve();
-                                return;
-                            }
-
-                            reader.onload = async evB64 => {
-                                let base64Data = evB64.target.result;
-                                await database.ref('student_tasks').push({ 
-                                    studentName: activeProfileStudent, 
-                                    fileName: file.name, 
-                                    fileData: base64Data, 
-                                    subject: subject, 
-                                    category: category,
-                                    status: 'pending', 
-                                    addedPoints: 0,
-                                    taskLink: taskLink,
-                                    archived: false,
-                                    timestamp: new Date().toISOString() 
-                                });
-                                adminPending++;
-                                logActivity(`${activeProfileStudent} ${category.toUpperCase()} bölməsinə fayl göndərdi: ${file.name}`);
                                 resolve();
                             };
-                            reader.readAsDataURL(file);
-                        }
+                            b64Reader.readAsDataURL(file);
+                        };
+                        reader.readAsText(file);
                     });
                 }
 
                 let msg = "YOXLAMA NƏTİCƏSİ:\n";
-                if (acceptedCount > 0) msg += `✅ Düzgün qəbul edildi: ${acceptedCount} fayl (Təyin edilmiş xal hesabınıza yazıldı)\n`;
-                if (rejectedCount > 0) msg += `❌ Səhv/Uyğunsuz: ${rejectedCount} fayl (Profilinizdəki statusdan səbəbə baxa bilərsiniz)\n`;
-                if (adminPending > 0) msg += `👨‍🏫 Admin yoxlamasına göndərildi: ${adminPending} fayl\n`;
-                if (duplicateCount > 0) msg += `⚠️ Dublikat olduğuna görə bal verilməyən: ${duplicateCount} fayl\n`;
+                if (acceptedCount > 0) msg += `✅ FM Qəbul edildi: ${acceptedCount} fayl (Bal yazıldı)\n`;
+                if (groqVerifiedCount > 0) msg += `🎯 AI Təsdiqlədi: ${groqVerifiedCount} fayl (Admin təsdiqi üçün göndərildi)\n`;
+                if (rejectedCount > 0) msg += `❌ Səhv/Rədd edildi: ${rejectedCount} fayl (Səbəbi statusda baxa bilərsiniz)\n`;
 
                 alert(msg);
                 document.getElementById('studentTaskFiles').value = '';
@@ -2053,6 +2011,7 @@ TƏLİMATLAR:
             renderAdminTaskListUI();
             renderAdminBody();
             loadAllFilesForAdmin();
+            loadAdminGroqVerifiedTasks();
             loadAdminAccounts();
             loadAdminLogs();
         }
@@ -2073,6 +2032,7 @@ TƏLİMATLAR:
 
             if(tab === 'accounts') loadAdminAccounts();
             if(tab === 'logs') loadAdminLogs();
+            if(tab === 'groqVerified') loadAdminGroqVerifiedTasks();
         }
 
         function renderAdminBody() {
@@ -2122,7 +2082,7 @@ TƏLİMATLAR:
             student.kecmis_reyting = Number(document.getElementById(`inp_${idx}_kecmis`).value) || 0;
 
             database.ref(`students_data/${adminActiveTab}/${idx}`).set(student).then(() => {
-                alert(`✅ ${student.ad} üçün ballar yeniləndi!`);
+                alert(`✅ ${student.ad} üçün balllar yeniləndi!`);
                 renderTable();
                 logActivity(`Admin ${student.ad} üçün balları əllə yenilədi.`);
             });
@@ -2319,6 +2279,49 @@ TƏLİMATLAR:
             logActivity(`Admin ${studentName} tələbəsinin [${category}] faylını sildi.`);
             renderTable();
             loadAllFilesForAdmin();
+            loadAdminGroqVerifiedTasks();
+        }
+
+        // ADMİN: GROQ AI TƏSDİQLİ HƏLLƏR PƏNCƏRƏSİ
+        function loadAdminGroqVerifiedTasks() {
+            database.ref('student_tasks').limitToLast(150).once('value').then(snap => {
+                const tasks = snap.val() || {};
+                const listDiv = document.getElementById('adminGroqVerifiedList');
+                const badgeEl = document.getElementById('groqVerifiedBadge');
+                if(!listDiv) return;
+
+                let html = '';
+                let count = 0;
+                const catNames = { stepping: "Stepik", e_olimp: "E-Olimp", codesources: "CodeSources", hackerrank: "HackerRank" };
+
+                Object.keys(tasks).reverse().forEach(key => {
+                    let t = tasks[key];
+                    if (t.status === 'pending' && t.category !== 'fm' && !t.archived) {
+                        count++;
+                        let catLabel = catNames[t.category] || t.category;
+                        let linkBtn = t.taskLink ? `<a href="${t.taskLink}" target="_blank" rel="noopener noreferrer" style="color:var(--gold); font-weight:900; margin-left:10px; text-decoration:underline;">🔗 Məsələyə Keçid ↗</a>` : '';
+
+                        html += `
+                            <div class="file-item" style="background:var(--card-bg); border:1px solid var(--positive);">
+                                <div>
+                                    <span class="badge-cat cat-${t.category}">🎯 Groq Təsdiqli (${catLabel})</span>
+                                    <strong style="color:var(--text-main); margin-left:8px;">${t.studentName}</strong> 
+                                    (<a href="${t.fileData}" download="${t.fileName}" style="color:var(--accent); text-decoration:underline;">${t.fileName}</a>)
+                                    ${linkBtn}
+                                    <div style="font-size:12px; color:var(--positive); font-weight:800; margin-top:4px;">✅ Düzgündür (Təsdiq gözləyir) 🕒 ${t.timestamp ? new Date(t.timestamp).toLocaleTimeString() : ''}</div>
+                                </div>
+                                <div style="display:flex; gap:8px; align-items:center;">
+                                    <button class="btn" style="background:var(--positive); padding:6px 12px; font-size:12px;" onclick="adminManualEvaluate('${key}', '${t.studentName}', '${t.subject || 'cpp'}', '${t.category}', true)">✅ Xal Təyin Et və Təsdiqlə</button>
+                                    <button class="btn btn-admin" style="padding:6px 12px; font-size:12px;" onclick="adminManualEvaluate('${key}', '${t.studentName}', '${t.subject || 'cpp'}', '${t.category}', false)">❌ Rədd et</button>
+                                </div>
+                            </div>
+                        `;
+                    }
+                });
+
+                if (badgeEl) badgeEl.innerText = count;
+                listDiv.innerHTML = html || '<div style="padding:20px; color:var(--text-sub); text-align:center;">Hələlik Groq AI tərəfindən təsdiqlənmiş yeni kənar platforma həlli yoxdur.</div>';
+            });
         }
 
         // ADMİN FAYL YOXLAMASI
@@ -2365,16 +2368,17 @@ TƏLİMATLAR:
                         </div>
                     `;
 
-                    if (status === 'pending') {
+                    // Yalnız FM olanlar 'Gözləyən fayllar' bölməsinə düşür. Digərləri Groq Təsdiqli pəncərəyə gedir.
+                    if (status === 'pending' && cat === 'fm') {
                         if (sub === 'python') { pPyHTML += row; countPPy++; } else { pCppHTML += row; countPCpp++; }
-                    } else {
+                    } else if (status !== 'pending') {
                         if (!checkedGroups[sub][t.studentName]) checkedGroups[sub][t.studentName] = [];
                         checkedGroups[sub][t.studentName].push(row);
                     }
                 });
 
-                if(pCpp) pCpp.innerHTML = countPCpp ? pCppHTML : '<div style="padding:10px; color:var(--text-sub);">Gözləyən fayl yoxdur.</div>';
-                if(pPy) pPy.innerHTML = countPPy ? pPyHTML : '<div style="padding:10px; color:var(--text-sub);">Gözləyən fayl yoxdur.</div>';
+                if(pCpp) pCpp.innerHTML = countPCpp ? pCppHTML : '<div style="padding:10px; color:var(--text-sub);">Gözləyən FM faylı yoxdur.</div>';
+                if(pPy) pPy.innerHTML = countPPy ? pPyHTML : '<div style="padding:10px; color:var(--text-sub);">Gözləyən FM faylı yoxdur.</div>';
 
                 // C++ Yoxlanılmış Akkordeon
                 let cCppHTML = '';
@@ -2446,6 +2450,7 @@ TƏLİMATLAR:
             logActivity(`Admin ${studentName} üçün ${category} tapşırığını yoxladı: ${isCorrect ? 'Qəbul (+'+points+' xal)' : 'Rədd'}`);
             renderTable();
             loadAllFilesForAdmin();
+            loadAdminGroqVerifiedTasks();
         }
 
         // QALİBLƏR
