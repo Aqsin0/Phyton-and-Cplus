@@ -164,16 +164,9 @@
         /* ADMIN PANEL */
         .admin-dashboard-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
         .admin-nav { display: flex; gap: 10px; margin-bottom: 25px; flex-wrap: wrap; background: var(--card-bg); padding: 10px; border-radius: 14px; border: 1px solid var(--border); }
-        .admin-nav-btn { background: transparent; border: none; color: var(--text-sub); padding: 12px 20px; border-radius: 10px; cursor: pointer; font-weight: 800; font-size: 15px; transition: 0.2s; position: relative; }
+        .admin-nav-btn { background: transparent; border: none; color: var(--text-sub); padding: 12px 20px; border-radius: 10px; cursor: pointer; font-weight: 800; font-size: 15px; transition: 0.2s; }
         .admin-nav-btn.active { background: var(--accent); color: #fff; }
         
-        /* GÖZLƏYƏN FAYL BİLDİRİŞ İŞARƏSİ */
-        .admin-badge-dot {
-            position: absolute; top: 6px; right: 6px; width: 10px; height: 10px;
-            background: var(--negative); border-radius: 50%; display: none;
-            box-shadow: 0 0 8px var(--negative);
-        }
-
         .admin-student-card { background: var(--card-hover); border-radius: 14px; padding: 20px; margin-bottom: 15px; border: 1px solid var(--border); }
         .grid-inputs { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 12px; margin-top: 15px; }
         .grid-inputs input { width: 100%; padding: 10px; border-radius: 10px; border: 1px solid var(--border); background: var(--bg-color); color: var(--text-main); font-weight: 800; font-family: inherit; transition: 0.2s; box-sizing: border-box; }
@@ -472,8 +465,7 @@
                 <button class="admin-nav-btn active tab-students" onclick="switchAdminSubTab(event, 'students')">👥 Reytinq və Balların İdarəsi</button>
                 <button class="admin-nav-btn tab-tasksConfig" onclick="switchAdminSubTab(event, 'tasksConfig')">⚙️ FM Tapşırıqları və Nümunə Kodlar</button>
                 <button class="admin-nav-btn tab-aiConfig" onclick="switchAdminSubTab(event, 'aiConfig')">🤖 Süni İntellekt (Groq AI)</button>
-                <button class="admin-nav-btn tab-pending" onclick="switchAdminSubTab(event, 'pendingFiles')">⏳ Yoxlama Gözləyən Fayllar <span id="adminPendingDot" class="admin-badge-dot"></span></button>
-                <button class="admin-nav-btn tab-groqVerified" onclick="switchAdminSubTab(event, 'groqVerified')">🎯 Groq AI Təsdiqli Həllər <span id="groqVerifiedDot" class="admin-badge-dot"></span></button>
+                <button class="admin-nav-btn tab-pending" onclick="switchAdminSubTab(event, 'pendingFiles')">⏳ Yoxlama Gözləyən Fayllar</button>
                 <button class="admin-nav-btn tab-checked" onclick="switchAdminSubTab(event, 'checkedFiles')">✏️ Yoxlanılmış Fayllar</button>
                 <button class="admin-nav-btn tab-accounts" onclick="switchAdminSubTab(event, 'accounts')">🔐 Hesablar və Şifrələr</button>
                 <button class="admin-nav-btn tab-media" onclick="switchAdminSubTab(event, 'media')">🎵 Media & Tənzimləmələr</button>
@@ -552,19 +544,6 @@
                         </div>
                         <div id="adminPendingTasksPython" class="file-list-inner">Yüklənir...</div>
                     </div>
-                </div>
-            </div>
-
-            <!-- TAB 3.5: GROQ AI TƏSDİQLİ HƏLLƏR (YENİ PƏNCƏRƏ) -->
-            <div id="adminTabGroqVerified" class="admin-sub-tab" style="display:none;">
-                <h3 style="color:var(--positive); margin-bottom: 20px; font-size:20px; font-weight:900;">
-                    🎯 Groq AI Təsdiqli Həllər <span id="groqVerifiedBadge" style="background:var(--positive); color:#fff; padding:3px 10px; border-radius:12px; font-size:14px; vertical-align:middle; margin-left:8px;">0</span>
-                </h3>
-                <p style="color:var(--text-sub); font-size:14px; margin-bottom:15px;">
-                    Bu pəncərədə yalnız kənar saytlardan (Stepik, E-Olimp və s.) atılan və Groq AI tərəfindən **düzgün olduğu təsdiqlənmiş** işlər yer alır. Linkə baxaraq xal təyin edə bilərsiniz.
-                </p>
-                <div id="adminGroqVerifiedList" class="file-list-inner" style="background:var(--bg-color); border:2px solid var(--positive); border-radius:16px; min-height:200px;">
-                    Yüklənir...
                 </div>
             </div>
 
@@ -887,27 +866,6 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             checkSession();
             renderTable();
             
-            // Gözləyən faylların və Groq təsdiqlilərin sayını anlıq yoxla və bildiriş nöqtələrini idarə et
-            database.ref('student_tasks').on('value', snap => {
-                const tasks = snap.val() || {};
-                let pendingCount = 0;
-                let groqVerifiedCount = 0;
-                Object.values(tasks).forEach(t => {
-                    if (t.status === 'pending' && !t.archived) {
-                        if (t.category === 'fm') pendingCount++;
-                        else groqVerifiedCount++;
-                    }
-                });
-                
-                const dotPending = document.getElementById('adminPendingDot');
-                if (dotPending) dotPending.style.display = pendingCount > 0 ? 'inline-block' : 'none';
-
-                const badgeGroq = document.getElementById('groqVerifiedBadge');
-                if (badgeGroq) badgeGroq.innerText = groqVerifiedCount;
-                const dotGroq = document.getElementById('groqVerifiedDot');
-                if (dotGroq) dotGroq.style.display = groqVerifiedCount > 0 ? 'inline-block' : 'none';
-            });
-
             // Texniki İşlər Rejimi
             database.ref('settings/maintenance_mode').on('value', snap => {
                 maintenanceMode = snap.val() === true;
@@ -1067,12 +1025,13 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
         }
 
         // =========================================================================
-        // ⚡ GROQ DİNAMİK MODEL AXTARIŞI VƏ ÇAĞIRIŞI
+        // ⚡ GROQ DİNAMİK MODEL AXTARIŞI VƏ ÇAĞIRIŞI (HƏR ZAMAN CANLI MODEL SEÇİR)
         // =========================================================================
         async function getLiveGroqModel(apiKey) {
             let saved = sessionStorage.getItem('groq_working_model');
             if (saved) return saved;
 
+            // Groq-un rəsmi models endpointindən canlı aktiv modelləri alırıq
             let res = await fetch("https://api.groq.com/openai/v1/models", {
                 headers: {
                     "Authorization": `Bearer ${apiKey}`,
@@ -1089,14 +1048,18 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
                 throw new Error("Bu açar üçün heç bir aktiv Groq modeli tapılmadı.");
             }
 
+            // Audio/whisper modellərini kənarlaşdırıb yalnız mətn/kod modellərini süzürük
             let chatModels = data.data.filter(m => 
                 !m.id.includes("whisper") && 
                 !m.id.includes("guard") && 
                 !m.id.includes("tts")
             );
 
-            let best = chatModels.find(m => m.id.includes("llama-3.3-70b"))
-                    || chatModels.find(m => m.id.includes("llama-3.1-8b"))
+            // Prioritet modellər: gpt-oss, qwen və ya mövcud ən güclü model
+            let best = chatModels.find(m => m.id.includes("gpt-oss-120b"))
+                    || chatModels.find(m => m.id.includes("gpt-oss-20b"))
+                    || chatModels.find(m => m.id.includes("qwen"))
+                    || chatModels.find(m => m.id.includes("llama-3.3"))
                     || chatModels.find(m => m.id.includes("llama"))
                     || chatModels[0];
 
@@ -1146,14 +1109,14 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             throw new Error("Groq heç bir cavab qaytarmadı.");
         }
 
-        // 🧪 GROQ TEST DÜYMƏSİ
+        // 🧪 GROQ TEST DÜYMƏSİ (CANLI MODEL AXTARIŞI İLƏ)
         async function testAiApiKey() {
             let key = document.getElementById('inpGroqApiKey').value.trim() || groqApiKey;
             if(!key) return alert("Zəhmət olmasa əvvəlcə Groq API açarını (`gsk_...`) xanaya daxil edin!");
 
             const btn = event.target;
             btn.disabled = true;
-            btn.innerText = "⏳ Groq LPU test edilir...";
+            btn.innerText = "⏳ Groq modelləri yoxlanılır...";
 
             try {
                 sessionStorage.removeItem('groq_working_model');
@@ -1161,9 +1124,9 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
                 let userPrompt = "Return JSON with: {\"status\": \"ok\", \"message\": \"Groq AI is ready\"}";
                 let result = await requestGroqAI(key, systemPrompt, userPrompt);
                 
-                alert(`✅ ƏLA! Groq Süni İntellekt uğurla qoşuldu!\nAktiv Model: ${result.model}\nİndi yüklənən bütün C++ və Python kodları 1 saniyəyə qüsursuz yoxlanılacaq.`);
+                alert(`✅ ƏLA! Groq Süni İntellekt uğurla qoşuldu!\nAktiv Canlı Model: ${result.model}\nİndi bütün kodlar heç bir model xətası olmadan birbaşa bu model ilə yoxlanılacaq.`);
             } catch(e) {
-                alert("❌ Xəta baş verdi:\n" + e.message + "\n\nPulsuz açar almaq üçün: console.groq.com/keys");
+                alert("❌ Xəta baş verdi:\n" + e.message);
             } finally {
                 btn.disabled = false;
                 btn.innerText = "🧪 API Açarını Test Et";
@@ -1183,7 +1146,7 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             reader.readAsDataURL(file);
         }
 
-        // DEMO ADMIN FUNKSİYALARI
+        // DEMO ADMİN FUNKSİYALARI
         function updateDemoAdminUI() {
             const statusText = document.getElementById('demoStatusText'); 
             const toggleBtn = document.getElementById('btnToggleDemo');
@@ -1601,7 +1564,7 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             document.getElementById('pKurs').innerText = "2-ci Kurs";
             document.getElementById('pTevellud').innerText = STUDENT_BIRTHDATES[student.ad] || "Məlum deyil";
             document.getElementById('pGender').innerText = STUDENT_GENDERS[student.ad] || 'Kişi'; 
-            document.getElementById('pYer').innerText = student.yer || "Gəncə şəhəri"; 
+            document.getElementById('pYer').innerText = student.yer || "Bakı şəhəri"; 
             document.getElementById('pCari').innerText = computed.cari_reyting + " xal";
 
             const weeklyGained = computed.cari_reyting - Number(student.kecmis_reyting || 0);
@@ -1676,9 +1639,6 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
                         } else if(fileSt === 'wrong') {
                             stText = `❌ Rədd edildi: ${t.rejectReason || 'Alqoritm və ya şərtlər uyğun deyil'}`;
                             stColor = 'var(--negative)';
-                        } else if(fileSt === 'groq_verified') {
-                            stText = `✅ Düzgündür (Təsdiq gözləyir)`;
-                            stColor = 'var(--positive)';
                         } else {
                             stText = '⏳ Admin yoxlamasındadır...';
                             stColor = 'var(--gold)';
@@ -1701,12 +1661,13 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
         }
 
         // =========================================================================
-        // 🧠 TƏKMİLLƏŞDİRİLMİŞ SÜNİ İNTELLEKT (FM VƏ DIGƏR SAYTLAR ÜÇÜN QÜSURSUZ ANALİZ)
+        // 🧠 TƏKMİLLƏŞDİRİLMİŞ SÜNİ İNTELLEKT (GROQ AI - CANLI MODEL AXTARIŞI)
         // =========================================================================
         async function runTrueAiEvaluation(rawCode, subject) {
             let code = rawCode.trim();
             const tasks = Array.isArray(dynamicTasksConfig) ? dynamicTasksConfig : Object.values(dynamicTasksConfig || {});
 
+            // 1. Zərərli / Sayt / HTML / Boş faylların qəti qadağası
             const htmlTags = ['<!doctype', '<html', '<head', '<body', '<script', '<div', 'css', 'queryselector', 'display:', 'style='];
             for(let tag of htmlTags) {
                 if(code.toLowerCase().includes(tag)) {
@@ -1718,6 +1679,7 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
                 return { isValid: false, reason: "Kod çox qısadır, natamamdır və ya boşdur!" };
             }
 
+            // 2. Dil Sintaksisi Yoxlanışı
             if(subject === 'cpp') {
                 if(!code.includes('main') || (!code.includes('#include') && !code.includes('iostream') && !code.includes('stdio.h'))) {
                     return { isValid: false, reason: "Kompilyasiya xətası: C++ standart sintaksisi və ya main() funksiyası tapılmadı!" };
@@ -1728,15 +1690,16 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
                 }
             }
 
+            // 3. Əgər Groq API açarı varsa, birbaşa canlı model axtarışı ilə sorğu göndər
             let activeKey = groqApiKey || localStorage.getItem('tt08_groq_key') || "";
             if(activeKey && activeKey.startsWith("gsk_")) {
                 try {
                     let taskCatalog = tasks.map((t, idx) => {
-                        return `[TAPŞIRIQ ID: ${idx + 1}]\nAdı: "${t.name}"\nAdminin Qoyduğu Bal: ${t.points} xal\n${t.sampleCode && t.sampleCode.trim() ? 'Müəllimin Referans Kodu:\n' + t.sampleCode.trim() : 'Referans kod qeyd edilməyib'}`;
+                        return `[TAPŞIRIQ ID: ${idx + 1}]\nAdı: "${t.name}"\nAdminin Qoyduğu Bal: ${t.points} xal\n${t.sampleCode && t.sampleCode.trim() ? 'Müəllimin Referans Kodu:\n' + t.sampleCode.trim() : 'Referans kod yoxdur'}`;
                     }).join('\n-----------------------------------------\n');
 
-                    let systemPrompt = `Sən universitetdə alqoritmlər üzrə sərt professorsan. YALNIZ JSON formatında cavab ver: {"isCorrect": boolean, "detectedAlgorithm": string, "taskIndex": number, "taskName": string, "earnedPoints": number, "explanation": string}`;
-                    
+                    let systemPrompt = `Sən universitetdə alqoritmlər üzrə sərt və dahi professorsan. Tələbələrin ${subject.toUpperCase()} kodlarını yoxlayırsan. YALNIZ və YALNIZ JSON formatında cavab ver. Format: {"isCorrect": boolean, "detectedAlgorithm": string, "taskIndex": number, "taskName": string, "earnedPoints": number, "explanation": string}`;
+
                     let userPrompt = `
 Tələbənin kodu:
 === KOD BAŞLANĞICI ===
@@ -1774,15 +1737,22 @@ TƏLİMATLAR:
                     }
                 } catch(e) {
                     console.error("Groq AI xətası:", e);
+                    return {
+                        isValid: false,
+                        reason: `[Groq AI Xətası]: ${e.message}. Zəhmət olmasa Admin panelindən API açarını test edin.`
+                    };
                 }
             }
 
+            // 4. Əgər API açarı daxil edilməyibsə, Daxili Ciddi Alqoritmik Analizator işə düşür
             return evaluateStrictAlgorithmicLogic(code, subject, tasks);
         }
 
+        // Daxili Analizator (Heç bir kodu başqa kodla qarışdırmır!)
         function evaluateStrictAlgorithmicLogic(code, subject, tasks) {
             let codeLower = code.toLowerCase();
 
+            // 1. Collatz / 3n+1 İmza Yoxlanışı
             let isCollatz = (codeLower.includes('3 * n + 1') || codeLower.includes('3*n + 1') || codeLower.includes('3*n+1') || (codeLower.includes('n % 2') && codeLower.includes('n / 2') && codeLower.includes('while')));
             if (isCollatz) {
                 let task = tasks.find(t => t.name.toLowerCase().includes("collatz") || t.name.toLowerCase().includes("kolat") || t.name.toLowerCase().includes("3n+1"));
@@ -1793,6 +1763,7 @@ TƏLİMATLAR:
                 }
             }
 
+            // 2. Kvadratların Cəmi İmza Yoxlanışı
             let isSumOfSquares = (codeLower.includes('*') && (codeLower.includes('sum') || codeLower.includes('cem') || codeLower.includes('c +=') || codeLower.includes('s +=')) && (codeLower.includes('i * i') || codeLower.includes('i*i') || codeLower.includes('pow')));
             if (isSumOfSquares) {
                 let task = tasks.find(t => t.name.toLowerCase().includes("kvadrat") && (t.name.toLowerCase().includes("cəm") || t.name.toLowerCase().includes("cem")));
@@ -1801,6 +1772,7 @@ TƏLİMATLAR:
                 }
             }
 
+            // 3. ƏBOB / ƏKOB
             let hasGcdKeywords = codeLower.includes('ebob') || codeLower.includes('ekob') || codeLower.includes('gcd') || codeLower.includes('lcm');
             let hasEuclidPattern = (codeLower.includes('%') && codeLower.includes('while') && (codeLower.includes('b != 0') || codeLower.includes('b!=0') || codeLower.includes('b > 0')));
             if (hasGcdKeywords || hasEuclidPattern) {
@@ -1815,6 +1787,7 @@ TƏLİMATLAR:
                 }
             }
 
+            // 4. Armstrong Ədədi
             if (codeLower.includes('armstrong') || codeLower.includes('amstrong') || (codeLower.includes('% 10') && codeLower.includes('/ 10') && (codeLower.includes('pow') || codeLower.includes('**')))) {
                 let task = tasks.find(t => t.name.toLowerCase().includes("armstrong") || t.name.toLowerCase().includes("amstrong"));
                 if (task) {
@@ -1827,6 +1800,7 @@ TƏLİMATLAR:
                 }
             }
 
+            // 5. Sadə Ədəd
             if (codeLower.includes('prime') || codeLower.includes('sade') || codeLower.includes('sadə')) {
                 let task = tasks.find(t => t.name.toLowerCase().includes("sadə") || t.name.toLowerCase().includes("prime"));
                 if (task) {
@@ -1842,6 +1816,7 @@ TƏLİMATLAR:
                 }
             }
 
+            // 6. Vigenere Şifrəsi
             if (codeLower.includes('vigenere') || (codeLower.includes('key') && (codeLower.includes('26') || codeLower.includes('% 26')))) {
                 let task = tasks.find(t => t.name.toLowerCase().includes("vigenere") || t.name.toLowerCase().includes("şifrə"));
                 if (task) {
@@ -1849,22 +1824,7 @@ TƏLİMATLAR:
                 }
             }
 
-            for (let t of tasks) {
-                if (t.sampleCode && t.sampleCode.trim().length > 25) {
-                    let sampleTokens = t.sampleCode.toLowerCase().match(/[a-zA-Z_]{5,}/g) || [];
-                    let ignored = ['include', 'iostream', 'using', 'namespace', 'return', 'vector', 'string', 'while'];
-                    let cleanSampleTokens = sampleTokens.filter(tok => !ignored.includes(tok));
-
-                    let matchedCount = 0;
-                    cleanSampleTokens.forEach(tok => {
-                        if (codeLower.includes(tok)) matchedCount++;
-                    });
-                    if (cleanSampleTokens.length > 0 && matchedCount / cleanSampleTokens.length >= 0.5) {
-                        return { isValid: true, taskName: t.name, points: parseInt(t.points) || 50 };
-                    }
-                }
-            }
-
+            // Heç bir meyara uyğun gəlmirsə:
             return {
                 isValid: false,
                 reason: "Daxil edilən kod aktiv tapşırıqlar arasında tapılmadı. Hal-hazırda belə bir tapşırıq tələb olunmur."
@@ -1879,6 +1839,7 @@ TƏLİMATLAR:
 
             let isAdmin = (currentUserRole && currentUserRole !== 'student');
 
+            // Əgər admin deyilsə və deadline bitibsə, blokla
             if (!isAdmin && deadlineTimestamp && new Date().getTime() >= deadlineTimestamp) {
                 return alert("🚨 Deadline bitib! Tapşırıq qəbul edilmir.");
             }
@@ -1889,7 +1850,6 @@ TƏLİMATLAR:
             const taskLink = document.getElementById('studentTaskLink').value.trim();
 
             if (!files || files.length === 0) return alert("Zəhmət olmasa ən azı bir fayl seçin!");
-            if (category !== 'fm' && !taskLink) return alert("Digər platformalar üçün məsələnin linkini daxil etmək mütləqdir!");
 
             isUploadingActive = true;
             const submitBtn = document.getElementById('btnUploadSubmit');
@@ -2097,7 +2057,6 @@ TƏLİMATLAR:
 
             if(tab === 'accounts') loadAdminAccounts();
             if(tab === 'logs') loadAdminLogs();
-            if(tab === 'groqVerified') loadAdminGroqVerifiedTasks();
         }
 
         function renderAdminBody() {
@@ -2346,48 +2305,6 @@ TƏLİMATLAR:
             loadAllFilesForAdmin();
         }
 
-        // ADMİN: GROQ AI TƏSDİQLİ HƏLLƏR PƏNCƏRƏSİ
-        function loadAdminGroqVerifiedTasks() {
-            database.ref('student_tasks').limitToLast(150).once('value').then(snap => {
-                const tasks = snap.val() || {};
-                const listDiv = document.getElementById('adminGroqVerifiedList');
-                const badgeEl = document.getElementById('groqVerifiedBadge');
-                if(!listDiv) return;
-
-                let html = '';
-                let count = 0;
-                const catNames = { stepping: "Stepik", e_olimp: "E-Olimp", codesources: "CodeSources", hackerrank: "HackerRank" };
-
-                Object.keys(tasks).reverse().forEach(key => {
-                    let t = tasks[key];
-                    if (t.status === 'pending' && t.category !== 'fm' && !t.archived) {
-                        count++;
-                        let catLabel = catNames[t.category] || t.category;
-                        let linkBtn = t.taskLink ? `<a href="${t.taskLink}" target="_blank" rel="noopener noreferrer" style="color:var(--gold); font-weight:900; margin-left:10px; text-decoration:underline;">🔗 Məsələyə Keçid ↗</a>` : '';
-
-                        html += `
-                            <div class="file-item" style="background:var(--card-bg); border:1px solid var(--positive);">
-                                <div>
-                                    <span class="badge-cat cat-${t.category}">🎯 Groq Təsdiqli (${catLabel})</span>
-                                    <strong style="color:var(--text-main); margin-left:8px;">${t.studentName}</strong> 
-                                    (<a href="${t.fileData}" download="${t.fileName}" style="color:var(--accent); text-decoration:underline;">${t.fileName}</a>)
-                                    ${linkBtn}
-                                    <div style="font-size:12px; color:var(--positive); font-weight:800; margin-top:4px;">✅ Düzgündür (Təsdiq gözləyir) 🕒 ${t.timestamp ? new Date(t.timestamp).toLocaleTimeString() : ''}</div>
-                                </div>
-                                <div style="display:flex; gap:8px; align-items:center;">
-                                    <button class="btn" style="background:var(--positive); padding:6px 12px; font-size:12px;" onclick="adminManualEvaluate('${key}', '${t.studentName}', '${t.subject || 'cpp'}', '${t.category}', true)">✅ Xal Təyin Et və Təsdiqlə</button>
-                                    <button class="btn btn-admin" style="padding:6px 12px; font-size:12px;" onclick="adminManualEvaluate('${key}', '${t.studentName}', '${t.subject || 'cpp'}', '${t.category}', false)">❌ Rədd et</button>
-                                </div>
-                            </div>
-                        `;
-                    }
-                });
-
-                if (badgeEl) badgeEl.innerText = count;
-                listDiv.innerHTML = html || '<div style="padding:20px; color:var(--text-sub); text-align:center;">Hələlik Groq AI tərəfindən təsdiqlənmiş yeni kənar platforma həlli yoxdur.</div>';
-            });
-        }
-
         // ADMİN FAYL YOXLAMASI
         function loadAllFilesForAdmin() {
             database.ref('student_tasks').limitToLast(150).once('value').then(snap => {
@@ -2432,16 +2349,16 @@ TƏLİMATLAR:
                         </div>
                     `;
 
-                    if (status === 'pending' && cat === 'fm') {
+                    if (status === 'pending') {
                         if (sub === 'python') { pPyHTML += row; countPPy++; } else { pCppHTML += row; countPCpp++; }
-                    } else if (status !== 'pending') {
+                    } else {
                         if (!checkedGroups[sub][t.studentName]) checkedGroups[sub][t.studentName] = [];
                         checkedGroups[sub][t.studentName].push(row);
                     }
                 });
 
-                if(pCpp) pCpp.innerHTML = countPCpp ? pCppHTML : '<div style="padding:10px; color:var(--text-sub);">Gözləyən FM faylı yoxdur.</div>';
-                if(pPy) pPy.innerHTML = countPPy ? pPyHTML : '<div style="padding:10px; color:var(--text-sub);">Gözləyən FM faylı yoxdur.</div>';
+                if(pCpp) pCpp.innerHTML = countPCpp ? pCppHTML : '<div style="padding:10px; color:var(--text-sub);">Gözləyən fayl yoxdur.</div>';
+                if(pPy) pPy.innerHTML = countPPy ? pPyHTML : '<div style="padding:10px; color:var(--text-sub);">Gözləyən fayl yoxdur.</div>';
 
                 // C++ Yoxlanılmış Akkordeon
                 let cCppHTML = '';
@@ -2513,7 +2430,6 @@ TƏLİMATLAR:
             logActivity(`Admin ${studentName} üçün ${category} tapşırığını yoxladı: ${isCorrect ? 'Qəbul (+'+points+' xal)' : 'Rədd'}`);
             renderTable();
             loadAllFilesForAdmin();
-            loadAdminGroqVerifiedTasks();
         }
 
         // QALİBLƏR
