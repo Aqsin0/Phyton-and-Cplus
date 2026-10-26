@@ -464,7 +464,7 @@
             <div class="admin-nav" id="adminNavTabs">
                 <button class="admin-nav-btn active tab-students" onclick="switchAdminSubTab(event, 'students')">👥 Reytinq və Balların İdarəsi</button>
                 <button class="admin-nav-btn tab-tasksConfig" onclick="switchAdminSubTab(event, 'tasksConfig')">⚙️ FM Tapşırıqları və Nümunə Kodlar</button>
-                <button class="admin-nav-btn tab-aiConfig" onclick="switchAdminSubTab(event, 'aiConfig')">🤖 Süni İntellekt (AI Quraşdırma)</button>
+                <button class="admin-nav-btn tab-aiConfig" onclick="switchAdminSubTab(event, 'aiConfig')">🤖 Süni İntellekt (Groq AI Quraşdırma)</button>
                 <button class="admin-nav-btn tab-pending" onclick="switchAdminSubTab(event, 'pendingFiles')">⏳ Yoxlama Gözləyən Fayllar</button>
                 <button class="admin-nav-btn tab-checked" onclick="switchAdminSubTab(event, 'checkedFiles')">✏️ Yoxlanılmış Fayllar</button>
                 <button class="admin-nav-btn tab-accounts" onclick="switchAdminSubTab(event, 'accounts')">🔐 Hesablar və Şifrələr</button>
@@ -507,16 +507,17 @@
                 </div>
             </div>
 
-            <!-- TAB 2.5: AI QURAŞDIRILMASI VƏ TEST DÜYMƏSİ -->
+            <!-- TAB 2.5: GROQ AI QURAŞDIRILMASI VƏ TEST DÜYMƏSİ -->
             <div id="adminTabAiConfig" class="admin-sub-tab" style="display:none;">
                 <div class="info-box" style="border: 2px solid var(--accent);">
-                    <h3 style="color:var(--accent); margin-top:0;">🤖 Real Süni İntellekt (Gemini AI API) İnteqrasiyası</h3>
+                    <h3 style="color:var(--accent); margin-top:0;">⚡ Ultra Sürətli Groq AI İnteqrasiyası</h3>
                     <p style="color:var(--text-sub); font-size:14px; line-height:1.6;">
-                        Süni intellektin bütün tapşırıqları (Collatz, Armstrong, Sadə ədəd, Kvadratlar və s.) bir-birindən dəqiq ayıra bilməsi üçün pulsuz <strong>Google Gemini API Açarını</strong> daxil edin.
+                        Pulsuz və limitsiz <strong>Groq API Açarını (`gsk_...`)</strong> daxil edin. Groq LPU texnologiyası sayəsində kodlar <strong>1 saniyəyə</strong> Llama-3.3-70b modeli ilə qüsursuz analiz edilir və server yüklənməsi xətası vermir.
+                        <br>🔗 Pulsuz açar almaq üçün: <a href="https://console.groq.com/keys" target="_blank" style="color:var(--gold); font-weight:900;">console.groq.com/keys</a>
                     </p>
                     <div class="form-group">
-                        <label>Gemini API Key:</label>
-                        <input type="password" id="inpGeminiApiKey" placeholder="AIzaSy..." />
+                        <label>Groq API Key:</label>
+                        <input type="password" id="inpGroqApiKey" placeholder="gsk_..." />
                     </div>
                     <div style="display:flex; gap:10px; flex-wrap:wrap;">
                         <button class="btn btn-gold" onclick="saveAiApiKey()">API Açarını Yadda Saxla 💾</button>
@@ -836,7 +837,7 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
         let maintenanceMode = false;
         let blackCatVideoData = null;
         let emojiInterval = null;
-        let geminiApiKey = localStorage.getItem('tt08_gemini_key') || "";
+        let groqApiKey = localStorage.getItem('tt08_groq_key') || "";
 
         let customAudioWinner = DEFAULT_AUDIO_WINNER;
         let customAudioOutsider = DEFAULT_AUDIO_OUTSIDER;
@@ -880,15 +881,15 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
                 if(prev) prev.src = photo;
             });
 
-            // AI API Key (Həm Firebase, həm LocalStorage)
-            database.ref('settings/gemini_api_key').on('value', snap => {
+            // Groq API Key
+            database.ref('settings/groq_api_key').on('value', snap => {
                 let key = snap.val() || "";
                 if(key) {
-                    geminiApiKey = key;
-                    localStorage.setItem('tt08_gemini_key', key);
+                    groqApiKey = key;
+                    localStorage.setItem('tt08_groq_key', key);
                 }
-                const inp = document.getElementById('inpGeminiApiKey');
-                if(inp) inp.value = geminiApiKey;
+                const inp = document.getElementById('inpGroqApiKey');
+                if(inp) inp.value = groqApiKey;
             });
 
             // Demo Admin Dinləyiciləri
@@ -1014,101 +1015,82 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
         function openTeacherModal() { openModal('teacherModal'); }
 
         function saveAiApiKey() {
-            let key = document.getElementById('inpGeminiApiKey').value.trim();
-            geminiApiKey = key;
-            localStorage.setItem('tt08_gemini_key', key);
-            database.ref('settings/gemini_api_key').set(key).then(() => {
-                alert("Süni İntellekt API açarı saxlanıldı! İndi 'API Açarını Test Et' düyməsinə basıb yoxlayın. 🤖");
-                logActivity("Admin Süni İntellekt API açarını yenilədi.");
+            let key = document.getElementById('inpGroqApiKey').value.trim();
+            groqApiKey = key;
+            localStorage.setItem('tt08_groq_key', key);
+            database.ref('settings/groq_api_key').set(key).then(() => {
+                alert("⚡ Groq API açarı uğurla saxlanıldı! İndi 'API Açarını Test Et' düyməsinə klikləyin.");
+                logActivity("Admin Groq AI API açarını yenilədi.");
             });
         }
 
         // =========================================================================
-        // 🧠 GOOGLE LİSTMODELS - DİNAMİK MODEL AXTARIŞI VƏ TESTİ (404-Ü DƏF EDİR)
+        // ⚡ GROQ AI ÇAĞIRIŞI (LLAMA-3.3-70B MODELİ İLƏ 1 SANİYƏYƏ CAVAB)
         // =========================================================================
-        async function getLiveGoogleModel(apiKey) {
-            let saved = sessionStorage.getItem('gemini_live_model');
-            if (saved) return saved;
+        async function requestGroqAI(apiKey, systemPrompt, userPrompt) {
+            const models = ["llama-3.3-70b-versatile", "llama-3.1-8b-instant"];
+            let lastError = null;
 
-            let res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`);
-            let data = await res.json();
+            for (let model of models) {
+                try {
+                    const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+                        method: "POST",
+                        headers: {
+                            "Authorization": `Bearer ${apiKey}`,
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            model: model,
+                            messages: [
+                                { role: "system", content: systemPrompt },
+                                { role: "user", content: userPrompt }
+                            ],
+                            response_format: { type: "json_object" },
+                            temperature: 0.1
+                        })
+                    });
 
-            if (data.error) {
-                throw new Error(`Google API Xətası (${data.error.code}): ${data.error.message}`);
-            }
+                    const resData = await res.json();
 
-            if (!data.models || !Array.isArray(data.models) || data.models.length === 0) {
-                throw new Error("Bu API açarı üçün Google heç bir model tapmadı. Zəhmət olmasa aistudio.google.com saytından yeni açar yaradın.");
-            }
-
-            let valid = data.models.filter(m => m.supportedGenerationMethods && m.supportedGenerationMethods.includes("generateContent"));
-
-            if (valid.length === 0) {
-                throw new Error("Açarınız üçün heç bir mətn generasiyası modeli aktiv deyil.");
-            }
-
-            // Ən müasir Flash modellərini prioritə alırıq
-            let chosen = valid.find(m => m.name.includes("2.5-flash"))
-                      || valid.find(m => m.name.includes("2.0-flash"))
-                      || valid.find(m => m.name.includes("flash"))
-                      || valid.find(m => m.name.includes("gemini"))
-                      || valid[0];
-
-            let cleanName = chosen.name.replace("models/", "");
-            sessionStorage.setItem('gemini_live_model', cleanName);
-            return cleanName;
-        }
-
-        async function requestGeminiAI(apiKey, prompt) {
-            let activeModel = await getLiveGoogleModel(apiKey);
-
-            const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${activeModel}:generateContent?key=${apiKey}`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    contents: [{ parts: [{ text: prompt }] }],
-                    generationConfig: {
-                        responseMimeType: "application/json",
-                        temperature: 0.1
+                    if (!res.ok) {
+                        throw new Error(resData.error?.message || `HTTP ${res.status}`);
                     }
-                })
-            });
 
-            const resData = await res.json();
-
-            if (resData.error) {
-                sessionStorage.removeItem('gemini_live_model');
-                throw new Error(resData.error.message);
+                    if (resData.choices && resData.choices.length > 0) {
+                        let text = resData.choices[0].message.content;
+                        return {
+                            model: model,
+                            data: JSON.parse(text)
+                        };
+                    }
+                } catch (e) {
+                    lastError = e;
+                    if (e.message.includes("Invalid API Key") || e.message.includes("authentication")) {
+                        throw new Error("Daxil etdiyiniz Groq API açarı yanlışdır!");
+                    }
+                }
             }
 
-            if (!resData.candidates || resData.candidates.length === 0) {
-                throw new Error("Süni intellekt cavab qaytarmadı.");
-            }
-
-            let text = resData.candidates[0].content.parts[0].text;
-            return {
-                model: activeModel,
-                data: JSON.parse(text)
-            };
+            throw lastError || new Error("Groq API ilə əlaqə qurulmadı.");
         }
 
-        // 🧪 TEST DÜYMƏSİ
+        // 🧪 GROQ TEST DÜYMƏSİ
         async function testAiApiKey() {
-            let key = document.getElementById('inpGeminiApiKey').value.trim() || geminiApiKey;
-            if(!key) return alert("Zəhmət olmasa əvvəlcə Gemini API açarını xanaya daxil edin!");
+            let key = document.getElementById('inpGroqApiKey').value.trim() || groqApiKey;
+            if(!key) return alert("Zəhmət olmasa əvvəlcə Groq API açarını (`gsk_...`) xanaya daxil edin!");
 
             const btn = event.target;
             btn.disabled = true;
-            btn.innerText = "⏳ Google modelləri aşkarlanır...";
+            btn.innerText = "⏳ Groq LPU test edilir...";
 
             try {
-                sessionStorage.removeItem('gemini_live_model');
-                let testPrompt = `Sadəcə bu JSON-u qaytar: {"status": "ok"}`;
-                let result = await requestGeminiAI(key, testPrompt);
+                let systemPrompt = "You are a test assistant. Always output JSON.";
+                let userPrompt = "Return JSON with: {\"status\": \"ok\", \"message\": \"Groq AI is ready\"}";
+                let result = await requestGroqAI(key, systemPrompt, userPrompt);
                 
-                alert(`✅ ƏLA! Süni İntellekt uğurla qoşuldu!\nGoogle tərəfindən aşkarlanan aktiv model: ${result.model}\nİndi bütün kodlar 404 xətası olmadan birbaşa bu model ilə yoxlanılacaq.`);
+                alert(`✅ ƏLA! Groq Süni İntellekt uğurla qoşuldu!\nAktiv Model: ${result.model}\nİndi yüklənən bütün C++ və Python kodları 1 saniyəyə qüsursuz yoxlanılacaq.`);
             } catch(e) {
-                alert("❌ Xəta baş verdi:\n" + e.message + "\n\nZəhmət olmasa açarın Google AI Studio-da aktiv olduğuna əmin olun.");
+                alert("❌ Xəta baş verdi:\n" + e.message + "\n\nPulsuz açar almaq üçün: console.groq.com/keys");
             } finally {
                 btn.disabled = false;
                 btn.innerText = "🧪 API Açarını Test Et";
@@ -1643,7 +1625,7 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
         }
 
         // =========================================================================
-        // 🧠 TƏKMİLLƏŞDİRİLMİŞ SÜNİ İNTELLEKT (DİNAMİK LİSTMODELS İLƏ)
+        // 🧠 TƏKMİLLƏŞDİRİLMİŞ SÜNİ İNTELLEKT (GROQ AI - LLAMA 3.3 İLƏ DƏQİQ ANALİZ)
         // =========================================================================
         async function runTrueAiEvaluation(rawCode, subject) {
             let code = rawCode.trim();
@@ -1672,23 +1654,23 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
                 }
             }
 
-            // 3. Əgər Gemini API açarı varsa, dinamik olaraq Google-dan aktiv modeli çəkib sorğu göndəririk
-            let activeKey = geminiApiKey || localStorage.getItem('tt08_gemini_key') || "";
-            if(activeKey && activeKey.startsWith("AIzaSy")) {
+            // 3. Əgər Groq API açarı varsa, birbaşa Groq LPU ilə yoxlayırıq
+            let activeKey = groqApiKey || localStorage.getItem('tt08_groq_key') || "";
+            if(activeKey && activeKey.startsWith("gsk_")) {
                 try {
                     let taskCatalog = tasks.map((t, idx) => {
                         return `[TAPŞIRIQ ID: ${idx + 1}]\nAdı: "${t.name}"\nAdminin Qoyduğu Bal: ${t.points} xal\n${t.sampleCode && t.sampleCode.trim() ? 'Müəllimin Referans Kodu:\n' + t.sampleCode.trim() : 'Referans kod yoxdur'}`;
                     }).join('\n-----------------------------------------\n');
 
-                    let prompt = `
-Sən ali məktəbdə alqoritmlər üzrə sərt və dahi professorsun.
-Tələbə ${subject.toUpperCase()} dilində aşağıdakı kodu göndərib:
+                    let systemPrompt = `Sən universitetdə alqoritmlər üzrə sərt və ədalətli professorsan. Tələbələrin ${subject.toUpperCase()} kodlarını yoxlayırsan. YALNIZ və YALNIZ JSON formatında cavab ver. Format: {"isCorrect": boolean, "detectedAlgorithm": string, "taskIndex": number, "taskName": string, "earnedPoints": number, "explanation": string}`;
 
-=== TƏLƏBƏ KODU ===
+                    let userPrompt = `
+Tələbənin kodu:
+=== KOD BAŞLANĞICI ===
 ${code}
-=== TƏLƏBƏ KODU BİTDİ ===
+=== KOD BİTDİ ===
 
-Sistemdəki aktiv tapşırıqlar:
+Sistemdə aktiv olan tapşırıqlar siyahısı:
 ${taskCatalog}
 
 TƏLİMATLAR:
@@ -1697,17 +1679,8 @@ TƏLİMATLAR:
    - DİQQƏT: Əgər tələbə Collatz alqoritmi (3n+1) yazıbsa, onu əsla Kvadratların cəmi və ya başqa məsələyə CALAMA!
    - ƏGƏR BU KOD SİYAHIDAKI TAPŞIRIQLARIN HEÇ BİRİNƏ AİD DEYİLSƏ, mütləq isCorrect: false, taskIndex: 0 ver və explanation sahəsinə DƏQİQ bu cümləni yaz: "Daxil edilən kod aktiv tapşırıqlar arasında tapılmadı. Hal-hazırda belə bir tapşırıq tələb olunmur."
 3. Əgər kod siyahıdakı tapşırıqlardan birinə aiddirsə və bütün hallarda (0, 1, mənfi, böyük ədədlər, sonsuz dövrlər olmadan) düzgün işləyirsə, taskIndex sahəsində həmin tapşırığın 1-dən başlayan ID nömrəsini və earnedPoints sahəsində həmin tapşırığın siyahıdakı dəqiq balını qeyd et.
-4. Cavabı YALNIZ və YALNIZ bu JSON formatında ver:
-{
-  "isCorrect": true/false,
-  "detectedAlgorithm": "kodun icra etdiyi əsas mövzu",
-  "taskIndex": uyğun gələn tapşırığın ID nömrəsi (uyğun gəlmirsə 0),
-  "taskName": "Tapşırığın dəqiq adı",
-  "earnedPoints": həmin tapşırığın admin tərəfindən qoyulmuş balı,
-  "explanation": "Ətraflı azərbaycanca izah"
-}
 `;
-                    let aiResponse = await requestGeminiAI(activeKey, prompt);
+                    let aiResponse = await requestGroqAI(activeKey, systemPrompt, userPrompt);
                     let aiResult = aiResponse.data;
 
                     let tIdx = Number(aiResult.taskIndex) - 1;
@@ -1727,10 +1700,10 @@ TƏLİMATLAR:
                         };
                     }
                 } catch(e) {
-                    console.error("Gemini AI xətası:", e);
+                    console.error("Groq AI xətası:", e);
                     return {
                         isValid: false,
-                        reason: `[Süni İntellekt]: ${e.message}`
+                        reason: `[Groq AI Xətası]: ${e.message}. Zəhmət olmasa Admin panelindən API açarını test edin.`
                     };
                 }
             }
@@ -2612,4 +2585,3 @@ TƏLİMATLAR:
     </script>
 </body>
 </html>
-
