@@ -540,7 +540,7 @@
                 </div>
             </div>
 
-            <!-- TAB 4: REDAKTƏ ÜÇÜN FAYLLAR (TƏLƏBƏ ADLARI İLƏ QURUPLAŞDIRILDI) -->
+            <!-- TAB 4: REDAKTƏ ÜÇÜN FAYLLAR (SİL DÜYMƏSİ ƏLAVƏ EDİLDİ) -->
             <div id="adminTabCheckedFiles" class="admin-sub-tab" style="display:none;">
                 <h3 style="color:var(--accent); margin-bottom: 20px; font-size:20px; font-weight:900;">
                     ✅ Yoxlanılmış Fayllar (Tələbəyə görə sıralanmış)
@@ -907,8 +907,9 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             });
 
             database.ref('settings/dynamic_tasks').on('value', snap => {
-                if(snap.val() && Array.isArray(snap.val())) {
-                    dynamicTasksConfig = snap.val();
+                let val = snap.val();
+                if(val) {
+                    dynamicTasksConfig = Array.isArray(val) ? val : Object.values(val);
                     if(currentUserRole && currentUserRole !== 'student') renderAdminTaskListUI();
                 }
             });
@@ -1534,10 +1535,11 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
         }
 
         // =========================================================================
-        // 🧠 TƏKMİLLƏŞDİRİLMİŞ SÜNİ İNTELLEKT (MƏQSƏDƏ GÖRƏ REAL BAL TƏYİNİ)
+        // 🧠 TƏKMİLLƏŞDİRİLMİŞ SÜNİ İNTELLEKT (DƏQİQ TAPŞIRIQ VƏ BAL TƏYİNİ)
         // =========================================================================
         async function runTrueAiEvaluation(rawCode, subject) {
             let code = rawCode.trim();
+            const tasks = Array.isArray(dynamicTasksConfig) ? dynamicTasksConfig : Object.values(dynamicTasksConfig || {});
 
             // 1. Zərərli / Sayt / HTML / Boş faylların qəti qadağası
             const htmlTags = ['<!doctype', '<html', '<head', '<body', '<script', '<div', 'css', 'queryselector', 'display:', 'style='];
@@ -1565,32 +1567,31 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             // 3. Əgər Admin Gemini API açarı daxil edibsə, Real Gemini 1.5 Flash çağırılır
             if(geminiApiKey && geminiApiKey.startsWith("AIzaSy")) {
                 try {
-                    let taskCatalog = dynamicTasksConfig.map((t, idx) => {
-                        return `[ID: ${idx + 1}] Adı: "${t.name}" | Balı: ${t.points} xal\n${t.sampleCode ? 'Referans Həll:\n' + t.sampleCode : 'Referans kod qeyd edilməyib'}`;
-                    }).join('\n---------------------\n');
+                    let taskCatalog = tasks.map((t, idx) => {
+                        return `[TAPŞIRIQ ID: ${idx + 1}]\nAdı: "${t.name}"\nAdminin Qoyduğu Bal: ${t.points} xal\n${t.sampleCode && t.sampleCode.trim() ? 'Müəllimin Referans Kodu:\n' + t.sampleCode.trim() : 'Referans kod qoyulmayıb.'}`;
+                    }).join('\n-----------------------------------------\n');
 
                     let prompt = `
-Sən ali məktəbdə alqoritmlər üzrə ÇOX SƏRT və ədalətli professorsun.
-Tələbə ${subject.toUpperCase()} dilində aşağıdakı kodu yazıb:
+Sən ali məktəbdə alqoritmlər üzrə sərt və ədalətli professorsun.
+Tələbə ${subject.toUpperCase()} dilində aşağıdakı kodu yazıb göndərib:
 
-=== KOD ===
+=== TƏLƏBƏ KODU ===
 ${code}
-=== KOD BİTDİ ===
+=== TƏLƏBƏ KODU BİTDİ ===
 
-Sistemdə mövcud olan aktiv tapşırıqlar siyahısı:
+Sistemdə mövcud olan aktiv tapşırıqlar:
 ${taskCatalog}
 
 TƏLİMATLAR:
-1. Əsla boş yerə bal vermə! Əgər kod natamamdırsa, işləmirsə, sadəcə print verirsə və ya dummy koddursa, QƏTİYYƏN QƏBUL ETMƏ (isCorrect: false).
-2. Tələbənin kodunun məhz HANSI tapşırığa aid olduğunu siyahıdakı hər tapşırığı tək-tək yoxlayaraq tap.
-3. ƏGƏR BU KOD SİYAHIDAKI TAPŞIRIQLARIN HEÇ BİRİNƏ AİD DEYİLSƏ, isCorrect: false ver və izaha dəqiq bunu yaz: "Daxil edilən kod aktiv tapşırıqlar arasında tapılmadı. Hal-hazırda belə bir tapşırıq tələb olunmur."
-4. Əgər kod siyahıdakı tapşırıqlardan birinə aiddirsə və bütün hallarda (0, 1, mənfi, böyük ədədlər) düzgün işləyirsə, həmin tapşırığın siyahıdakı DƏQİQ BALINI (earnedPoints) ver.
-5. YALNIZ və YALNIZ bu JSON formatında cavab ver (heç bir markdown və ya artıq söz yazma):
+1. Tələbənin kodunun məhz HANSI tapşırığa aid olduğunu yuxarıdakı siyahıdan tək-tək axtararaq tap.
+2. Əgər tələbənin kodu bu tapşırıqlardan heç birinə aid deyilsə, mütləq isCorrect: false ver və explanation sahəsinə DƏQİQ bu cümləni yaz: "Daxil edilən kod aktiv tapşırıqlar arasında tapılmadı. Hal-hazırda belə bir tapşırıq tələb olunmur."
+3. Əgər kod siyahıdakı tapşırıqlardan birinə aiddirsə və düzgündürsə, taskIndex sahəsində həmin tapşırığın 1-dən başlayan ID nömrəsini və earnedPoints sahəsində həmin tapşırığın dəqiq balını qeyd et.
+4. Cavabı YALNIZ və YALNIZ bu JSON formatında ver (heç bir markdown və ya artıq söz yazma):
 {
   "isCorrect": true/false,
   "taskIndex": uyğun gələn tapşırığın 1-dən başlayan ID nömrəsi (uyğun gəlmirsə 0),
   "taskName": "Tapşırığın dəqiq adı",
-  "earnedPoints": həmin tapşırığın konfiqurasiyadakı dəqiq balı,
+  "earnedPoints": həmin tapşırığın admin tərəfindən qoyulmuş balı,
   "explanation": "Ətraflı azərbaycanca izah"
 }
 `;
@@ -1601,56 +1602,56 @@ TƏLİMATLAR:
                     });
                     const resData = await res.json();
                     let text = resData?.candidates?.[0]?.content?.parts?.[0]?.text || "";
-                    let cleanJson = text.replace(/```json/g, "").replace(/```/g, "").trim();
-                    let aiResult = JSON.parse(cleanJson);
+                    let match = text.match(/\{[\s\S]*\}/);
+                    if (match) {
+                        let aiResult = JSON.parse(match[0]);
+                        let tIdx = Number(aiResult.taskIndex) - 1;
+                        let matchedTask = (tIdx >= 0 && tasks[tIdx]) ? tasks[tIdx] : tasks.find(t => t.name.toLowerCase().trim() === (aiResult.taskName || "").toLowerCase().trim());
 
-                    let tIdx = Number(aiResult.taskIndex) - 1;
-                    let matchedTask = (tIdx >= 0 && dynamicTasksConfig[tIdx]) ? dynamicTasksConfig[tIdx] : dynamicTasksConfig.find(t => t.name.toLowerCase().trim() === (aiResult.taskName || "").toLowerCase().trim());
-
-                    if (aiResult.isCorrect === true && matchedTask) {
-                        return {
-                            isValid: true,
-                            taskName: matchedTask.name,
-                            points: Number(matchedTask.points), // Adminin yazdığı real bal
-                            reason: aiResult.explanation || ""
-                        };
-                    } else {
-                        return {
-                            isValid: false,
-                            reason: aiResult.explanation || "Daxil edilən kod aktiv tapşırıqlar arasında tapılmadı. Hal-hazırda belə bir tapşırıq tələb olunmur."
-                        };
+                        if (aiResult.isCorrect === true && matchedTask) {
+                            return {
+                                isValid: true,
+                                taskName: matchedTask.name,
+                                points: parseInt(matchedTask.points) || 50,
+                                reason: aiResult.explanation || "Tapşırıq düzgün həll edildi."
+                            };
+                        } else {
+                            return {
+                                isValid: false,
+                                reason: aiResult.explanation || "Daxil edilən kod aktiv tapşırıqlar arasında tapılmadı. Hal-hazırda belə bir tapşırıq tələb olunmur."
+                            };
+                        }
                     }
                 } catch(e) {
-                    console.log("Gemini API zəngi uğursuz oldu, daxili intellektual mühərrik işə düşür...", e);
+                    console.log("Gemini API xətası, daxili analizator işə düşür...", e);
                 }
             }
 
             // 4. Daxili Ciddi Alqoritmik Analizator
-            return evaluateStrictAlgorithmicLogic(code, subject);
+            return evaluateStrictAlgorithmicLogic(code, subject, tasks);
         }
 
         // Daxili Analizator
-        function evaluateStrictAlgorithmicLogic(code, subject) {
+        function evaluateStrictAlgorithmicLogic(code, subject, tasks) {
             let codeLower = code.toLowerCase();
-
             let matchedTask = null;
 
             // 1. Armstrong Ədədi yoxlanışı
             if (codeLower.includes('armstrong') || (codeLower.includes('% 10') && codeLower.includes('/ 10') && (codeLower.includes('pow') || codeLower.includes('**')))) {
-                matchedTask = dynamicTasksConfig.find(t => t.name.toLowerCase().includes("armstrong") || t.name.toLowerCase().includes("amstrong"));
+                matchedTask = tasks.find(t => t.name.toLowerCase().includes("armstrong") || t.name.toLowerCase().includes("amstrong"));
                 if (matchedTask) {
                     let hasDigitExtract = codeLower.includes('% 10') || codeLower.includes('%10') || codeLower.includes('str(');
                     let hasSumComparison = codeLower.includes('==');
                     if (!hasDigitExtract || !hasSumComparison) {
                         return { isValid: false, reason: "Məntiq xətası: Armstrong ədədi üçün rəqəmlərin qüvvətləri cəminin ilkin ədədlə bərabərliyi yoxlanılmayıb!" };
                     }
-                    return { isValid: true, taskName: matchedTask.name, points: Number(matchedTask.points) };
+                    return { isValid: true, taskName: matchedTask.name, points: parseInt(matchedTask.points) || 50 };
                 }
             }
 
             // 2. Sadə Ədəd yoxlanışı
             if (codeLower.includes('prime') || codeLower.includes('sade') || (codeLower.includes('%') && (codeLower.includes('for') || codeLower.includes('while')))) {
-                matchedTask = dynamicTasksConfig.find(t => t.name.toLowerCase().includes("sadə") || t.name.toLowerCase().includes("prime"));
+                matchedTask = tasks.find(t => t.name.toLowerCase().includes("sadə") || t.name.toLowerCase().includes("prime"));
                 if (matchedTask) {
                     let hasLoop = codeLower.includes('for') || codeLower.includes('while');
                     let hasModulo = codeLower.includes('%');
@@ -1660,25 +1661,25 @@ TƏLİMATLAR:
                     if (codeLower.includes('i = 1') && !codeLower.includes('i = 2') && !codeLower.includes('i=2')) {
                         return { isValid: false, reason: "Kənar hal xətası: 1 ədədi sadə ədəd deyil! Kodunuz 1-i bölən kimi qəbul edir." };
                     }
-                    return { isValid: true, taskName: matchedTask.name, points: Number(matchedTask.points) };
+                    return { isValid: true, taskName: matchedTask.name, points: parseInt(matchedTask.points) || 50 };
                 }
             }
 
             // 3. Vigenere Şifrəsi
             if (codeLower.includes('vigenere') || (codeLower.includes('key') && (codeLower.includes('26') || codeLower.includes('% 26')))) {
-                matchedTask = dynamicTasksConfig.find(t => t.name.toLowerCase().includes("vigenere") || t.name.toLowerCase().includes("şifrə"));
+                matchedTask = tasks.find(t => t.name.toLowerCase().includes("vigenere") || t.name.toLowerCase().includes("şifrə"));
                 if (matchedTask) {
                     let hasShift = codeLower.includes('26') || codeLower.includes('ord') || codeLower.includes('chr');
                     let hasKey = codeLower.includes('key') || codeLower.includes('acar');
                     if (!hasShift || !hasKey) {
                         return { isValid: false, reason: "Alqoritm xətası: Vigenere şifrələməsi üçün açar və ya 26 əlifba sürüşdürməsi tapılmadı!" };
                     }
-                    return { isValid: true, taskName: matchedTask.name, points: Number(matchedTask.points) };
+                    return { isValid: true, taskName: matchedTask.name, points: parseInt(matchedTask.points) || 75 };
                 }
             }
 
             // 4. Referans kod qoyulmuş digər tapşırıqlar
-            for (let t of dynamicTasksConfig) {
+            for (let t of tasks) {
                 if (t.sampleCode && t.sampleCode.trim().length > 15) {
                     let sampleTokens = t.sampleCode.toLowerCase().match(/[a-zA-Z_]{4,}/g) || [];
                     let matchedCount = 0;
@@ -1686,7 +1687,7 @@ TƏLİMATLAR:
                         if (codeLower.includes(tok)) matchedCount++;
                     });
                     if (matchedCount >= 5 && (codeLower.includes('for') || codeLower.includes('while') || codeLower.includes('if'))) {
-                        return { isValid: true, taskName: t.name, points: Number(t.points) };
+                        return { isValid: true, taskName: t.name, points: parseInt(t.points) || 50 };
                     }
                 }
             }
@@ -1698,7 +1699,7 @@ TƏLİMATLAR:
             };
         }
 
-        // TƏLƏBƏ FAYL YÜKLƏMƏSİ (DUBİKATI VƏ TƏKRAR BAL ALMAĞI 100% BLOKLAYAN MƏNTİQ)
+        // TƏLƏBƏ FAYL YÜKLƏMƏSİ (DUBLİKATI VƏ TƏKRAR BAL ALMAĞI BLOKLAYIR)
         let isUploadingActive = false;
 
         async function uploadStudentTasks() {
@@ -2011,7 +2012,9 @@ TƏLİMATLAR:
             const container = document.getElementById('adminTaskListContainer');
             if(!container) return;
             let html = '';
-            dynamicTasksConfig.forEach((t, idx) => {
+            const tasks = Array.isArray(dynamicTasksConfig) ? dynamicTasksConfig : Object.values(dynamicTasksConfig || {});
+            
+            tasks.forEach((t, idx) => {
                 html += `
                     <div style="background:var(--card-hover); padding:15px; border-radius:12px; border:1px solid var(--border);">
                         <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-bottom:10px;">
@@ -2032,18 +2035,22 @@ TƏLİMATLAR:
         }
 
         function addAdminTaskRow() {
+            if(!Array.isArray(dynamicTasksConfig)) dynamicTasksConfig = Object.values(dynamicTasksConfig || {});
             dynamicTasksConfig.push({ name: "Yeni FM Tapşırığı", points: 50, sampleCode: "" });
             renderAdminTaskListUI();
         }
 
         function removeAdminTaskRow(idx) {
+            if(!Array.isArray(dynamicTasksConfig)) dynamicTasksConfig = Object.values(dynamicTasksConfig || {});
             dynamicTasksConfig.splice(idx, 1);
             renderAdminTaskListUI();
         }
 
         function saveAdminTaskConfigs() {
             let newList = [];
-            dynamicTasksConfig.forEach((_, idx) => {
+            const tasks = Array.isArray(dynamicTasksConfig) ? dynamicTasksConfig : Object.values(dynamicTasksConfig || {});
+            
+            tasks.forEach((_, idx) => {
                 let nameInp = document.getElementById(`dt_name_${idx}`);
                 let ptsInp = document.getElementById(`dt_pts_${idx}`);
                 let sampleInp = document.getElementById(`dt_sample_${idx}`);
@@ -2129,7 +2136,7 @@ TƏLİMATLAR:
             });
         }
 
-        // TOGGLE AKKORDEON (Yoxlanılmış faylların səliqəli açılıb bağlanması)
+        // TOGGLE AKKORDEON
         function toggleCheckedGroup(id) {
             let el = document.getElementById(id);
             if(el) {
@@ -2137,7 +2144,32 @@ TƏLİMATLAR:
             }
         }
 
-        // ADMİN FAYL YOXLAMASI (TƏLƏBƏ ADLARI ÜZRƏ QRUPLAŞDIRILMIŞ VƏ SƏLİQƏLİ)
+        // YOXLANIŞDAN KEÇMİŞ FAYLIN SİLİNMƏSİ VƏ BALIN DÜZƏLDİLMƏSİ
+        async function deleteCheckedTask(key, studentName, subject, category, addedPoints) {
+            if (!confirm(`Bu yoxlanılmış faylı silmək istədiyinizə əminsiniz?`)) return;
+
+            let pts = Number(addedPoints) || 0;
+            if (pts > 0 && studentName && subject && category) {
+                let stList = globalData[subject];
+                if (stList) {
+                    let idx = stList.findIndex(s => s.ad === studentName);
+                    if (idx > -1) {
+                        let col = category;
+                        let currentVal = Number(stList[idx][col]) || 0;
+                        stList[idx][col] = Math.max(0, currentVal - pts);
+                        await database.ref(`students_data/${subject}/${idx}/${col}`).set(stList[idx][col]);
+                    }
+                }
+            }
+
+            await database.ref(`student_tasks/${key}`).remove();
+            alert("Fayl uğurla silindi və bal cədvəldən çıxarıldı!");
+            logActivity(`Admin ${studentName} tələbəsinin [${category}] faylını sildi.`);
+            renderTable();
+            loadAllFilesForAdmin();
+        }
+
+        // ADMİN FAYL YOXLAMASI (SİL DÜYMƏSİ ƏLAVƏ EDİLDİ)
         function loadAllFilesForAdmin() {
             database.ref('student_tasks').limitToLast(150).once('value').then(snap => {
                 const tasks = snap.val() || {};
@@ -2175,6 +2207,7 @@ TƏLİMATLAR:
                                 ` : `
                                     <span style="font-weight:900; color:${status==='correct'?'var(--positive)':'var(--negative)'};">${status==='correct'?'✅ +'+t.addedPoints:'❌'}</span>
                                     <button class="btn btn-dark" style="padding:4px 8px; font-size:11px;" onclick="adminManualEvaluate('${key}', '${t.studentName}', '${sub}', '${cat}', ${status!=='correct'})">Dəyiş</button>
+                                    <button class="btn btn-admin" style="padding:4px 8px; font-size:11px;" onclick="deleteCheckedTask('${key}', '${t.studentName}', '${sub}', '${cat}', ${t.addedPoints || 0})">Sil 🗑️</button>
                                 `}
                             </div>
                         </div>
@@ -2183,7 +2216,6 @@ TƏLİMATLAR:
                     if (status === 'pending') {
                         if (sub === 'python') { pPyHTML += row; countPPy++; } else { pCppHTML += row; countPCpp++; }
                     } else {
-                        // Yoxlanılmışları tələbə adı üzrə qruplaşdırırıq
                         if (!checkedGroups[sub][t.studentName]) checkedGroups[sub][t.studentName] = [];
                         checkedGroups[sub][t.studentName].push(row);
                     }
