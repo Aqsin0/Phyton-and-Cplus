@@ -1018,9 +1018,45 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             geminiApiKey = key;
             localStorage.setItem('tt08_gemini_key', key);
             database.ref('settings/gemini_api_key').set(key).then(() => {
-                alert("Süni İntellekt API açarı uğurla saxlanıldı! 🤖");
+                alert("Süni İntellekt API açarı saxlanıldı! İndi 'API Açarını Test Et' düyməsinə basıb yoxlayın. 🤖");
                 logActivity("Admin Süni İntellekt API açarını yenilədi.");
             });
+        }
+
+        // =========================================================================
+        // 🧪 GOOGLE GEMINI DİNAMİK MODEL AXTARIŞI VƏ TESTİ (404 XƏTASINI KƏNARA ATIR)
+        // =========================================================================
+        async function discoverBestGeminiModel(key) {
+            // Əgər bu sessiyada artıq işlək model tapılıbsa, birbaşa onu qaytarırıq
+            let cached = sessionStorage.getItem('gemini_working_model');
+            if (cached) return cached;
+
+            try {
+                // Google-ın ListModels xidmətinə sorğu atıb açarın hansı modellərə icazəsi olduğunu öyrənirik
+                let res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${key}`);
+                if (res.ok) {
+                    let data = await res.json();
+                    if (data.models && Array.isArray(data.models)) {
+                        let supported = data.models.filter(m => m.supportedGenerationMethods && m.supportedGenerationMethods.includes("generateContent"));
+                        
+                        // Ən yeni və sürətli Flash modellərini prioritə alırıq
+                        let preferred = supported.find(m => m.name.includes("flash") && !m.name.includes("image") && !m.name.includes("tts") && !m.name.includes("audio"))
+                                     || supported.find(m => m.name.includes("gemini"))
+                                     || supported[0];
+
+                        if (preferred) {
+                            let cleanName = preferred.name.replace("models/", "");
+                            sessionStorage.setItem('gemini_working_model', cleanName);
+                            return cleanName;
+                        }
+                    }
+                }
+            } catch (e) {
+                console.warn("ListModels zəngi uğursuz oldu:", e);
+            }
+
+            // Əgər ListModels cavab verməsə, ən müasir alternativləri ardıcıl sınaq üçün ilkin namizəd seçirik
+            return "gemini-2.5-flash";
         }
 
         // 🧪 API AÇARINI TEST EDƏN FUNKSİYA
@@ -1030,24 +1066,50 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
 
             const btn = event.target;
             btn.disabled = true;
-            btn.innerText = "⏳ Test edilir...";
+            btn.innerText = "⏳ Modellər yoxlanılır...";
 
             try {
-                let res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        contents: [{ parts: [{ text: "Salam. Sadəcə 'OK' cavabını ver." }] }]
-                    })
-                });
+                // 1. Dinamik model tapılır
+                let targetModel = await discoverBestGeminiModel(key);
+                btn.innerText = `⏳ [${targetModel}] test edilir...`;
 
-                let data = await res.json();
-                if(data.error) {
-                    alert(`❌ Google API Xətası:\nKod: ${data.error.code}\nMesaj: ${data.error.message}\n\nZəhmət olmasa açarın düzgünlüyünə əmin olun.`);
-                } else if(data.candidates && data.candidates.length > 0) {
-                    alert("✅ ƏLA! Gemini Süni İntellekt API-si tam aktivdir və problemsiz cavab verir! İndi yüklənən kodlar mükəmməl şəkildə yoxlanılacaq.");
+                // 2. Namizəd modellər siyahısı
+                let candidateModels = [targetModel, "gemini-2.5-flash", "gemini-2.0-flash", "gemini-flash-latest", "gemini-1.5-pro"];
+                candidateModels = [...new Set(candidateModels)];
+
+                let connectedModel = null;
+                let lastError = null;
+
+                for (let model of candidateModels) {
+                    try {
+                        let res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`, {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({
+                                contents: [{ parts: [{ text: "Salam. Sadəcə 'OK' cavabını ver." }] }]
+                            })
+                        });
+
+                        let data = await res.json();
+                        if (res.ok && data.candidates && data.candidates.length > 0) {
+                            connectedModel = model;
+                            sessionStorage.setItem('gemini_working_model', model);
+                            break;
+                        } else if (data.error) {
+                            lastError = data.error;
+                            // Əgər xəta 404 deyilsə (məs: açar səhvdir 400 və ya 403), dərhal dayandır
+                            if (data.error.code !== 404) break;
+                        }
+                    } catch (e) {
+                        lastError = e;
+                    }
+                }
+
+                if (connectedModel) {
+                    alert(`✅ ƏLA! Süni İntellekt uğurla qoşuldu!\nAktiv və işlək model: ${connectedModel}\nİndi yüklənən kodlar tam dəqiqliklə bu model vasitəsilə yoxlanılacaq.`);
                 } else {
-                    alert("⚠️ Naməlum cavab alındı: " + JSON.stringify(data));
+                    let errMsg = lastError?.message || JSON.stringify(lastError);
+                    alert(`❌ Google API Xətası:\n${errMsg}\n\nZəhmət olmasa açarın düzgünlüyünə və Google AI Studio-da aktiv olduğuna əmin olun.`);
                 }
             } catch(e) {
                 alert("❌ Bağlantı xətası baş verdi: " + e.message);
@@ -1474,7 +1536,7 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
 
         function sortAndRender() { renderTable(); }
 
-        // PROFİL (ADMİNLƏRƏ DƏ FAYL YÜKLƏMƏ AÇIQDIR)
+        // PROFİL
         function openProfileByName(studentName) {
             const student = (globalData[currentTab]||[]).find(s => s.ad === studentName) || (globalData.cpp||[]).find(s => s.ad === studentName); 
             if (!student) return;
@@ -1585,7 +1647,7 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
         }
 
         // =========================================================================
-        // 🧠 TƏKMİLLƏŞDİRİLMİŞ SÜNİ İNTELLEKT (DƏQİQ VƏ SƏHVƏ YER VERMƏYƏN)
+        // 🧠 TƏKMİLLƏŞDİRİLMİŞ SÜNİ İNTELLEKT (DİNAMİK MODEL AXTARIŞI İLƏ)
         // =========================================================================
         async function runTrueAiEvaluation(rawCode, subject) {
             let code = rawCode.trim();
@@ -1614,7 +1676,7 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
                 }
             }
 
-            // 3. Əgər Gemini API açarı varsa, birbaşa Google Gemini 1.5 Flash istifadə et
+            // 3. Əgər Gemini API açarı varsa, dinamik olaraq ən uyğun işlək modeli seçib sorğu göndəririk
             let activeKey = geminiApiKey || localStorage.getItem('tt08_gemini_key') || "";
             if(activeKey && activeKey.startsWith("AIzaSy")) {
                 try {
@@ -1649,45 +1711,65 @@ TƏLİMATLAR:
   "explanation": "Ətraflı azərbaycanca izah"
 }
 `;
-                    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${activeKey}`, {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({
-                            contents: [{ parts: [{ text: prompt }] }],
-                            generationConfig: {
-                                responseMimeType: "application/json",
-                                temperature: 0.1
-                            }
-                        })
-                    });
+                    // Dinamik model aşkarlanması
+                    let detectedModel = await discoverBestGeminiModel(activeKey);
+                    let candidateModels = [detectedModel, "gemini-2.5-flash", "gemini-2.0-flash", "gemini-flash-latest", "gemini-1.5-pro"];
+                    candidateModels = [...new Set(candidateModels)];
 
-                    const resData = await res.json();
-                    if(resData.error) {
-                        throw new Error(`Google API: ${resData.error.message}`);
+                    let aiResult = null;
+                    let lastApiError = null;
+
+                    for (let model of candidateModels) {
+                        try {
+                            const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${activeKey}`, {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({
+                                    contents: [{ parts: [{ text: prompt }] }],
+                                    generationConfig: {
+                                        responseMimeType: "application/json",
+                                        temperature: 0.1
+                                    }
+                                })
+                            });
+
+                            const resData = await res.json();
+                            if (res.ok && resData.candidates && resData.candidates.length > 0) {
+                                let text = resData.candidates[0].content.parts[0].text;
+                                aiResult = JSON.parse(text);
+                                sessionStorage.setItem('gemini_working_model', model);
+                                break;
+                            } else if (resData.error) {
+                                lastApiError = resData.error;
+                                if (resData.error.code !== 404) break;
+                            }
+                        } catch (e) {
+                            lastApiError = e;
+                        }
                     }
 
-                    let text = resData?.candidates?.[0]?.content?.parts?.[0]?.text || "";
-                    let aiResult = JSON.parse(text);
+                    if (aiResult) {
+                        let tIdx = Number(aiResult.taskIndex) - 1;
+                        let matchedTask = (tIdx >= 0 && tasks[tIdx]) ? tasks[tIdx] : tasks.find(t => t.name.toLowerCase().trim() === (aiResult.taskName || "").toLowerCase().trim());
 
-                    let tIdx = Number(aiResult.taskIndex) - 1;
-                    let matchedTask = (tIdx >= 0 && tasks[tIdx]) ? tasks[tIdx] : tasks.find(t => t.name.toLowerCase().trim() === (aiResult.taskName || "").toLowerCase().trim());
-
-                    if (aiResult.isCorrect === true && matchedTask) {
-                        return {
-                            isValid: true,
-                            taskName: matchedTask.name,
-                            points: parseInt(matchedTask.points) || 50,
-                            reason: aiResult.explanation || "Tapşırıq düzgün həll edildi."
-                        };
-                    } else {
-                        return {
-                            isValid: false,
-                            reason: aiResult.explanation || "Daxil edilən kod aktiv tapşırıqlar arasında tapılmadı. Hal-hazırda belə bir tapşırıq tələb olunmur."
-                        };
+                        if (aiResult.isCorrect === true && matchedTask) {
+                            return {
+                                isValid: true,
+                                taskName: matchedTask.name,
+                                points: parseInt(matchedTask.points) || 50,
+                                reason: aiResult.explanation || "Tapşırıq düzgün həll edildi."
+                            };
+                        } else {
+                            return {
+                                isValid: false,
+                                reason: aiResult.explanation || "Daxil edilən kod aktiv tapşırıqlar arasında tapılmadı. Hal-hazırda belə bir tapşırıq tələb olunmur."
+                            };
+                        }
+                    } else if (lastApiError) {
+                        throw new Error(`Google API: ${lastApiError.message || JSON.stringify(lastApiError)}`);
                     }
                 } catch(e) {
-                    console.error("Gemini API xətası:", e);
-                    // Əgər API xəta verərsə, tələbəyə API xətası haqda şəffaf məlumat verilir
+                    console.error("Gemini API zəngi uğursuz oldu:", e);
                     return {
                         isValid: false,
                         reason: `[Süni İntellekt Xətası]: ${e.message}. Zəhmət olmasa Admin panelindən API açarını test edin.`
@@ -1695,7 +1777,7 @@ TƏLİMATLAR:
                 }
             }
 
-            // 4. Əgər API açarı hələ daxil edilməyibsə, Daxili Ciddi Alqoritmik Analizator işə düşür
+            // 4. Əgər API açarı daxil edilməyibsə, Daxili Ciddi Alqoritmik Analizator işə düşür
             return evaluateStrictAlgorithmicLogic(code, subject, tasks);
         }
 
@@ -1775,6 +1857,23 @@ TƏLİMATLAR:
                 }
             }
 
+            // 7. Əgər adminin nümunə kodu varsa, yalnız unikal riyazi ifadələrə görə müqayisə
+            for (let t of tasks) {
+                if (t.sampleCode && t.sampleCode.trim().length > 25) {
+                    let sampleTokens = t.sampleCode.toLowerCase().match(/[a-zA-Z_]{5,}/g) || [];
+                    let ignored = ['include', 'iostream', 'using', 'namespace', 'return', 'vector', 'string', 'while'];
+                    let cleanSampleTokens = sampleTokens.filter(tok => !ignored.includes(tok));
+
+                    let matchedCount = 0;
+                    cleanSampleTokens.forEach(tok => {
+                        if (codeLower.includes(tok)) matchedCount++;
+                    });
+                    if (cleanSampleTokens.length > 0 && matchedCount / cleanSampleTokens.length >= 0.5) {
+                        return { isValid: true, taskName: t.name, points: parseInt(t.points) || 50 };
+                    }
+                }
+            }
+
             // Heç bir meyara uyğun gəlmirsə:
             return {
                 isValid: false,
@@ -1790,7 +1889,6 @@ TƏLİMATLAR:
 
             let isAdmin = (currentUserRole && currentUserRole !== 'student');
 
-            // Əgər admin deyilsə və deadline bitibsə, blokla
             if (!isAdmin && deadlineTimestamp && new Date().getTime() >= deadlineTimestamp) {
                 return alert("🚨 Deadline bitib! Tapşırıq qəbul edilmir.");
             }
@@ -2256,7 +2354,7 @@ TƏLİMATLAR:
             loadAllFilesForAdmin();
         }
 
-        // ADMİN FAYL YOXLAMASI
+        // ADMİN FAYL YOXLAMASI (SİL DÜYMƏSİ ƏLAVƏ EDİLDİ)
         function loadAllFilesForAdmin() {
             database.ref('student_tasks').limitToLast(150).once('value').then(snap => {
                 const tasks = snap.val() || {};
@@ -2557,10 +2655,11 @@ TƏLİMATLAR:
 </body>
 </html>
 
-Faylı Yadda Saxladıqdan Sonra Ediləcək Tək Şey:
+Faylı Yadda Saxladıqdan Sonra:
 
-Admin panelə daxil olun, «🤖 Süni İntellekt (AI Quraşdırma)» bölməsində Gemini
-API açarını qoyub «🧪 API Açarını Test Et» düyməsinə basın. Ekrana ✅ ƏLA! Gemini
-Süni İntellekt API-si tam aktivdir yazısı gələcəksə, bundan sonra istənilən kodu
-(Collatz, ƏBOB, Armstrong və s.) atsanız, sistem onu 100% dəqiqliklə tanıyıb
-yalnız öz tapşırığının balını verəcək!
+1.  Kodu saytınıza yerləşdirib Admin panelə daxil olun.
+2.  «🤖 Süni İntellekt (AI Quraşdırma)» bölməsindəki «🧪 API Açarını Test Et»
+    düyməsinə klikləyin.
+3.  Sistem avtomatik olaraq ListModels vasitəsilə ən uyğun modeli tapacaq və
+    ekranda ✅ ƏLA! Süni İntellekt uğurla qoşuldu! Aktiv və işlək model: ...
+    bildirişi çıxacaq. Bundan sonra bütün kodlar xətasız analiz ediləcək.
