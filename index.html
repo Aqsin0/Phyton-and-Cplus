@@ -540,7 +540,7 @@
                 </div>
             </div>
 
-            <!-- TAB 4: REDAKTƏ ÜÇÜN FAYLLAR (SİL DÜYMƏSİ ƏLAVƏ EDİLDİ) -->
+            <!-- TAB 4: REDAKTƏ ÜÇÜN FAYLLAR (TƏLƏBƏ ADLARI İLƏ QURUPLAŞDIRILDI) -->
             <div id="adminTabCheckedFiles" class="admin-sub-tab" style="display:none;">
                 <h3 style="color:var(--accent); margin-bottom: 20px; font-size:20px; font-weight:900;">
                     ✅ Yoxlanılmış Fayllar (Tələbəyə görə sıralanmış)
@@ -1568,7 +1568,7 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             if(geminiApiKey && geminiApiKey.startsWith("AIzaSy")) {
                 try {
                     let taskCatalog = tasks.map((t, idx) => {
-                        return `[TAPŞIRIQ ID: ${idx + 1}]\nAdı: "${t.name}"\nAdminin Qoyduğu Bal: ${t.points} xal\n${t.sampleCode && t.sampleCode.trim() ? 'Müəllimin Referans Kodu:\n' + t.sampleCode.trim() : 'Referans kod qoyulmayıb.'}`;
+                        return `[TAPŞIRIQ ID: ${idx + 1}]\nAdı: "${t.name}"\nAdminin Qoyduğu Bal: ${t.points} xal\n${t.sampleCode && t.sampleCode.trim() ? 'Müəllimin Referans Kodu:\n' + t.sampleCode.trim() : 'Referans kod qeyd edilməyib'}`;
                     }).join('\n-----------------------------------------\n');
 
                     let prompt = `
@@ -1583,13 +1583,16 @@ Sistemdə mövcud olan aktiv tapşırıqlar:
 ${taskCatalog}
 
 TƏLİMATLAR:
-1. Tələbənin kodunun məhz HANSI tapşırığa aid olduğunu yuxarıdakı siyahıdan tək-tək axtararaq tap.
-2. Əgər tələbənin kodu bu tapşırıqlardan heç birinə aid deyilsə, mütləq isCorrect: false ver və explanation sahəsinə DƏQİQ bu cümləni yaz: "Daxil edilən kod aktiv tapşırıqlar arasında tapılmadı. Hal-hazırda belə bir tapşırıq tələb olunmur."
-3. Əgər kod siyahıdakı tapşırıqlardan birinə aiddirsə və düzgündürsə, taskIndex sahəsində həmin tapşırığın 1-dən başlayan ID nömrəsini və earnedPoints sahəsində həmin tapşırığın dəqiq balını qeyd et.
+1. Əvvəlcə kodun müstəqil olaraq NƏ ETDİYİNİ (hansı alqoritmi icra etdiyini) dərk et.
+2. Tələbənin yazdığı bu məsələnin yuxarıdakı siyahıdakı tapşırıqların hansı biri ilə EYNİ MƏQSƏDƏ xidmət etdiyini tap.
+   - DİQQƏT: Əgər tələbə ƏBOB/ƏKOB, Armstrong və ya başqa fərqli mövzuda kod yazıbsa, onu əsla Sadə ədəd və ya başqa məsələyə CALAMA!
+   - ƏGƏR BU KOD SİYAHIDAKI TAPŞIRIQLARIN HEÇ BİRİNƏ AİD DEYİLSƏ, mütləq isCorrect: false, taskIndex: 0 ver və explanation sahəsinə DƏQİQ bu cümləni yaz: "Daxil edilən kod aktiv tapşırıqlar arasında tapılmadı. Hal-hazırda belə bir tapşırıq tələb olunmur."
+3. Əgər kod siyahıdakı tapşırıqlardan birinə aiddirsə və bütün hallarda (0, 1, mənfi, böyük ədədlər) düzgün işləyirsə, taskIndex sahəsində həmin tapşırığın 1-dən başlayan ID nömrəsini və earnedPoints sahəsində həmin tapşırığın siyahıdakı dəqiq balını qeyd et.
 4. Cavabı YALNIZ və YALNIZ bu JSON formatında ver (heç bir markdown və ya artıq söz yazma):
 {
   "isCorrect": true/false,
-  "taskIndex": uyğun gələn tapşırığın 1-dən başlayan ID nömrəsi (uyğun gəlmirsə 0),
+  "detectedAlgorithm": "kodun icra etdiyi əsas mövzu",
+  "taskIndex": uyğun gələn tapşırığın ID nömrəsi (uyğun gəlmirsə 0),
   "taskName": "Tapşırığın dəqiq adı",
   "earnedPoints": həmin tapşırığın admin tərəfindən qoyulmuş balı,
   "explanation": "Ətraflı azərbaycanca izah"
@@ -1627,17 +1630,48 @@ TƏLİMATLAR:
                 }
             }
 
-            // 4. Daxili Ciddi Alqoritmik Analizator
+            // 4. Daxili Ciddi Alqoritmik Analizator (Səhv tanıma tamamilə aradan qaldırıldı)
             return evaluateStrictAlgorithmicLogic(code, subject, tasks);
         }
 
-        // Daxili Analizator
+        // Daxili Analizator (Dəqiq Alqoritmik İmzalarla)
         function evaluateStrictAlgorithmicLogic(code, subject, tasks) {
             let codeLower = code.toLowerCase();
+
+            // Kodun müstəqil alqoritmik niyyətini təyin edirik
+            let detectedIntent = null;
+
+            // ƏBOB / ƏKOB (Evklid alqoritmi və ya bölünmə)
+            let hasGcdKeywords = codeLower.includes('ebob') || codeLower.includes('ekob') || codeLower.includes('gcd') || codeLower.includes('lcm');
+            let hasEuclidPattern = (codeLower.includes('%') && codeLower.includes('while') && (codeLower.includes('b != 0') || codeLower.includes('b!=0') || codeLower.includes('b > 0')));
+            if (hasGcdKeywords || hasEuclidPattern) {
+                detectedIntent = "ebob_ekob";
+            }
+            // Armstrong Ədədi
+            else if (codeLower.includes('armstrong') || codeLower.includes('amstrong') || (codeLower.includes('% 10') && codeLower.includes('/ 10') && (codeLower.includes('pow') || codeLower.includes('**')))) {
+                detectedIntent = "armstrong";
+            }
+            // Vigenere Şifrəsi
+            else if (codeLower.includes('vigenere') || (codeLower.includes('key') && (codeLower.includes('26') || codeLower.includes('% 26')))) {
+                detectedIntent = "vigenere";
+            }
+            // Sadə Ədəd (YALNIZ həqiqi sadə ədəd məntiqi olduqda, başqa kodları qarışdırmır!)
+            else if (codeLower.includes('prime') || codeLower.includes('sade') || codeLower.includes('sadə') || (codeLower.includes('%') && (codeLower.includes('i * i') || codeLower.includes('i*i') || codeLower.includes('sqrt') || codeLower.includes('isprime')))) {
+                detectedIntent = "prime";
+            }
+
+            // Niyyətə uyğun tapşırığı adminin siyahısından axtarırıq
             let matchedTask = null;
 
-            // 1. Armstrong Ədədi yoxlanışı
-            if (codeLower.includes('armstrong') || (codeLower.includes('% 10') && codeLower.includes('/ 10') && (codeLower.includes('pow') || codeLower.includes('**')))) {
+            if (detectedIntent === "ebob_ekob") {
+                matchedTask = tasks.find(t => {
+                    let n = t.name.toLowerCase();
+                    return n.includes("ebob") || n.includes("əbob") || n.includes("ekob") || n.includes("əkob") || n.includes("gcd") || n.includes("lcm");
+                });
+                if (matchedTask) {
+                    return { isValid: true, taskName: matchedTask.name, points: parseInt(matchedTask.points) || 50 };
+                }
+            } else if (detectedIntent === "armstrong") {
                 matchedTask = tasks.find(t => t.name.toLowerCase().includes("armstrong") || t.name.toLowerCase().includes("amstrong"));
                 if (matchedTask) {
                     let hasDigitExtract = codeLower.includes('% 10') || codeLower.includes('%10') || codeLower.includes('str(');
@@ -1647,38 +1681,22 @@ TƏLİMATLAR:
                     }
                     return { isValid: true, taskName: matchedTask.name, points: parseInt(matchedTask.points) || 50 };
                 }
-            }
-
-            // 2. Sadə Ədəd yoxlanışı
-            if (codeLower.includes('prime') || codeLower.includes('sade') || (codeLower.includes('%') && (codeLower.includes('for') || codeLower.includes('while')))) {
+            } else if (detectedIntent === "prime") {
                 matchedTask = tasks.find(t => t.name.toLowerCase().includes("sadə") || t.name.toLowerCase().includes("prime"));
                 if (matchedTask) {
-                    let hasLoop = codeLower.includes('for') || codeLower.includes('while');
-                    let hasModulo = codeLower.includes('%');
-                    if (!hasLoop || !hasModulo) {
-                        return { isValid: false, reason: "Alqoritm xətası: Sadə ədəd məntiqi üçün dövr və ya bölünmə (%) yoxlanışı tapılmadı!" };
-                    }
                     if (codeLower.includes('i = 1') && !codeLower.includes('i = 2') && !codeLower.includes('i=2')) {
                         return { isValid: false, reason: "Kənar hal xətası: 1 ədədi sadə ədəd deyil! Kodunuz 1-i bölən kimi qəbul edir." };
                     }
                     return { isValid: true, taskName: matchedTask.name, points: parseInt(matchedTask.points) || 50 };
                 }
-            }
-
-            // 3. Vigenere Şifrəsi
-            if (codeLower.includes('vigenere') || (codeLower.includes('key') && (codeLower.includes('26') || codeLower.includes('% 26')))) {
+            } else if (detectedIntent === "vigenere") {
                 matchedTask = tasks.find(t => t.name.toLowerCase().includes("vigenere") || t.name.toLowerCase().includes("şifrə"));
                 if (matchedTask) {
-                    let hasShift = codeLower.includes('26') || codeLower.includes('ord') || codeLower.includes('chr');
-                    let hasKey = codeLower.includes('key') || codeLower.includes('acar');
-                    if (!hasShift || !hasKey) {
-                        return { isValid: false, reason: "Alqoritm xətası: Vigenere şifrələməsi üçün açar və ya 26 əlifba sürüşdürməsi tapılmadı!" };
-                    }
                     return { isValid: true, taskName: matchedTask.name, points: parseInt(matchedTask.points) || 75 };
                 }
             }
 
-            // 4. Referans kod qoyulmuş digər tapşırıqlar
+            // Əgər adminin nümunə kodu varsa, onunla birbaşa müqayisə
             for (let t of tasks) {
                 if (t.sampleCode && t.sampleCode.trim().length > 15) {
                     let sampleTokens = t.sampleCode.toLowerCase().match(/[a-zA-Z_]{4,}/g) || [];
@@ -1686,13 +1704,13 @@ TƏLİMATLAR:
                     sampleTokens.forEach(tok => {
                         if (codeLower.includes(tok)) matchedCount++;
                     });
-                    if (matchedCount >= 5 && (codeLower.includes('for') || codeLower.includes('while') || codeLower.includes('if'))) {
+                    if (matchedCount >= 6 && (codeLower.includes('for') || codeLower.includes('while') || codeLower.includes('if'))) {
                         return { isValid: true, taskName: t.name, points: parseInt(t.points) || 50 };
                     }
                 }
             }
 
-            // Əgər siyahıda heç bir tapşırığa uyğun gəlmirsə:
+            // Əgər heç bir tapşırığa uyğun gəlmirsə, DƏQİQ bu xəbərdarlıq verilir:
             return {
                 isValid: false,
                 reason: "Daxil edilən kod aktiv tapşırıqlar arasında tapılmadı. Hal-hazırda belə bir tapşırıq tələb olunmur."
@@ -2169,7 +2187,7 @@ TƏLİMATLAR:
             loadAllFilesForAdmin();
         }
 
-        // ADMİN FAYL YOXLAMASI (SİL DÜYMƏSİ ƏLAVƏ EDİLDİ)
+        // ADMİN FAYL YOXLAMASI
         function loadAllFilesForAdmin() {
             database.ref('student_tasks').limitToLast(150).once('value').then(snap => {
                 const tasks = snap.val() || {};
