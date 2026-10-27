@@ -240,8 +240,8 @@
     </div>
 
     <!-- Səs Pleyerləri -->
-    <audio id="audioWinner" preload="none"></audio>
-    <audio id="audioOutsider" preload="none"></audio>
+    <audio id="audioWinner" preload="auto"></audio>
+    <audio id="audioOutsider" preload="auto"></audio>
 
     <div id="shameBanner">⚠️ SHAME ON YOU! ⚠️</div>
 
@@ -615,16 +615,16 @@
                 <div class="info-box" style="border: 2px solid var(--accent); margin-bottom:20px;">
                     <h3 style="color:var(--accent); margin-top:0;">🎵 Saytdaxili Musiqi və Səs Tənzimləmələri</h3>
                     <div class="form-group">
-                        <label>🏆 Qaliblər Mahnısı Linki (MP3/Audio URL):</label>
-                        <div style="display:flex; gap:10px;">
-                            <input type="url" id="inpAudioWinner" placeholder="https://example.com/winner.mp3" />
+                        <label>🏆 Qaliblər Mahnısı (Səs Faylı Yüklə):</label>
+                        <div style="display:flex; gap:10px; align-items:center;">
+                            <input type="file" id="inpAudioWinner" accept="audio/*" class="form-group" style="margin:0; flex:1;" />
                             <button class="btn btn-dark" onclick="testAudio('winner')">▶ Dinlə</button>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label>😭 Outsiderlər Mahnısı Linki (MP3/Audio URL):</label>
-                        <div style="display:flex; gap:10px;">
-                            <input type="url" id="inpAudioOutsider" placeholder="https://example.com/outsider.mp3" />
+                        <label>😭 Outsiderlər Mahnısı (Səs Faylı Yüklə):</label>
+                        <div style="display:flex; gap:10px; align-items:center;">
+                            <input type="file" id="inpAudioOutsider" accept="audio/*" class="form-group" style="margin:0; flex:1;" />
                             <button class="btn btn-dark" onclick="testAudio('outsider')">▶ Dinlə</button>
                         </div>
                     </div>
@@ -908,13 +908,11 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             database.ref('settings/audio_winner').once('value').then(snap => {
                 customAudioWinner = snap.val() || DEFAULT_AUDIO_WINNER;
                 document.getElementById('audioWinner').src = customAudioWinner;
-                const inp = document.getElementById('inpAudioWinner'); if(inp) inp.value = snap.val() || '';
             });
 
             database.ref('settings/audio_outsider').once('value').then(snap => {
                 customAudioOutsider = snap.val() || DEFAULT_AUDIO_OUTSIDER;
                 document.getElementById('audioOutsider').src = customAudioOutsider;
-                const inp = document.getElementById('inpAudioOutsider'); if(inp) inp.value = snap.val() || '';
             });
 
             database.ref('settings/dynamic_tasks').on('value', snap => {
@@ -1121,12 +1119,15 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             try {
                 sessionStorage.removeItem('groq_working_model');
                 let systemPrompt = "You are a test assistant. Always output JSON.";
-                let userPrompt = "Return JSON with: {\"status\": \"ok\", \"message\": \"Groq AI is ready\"}";
+                let userPrompt = "Return JSON with: {"status": "ok", "message": "Groq AI is ready"}";
                 let result = await requestGroqAI(key, systemPrompt, userPrompt);
                 
-                alert(`✅ ƏLA! Groq Süni İntellekt uğurla qoşuldu!\nAktiv Canlı Model: ${result.model}\nİndi bütün kodlar heç bir model xətası olmadan birbaşa bu model ilə yoxlanılacaq.`);
+                alert(`✅ ƏLA! Groq Süni İntellekt uğurla qoşuldu!
+Aktiv Canlı Model: ${result.model}
+İndi bütün kodlar heç bir model xətası olmadan birbaşa bu model ilə yoxlanılacaq.`);
             } catch(e) {
-                alert("❌ Xəta baş verdi:\n" + e.message);
+                alert("❌ Xəta baş verdi:
+" + e.message);
             } finally {
                 btn.disabled = false;
                 btn.innerText = "🧪 API Açarını Test Et";
@@ -1247,19 +1248,62 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
         }
 
         function saveAudioSettings() {
-            const winVal = document.getElementById('inpAudioWinner').value.trim();
-            const outVal = document.getElementById('inpAudioOutsider').value.trim();
-            database.ref('settings/audio_winner').set(winVal);
-            database.ref('settings/audio_outsider').set(outVal).then(() => {
-                alert("✅ Musiqi linkləri yadda saxlanıldı!");
-                logActivity("Musiqi linklərini yenilədi.");
-            });
+            const winFile = document.getElementById('inpAudioWinner').files[0];
+            const outFile = document.getElementById('inpAudioOutsider').files[0];
+            
+            let promises = [];
+            
+            if (winFile) {
+                promises.push(new Promise(resolve => {
+                    const reader = new FileReader();
+                    reader.onload = e => database.ref('settings/audio_winner').set(e.target.result).then(() => {
+                        customAudioWinner = e.target.result;
+                        document.getElementById('audioWinner').src = customAudioWinner;
+                        resolve();
+                    });
+                    reader.readAsDataURL(winFile);
+                }));
+            }
+            
+            if (outFile) {
+                promises.push(new Promise(resolve => {
+                    const reader = new FileReader();
+                    reader.onload = e => database.ref('settings/audio_outsider').set(e.target.result).then(() => {
+                        customAudioOutsider = e.target.result;
+                        document.getElementById('audioOutsider').src = customAudioOutsider;
+                        resolve();
+                    });
+                    reader.readAsDataURL(outFile);
+                }));
+            }
+            
+            if (promises.length > 0) {
+                Promise.all(promises).then(() => {
+                    alert("✅ Musiqilər uğurla yükləndi və yadda saxlanıldı!");
+                    logActivity("Musiqiləri yenilədi (fayl yükləmə ilə).");
+                    document.getElementById('inpAudioWinner').value = '';
+                    document.getElementById('inpAudioOutsider').value = '';
+                });
+            } else {
+                alert("Zəhmət olmasa yeniləmək üçün ən azı bir səs faylı seçin.");
+            }
         }
 
         function testAudio(type) {
-            let src = type === 'winner' ? (document.getElementById('inpAudioWinner').value.trim() || customAudioWinner) : (document.getElementById('inpAudioOutsider').value.trim() || customAudioOutsider);
-            let aud = new Audio(src);
-            aud.play().catch(e => alert("Səs oxunmadı! Birbaşa MP3 linki olduğundan əmin olun."));
+            let fileInput = type === 'winner' ? document.getElementById('inpAudioWinner') : document.getElementById('inpAudioOutsider');
+            let currentAudio = type === 'winner' ? customAudioWinner : customAudioOutsider;
+            
+            if (fileInput.files[0]) {
+                let reader = new FileReader();
+                reader.onload = e => {
+                    let aud = new Audio(e.target.result);
+                    aud.play().catch(err => alert("Səs oxunmadı!"));
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            } else {
+                let aud = new Audio(currentAudio);
+                aud.play().catch(err => alert("Səs oxunmadı!"));
+            }
         }
 
         function checkSession() {
@@ -1695,8 +1739,14 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             if(activeKey && activeKey.startsWith("gsk_")) {
                 try {
                     let taskCatalog = tasks.map((t, idx) => {
-                        return `[TAPŞIRIQ ID: ${idx + 1}]\nAdı: "${t.name}"\nAdminin Qoyduğu Bal: ${t.points} xal\n${t.sampleCode && t.sampleCode.trim() ? 'Müəllimin Referans Kodu:\n' + t.sampleCode.trim() : 'Referans kod yoxdur'}`;
-                    }).join('\n-----------------------------------------\n');
+                        return `[TAPŞIRIQ ID: ${idx + 1}]
+Adı: "${t.name}"
+Adminin Qoyduğu Bal: ${t.points} xal
+${t.sampleCode && t.sampleCode.trim() ? 'Müəllimin Referans Kodu:
+' + t.sampleCode.trim() : 'Referans kod yoxdur'}`;
+                    }).join('
+-----------------------------------------
+');
 
                     let systemPrompt = `Sən universitetdə alqoritmlər üzrə sərt və dahi professorsan. Tələbələrin ${subject.toUpperCase()} kodlarını yoxlayırsan. YALNIZ və YALNIZ JSON formatında cavab ver. Format: {"isCorrect": boolean, "detectedAlgorithm": string, "taskIndex": number, "taskName": string, "earnedPoints": number, "explanation": string}`;
 
@@ -1991,11 +2041,16 @@ TƏLİMATLAR:
                     });
                 }
 
-                let msg = "YOXLAMA NƏTİCƏSİ:\n";
-                if (acceptedCount > 0) msg += `✅ Düzgün qəbul edildi: ${acceptedCount} fayl (Təyin edilmiş xal hesabınıza yazıldı)\n`;
-                if (rejectedCount > 0) msg += `❌ Səhv/Uyğunsuz: ${rejectedCount} fayl (Profilinizdəki statusdan səbəbə baxa bilərsiniz)\n`;
-                if (adminPending > 0) msg += `👨‍🏫 Admin yoxlamasına göndərildi: ${adminPending} fayl\n`;
-                if (duplicateCount > 0) msg += `⚠️ Dublikat olduğuna görə bal verilməyən: ${duplicateCount} fayl\n`;
+                let msg = "YOXLAMA NƏTİCƏSİ:
+";
+                if (acceptedCount > 0) msg += `✅ Düzgün qəbul edildi: ${acceptedCount} fayl (Təyin edilmiş xal hesabınıza yazıldı)
+`;
+                if (rejectedCount > 0) msg += `❌ Səhv/Uyğunsuz: ${rejectedCount} fayl (Profilinizdəki statusdan səbəbə baxa bilərsiniz)
+`;
+                if (adminPending > 0) msg += `👨‍🏫 Admin yoxlamasına göndərildi: ${adminPending} fayl
+`;
+                if (duplicateCount > 0) msg += `⚠️ Dublikat olduğuna görə bal verilməyən: ${duplicateCount} fayl
+`;
 
                 alert(msg);
                 document.getElementById('studentTaskFiles').value = '';
@@ -2605,3 +2660,4 @@ TƏLİMATLAR:
     </script>
 </body>
 </html>
+yenilenmis_index.html görüntüleniyor.
