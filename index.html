@@ -1029,12 +1029,9 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
         // =========================================================================
         async function getLiveGroqModel(apiKey) {
             let saved = sessionStorage.getItem('groq_working_model');
-            // Önbellekteki model hatalıysa (canopylabs vb.) onu yoksay ve temizle
-            if (saved && (saved.includes('llama') || saved.includes('mixtral') || saved.includes('gemma'))) {
-                return saved;
-            }
-            sessionStorage.removeItem('groq_working_model');
+            if (saved) return saved;
 
+            // Groq-un rəsmi models endpointindən canlı aktiv modelləri alırıq
             let res = await fetch("https://api.groq.com/openai/v1/models", {
                 headers: {
                     "Authorization": `Bearer ${apiKey}`,
@@ -1051,23 +1048,23 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
                 throw new Error("Bu açar üçün heç bir aktiv Groq modeli tapılmadı.");
             }
 
-            // Yalnız Llama, Mixtral və ya Gemma kimi dəstəklənən chat modellərini süzürük
+            // Audio/whisper modellərini kənarlaşdırıb yalnız mətn/kod modellərini süzürük
             let chatModels = data.data.filter(m => 
-                m.id.includes("llama") || 
-                m.id.includes("mixtral") || 
-                m.id.includes("gemma")
+                !m.id.includes("whisper") && 
+                !m.id.includes("guard") && 
+                !m.id.includes("tts")
             );
 
-            // Prioritet olaraq ən güclü və stabil modellər
-            let best = chatModels.find(m => m.id === "llama-3.3-70b-versatile")
-                    || chatModels.find(m => m.id === "llama3-70b-8192")
-                    || chatModels.find(m => m.id === "llama3-8b-8192")
+            // Prioritet modellər: gpt-oss, qwen və ya mövcud ən güclü model
+            let best = chatModels.find(m => m.id.includes("gpt-oss-120b"))
+                    || chatModels.find(m => m.id.includes("gpt-oss-20b"))
+                    || chatModels.find(m => m.id.includes("qwen"))
+                    || chatModels.find(m => m.id.includes("llama-3.3"))
                     || chatModels.find(m => m.id.includes("llama"))
-                    || chatModels.find(m => m.id.includes("mixtral"))
                     || chatModels[0];
 
             if (!best) {
-                return "llama-3.3-70b-versatile"; // Hər ehtimala qarşı sabit ehtiyat model
+                throw new Error("Mətn/kod təhlili üçün uyğun aktiv Groq modeli tapılmadı.");
             }
 
             sessionStorage.setItem('groq_working_model', best.id);
