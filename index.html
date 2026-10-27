@@ -512,7 +512,7 @@
                 <div class="info-box" style="border: 2px solid var(--accent);">
                     <h3 style="color:var(--accent); margin-top:0;">⚡ Ultra Sürətli Groq AI İnteqrasiyası</h3>
                     <p style="color:var(--text-sub); font-size:14px; line-height:1.6;">
-                        Pulsuz <strong>Groq API Açarını (`gsk_...`)</strong> daxil edin. Sistem Groq-dan aktiv modeli avtomatik aşkarlayaraq kodları <strong>1 saniyəyə</strong> qüsursuz yoxlayacaq.
+                        Pulsuz <strong>Groq API Açarını (\`gsk_...\`)</strong> daxil edin. Sistem Groq-dan aktiv modeli avtomatik aşkarlayaraq kodları <strong>1 saniyəyə</strong> qüsursuz yoxlayacaq.
                         <br>🔗 Pulsuz açar almaq üçün: <a href="https://console.groq.com/keys" target="_blank" style="color:var(--gold); font-weight:900;">console.groq.com/keys</a>
                     </p>
                     <div class="form-group">
@@ -1119,15 +1119,15 @@ Açma gözünü, xabi-cəhalətdən ayılma!</div>
             try {
                 sessionStorage.removeItem('groq_working_model');
                 let systemPrompt = "You are a test assistant. Always output JSON.";
-                let userPrompt = "Return JSON with: {"status": "ok", "message": "Groq AI is ready"}";
+                let userPrompt = 'Return JSON with: {"status": "ok", "message": "Groq AI is ready"}';
                 let result = await requestGroqAI(key, systemPrompt, userPrompt);
                 
                 alert(`✅ ƏLA! Groq Süni İntellekt uğurla qoşuldu!
 Aktiv Canlı Model: ${result.model}
 İndi bütün kodlar heç bir model xətası olmadan birbaşa bu model ilə yoxlanılacaq.`);
             } catch(e) {
-                alert("❌ Xəta baş verdi:
-" + e.message);
+                alert(`❌ Xəta baş verdi:
+` + e.message);
             } finally {
                 btn.disabled = false;
                 btn.innerText = "🧪 API Açarını Test Et";
@@ -1739,14 +1739,8 @@ Aktiv Canlı Model: ${result.model}
             if(activeKey && activeKey.startsWith("gsk_")) {
                 try {
                     let taskCatalog = tasks.map((t, idx) => {
-                        return `[TAPŞIRIQ ID: ${idx + 1}]
-Adı: "${t.name}"
-Adminin Qoyduğu Bal: ${t.points} xal
-${t.sampleCode && t.sampleCode.trim() ? 'Müəllimin Referans Kodu:
-' + t.sampleCode.trim() : 'Referans kod yoxdur'}`;
-                    }).join('
------------------------------------------
-');
+                        return `[TAPŞIRIQ ID: ${idx + 1}]\nAdı: "${t.name}"\nAdminin Qoyduğu Bal: ${t.points} xal\n${t.sampleCode && t.sampleCode.trim() ? 'Müəllimin Referans Kodu:\n' + t.sampleCode.trim() : 'Referans kod yoxdur'}`;
+                    }).join('\n-----------------------------------------\n');
 
                     let systemPrompt = `Sən universitetdə alqoritmlər üzrə sərt və dahi professorsan. Tələbələrin ${subject.toUpperCase()} kodlarını yoxlayırsan. YALNIZ və YALNIZ JSON formatında cavab ver. Format: {"isCorrect": boolean, "detectedAlgorithm": string, "taskIndex": number, "taskName": string, "earnedPoints": number, "explanation": string}`;
 
@@ -2041,16 +2035,11 @@ TƏLİMATLAR:
                     });
                 }
 
-                let msg = "YOXLAMA NƏTİCƏSİ:
-";
-                if (acceptedCount > 0) msg += `✅ Düzgün qəbul edildi: ${acceptedCount} fayl (Təyin edilmiş xal hesabınıza yazıldı)
-`;
-                if (rejectedCount > 0) msg += `❌ Səhv/Uyğunsuz: ${rejectedCount} fayl (Profilinizdəki statusdan səbəbə baxa bilərsiniz)
-`;
-                if (adminPending > 0) msg += `👨‍🏫 Admin yoxlamasına göndərildi: ${adminPending} fayl
-`;
-                if (duplicateCount > 0) msg += `⚠️ Dublikat olduğuna görə bal verilməyən: ${duplicateCount} fayl
-`;
+                let msg = "YOXLAMA NƏTİCƏSİ:\n";
+                if (acceptedCount > 0) msg += `✅ Düzgün qəbul edildi: ${acceptedCount} fayl (Təyin edilmiş xal hesabınıza yazıldı)\n`;
+                if (rejectedCount > 0) msg += `❌ Səhv/Uyğunsuz: ${rejectedCount} fayl (Profilinizdəki statusdan səbəbə baxa bilərsiniz)\n`;
+                if (adminPending > 0) msg += `👨‍🏫 Admin yoxlamasına göndərildi: ${adminPending} fayl\n`;
+                if (duplicateCount > 0) msg += `⚠️ Dublikat olduğuna görə bal verilməyən: ${duplicateCount} fayl\n`;
 
                 alert(msg);
                 document.getElementById('studentTaskFiles').value = '';
@@ -2660,3 +2649,4 @@ TƏLİMATLAR:
     </script>
 </body>
 </html>
+sayt_kodu_tam_duzeldilmis.html görüntüleniyor.
